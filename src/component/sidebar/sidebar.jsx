@@ -1,0 +1,96 @@
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { HiUsers } from "react-icons/hi";
+import { MdOutlineReceipt } from "react-icons/md";
+import { BiSolidDashboard } from "react-icons/bi";
+import { FaCog, FaUser } from "react-icons/fa";
+import { TbCurrencyNaira } from "react-icons/tb";
+import logo from "../../assets/images/flybird-logo.png";
+import { Image } from "react-bootstrap";
+function SideBar() {
+  const [showMenu, setShowMenu] = useState(false);
+  const location = useLocation();
+
+  const menuItems = [
+    {
+      to: "/admin-dashboard",
+      icon: <BiSolidDashboard className="sidebar-icon" />,
+      text: "Dashboard",
+    },
+    { to: "/users", icon: <FaUser className="sidebar-icon" />, text: "Users" },
+    {
+      to: "/orders",
+      icon: <MdOutlineReceipt className="sidebar-icon" />,
+      text: "Transaction & Payment",
+    },
+    {
+      to: "/financials",
+      icon: <TbCurrencyNaira className="sidebar-icon" />,
+      text: "Booking Management",
+    },
+    {
+      to: "/admin-users",
+      icon: <HiUsers className="sidebar-icon" />,
+      text: "Flight/Aircraft Management",
+    },
+    {
+      to: "/admin-users",
+      icon: <HiUsers className="sidebar-icon" />,
+      text: "Fuel Management",
+    },
+    {
+      to: "/admin-users",
+      icon: <HiUsers className="sidebar-icon" />,
+      text: "Client management",
+    },
+    {
+      to: "/admin-users",
+      icon: <HiUsers className="sidebar-icon" />,
+      text: "Statistics & Reporting",
+    },
+
+    {
+      to: "/settings",
+      icon: <FaCog className="sidebar-icon" />,
+      text: "Config",
+    },
+  ];
+
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  };
+  return (
+    <>
+      <aside
+        className="sidebar shadow"
+        style={{ left: showMenu ? "0" : "-390px" }}
+      >
+        <div className="text-center py-1">
+          <Image src={logo} className="img-fluid" />
+        </div>
+        <div className="sidebar-toggle shadow" id="m-tog" onClick={toggleMenu}>
+          <div className="text-center mt-1 p-1 text-white h3">
+            <GiHamburgerMenu />
+          </div>
+        </div>
+        <div className="mt-5"></div>
+        {menuItems.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className={
+              location.pathname === item.to
+                ? "admin-active-side admin-sidebar-link"
+                : "admin-sidebar-link"
+            }
+          >
+            <span className="m-2 fw-bold">{item.icon}</span>
+            {item.text}
+          </Link>
+        ))}
+      </aside>
+    </>
+  );
+}
+export default SideBar;

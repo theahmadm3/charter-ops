@@ -1,0 +1,265 @@
+@import url("https://fonts.cdnfonts.com/css/euclid-circular-a");
+
+$bg-orange-light: #fbc8c5;
+$bg-blue-light: #ACDEF6;
+
+* {
+  font-family: "Euclid Circular A", sans-serif;
+  scroll-behavior: smooth;
+  letter-spacing: normal;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+p {
+  line-height: 2;
+}
+td {
+  font-size: small;
+}
+
+#error-page {
+  min-height: 100vh;
+}
+
+.error-content {
+  max-width: 400px;
+  padding: 20px;
+}
+
+.error-message {
+  margin-top: 10px;
+}
+
+.error-message span {
+  font-weight: bold;
+}
+
+.error-image-container {
+  margin-top: 20px;
+}
+
+.login-container{
+  background-image: url("./assets/images/login-bg-img.png");
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: contain;
+}
+
+
+.loader-section {
+  font-family: "Hind Guntur", sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(5, 61, 78, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.loader {
+  position: relative;
+  width: 164px;
+  height: 164px;
+}
+.loader::before,
+.loader::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  left: 50%;
+  top: 50%;
+  animation: rotate 1s ease-in infinite;
+}
+.loader::after {
+  width: 20px;
+  height: 20px;
+  background-color: #ff3d00;
+  animation: rotate 1s ease-in infinite, moveY 1s ease-in infinite;
+}
+
+@keyframes moveY {
+  0%,
+  100% {
+    top: 10%;
+  }
+  45%,
+  55% {
+    top: 59%;
+  }
+  60% {
+    top: 40%;
+  }
+}
+@keyframes rotate {
+  0% {
+    transform: translate(-50%, -100%) rotate(0deg) scale(1, 1);
+  }
+  25% {
+    transform: translate(-50%, 0%) rotate(180deg) scale(1, 1);
+  }
+  45%,
+  55% {
+    transform: translate(-50%, 100%) rotate(180deg) scale(3, 0.5);
+  }
+  60% {
+    transform: translate(-50%, 100%) rotate(180deg) scale(1, 1);
+  }
+  75% {
+    transform: translate(-50%, 0%) rotate(270deg) scale(1, 1);
+  }
+  100% {
+    transform: translate(-50%, -100%) rotate(360deg) scale(1, 1);
+  }
+}
+
+
+.real {
+  display: flex;
+
+  .sidebar {
+    flex: 1 1 0;
+    margin: 0;
+    // padding-top: 2rem;
+    width: 280px;
+    height: 100vh;
+    box-shadow: 8px 0px 19px -4px rgba(36, 71, 97, 0.75);
+
+    .admin-sidebar-link {
+      display: block;
+      line-height: 65px;
+      color: #aebbd0;
+      transition: 0.5s;
+      padding-left: 20px;
+      // padding-top: 5px;
+      cursor: pointer;
+      text-decoration: none;
+
+      &:hover {
+        color: $bg-blue-light;
+        text-decoration: none;
+        border-radius: 10px;
+      }
+    }
+
+    #menu {
+      display: none;
+    }
+
+    .menu-b {
+      display: none;
+    }
+
+    @media screen and (max-width: 700px) {
+      width: 100%;
+      height: auto;
+      color: #ffffff;
+      position: relative;
+
+      // a {
+      //   float: left;
+      // }
+
+      div.content {
+        margin-left: 0;
+      }
+    }
+
+    @media screen and (max-width: 650px) {
+      width: 100%;
+      color: #aebbd0;
+    }
+
+    @media (min-width: 1025px) {
+      #m-tog {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .content {
+        padding-top: 8rem;
+      }
+
+      & {
+        position: fixed;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        max-width: 280px;
+        transition: 0.2s linear;
+        z-index: 20;
+      }
+
+      .sidebar-link {
+        display: block;
+        line-height: 5px;
+        color: #ffffff;
+        transition: 0.5s;
+        margin-top: 20px;
+        cursor: pointer;
+        font-size: small;
+      }
+    }
+  }
+
+  .content {
+    flex: 1 1 0;
+    overflow: auto;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100%;
+  }
+
+  .sidebar-toggle {
+    position: fixed;
+    top: 6rem;
+    right: 0.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 99px;
+    cursor: pointer;
+    z-index: 1;
+
+    &.show {
+      transform: rotate(45deg);
+
+      &::before {
+        top: 0;
+        transform: rotate(0deg);
+      }
+
+      &::after {
+        top: 0;
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  .admin-active-side {
+    color: $bg-blue-light !important;
+  }
+}
+
+
+.login-form-conatainer{
+  width: 600px;
+  margin: 10rem 0 0 0;
+}
+
+.dash-card-1{
+  height: 9rem !important;
+}
+
+.bg-color-1 {
+  background-color: $bg-blue-light !important;
+}
