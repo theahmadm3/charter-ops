@@ -1,4 +1,4 @@
-import { Card, Col, Container, Image, Row, Table } from "react-bootstrap";
+import { Card, Col, Container, Row, Table } from "react-bootstrap";
 import AdminLayout from "../../../component/layout/admin-layout";
 import { FaPlaneUp } from "react-icons/fa6";
 import DateTimeDisplay from "../../../util/date";

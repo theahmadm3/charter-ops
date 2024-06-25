@@ -13,6 +13,7 @@ import { Provider } from "react-redux";
 import ForgetPassword from "./pages/auth/forget-password";
 import ResetPassword from "./pages/auth/reset-password";
 import AdminDashboard from "./pages/dashboard/admin/dashboard";
+import SystemConfig from "./pages/dashboard/admin/config/system-config.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
   {
     path: "/admin-dashboard",
     element: <AdminDashboard />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin-config",
+    element: <SystemConfig />,
     errorElement: <ErrorPage />,
   },
 ]);

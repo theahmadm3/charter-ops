@@ -51,7 +51,7 @@ function SideBar() {
     },
 
     {
-      to: "/settings",
+      to: "/admin-config",
       icon: <FaCog className="sidebar-icon" />,
       text: "Config",
     },
