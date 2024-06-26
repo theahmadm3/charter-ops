@@ -1,12 +1,12 @@
-import { DeleteRequest, PostRequest, PutRequest } from "../../util/apiMethods";
+import { PostRequest, PutRequest } from "../../util/apiMethods";
 
 export const login = async (credentials) => {
-  const response = await PostRequest("/auth/login", credentials);
+  const response = await PostRequest("/users/login", credentials);
   return response;
 };
 
 export const forgetPassword = async (credentials) => {
-  const response = await PostRequest("/auth/reset", credentials);
+  const response = await PostRequest("/password/forgot", credentials);
   return response;
 };
 
@@ -16,6 +16,6 @@ export const resetPassword = async (credentials, token) => {
 };
 
 export const logout = async () => {
-  const response = await PostRequest("/auth/logout");
+  const response = await PostRequest("/users/logout");
   return response;
 };

@@ -11,14 +11,12 @@ import {
 import logo from "../../assets/images/flybird-logo.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-const ResetPassword = ({ match }) => {
-  const navigate = useNavigate();
+const ResetPassword = () => {
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = useParams();
-  const passtoken = token.token;
   return (
     <>
       <Container fluid className="login-container">

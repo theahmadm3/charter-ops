@@ -11,9 +11,13 @@ import {
 import logo from "../../assets/images/flybird-logo.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { forgetPasswordAsnyc } from "../../slices/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const ForgetPassword = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <>
       <Container fluid className="login-container">
@@ -41,8 +45,25 @@ const ForgetPassword = () => {
                           .email("Invalid email")
                           .required("Email is required"),
                       })}
-                      onSubmit={(values) => {
-                        dispatch(loginAsync({ credentials: values }));
+                      onSubmit={async (values) => {
+                        try {
+                          const result = await dispatch(
+                            forgetPasswordAsnyc({ values })
+                          );
+
+                          if (forgetPasswordAsnyc.fulfilled.match(result)) {
+                            // Check if the login was successful
+                            navigate("/reset-password");
+                          } else {
+                            // Handle the case where login was not successful
+                            console.error("Login failed:", result.error);
+                          }
+                        } catch (error) {
+                          console.error(
+                            "An error occurred during login:",
+                            error
+                          );
+                        }
                       }}
                       validateOnChange
                       validateOnBlur

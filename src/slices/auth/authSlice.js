@@ -18,10 +18,15 @@ export const loginAsync = createAsyncThunk(
 
 export const forgetPasswordAsnyc = createAsyncThunk(
   "users/forget/password",
-  async (credentials) => {
-    const response = await forgetPassword(credentials);
-
-    return response;
+  async ({ values }, thunkAPI) => {
+    try {
+      const response = await forgetPassword(values);
+      return response;
+    } catch (error) {
+      // Handle errors here
+      toast.error(error?.response?.data?.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
 
@@ -33,6 +38,9 @@ export const resetPasswordAsync = createAsyncThunk(
       return response;
     } catch (error) {
       // Handle errors here
+      console.log("errrrrrr", error);
+      toast.error(error?.payload?.message);
+
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -57,8 +65,8 @@ const userSlice = createSlice({
     builder.addCase(loginAsync.fulfilled, (state, action) => {
       state.loginResponse = action.payload;
       toast.success(action.payload.message);
-      localStorage.setItem("token", action?.payload?.token);
-      localStorage.setItem("user", JSON.stringify(action?.payload?.user));
+      localStorage.setItem("token", action?.payload?.data?.token);
+      localStorage.setItem("user", JSON.stringify(action?.payload?.data?.user));
     });
 
     builder.addCase(loginAsync.pending, (state, action) => {
@@ -72,7 +80,7 @@ const userSlice = createSlice({
       toast.success("Check your email to complete");
     });
     builder.addCase(forgetPasswordAsnyc.rejected, (state, action) => {
-      toast.error("Not found");
+      toast.error(action?.payload?.message);
     });
     builder.addCase(resetPasswordAsync.fulfilled, (state, action) => {
       state.resetPasswordResponse = action.payload;

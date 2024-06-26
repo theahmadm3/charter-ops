@@ -12,9 +12,12 @@ import logo from "../../assets/images/flybird-logo.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
+import { loginAsync } from "../../slices/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -50,9 +53,25 @@ const Login = () => {
                             "Password is too short - should be 6 chars minimum."
                           ),
                       })}
-                      onSubmit={(values) => {
-                        // dispatch(loginAsync({ credentials: values }));
-                        navigate("/admin-dashboard");
+                      onSubmit={async (values) => {
+                        try {
+                          const result = await dispatch(
+                            loginAsync({ credentials: values })
+                          );
+
+                          if (loginAsync.fulfilled.match(result)) {
+                            // Check if the login was successful
+                            navigate("/admin-dashboard");
+                          } else {
+                            // Handle the case where login was not successful
+                            console.error("Login failed:", result.error);
+                          }
+                        } catch (error) {
+                          console.error(
+                            "An error occurred during login:",
+                            error
+                          );
+                        }
                       }}
                       validateOnChange
                       validateOnBlur
