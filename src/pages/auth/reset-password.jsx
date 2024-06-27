@@ -13,9 +13,10 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { resetPasswordAsync } from "../../slices/auth/authSlice";
 
 const ResetPassword = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
     <>
@@ -39,8 +40,10 @@ const ResetPassword = () => {
                       initialValues={{
                         password: "",
                         confirm_password: "",
+                        token: "",
                       }}
                       validationSchema={Yup.object().shape({
+                        token: Yup.string().required("Token is required"),
                         password: Yup.string()
                           .required("No password provided.")
                           .min(
@@ -54,8 +57,25 @@ const ResetPassword = () => {
                           )
                           .required("Please confirm password."),
                       })}
-                      onSubmit={(values) => {
-                        dispatch(loginAsync({ credentials: values }));
+                      onSubmit={async (values) => {
+                        try {
+                          const result = await dispatch(
+                            resetPasswordAsync({ credentials: values })
+                          );
+
+                          if (resetPasswordAsync.fulfilled.match(result)) {
+                            // Check if the login was successful
+                            navigate("/");
+                          } else {
+                            // Handle the case where login was not successful
+                            console.error("Process failed:", result.error);
+                          }
+                        } catch (error) {
+                          console.error(
+                            "An error occurred during reset:",
+                            error
+                          );
+                        }
                       }}
                       validateOnChange
                       validateOnBlur
@@ -69,6 +89,27 @@ const ResetPassword = () => {
                         handleChange,
                       }) => (
                         <Form onSubmit={handleSubmit}>
+                          <Form.Group className="my-4">
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Token"
+                              className="my-3"
+                            >
+                              <Form.Control
+                                placeholder="Enter your token"
+                                name="token"
+                                value={values.token}
+                                onChange={handleChange}
+                                className="p-3 password-input"
+                                type="text"
+                              />
+                              {errors.token && touched.token ? (
+                                <small className="text-danger">
+                                  {errors.token}
+                                </small>
+                              ) : null}
+                            </FloatingLabel>
+                          </Form.Group>
                           <Form.Group className="my-4">
                             <FloatingLabel
                               controlId="floatingInput"
@@ -123,11 +164,9 @@ const ResetPassword = () => {
                           <div className="d-grid gap-2 mb-5">
                             <Button
                               type="submit"
-                              className=" my-4 py-3  border-0  bg-color-1"
+                              className=" my-4 py-3  border-0  bg-color-2"
                             >
-                              <span className="text-center fw-bold">
-                                Submit
-                              </span>
+                              <span className="text-center fw-bold">Reset</span>
                             </Button>
                           </div>
                         </Form>

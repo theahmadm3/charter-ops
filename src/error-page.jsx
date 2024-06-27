@@ -1,9 +1,15 @@
+import { Button } from "react-bootstrap";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import { TbFaceIdError } from "react-icons/tb";
-import { useRouteError } from "react-router-dom";
+import { useNavigate, useRouteError } from "react-router-dom";
 
 const ErrorPage = () => {
   const error = useRouteError();
+  const navigate = useNavigate();
 
+  const handleBack = () => {
+    navigate(-1);
+  };
   return (
     <div
       id="error-page"
@@ -22,6 +28,11 @@ const ErrorPage = () => {
         <div className="error-image-container mt-4">
           <TbFaceIdError className="display-1" />
         </div>
+
+        <Button className="my-4 px-4 py-2" onClick={() => handleBack()}>
+          <IoMdArrowRoundBack />
+          Back
+        </Button>
       </div>
     </div>
   );

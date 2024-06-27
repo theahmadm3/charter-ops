@@ -137,7 +137,7 @@ const Login = () => {
                           <div className="d-grid gap-2 mb-5">
                             <Button
                               type="submit"
-                              className=" my-4 py-3  border-0  bg-color-1"
+                              className=" my-4 py-3  border-0  bg-color-2"
                             >
                               <span className="text-center fw-bold">Login</span>
                             </Button>

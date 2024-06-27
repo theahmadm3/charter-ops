@@ -38,9 +38,7 @@ export const resetPasswordAsync = createAsyncThunk(
       return response;
     } catch (error) {
       // Handle errors here
-      console.log("errrrrrr", error);
-      toast.error(error?.payload?.message);
-
+      toast.error(error?.response?.data?.message);
       return thunkAPI.rejectWithValue(error.message);
     }
   }

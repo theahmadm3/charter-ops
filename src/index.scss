@@ -1,7 +1,8 @@
 @import url("https://fonts.cdnfonts.com/css/euclid-circular-a");
 
 $bg-orange-light: #fbc8c5;
-$bg-blue-light: #ACDEF6;
+$bg-blue-light: #acdef6;
+$bg-main-blue: #0079c8;
 
 * {
   font-family: "Euclid Circular A", sans-serif;
@@ -39,7 +40,7 @@ td {
   margin-top: 20px;
 }
 
-.login-container{
+.login-container {
   background-image: url("./assets/images/login-bg-img.png");
   width: 100%;
   height: 100vh;
@@ -47,7 +48,6 @@ td {
   background-repeat: no-repeat;
   background-position: contain;
 }
-
 
 .loader-section {
   font-family: "Hind Guntur", sans-serif;
@@ -121,7 +121,6 @@ td {
     transform: translate(-50%, -100%) rotate(360deg) scale(1, 1);
   }
 }
-
 
 .real {
   display: flex;
@@ -246,20 +245,26 @@ td {
   }
 
   .admin-active-side {
-    color: $bg-blue-light !important;
+    color: $bg-main-blue !important;
   }
 }
 
-
-.login-form-conatainer{
+.login-form-conatainer {
   width: 600px;
   margin: 10rem 0 0 0;
 }
 
-.dash-card-1{
+.dash-card-1 {
   height: 9rem !important;
 }
 
 .bg-color-1 {
   background-color: $bg-blue-light !important;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  // border-radius: 50px;
+  // border-bottom: 5px solid $bg-blue-light !important;
+  margin-bottom: 0.5rem;
 }
