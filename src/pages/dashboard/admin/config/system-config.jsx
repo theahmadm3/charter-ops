@@ -1,18 +1,22 @@
-import { Button, Col, Row, Tab, Table, Tabs } from "react-bootstrap";
+import { Button, Col, Dropdown, Row, Tab, Table, Tabs } from "react-bootstrap";
 import AdminLayout from "../../../../component/layout/admin-layout";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getAllDepartmentsAsync,
   getAllPartnershipsAsync,
   getAllServicesAsync,
   getAllSuppliersAsync,
 } from "../../../../slices/config/configSlice";
+import AddService from "./modal/add-service";
+import { HiDotsHorizontal } from "react-icons/hi";
 
 const SystemConfig = () => {
   const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState("services");
   const [modalAddService, setModalAddService] = useState(false);
+  const configInfo = useSelector((state) => state.config);
+  console.log("first", configInfo);
 
   useEffect(() => {
     const savedActiveKey = localStorage.getItem("activeTab");
@@ -35,6 +39,10 @@ const SystemConfig = () => {
 
   return (
     <AdminLayout>
+      <AddService
+        show={modalAddService}
+        onHide={() => setModalAddService(false)}
+      />
       <div className="my-3 container">
         <h6 className="mb-4">System Configuration</h6>
         <Tabs
@@ -52,29 +60,52 @@ const SystemConfig = () => {
             }
           >
             <div>
-              <div>
+              <div className="my-3">
                 <Button onClick={() => setModalAddService(true)}>
                   Add Service
                 </Button>
               </div>
-              <Table striped bordered hover>
+              <Table striped bordered hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
                     <th>Service Name</th>
                     <th>Rate Type</th>
                     <th>Charge Rate</th>
+                    <th>Currency</th>
                     <th>Remark</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                  </tr>
+                  {configInfo?.getAllServicesResponse?.map((service, index) => (
+                    <tr key={index}>
+                      <td> {index + 1} </td>
+                      <td> {service?.service_name} </td>
+                      <td> {service?.rate_type} </td>
+                      <td> {service?.charge_rate} </td>
+                      <td> {service?.currency} </td>
+                      <td> {service?.remarks} </td>
+                      <td>
+                        <Dropdown>
+                          <Dropdown.Toggle
+                            variant="light"
+                            className=" border-0"
+                          >
+                            <HiDotsHorizontal />
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              className="small"
+                              // onClick={() => handleView(church.id)}
+                            >
+                              Manage
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </div>

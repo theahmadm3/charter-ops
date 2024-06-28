@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "../slices/auth/authSlice";
 import userSlice from "../slices/user/userSlice";
+import configSlice from "../slices/config/configSlice";
 
 const initialLoadingState = localStorage.getItem("loading") === "true";
 
@@ -8,6 +9,7 @@ export default configureStore({
   reducer: {
     auth: authSlice,
     users: userSlice,
+    config: configSlice,
 
     loading: (state = initialLoadingState, action) => {
       if (action.type.endsWith("/pending")) {

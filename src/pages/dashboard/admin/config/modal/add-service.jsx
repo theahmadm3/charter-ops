@@ -11,11 +11,13 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { min } from "date-fns";
+import { addServiceAsync } from "../../../../../slices/config/configSlice";
 
 function AddService(props) {
   const [imageUrl, setImageUrl] = useState(null);
   const [profilePic, setProfilePic] = useState();
-  const roles = useSelector((state) => state.settings.getAllRolesResponse);
+  //   const roles = useSelector((state) => state.settings.getAllRolesResponse);
   const dispatch = useDispatch();
 
   return (
@@ -28,7 +30,7 @@ function AddService(props) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Add New User
+            Add New Service
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -41,16 +43,16 @@ function AddService(props) {
               remarks: "",
             }}
             validationSchema={Yup.object().shape({
-              first_name: Yup.string().required("First name is required"),
-              last_name: Yup.string().required("Last name is required"),
-              email: Yup.string().required("Email is required"),
-              phone_number: Yup.string().required("Phone number is required"),
-              address: Yup.string().required("Address is required"),
-              role: Yup.string().required("Role is required"),
+              service_name: Yup.string()
+                .required("Service name is required")
+                .min(3, "The service name must be at least 3 characters"),
+              rate_type: Yup.string().required("Rate type is required"),
+              charge_rate: Yup.string().required("Charge rate is required"),
+              currency: Yup.string().required("Currency is required"),
             })}
             onSubmit={(values) => {
-              dispatch(addUserAsync(values));
-              props.closeAddModal();
+              dispatch(addServiceAsync({ values }));
+              props.onHide();
             }}
             validateOnChange
             validateOnBlur
@@ -70,19 +72,19 @@ function AddService(props) {
                     <Form.Group>
                       <FloatingLabel
                         controlId="floatingInput"
-                        label="First name"
+                        label="Service name"
                         className="my-2"
                       >
                         <Form.Control
                           type="text"
-                          placeholder="First name"
-                          name="first_name"
-                          value={values.first_name}
+                          placeholder="service name"
+                          name="service_name"
+                          value={values.service_name}
                           onChange={handleChange}
                         />
-                        {errors.first_name && touched.first_name ? (
+                        {errors.service_name && touched.service_name ? (
                           <small className="text-danger">
-                            {errors.first_name}
+                            {errors.service_name}
                           </small>
                         ) : null}
                       </FloatingLabel>
@@ -93,95 +95,48 @@ function AddService(props) {
                     <Form.Group>
                       <FloatingLabel
                         controlId="floatingInput"
-                        label="Last name"
-                        className="my-2"
-                      >
-                        <Form.Control
-                          type="text"
-                          placeholder="Last name"
-                          name="last_name"
-                          value={values.last_name}
-                          onChange={handleChange}
-                        />
-                        {errors.last_name && touched.last_name ? (
-                          <small className="text-danger">
-                            {errors.last_name}
-                          </small>
-                        ) : null}
-                      </FloatingLabel>
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col md={6}>
-                    <Form.Group>
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label="Email"
-                        className="my-2"
-                      >
-                        <Form.Control
-                          type="email"
-                          placeholder="Email"
-                          name="email"
-                          value={values.email}
-                          onChange={handleChange}
-                        />
-                        {errors.email && touched.email ? (
-                          <small className="text-danger">{errors.email}</small>
-                        ) : null}
-                      </FloatingLabel>
-                    </Form.Group>
-                  </Col>
-
-                  <Col md={6}>
-                    <Form.Group>
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label="Address"
-                        className="my-2"
-                      >
-                        <Form.Control
-                          type="text"
-                          placeholder="Address"
-                          name="address"
-                          value={values.address}
-                          onChange={handleChange}
-                        />
-                        {errors.address && touched.address ? (
-                          <small className="text-danger">
-                            {errors.address}
-                          </small>
-                        ) : null}
-                      </FloatingLabel>
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col md={6}>
-                    <Form.Group>
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label="Role"
+                        label="Rate Type"
                         className="my-2"
                       >
                         <Form.Select
                           aria-label="Floating label select example"
-                          name="role"
-                          value={values.role}
+                          name="rate_type"
+                          value={values.rate_type}
                           onChange={handleChange}
                         >
-                          <option>Select Role</option>
-                          {roles?.data?.map((role, index) => (
-                            <option key={index} value={role.name}>
-                              {role.name}
-                            </option>
-                          ))}
+                          <option value="">Select Rate Type</option>
+                          <option value="Flat rate">Flat rate</option>
+                          <option value="Hourly rate">Hourly rate</option>
                         </Form.Select>
-                        {errors.role && touched.role ? (
-                          <small className="text-danger">{errors.role}</small>
+                        {errors.rate_type && touched.rate_type ? (
+                          <small className="text-danger">
+                            {errors.rate_type}
+                          </small>
+                        ) : null}
+                      </FloatingLabel>
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col md={6}>
+                    <Form.Group>
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label="Charge rate"
+                        className="my-2"
+                      >
+                        <Form.Control
+                          type="number"
+                          placeholder="charge rate"
+                          name="charge_rate"
+                          value={values.charge_rate}
+                          onChange={handleChange}
+                        />
+                        {errors.charge_rate && touched.charge_rate ? (
+                          <small className="text-danger">
+                            {errors.charge_rate}
+                          </small>
                         ) : null}
                       </FloatingLabel>
                     </Form.Group>
@@ -191,21 +146,44 @@ function AddService(props) {
                     <Form.Group>
                       <FloatingLabel
                         controlId="floatingInput"
-                        label="Phone Number"
+                        label="Currency"
+                        className="my-2"
+                      >
+                        <Form.Select
+                          aria-label="Floating label select example"
+                          name="currency"
+                          value={values.currency}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select Currency</option>
+                          <option value="Naira">Naira</option>
+                          <option value="Dollar">Dollar</option>
+                        </Form.Select>
+                        {errors.currency && touched.currency ? (
+                          <small className="text-danger">
+                            {errors.currency}
+                          </small>
+                        ) : null}
+                      </FloatingLabel>
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col md={12}>
+                    <Form.Group>
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label="Remarks"
                         className="my-2"
                       >
                         <Form.Control
-                          type="tel"
-                          placeholder="Phone"
-                          name="phone_number"
-                          value={values.phone_number}
+                          as="textarea"
+                          style={{ height: "100px" }}
+                          name="remarks"
+                          value={values.remarks}
                           onChange={handleChange}
                         />
-                        {errors.phone_number && touched.phone_number ? (
-                          <small className="text-danger">
-                            {errors.phone_number}
-                          </small>
-                        ) : null}
                       </FloatingLabel>
                     </Form.Group>
                   </Col>
