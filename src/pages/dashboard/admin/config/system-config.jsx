@@ -1,4 +1,4 @@
-import { Tab, Table, Tabs } from "react-bootstrap";
+import { Button, Col, Row, Tab, Table, Tabs } from "react-bootstrap";
 import AdminLayout from "../../../../component/layout/admin-layout";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -12,6 +12,7 @@ import {
 const SystemConfig = () => {
   const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState("services");
+  const [modalAddService, setModalAddService] = useState(false);
 
   useEffect(() => {
     const savedActiveKey = localStorage.getItem("activeTab");
@@ -51,6 +52,11 @@ const SystemConfig = () => {
             }
           >
             <div>
+              <div>
+                <Button onClick={() => setModalAddService(true)}>
+                  Add Service
+                </Button>
+              </div>
               <Table striped bordered hover>
                 <thead>
                   <tr>
