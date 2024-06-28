@@ -1,12 +1,29 @@
 import { Tab, Table, Tabs } from "react-bootstrap";
 import AdminLayout from "../../../../component/layout/admin-layout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getAllServicesAsync } from "../../../../slices/config/configSlice";
+import {
+  getAllDepartmentsAsync,
+  getAllPartnershipsAsync,
+  getAllServicesAsync,
+  getAllSuppliersAsync,
+} from "../../../../slices/config/configSlice";
 
 const SystemConfig = () => {
   const dispatch = useDispatch();
+  const [activeKey, setActiveKey] = useState("services");
 
+  useEffect(() => {
+    const savedActiveKey = localStorage.getItem("activeTab");
+    if (savedActiveKey) {
+      setActiveKey(savedActiveKey);
+    }
+  }, []);
+
+  const handleSelect = (key) => {
+    setActiveKey(key);
+    localStorage.setItem("activeTab", key);
+  };
   useEffect(() => {
     try {
       dispatch(getAllServicesAsync());
@@ -20,7 +37,8 @@ const SystemConfig = () => {
       <div className="my-3 container">
         <h6 className="mb-4">System Configuration</h6>
         <Tabs
-          defaultActiveKey="services"
+          activeKey={activeKey}
+          onSelect={handleSelect}
           id="justify-tab-example"
           className="mb-3"
         >
@@ -55,13 +73,34 @@ const SystemConfig = () => {
               </Table>
             </div>
           </Tab>
-          <Tab eventKey="departments" title="Departments">
+          <Tab
+            eventKey="departments"
+            title={
+              <span onClick={() => dispatch(getAllDepartmentsAsync())}>
+                Departments
+              </span>
+            }
+          >
             Tab content for Profile
           </Tab>
-          <Tab eventKey="Fuel" title="Fuel Supplier">
+          <Tab
+            eventKey="Fuel"
+            title={
+              <span onClick={() => dispatch(getAllSuppliersAsync())}>
+                Fuel Supplier
+              </span>
+            }
+          >
             Tab content for Loooonger Tab
           </Tab>
-          <Tab eventKey="aircraft" title="Aircraft partnership types">
+          <Tab
+            eventKey="aircraft"
+            title={
+              <span onClick={() => dispatch(getAllPartnershipsAsync())}>
+                Aircraft partnership types
+              </span>
+            }
+          >
             Tab content for Contact
           </Tab>
         </Tabs>

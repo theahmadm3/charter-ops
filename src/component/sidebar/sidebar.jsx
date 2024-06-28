@@ -20,32 +20,32 @@ function SideBar() {
     },
     { to: "/users", icon: <FaUser className="sidebar-icon" />, text: "Users" },
     {
-      to: "/orders",
+      to: "/transaction",
       icon: <MdOutlineReceipt className="sidebar-icon" />,
       text: "Transaction & Payment",
     },
     {
-      to: "/financials",
+      to: "/booking",
       icon: <TbCurrencyNaira className="sidebar-icon" />,
       text: "Booking Management",
     },
     {
-      to: "/admin-users",
+      to: "/flight",
       icon: <HiUsers className="sidebar-icon" />,
       text: "Flight/Aircraft Management",
     },
     {
-      to: "/admin-users",
+      to: "/fuel",
       icon: <HiUsers className="sidebar-icon" />,
       text: "Fuel Management",
     },
     {
-      to: "/admin-users",
+      to: "/client",
       icon: <HiUsers className="sidebar-icon" />,
       text: "Client management",
     },
     {
-      to: "/admin-users",
+      to: "/statistics",
       icon: <HiUsers className="sidebar-icon" />,
       text: "Statistics & Reporting",
     },
