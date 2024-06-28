@@ -11,12 +11,11 @@ import {
 import logo from "../../assets/images/flybird-logo.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { loginAsync } from "../../slices/auth/authSlice";
 import { useDispatch } from "react-redux";
 
 const Login = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   return (
@@ -61,7 +60,7 @@ const Login = () => {
 
                           if (loginAsync.fulfilled.match(result)) {
                             // Check if the login was successful
-                            navigate("/admin-dashboard");
+                            window.location.href = "/admin-dashboard";
                           } else {
                             // Handle the case where login was not successful
                             console.error("Login failed:", result.error);

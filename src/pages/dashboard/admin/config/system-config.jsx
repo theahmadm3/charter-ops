@@ -36,18 +36,20 @@ const SystemConfig = () => {
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
+                    <th>S/N</th>
+                    <th>Service Name</th>
+                    <th>Rate Type</th>
+                    <th>Charge Rate</th>
+                    <th>Remark</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <td>test</td>
+                    <td>test</td>
+                    <td>test</td>
+                    <td>test</td>
                   </tr>
                 </tbody>
               </Table>
