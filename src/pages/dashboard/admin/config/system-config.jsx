@@ -15,7 +15,7 @@ const SystemConfig = () => {
   const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState("services");
   const [modalAddService, setModalAddService] = useState(false);
-  const configInfo = useSelector((state) => state.config);
+  const configInfo = useSelector((state) => state?.config);
   console.log("first", configInfo);
 
   useEffect(() => {
@@ -77,35 +77,50 @@ const SystemConfig = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {configInfo?.getAllServicesResponse?.map((service, index) => (
-                    <tr key={index}>
-                      <td> {index + 1} </td>
-                      <td> {service?.service_name} </td>
-                      <td> {service?.rate_type} </td>
-                      <td> {service?.charge_rate} </td>
-                      <td> {service?.currency} </td>
-                      <td> {service?.remarks} </td>
-                      <td>
-                        <Dropdown>
-                          <Dropdown.Toggle
-                            variant="light"
-                            className=" border-0"
-                          >
-                            <HiDotsHorizontal />
-                          </Dropdown.Toggle>
+                  {configInfo?.getAllServicesResponse?.length > 0 ? (
+                    configInfo.getAllServicesResponse.map((service, index) => {
+                      const {
+                        service_name,
+                        rate_type,
+                        charge_rate,
+                        currency,
+                        remarks,
+                      } = service;
+                      return (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{service_name}</td>
+                          <td>{rate_type}</td>
+                          <td>{charge_rate}</td>
+                          <td>{currency}</td>
+                          <td>{remarks}</td>
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="light"
+                                className="border-0"
+                              >
+                                <HiDotsHorizontal />
+                              </Dropdown.Toggle>
 
-                          <Dropdown.Menu>
-                            <Dropdown.Item
-                              className="small"
-                              // onClick={() => handleView(church.id)}
-                            >
-                              Manage
-                            </Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </td>
+                              <Dropdown.Menu>
+                                <Dropdown.Item className="small">
+                                  Manage
+                                </Dropdown.Item>
+                                <Dropdown.Item className="small">
+                                  Delete
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="7">No services available</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </Table>
             </div>

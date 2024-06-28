@@ -406,13 +406,13 @@ const configSlice = createSlice({
     builder.addCase(addServiceAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addServiceResponse = action.payload;
-        state.getAllServicesResponse.data.unshift({
-          id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          email: action.payload?.data?.email,
-          status: action.payload?.data?.status,
-          phone_number: action.payload?.data?.phone_number,
-          profile_picture: action?.payload?.profile_picture,
+        state.getAllServicesResponse.unshift({
+          id: action.payload?.id,
+          service_name: action.payload?.service_name,
+          rate_type: action.payload?.rate_type,
+          charge_rate: action.payload?.charge_rate,
+          currency: action.payload?.currency,
+          remarks: action.payload?.remarks,
         });
 
         toast.success(action.payload.message);
