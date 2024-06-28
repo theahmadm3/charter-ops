@@ -9,7 +9,7 @@ const api = axios.create({
 const token = localStorage.getItem("token");
 // Set default headers and content type
 if (token != null) {
-  api.defaults.headers.common["Authorization"] = `Token ${localStorage.getItem(
+  api.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
     "token"
   )}`;
 }

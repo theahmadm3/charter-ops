@@ -5,41 +5,137 @@ import {
   PutRequest,
 } from "../../util/apiMethods";
 
+// Services
 export const GetAllServices = async () => {
   const response = await GetRequest("/services");
   return response;
 };
 
-export const AddUser = async (body) => {
-  const response = await PostRequest("auth/users", body);
+export const AddService = async (body) => {
+  const response = await PostRequest("/services", body);
   return response;
 };
 
-export const AddAdminUser = async (body) => {
-  const response = await PostRequest("auth/get/admin/create", body);
+export const GetServiceById = async (id) => {
+  const response = await GetRequest(`/services/${id}`);
   return response;
 };
 
-export const GetUserById = async (id) => {
-  const response = await GetRequest(`auth/users/${id}`);
+export const UpdateService = async (id, body) => {
+  const response = await PutRequest(`/services/${id}`, body);
   return response;
 };
 
-export const UpdateUser = async (id, body) => {
-  const response = await PutRequest(`auth/users/${id}/`, body);
+export const DeleteService = async (id) => {
+  await DeleteRequest(`/services/${id}`);
+};
+
+// Supplier
+export const GetAllSuppliers = async () => {
+  const response = await GetRequest("/suppliers");
   return response;
 };
 
-export const DeleteUser = async (id) => {
-  await DeleteRequest(`auth/users/${id}`);
-};
-
-export const getAuthUser = async () => {
-  const response = await GetRequest("/auth/user");
+export const AddSupplier = async (body) => {
+  const response = await PostRequest("/suppliers", body);
   return response;
 };
 
-export const updateAuthUser = async (body) => {
-  const response = await PutRequest("/auth/user/auth/update", body);
+export const GetSupplierById = async (id) => {
+  const response = await GetRequest(`/suppliers/${id}`);
+  return response;
+};
+
+export const UpdateSupplier = async (id, body) => {
+  const response = await PutRequest(`/suppliers/${id}`, body);
+  return response;
+};
+
+export const DeleteSupplier = async (id) => {
+  await DeleteRequest(`/suppliers/${id}`);
+};
+
+// Department
+export const GetAllDepartments = async () => {
+  const response = await GetRequest("/departments");
+  return response;
+};
+
+export const AddDepartment = async (body) => {
+  const response = await PostRequest("/departments", body);
+  return response;
+};
+
+export const GetDepartmentById = async (id) => {
+  const response = await GetRequest(`/departments/${id}`);
+  return response;
+};
+
+export const UpdateDepartment = async (id, body) => {
+  const response = await PutRequest(`/departments/${id}`, body);
+  return response;
+};
+
+export const DeleteDepartment = async (id) => {
+  await DeleteRequest(`/departments/${id}`);
+};
+
+// Partnership
+export const GetAllPartnershipTypes = async () => {
+  const response = await GetRequest("/partnership_types");
+  return response;
+};
+
+export const AddPartnershipType = async (body) => {
+  const response = await PostRequest("/partnership_types", body);
+  return response;
+};
+
+export const GetPartnershipTypeById = async (id) => {
+  const response = await GetRequest(`/partnership_types/${id}`);
+  return response;
+};
+
+export const UpdatePartnershipType = async (id, body) => {
+  const response = await PutRequest(`/partnership_types/${id}`, body);
+  return response;
+};
+
+export const DeletePartnershipType = async (id) => {
+  await DeleteRequest(`/partnership_types/${id}`);
+};
+
+// Role
+export const GetAllRoles = async () => {
+  const response = await GetRequest("/config/roles");
+  return response;
+};
+
+export const AddRole = async (body) => {
+  const response = await PostRequest("/config/roles/create-role", body);
+  return response;
+};
+
+export const GetRoleById = async (id) => {
+  const response = await GetRequest(`/config/roles/${id}`);
+  return response;
+};
+
+export const UpdateRole = async (id, body) => {
+  const response = await PutRequest(`/config/roles/update-role/${id}`, body);
+  return response;
+};
+export const ActivateRole = async (id, body) => {
+  const response = await PutRequest(
+    `/config/roles/update-role/activate-role/${id}`,
+    body
+  );
+  return response;
+};
+export const DeactivateRole = async (id, body) => {
+  const response = await PutRequest(
+    `/config/roles/deactivate-role/${id}`,
+    body
+  );
   return response;
 };

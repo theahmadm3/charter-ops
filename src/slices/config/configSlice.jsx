@@ -1,0 +1,606 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+
+import {
+  ActivateRole,
+  AddDepartment,
+  AddRole,
+  AddService,
+  AddSupplier,
+  DeactivateRole,
+  DeleteDepartment,
+  DeletePartnershipType,
+  DeleteService,
+  DeleteSupplier,
+  GetAllDepartments,
+  GetAllPartnershipTypes,
+  GetAllRoles,
+  GetAllServices,
+  GetAllSuppliers,
+  GetDepartmentById,
+  GetPartnershipTypeById,
+  GetRoleById,
+  GetServiceById,
+  GetSupplierById,
+  UpdateDepartment,
+  UpdatePartnershipType,
+  UpdateRole,
+  UpdateService,
+  UpdateSupplier,
+} from "../../services/config/configService";
+
+// Services
+export const getAllServicesAsync = createAsyncThunk(
+  "services/all",
+  async () => {
+    const response = await GetAllServices();
+    return response;
+  }
+);
+
+export const addServiceAsync = createAsyncThunk(
+  "service/add",
+  async ({ values }, { rejectWithValue }) => {
+    try {
+      const response = await AddService(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getServiceByIdAsync = createAsyncThunk(
+  "service/by/id",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await GetServiceById(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateServiceAsync = createAsyncThunk(
+  "service/update",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await UpdateService(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deleteServiceAsync = createAsyncThunk(
+  "service/delete",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeleteService(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Supplier
+export const getAllSuppliersAsync = createAsyncThunk(
+  "suppliers/all",
+  async () => {
+    const response = await GetAllSuppliers();
+    return response;
+  }
+);
+
+export const addSupplierAsync = createAsyncThunk(
+  "suppliers/add",
+  async ({ values }, { rejectWithValue }) => {
+    try {
+      const response = await AddSupplier(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getSupplierByIdAsync = createAsyncThunk(
+  "suppliers/by/id",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await GetSupplierById(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateSupplierAsync = createAsyncThunk(
+  "suppliers/update",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await UpdateSupplier(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deleteSupplierAsync = createAsyncThunk(
+  "suppliers/delete",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeleteSupplier(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Department
+export const getAllDepartmentsAsync = createAsyncThunk(
+  "departments/all",
+  async () => {
+    const response = await GetAllDepartments();
+    return response;
+  }
+);
+
+export const addDepartmentAsync = createAsyncThunk(
+  "departments/add",
+  async ({ values }, { rejectWithValue }) => {
+    try {
+      const response = await AddDepartment(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getDepartmentByIdAsync = createAsyncThunk(
+  "departments/by/id",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await GetDepartmentById(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateDepartmentAsync = createAsyncThunk(
+  "departments/update",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await UpdateDepartment(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deleteDepartmentAsync = createAsyncThunk(
+  "departments/delete",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeleteDepartment(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Partnership
+export const getAllPartnershipsAsync = createAsyncThunk(
+  "partnership/all",
+  async () => {
+    const response = await GetAllPartnershipTypes();
+    return response;
+  }
+);
+
+export const addPartnershipAsync = createAsyncThunk(
+  "partnership/add",
+  async ({ values }, { rejectWithValue }) => {
+    try {
+      const response = await AddDepartment(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getPartnershipByIdAsync = createAsyncThunk(
+  "partnership/by/id",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await GetPartnershipTypeById(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updatePartnershipAsync = createAsyncThunk(
+  "partnership/update",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await UpdatePartnershipType(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deletePartnershipAsync = createAsyncThunk(
+  "partnership/delete",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeletePartnershipType(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Role
+export const getAllRoleAsync = createAsyncThunk("role/all", async () => {
+  const response = await GetAllRoles();
+  return response;
+});
+
+export const addRoleAsync = createAsyncThunk(
+  "role/add",
+  async ({ values }, { rejectWithValue }) => {
+    try {
+      const response = await AddRole(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getRoleByIdAsync = createAsyncThunk(
+  "role/by/id",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await GetRoleById(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateRoleAsync = createAsyncThunk(
+  "role/update",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await UpdateRole(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const activateRoleAsync = createAsyncThunk(
+  "role/activate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await ActivateRole(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deactivateRoleAsync = createAsyncThunk(
+  "role/deactivate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeactivateRole(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const configSlice = createSlice({
+  name: "config",
+  initialState: {
+    getAllServicesResponse: {},
+    addServiceResponse: {},
+    getServiceByIdResponse: {},
+    updateServiceResponse: {},
+    deleteServiceResponse: {},
+    getAllSuppliersResponse: {},
+    addSupplierResponse: {},
+    getSupplierByIdResponse: {},
+    updateSupplierResponse: {},
+    deleteSupplierResponse: {},
+    getAllDepartmentsResponse: {},
+    addDepartmentResponse: {},
+    getDepartmentByIdResponse: {},
+    updateDepartmentResponse: {},
+    deleteDepartmentResponse: {},
+    getAllPartnershipTypesResponse: {},
+    addPartnershipTypeResponse: {},
+    getPartnershipTypeByIdResponse: {},
+    updatePartnershipTypeResponse: {},
+    deletePartnershipTypeResponse: {},
+    getAllRoleResponse: {},
+    addRoleResponse: {},
+    getRoleByIdResponse: {},
+    updateRoleResponse: {},
+    activateRoleResponse: {},
+    deactivateRoleResponse: {},
+  },
+
+  reducers: {},
+  extraReducers: (builder) => {
+    // Service
+    builder.addCase(getAllServicesAsync.fulfilled, (state, action) => {
+      state.getAllServicesResponse = action.payload;
+    });
+
+    builder.addCase(addServiceAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.addServiceResponse = action.payload;
+        state.getAllServicesResponse.data.unshift({
+          id: action.payload?.data?.id,
+          first_name: action.payload?.data?.first_name,
+          email: action.payload?.data?.email,
+          status: action.payload?.data?.status,
+          phone_number: action.payload?.data?.phone_number,
+          profile_picture: action?.payload?.profile_picture,
+        });
+
+        toast.success(action.payload.message);
+      }
+    });
+    builder.addCase(addServiceAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(getServiceByIdAsync.fulfilled, (state, action) => {
+      state.getServiceByIdResponse = action.payload;
+    });
+
+    builder.addCase(getServiceByIdAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(updateServiceAsync.fulfilled, (state, action) => {
+      state.updateServiceResponse = action.payload;
+      toast.success(action?.payload?.message);
+    });
+
+    builder.addCase(updateServiceAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(deleteServiceAsync.fulfilled, (state, action) => {
+      state.deleteServiceResponse = action.payload;
+    });
+
+    builder.addCase(deleteServiceAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    // Supplier
+    builder.addCase(getAllSuppliersAsync.fulfilled, (state, action) => {
+      state.getAllSuppliersResponse = action.payload;
+    });
+
+    builder.addCase(addSupplierAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.addSupplierResponse = action.payload;
+        state.getAllSuppliersResponse.data.unshift({
+          id: action.payload?.data?.id,
+          first_name: action.payload?.data?.first_name,
+          email: action.payload?.data?.email,
+          status: action.payload?.data?.status,
+          phone_number: action.payload?.data?.phone_number,
+          profile_picture: action?.payload?.profile_picture,
+        });
+
+        toast.success(action.payload.message);
+      }
+    });
+    builder.addCase(addSupplierAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(getSupplierByIdAsync.fulfilled, (state, action) => {
+      state.getServiceByIdResponse = action.payload;
+    });
+
+    builder.addCase(getSupplierByIdAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(updateSupplierAsync.fulfilled, (state, action) => {
+      state.updateSupplierResponse = action.payload;
+      toast.success(action?.payload?.message);
+    });
+
+    builder.addCase(updateSupplierAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(deleteSupplierAsync.fulfilled, (state, action) => {
+      state.deleteServiceResponse = action.payload;
+    });
+
+    builder.addCase(deleteSupplierAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    // Department
+    builder.addCase(getAllDepartmentsAsync.fulfilled, (state, action) => {
+      state.getAllDepartmentsResponse = action.payload;
+    });
+
+    builder.addCase(addDepartmentAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.addDepartmentResponse = action.payload;
+        state.getAllDepartmentsResponse.data.unshift({
+          id: action.payload?.data?.id,
+          first_name: action.payload?.data?.first_name,
+          email: action.payload?.data?.email,
+          status: action.payload?.data?.status,
+          phone_number: action.payload?.data?.phone_number,
+          profile_picture: action?.payload?.profile_picture,
+        });
+
+        toast.success(action.payload.message);
+      }
+    });
+    builder.addCase(addDepartmentAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(getDepartmentByIdAsync.fulfilled, (state, action) => {
+      state.getDepartmentByIdResponse = action.payload;
+    });
+
+    builder.addCase(getDepartmentByIdAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(updateDepartmentAsync.fulfilled, (state, action) => {
+      state.updateDepartmentResponse = action.payload;
+      toast.success(action?.payload?.message);
+    });
+
+    builder.addCase(updateDepartmentAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(deleteDepartmentAsync.fulfilled, (state, action) => {
+      state.deleteDepartmentResponse = action.payload;
+    });
+
+    builder.addCase(deleteDepartmentAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    // Role
+    builder.addCase(getAllRoleAsync.fulfilled, (state, action) => {
+      state.getAllRoleResponse = action.payload;
+    });
+
+    builder.addCase(addRoleAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.addRoleResponse = action.payload;
+        state.getAllRoleResponse.data.unshift({
+          id: action.payload?.data?.id,
+          first_name: action.payload?.data?.first_name,
+          email: action.payload?.data?.email,
+          status: action.payload?.data?.status,
+          phone_number: action.payload?.data?.phone_number,
+          profile_picture: action?.payload?.profile_picture,
+        });
+
+        toast.success(action.payload.message);
+      }
+    });
+    builder.addCase(addRoleAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(getRoleByIdAsync.fulfilled, (state, action) => {
+      state.getRoleByIdResponse = action.payload;
+    });
+
+    builder.addCase(getRoleByIdAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(updateRoleAsync.fulfilled, (state, action) => {
+      state.updateRoleResponse = action.payload;
+      toast.success(action?.payload?.message);
+    });
+
+    builder.addCase(updateRoleAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(activateRoleAsync.fulfilled, (state, action) => {
+      state.activateRoleResponse = action.payload;
+    });
+
+    builder.addCase(activateRoleAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+    builder.addCase(deactivateRoleAsync.fulfilled, (state, action) => {
+      state.deactivateRoleResponse = action.payload;
+    });
+
+    builder.addCase(deactivateRoleAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+  },
+});
+
+export default configSlice.reducer;

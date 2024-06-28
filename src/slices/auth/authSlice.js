@@ -68,10 +68,11 @@ const userSlice = createSlice({
     });
 
     builder.addCase(loginAsync.pending, (state, action) => {
-      state.user = action.payload;
+      state.loginResponse = action.payload;
     });
     builder.addCase(loginAsync.rejected, (state, action) => {
       toast.error("Login failed!");
+      state.loginResponse = action.payload;
     });
     builder.addCase(forgetPasswordAsnyc.fulfilled, (state, action) => {
       state.forgotPasswordResponse = action.payload;
