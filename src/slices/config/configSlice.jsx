@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import {
   ActivateRole,
   AddDepartment,
+  AddPartnershipType,
   AddRole,
   AddService,
   AddSupplier,
@@ -68,11 +69,15 @@ export const getServiceByIdAsync = createAsyncThunk(
 
 export const updateServiceAsync = createAsyncThunk(
   "service/update",
-  async ({ id }, { rejectWithValue }) => {
+  async ({ id, values }, { rejectWithValue }) => {
     try {
-      const response = await UpdateService(id);
+      const response = await UpdateService(id, values);
 
-      return response;
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        return rejectWithValue("Update failed");
+      }
     } catch (error) {
       toast.error(error?.response?.data.message);
       return rejectWithValue(error.message);
@@ -133,9 +138,9 @@ export const getSupplierByIdAsync = createAsyncThunk(
 
 export const updateSupplierAsync = createAsyncThunk(
   "suppliers/update",
-  async ({ id }, { rejectWithValue }) => {
+  async ({ id, values }, { rejectWithValue }) => {
     try {
-      const response = await UpdateSupplier(id);
+      const response = await UpdateSupplier(id, values);
 
       return response;
     } catch (error) {
@@ -198,9 +203,9 @@ export const getDepartmentByIdAsync = createAsyncThunk(
 
 export const updateDepartmentAsync = createAsyncThunk(
   "departments/update",
-  async ({ id }, { rejectWithValue }) => {
+  async ({ id, values }, { rejectWithValue }) => {
     try {
-      const response = await UpdateDepartment(id);
+      const response = await UpdateDepartment(id, values);
 
       return response;
     } catch (error) {
@@ -237,7 +242,7 @@ export const addPartnershipAsync = createAsyncThunk(
   "partnership/add",
   async ({ values }, { rejectWithValue }) => {
     try {
-      const response = await AddDepartment(values);
+      const response = await AddPartnershipType(values);
 
       return response;
     } catch (error) {
@@ -263,9 +268,9 @@ export const getPartnershipByIdAsync = createAsyncThunk(
 
 export const updatePartnershipAsync = createAsyncThunk(
   "partnership/update",
-  async ({ id }, { rejectWithValue }) => {
+  async ({ id, values }, { rejectWithValue }) => {
     try {
-      const response = await UpdatePartnershipType(id);
+      const response = await UpdatePartnershipType(id, values);
 
       return response;
     } catch (error) {
@@ -415,7 +420,7 @@ const configSlice = createSlice({
           remarks: action.payload?.remarks,
         });
 
-        toast.success(action.payload.message);
+        toast.success("Service add successfully");
       }
     });
     builder.addCase(addServiceAsync.rejected, (state, action) => {
@@ -432,7 +437,7 @@ const configSlice = createSlice({
 
     builder.addCase(updateServiceAsync.fulfilled, (state, action) => {
       state.updateServiceResponse = action.payload;
-      toast.success(action?.payload?.message);
+      toast.success("Updated successfully");
     });
 
     builder.addCase(updateServiceAsync.rejected, (state, action) => {
@@ -440,7 +445,14 @@ const configSlice = createSlice({
     });
 
     builder.addCase(deleteServiceAsync.fulfilled, (state, action) => {
-      state.deleteServiceResponse = action.payload;
+      if (action.payload) {
+        state.deleteServiceResponse = action.payload;
+        state.getAllServicesResponse = state.getAllServicesResponse.filter(
+          (service) => service.id !== action.payload.id
+        );
+
+        toast.success("Service delete successfully");
+      }
     });
 
     builder.addCase(deleteServiceAsync.rejected, (state, action) => {
@@ -455,16 +467,14 @@ const configSlice = createSlice({
     builder.addCase(addSupplierAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addSupplierResponse = action.payload;
-        state.getAllSuppliersResponse.data.unshift({
-          id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          email: action.payload?.data?.email,
-          status: action.payload?.data?.status,
-          phone_number: action.payload?.data?.phone_number,
-          profile_picture: action?.payload?.profile_picture,
+        state.getAllSuppliersResponse?.unshift({
+          id: action.payload?.id,
+          name: action.payload?.name,
+          remarks: action.payload?.remarks,
+          created_at: action.payload?.created_at,
         });
 
-        toast.success(action.payload.message);
+        toast.success("Supplier added successfully");
       }
     });
     builder.addCase(addSupplierAsync.rejected, (state, action) => {
@@ -504,16 +514,13 @@ const configSlice = createSlice({
     builder.addCase(addDepartmentAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addDepartmentResponse = action.payload;
-        state.getAllDepartmentsResponse.data.unshift({
-          id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          email: action.payload?.data?.email,
-          status: action.payload?.data?.status,
-          phone_number: action.payload?.data?.phone_number,
-          profile_picture: action?.payload?.profile_picture,
+        state.getAllDepartmentsResponse.unshift({
+          id: action.payload?.id,
+          name: action.payload?.name,
+          created_at: action.payload?.created_at,
         });
 
-        toast.success(action.payload.message);
+        toast.success("Department added successfully");
       }
     });
     builder.addCase(addDepartmentAsync.rejected, (state, action) => {
@@ -530,7 +537,7 @@ const configSlice = createSlice({
 
     builder.addCase(updateDepartmentAsync.fulfilled, (state, action) => {
       state.updateDepartmentResponse = action.payload;
-      toast.success(action?.payload?.message);
+      toast.success("Department updated successfully");
     });
 
     builder.addCase(updateDepartmentAsync.rejected, (state, action) => {
@@ -542,6 +549,52 @@ const configSlice = createSlice({
     });
 
     builder.addCase(deleteDepartmentAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    // Partnership
+    builder.addCase(getAllPartnershipsAsync.fulfilled, (state, action) => {
+      state.getAllPartnershipTypesResponse = action.payload;
+    });
+
+    builder.addCase(addPartnershipAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.addPartnershipTypeResponse = action.payload;
+        state.getAllPartnershipTypesResponse?.unshift({
+          id: action.payload?.id,
+          name: action.payload?.name,
+          created_at: action.payload?.created_at,
+        });
+
+        toast.success("Partnership added successfully");
+      }
+    });
+    builder.addCase(addPartnershipAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(getPartnershipByIdAsync.fulfilled, (state, action) => {
+      state.getPartnershipTypeByIdResponse = action.payload;
+    });
+
+    builder.addCase(getPartnershipByIdAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(updatePartnershipAsync.fulfilled, (state, action) => {
+      state.updatePartnershipTypeResponse = action.payload;
+      toast.success("Partnership updated successfully");
+    });
+
+    builder.addCase(updatePartnershipAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(deletePartnershipAsync.fulfilled, (state, action) => {
+      state.deletePartnershipTypeResponse = action.payload;
+    });
+
+    builder.addCase(deletePartnershipAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
 
@@ -562,7 +615,7 @@ const configSlice = createSlice({
           profile_picture: action?.payload?.profile_picture,
         });
 
-        toast.success(action.payload.message);
+        toast.success("Role added successfully");
       }
     });
     builder.addCase(addRoleAsync.rejected, (state, action) => {

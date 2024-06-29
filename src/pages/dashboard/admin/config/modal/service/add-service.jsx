@@ -1,23 +1,10 @@
-import {
-  Modal,
-  Button,
-  Form,
-  Row,
-  Col,
-  FloatingLabel,
-  Image,
-} from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { min } from "date-fns";
-import { addServiceAsync } from "../../../../../slices/config/configSlice";
+import { useDispatch } from "react-redux";
+import { addServiceAsync } from "../../../../../../slices/config/configSlice";
 
 function AddService(props) {
-  const [imageUrl, setImageUrl] = useState(null);
-  const [profilePic, setProfilePic] = useState();
-  //   const roles = useSelector((state) => state.settings.getAllRolesResponse);
   const dispatch = useDispatch();
 
   return (
@@ -51,21 +38,24 @@ function AddService(props) {
               currency: Yup.string().required("Currency is required"),
             })}
             onSubmit={(values) => {
-              dispatch(addServiceAsync({ values }));
-              props.onHide();
+              dispatch(addServiceAsync({ values }))
+                .then((response) => {
+                  if (response) {
+                    props.onHide();
+                  } else {
+                    console.log("Error please try again");
+                  }
+                })
+                .catch((error) => {
+                  // Handle the error case if necessary
+                  console.error("Error occurred:", error);
+                });
             }}
             validateOnChange
             validateOnBlur
             validateOnSubmit
           >
-            {({
-              errors,
-              touched,
-              handleSubmit,
-              isSubmitting,
-              values,
-              handleChange,
-            }) => (
+            {({ errors, touched, handleSubmit, values, handleChange }) => (
               <Form onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6}>

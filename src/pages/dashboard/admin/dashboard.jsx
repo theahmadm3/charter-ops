@@ -10,7 +10,7 @@ const AdminDashboard = () => {
       <Container fluid>
         <Row className="mt-5">
           <Col md={6}>
-            <Card className="dash-card-1 bg-color-1">
+            <Card className="dash-card-1 bg-color-1 ">
               <Card.Body>
                 <h2 className="">Welcome, Sadiqq</h2>
                 <p>
