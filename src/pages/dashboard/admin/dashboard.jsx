@@ -5,14 +5,29 @@ import DateTimeDisplay from "../../../util/date";
 import { BarChart } from "../../../component/charts/bar";
 
 const AdminDashboard = () => {
+  const user = localStorage.getItem("user");
+  let loginUser = null;
+
+  if (user) {
+    try {
+      loginUser = JSON.parse(user);
+    } catch (error) {
+      console.error("Error parsing 'user' from localStorage:", error);
+    }
+  }
   return (
     <AdminLayout>
       <Container fluid>
-        <Row className="mt-5">
+        <Row className="my-5 ">
           <Col md={6}>
-            <Card className="dash-card-1 bg-color-1 ">
+            <Card className=" bg-color-1 ">
               <Card.Body>
-                <h2 className="">Welcome, Sadiqq</h2>
+                <h2 className="text-capitalize">
+                  Welcome,{" "}
+                  <span className="text-capitalize">
+                    {loginUser?.first_name}
+                  </span>{" "}
+                </h2>
                 <p>
                   {" "}
                   <DateTimeDisplay />{" "}
@@ -22,7 +37,7 @@ const AdminDashboard = () => {
           </Col>
 
           <Col md={3}>
-            <Card className="dash-card-1">
+            <Card className="">
               <Card.Body>
                 <Row>
                   <Col md={8}>
@@ -41,7 +56,7 @@ const AdminDashboard = () => {
             </Card>
           </Col>
           <Col md={3}>
-            <Card className="dash-card-1">
+            <Card className="">
               <Card.Body>
                 <Row>
                   <Col md={8}>
@@ -61,9 +76,9 @@ const AdminDashboard = () => {
           </Col>
         </Row>
 
-        <Row className="mt-5">
-          <Col md={4}>
-            <Card className="dash-card-1">
+        <Row className="my-5">
+          <Col md={4} className="">
+            <Card className="">
               <Card.Body>
                 <Row>
                   <Col md={8}>
@@ -83,7 +98,7 @@ const AdminDashboard = () => {
           </Col>
 
           <Col md={8}>
-            <Card className="dash-card-1 bg-color-1">
+            <Card className=" bg-color-1">
               <Card.Body>
                 <Row>
                   <Col md={4}>

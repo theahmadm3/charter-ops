@@ -70,7 +70,7 @@ function SideBar() {
           <Image src={logo} className="img-fluid" />
         </div>
         <div className="sidebar-toggle shadow" id="m-tog" onClick={toggleMenu}>
-          <div className="text-center mt-1 p-1 text-white h3">
+          <div className="text-center mt-1 p-1  h3">
             <GiHamburgerMenu />
           </div>
         </div>
