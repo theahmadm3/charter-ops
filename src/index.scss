@@ -287,3 +287,21 @@ th {
 .table-responsive .btn-group-vertical {
   position: static;
 }
+
+.input-group
+  > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(
+    .valid-feedback
+  ):not(.invalid-tooltip):not(.invalid-feedback) {
+  border-left: none;
+  border-color: #dee2e6;
+  background-color: rgb(255, 255, 255);
+  color: #0079c8;
+}
+
+.password-input {
+  border-right: none !important;
+}
+
+.dropdown-toggle::after {
+  border: none !important;
+}
