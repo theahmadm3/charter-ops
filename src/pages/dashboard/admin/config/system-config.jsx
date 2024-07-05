@@ -151,6 +151,9 @@ const SystemConfig = () => {
   useEffect(() => {
     try {
       dispatch(getAllServicesAsync());
+      dispatch(getAllPartnershipsAsync());
+      dispatch(getAllSuppliersAsync());
+      dispatch(getAllDepartmentsAsync());
     } catch (error) {
       console.log(error);
     }

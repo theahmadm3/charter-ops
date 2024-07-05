@@ -1,12 +1,13 @@
+import React, { useState } from "react";
 import {
   Button,
   Card,
   Col,
   Container,
-  FloatingLabel,
   Form,
   Image,
   Row,
+  InputGroup,
 } from "react-bootstrap";
 import logo from "../../assets/images/flybird-logo.png";
 import { Formik } from "formik";
@@ -14,21 +15,23 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { loginAsync } from "../../slices/auth/authSlice";
 import { useDispatch } from "react-redux";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const toggleShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <>
       <Container fluid className="login-container">
         <Row>
           <Col md={7}></Col>
-          <Col
-            md={4}
-            className="d-flex align-items-center justify-content-center"
-          >
-            <div className="mt-5 ">
-              <Card className="shadow border-0 login-form-conatainer p-5">
+          <Col md={4} className=" align-items-center justify-content-center">
+            <div className="mt-5">
+              <Card className="shadow border-0 login-form-container p-5">
                 <Card.Body>
                   <div className="text-center my-4">
                     <Image src={logo} width={140} />
@@ -85,50 +88,56 @@ const Login = () => {
                       }) => (
                         <Form onSubmit={handleSubmit}>
                           <Form.Group className="my-4">
-                            <FloatingLabel
-                              controlId="floatingInput"
-                              label="Email Address"
-                              className="my-3"
-                            >
-                              <Form.Control
-                                type="email"
-                                placeholder="Enter your email"
-                                name="email"
-                                value={values.email}
-                                onChange={handleChange}
-                              />
-                              {errors.email && touched.email ? (
-                                <small className="text-danger">
-                                  {errors.email}
-                                </small>
-                              ) : null}
-                            </FloatingLabel>
+                            <Form.Label>Email Address</Form.Label>
+                            <Form.Control
+                              className="p-3"
+                              type="email"
+                              placeholder="Enter your email"
+                              name="email"
+                              value={values.email}
+                              onChange={handleChange}
+                              isInvalid={touched.email && errors.email}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              {errors.email}
+                            </Form.Control.Feedback>
                           </Form.Group>
                           <Form.Group className="my-4">
-                            <FloatingLabel
-                              controlId="floatingInput"
-                              label="Password"
-                              className="my-3"
-                            >
+                            <Form.Label>Password</Form.Label>
+                            <InputGroup className="border-left-0">
                               <Form.Control
                                 placeholder="Enter your password"
                                 name="password"
                                 value={values.password}
-                                onChange={handleChange}
                                 className="p-3 password-input"
-                                type="password"
+                                onChange={handleChange}
+                                type={showPassword ? "text" : "password"}
+                                isInvalid={touched.password && errors.password}
                               />
-                              {errors.password && touched.password ? (
-                                <small className="text-danger">
-                                  {errors.password}
-                                </small>
-                              ) : null}
-                            </FloatingLabel>
+                              <Button
+                                variant="outline-secondary"
+                                onClick={toggleShowPassword}
+                                className="border-left-0  "
+                              >
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                              </Button>
+                              <Form.Control.Feedback type="invalid">
+                                {errors.password}
+                              </Form.Control.Feedback>
+                            </InputGroup>
+                          </Form.Group>
+                          <Form.Group className="my-4">
+                            <Form.Check
+                              type="checkbox"
+                              label="Remember Me"
+                              checked={rememberMe}
+                              onChange={() => setRememberMe(!rememberMe)}
+                            />
                           </Form.Group>
                           <div className="my-4">
                             <Link
                               to="/forget-password"
-                              className=" text-start text-color-2 my-5 text-black"
+                              className="text-start text-color-2 my-5 text-black"
                             >
                               Forgot your Password?{" "}
                             </Link>
@@ -136,7 +145,7 @@ const Login = () => {
                           <div className="d-grid gap-2 mb-5">
                             <Button
                               type="submit"
-                              className=" my-4 py-3  border-0  bg-color-2"
+                              className="my-4 py-3 border-0 bg-color-2"
                             >
                               <span className="text-center fw-bold">Login</span>
                             </Button>

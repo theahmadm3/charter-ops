@@ -17,7 +17,7 @@ function EditDepartment(props) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Add Update Department
+            Update Department
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -53,7 +53,14 @@ function EditDepartment(props) {
             validateOnBlur
             validateOnSubmit
           >
-            {({ errors, touched, handleSubmit, values, handleChange }) => (
+            {({
+              errors,
+              touched,
+              handleSubmit,
+              values,
+              handleChange,
+              dirty,
+            }) => (
               <Form onSubmit={handleSubmit}>
                 <Row>
                   <Col md={12}>
@@ -83,6 +90,7 @@ function EditDepartment(props) {
                     type="submit"
                     variant="success"
                     className=" my-2 me-3  border-0  "
+                    disabled={!dirty}
                   >
                     <span className=" ">Update</span>
                   </Button>
