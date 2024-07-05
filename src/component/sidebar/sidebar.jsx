@@ -18,7 +18,11 @@ function SideBar() {
       icon: <BiSolidDashboard className="sidebar-icon" />,
       text: "Dashboard",
     },
-    { to: "/users", icon: <FaUser className="sidebar-icon" />, text: "Users" },
+    {
+      to: "/admin-users",
+      icon: <FaUser className="sidebar-icon" />,
+      text: "Users",
+    },
     {
       to: "/transaction",
       icon: <MdOutlineReceipt className="sidebar-icon" />,
