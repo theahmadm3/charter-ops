@@ -23,18 +23,14 @@ import AddSupplier from "../config/modal/supplier/add-supplier";
 import EditSupplier from "../config/modal/supplier/edit-supplier";
 import AddPartnership from "../config/modal/partnership/add-partnership";
 import EditPartnership from "../config/modal/partnership/edit-partnership";
+import { getAllUsersAsync } from "../../../../slices/user/userSlice";
 
 const Users = () => {
   const dispatch = useDispatch();
-  const [activeKey, setActiveKey] = useState("services");
+  const [activeKey, setActiveKey] = useState("users");
   const [modalAddService, setModalAddService] = useState(false);
   const [modalEditService, setModalEditService] = useState(false);
   const [modalAddDepartment, setModalAddDepartment] = useState(false);
-  const [modalEditDepartment, setModalEditDepartment] = useState(false);
-  const [modalAddSupplier, setModalAddSupplier] = useState(false);
-  const [modalEditSupplier, setModalEditSupplier] = useState(false);
-  const [modalAddPartnership, setModalAddPartnership] = useState(false);
-  const [modalEditPartnership, setModalEditPartnership] = useState(false);
 
   const configInfo = useSelector((state) => state?.config);
   const [updateService, setUpdateService] = useState([]);
@@ -66,77 +62,6 @@ const Users = () => {
       });
   };
 
-  const handleEditDepartment = (id) => {
-    setModalEditDepartment(true);
-
-    const updateDepartment = configInfo?.getAllDepartmentsResponse?.filter(
-      (data) => data.id === id
-    );
-    setUpdateDepartment(updateDepartment);
-  };
-  const handleDeletDepartment = (id) => {
-    dispatch(deleteDepartmentAsync({ id }))
-      .then((response) => {
-        if (response) {
-          toast.success("Department deleted successfully");
-        } else {
-          toast.error("Error: Service deletion failed");
-        }
-      })
-      .catch((error) => {
-        toast.error("Error: Please try again");
-        console.error("Error occurred:", error);
-      });
-  };
-
-  const handleEditSupplier = (id) => {
-    setModalEditSupplier(true);
-
-    const updateSupplier = configInfo?.getAllSuppliersResponse?.filter(
-      (data) => data.id === id
-    );
-    setUpdateSupplier(updateSupplier);
-  };
-  const handleDeleteSupplier = (id) => {
-    dispatch(deleteSupplierAsync({ id }))
-      .then((response) => {
-        if (response) {
-          toast.success("Supplier deleted successfully");
-        } else {
-          toast.error("Error: Service deletion failed");
-        }
-      })
-      .catch((error) => {
-        toast.error("Error: Please try again");
-        console.error("Error occurred:", error);
-      });
-  };
-
-  const handleEditPartnership = (id) => {
-    setModalEditPartnership(true);
-
-    const updatePartnership =
-      configInfo?.getAllPartnershipTypesResponse?.filter(
-        (data) => data.id === id
-      );
-    setUpdatePartnership(updatePartnership);
-  };
-
-  const handleDeletePartnership = (id) => {
-    dispatch(deletePartnershipAsync({ id }))
-      .then((response) => {
-        if (response) {
-          toast.success("Partnership deleted successfully");
-        } else {
-          toast.error("Error: Service deletion failed");
-        }
-      })
-      .catch((error) => {
-        toast.error("Error: Please try again");
-        console.error("Error occurred:", error);
-      });
-  };
-
   useEffect(() => {
     const savedActiveKey = localStorage.getItem("activeTab");
     if (savedActiveKey) {
@@ -150,7 +75,7 @@ const Users = () => {
   };
   useEffect(() => {
     try {
-      dispatch(getAllServicesAsync());
+      dispatch(getAllUsersAsync());
     } catch (error) {
       console.log(error);
     }
@@ -162,40 +87,9 @@ const Users = () => {
         show={modalAddService}
         onHide={() => setModalAddService(false)}
       />
-      <EditService
-        show={modalEditService}
-        onHide={() => setModalEditService(false)}
-        data={updateService}
-      />
-      <AddDepartment
-        show={modalAddDepartment}
-        onHide={() => setModalAddDepartment(false)}
-      />
-      <EditDepartment
-        show={modalEditDepartment}
-        onHide={() => setModalEditDepartment(false)}
-        data={updateDepartment}
-      />
-      <AddSupplier
-        show={modalAddSupplier}
-        onHide={() => setModalAddSupplier(false)}
-      />
-      <EditSupplier
-        show={modalEditSupplier}
-        onHide={() => setModalEditSupplier(false)}
-        data={updateSupplier}
-      />
-      <AddPartnership
-        show={modalAddPartnership}
-        onHide={() => setModalAddPartnership(false)}
-      />
-      <EditPartnership
-        show={modalEditPartnership}
-        onHide={() => setModalEditPartnership(false)}
-        data={updatePartnership}
-      />
+
       <div className="my-3 container">
-        <h6 className="mb-4">System Configuration</h6>
+        <h6 className="mb-4">Users</h6>
         <Tabs
           activeKey={activeKey}
           onSelect={handleSelect}
@@ -203,29 +97,32 @@ const Users = () => {
           className="mb-3"
         >
           <Tab
-            eventKey="services"
+            eventKey="users"
             title={
               <span onClick={() => dispatch(getAllServicesAsync())}>Users</span>
             }
           >
             <div>
               <div className="my-3 text-end">
-                <Button onClick={() => setModalAddService(true)}>
-                  Partners
+                <Button
+                  onClick={() => setModalAddService(true)}
+                  className="shadow"
+                >
+                  Add User
                 </Button>
               </div>
               <Table striped bordered hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
-                    <th>Service Name</th>
-                    <th>Rate Type</th>
-                    <th>Charge Rate</th>
-                    <th>Currency</th>
-                    <th>Remark</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   {configInfo?.getAllServicesResponse?.length > 0 ? (
                     configInfo.getAllServicesResponse.map((service, index) => {
                       const {
@@ -278,33 +175,36 @@ const Users = () => {
                       <td colSpan="7">No services available</td>
                     </tr>
                   )}
-                </tbody>
+                </tbody> */}
               </Table>
             </div>
           </Tab>
           <Tab
-            eventKey="departments"
+            eventKey="partner"
             title={
               <span onClick={() => dispatch(getAllDepartmentsAsync())}>
-                Departments
+                Partner
               </span>
             }
           >
             <div>
               <div className="my-3 text-end">
                 <Button onClick={() => setModalAddDepartment(true)}>
-                  Add Department
+                  Add Partner
                 </Button>
               </div>
               <Table striped bordered hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
-                    <th>Service Name</th>
-                    <th>Date</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   {configInfo?.getAllDepartmentsResponse?.length > 0 ? (
                     configInfo.getAllDepartmentsResponse.map(
                       (department, index) => {
@@ -353,7 +253,7 @@ const Users = () => {
                       <td colSpan="7">No departments available</td>
                     </tr>
                   )}
-                </tbody>
+                </tbody> */}
               </Table>
             </div>
           </Tab>

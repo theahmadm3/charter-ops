@@ -7,12 +7,7 @@ import {
   AddUser,
   UpdateUser,
   DeleteUser,
-  getAuthUser,
-  updateAuthUser,
-  GetAllCustomer,
-  GetAllVendor,
-  AddAdminUser,
-  GetAllAdminUsers,
+  GetAuthUser,
 } from "../../services/user/userService";
 
 export const getAllUsersAsync = createAsyncThunk("users/all", async () => {
@@ -20,47 +15,15 @@ export const getAllUsersAsync = createAsyncThunk("users/all", async () => {
   return response;
 });
 
-export const getAllAdminUsersAsync = createAsyncThunk(
-  "users/admin/all",
-  async () => {
-    const response = await GetAllAdminUsers();
-    return response;
-  }
-);
-export const getAllCustomersAsync = createAsyncThunk(
-  "users/customer",
-  async () => {
-    const response = await GetAllCustomer();
-    return response;
-  }
-);
-
-export const getAllVendorsAsync = createAsyncThunk("users/vendor", async () => {
-  const response = await GetAllVendor();
-  return response;
-});
-
-export const getUserByIdAsync = createAsyncThunk(
-  "users/by/id",
-  async ({ id }) => {
-    const response = await GetUserById(id);
-    return response;
-  }
-);
-
 export const addUserAsync = createAsyncThunk("users/add", async (values) => {
   const response = await AddUser(values);
   return response;
 });
 
-export const addAdminUserAsync = createAsyncThunk(
-  "users/add/admin",
-  async (values) => {
-    const response = await AddAdminUser(values);
-    console.log("error from slice", response);
-    return response;
-  }
-);
+export const getUserByIdAsync = createAsyncThunk("users/by/id", async () => {
+  const response = await GetUserById();
+  return response;
+});
 
 export const updateUserAsync = createAsyncThunk(
   "users/update",
@@ -79,32 +42,20 @@ export const deleteUserAsync = createAsyncThunk(
 );
 
 export const getAuthUserAsync = createAsyncThunk("users/auth", async () => {
-  const response = await getAuthUser();
+  const response = await GetAuthUser();
   return response;
 });
-
-export const updateAuthUsersAsync = createAsyncThunk(
-  "users/auth/update",
-  async (payload) => {
-    const response = await updateAuthUser(payload);
-    return response;
-  }
-);
 
 const userSlice = createSlice({
   name: "users",
   initialState: {
     getAllUsersResponse: {},
-    getAllAdminUsersResponse: {},
-    getAllCustomersResponse: {},
-    getAllVendorsResponse: {},
     getUserByIdResponse: {},
     updateUserResponse: {},
+    deleteUserResponse: {},
     updateUserResponseFail: [],
     addUserResponse: {},
-    addAdminUserResponse: {},
     getAuthUserResponse: {},
-    updateAuthUserResponse: {},
   },
 
   reducers: {},
@@ -113,68 +64,29 @@ const userSlice = createSlice({
       state.getAllUsersResponse = action.payload;
     });
 
-    builder.addCase(getAllAdminUsersAsync.fulfilled, (state, action) => {
-      state.getAllAdminUsersResponse = action.payload;
-    });
-
     builder.addCase(addUserAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addUserResponse = action.payload;
-        state.getAllUsersResponse.data.unshift({
-          id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          email: action.payload?.data?.email,
-          status: action.payload?.data?.status,
-          phone_number: action.payload?.data?.phone_number,
-          profile_picture: action?.payload?.profile_picture,
-        });
-
-        toast.success(action.payload.message);
-      }
-    });
-    builder.addCase(addUserAsync.rejected, (state, action) => {
-      toast.error(action.payload.message);
-    });
-
-    builder.addCase(addAdminUserAsync.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.addAdminUserResponse = action.payload;
-        state.getAllAdminUsersResponse.data.unshift({
-          id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          last_name: action.payload?.data?.last_name,
-          email: action.payload?.data?.email,
-          role: action.payload?.data?.role,
-          department: action.payload?.data?.department,
-          supervisor: action.payload?.data?.supervisor,
-          level: action.payload?.data?.level,
-          phone_number: action.payload?.data?.phone_number,
+        state.getAllUsersResponse.unshift({
+          id: action.payload?.id,
+          first_name: action.payload?.first_name,
+          email: action.payload?.email,
+          status: action.payload?.status,
+          phone_number: action.payload?.phone_number,
         });
 
         toast.success(action?.payload?.message);
       }
     });
-    builder.addCase(addAdminUserAsync.rejected, (state, action) => {
-      toast.error("Failed: Please try again");
+    builder.addCase(addUserAsync.rejected, (state, action) => {
+      state.addUserResponse = action.payload;
+      toast.error(action.payload.message);
     });
 
     builder.addCase(updateUserAsync.fulfilled, (state, action) => {
       state.updateUserResponse = action.payload;
       toast.success(action.payload.message);
     });
-    // builder.addCase(updateUserAsync.rejected, (state, action) => {
-    //   const errorMessages = [];
-
-    //   for (const field in action.payload) {
-    //     if (action.payload.hasOwnProperty(field)) {
-    //       const messages = action.payload[field].map(
-    //         (message) => `${field}: ${message}`
-    //       );
-    //       errorMessages.push(...messages);
-    //     }
-    //   }
-    //   toast.error(errorMessages.join("\n"));
-    // });
 
     builder.addCase(getAuthUserAsync.fulfilled, (state, action) => {
       state.getAuthUserResponse = action.payload;
@@ -184,28 +96,23 @@ const userSlice = createSlice({
       toast.error(action?.payload?.message);
     });
 
-    builder.addCase(updateAuthUsersAsync.fulfilled, (state, action) => {
-      state.updateAuthUserResponse = action.payload;
+    builder.addCase(getUserByIdAsync.fulfilled, (state, action) => {
+      state.getUserByIdResponse = action.payload;
       toast.success(action?.payload?.message);
     });
 
-    builder.addCase(updateAuthUsersAsync.rejected, (state, action) => {
+    builder.addCase(getUserByIdAsync.rejected, (state, action) => {
+      state.getUserByIdResponse = action.payload;
       toast.error(action?.payload?.message);
     });
 
-    builder.addCase(getAllCustomersAsync.fulfilled, (state, action) => {
-      state.getAllCustomersResponse = action.payload;
+    builder.addCase(deleteUserAsync.fulfilled, (state, action) => {
+      state.deleteUserResponse = action.payload;
+      toast.success(action?.payload?.message);
     });
 
-    builder.addCase(getAllCustomersAsync.rejected, (state, action) => {
-      toast.error(action?.payload?.message);
-    });
-
-    builder.addCase(getAllVendorsAsync.fulfilled, (state, action) => {
-      state.getAllVendorsResponse = action.payload;
-    });
-
-    builder.addCase(getAllVendorsAsync.rejected, (state, action) => {
+    builder.addCase(deleteUserAsync.rejected, (state, action) => {
+      state.deleteUserResponse = action.payload;
       toast.error(action?.payload?.message);
     });
   },
