@@ -2,9 +2,9 @@ import { Modal, Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { addUserAsync } from "../../../../../slices/user/userSlice";
+import { updateUserAsync } from "../../../../../slices/user/userSlice";
 
-function AddUser(props) {
+function EditUser(props) {
   const dispatch = useDispatch();
   const rolesInfo = useSelector((state) => state?.config?.getAllRoleResponse);
   return (
@@ -17,20 +17,20 @@ function AddUser(props) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Add New User
+            Edit User
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Formik
             initialValues={{
-              first_name: "",
-              middle_name: "",
-              last_name: "",
-              phone: "",
-              gender: "",
-              address: "",
-              email: "",
-              role_id: "",
+              first_name: props?.data[0]?.first_name,
+              middle_name: props?.data[0]?.middle_name,
+              last_name: props?.data[0]?.last_name,
+              phone: props?.data[0]?.phone,
+              gender: props?.data[0]?.gender,
+              address: props?.data[0]?.address,
+              email: props?.data[0]?.email,
+              role_id: props?.data[0]?.role_id,
             }}
             validationSchema={Yup.object().shape({
               first_name: Yup.string()
@@ -58,7 +58,7 @@ function AddUser(props) {
                 .integer("Role ID must be an integer"),
             })}
             onSubmit={(values) => {
-              dispatch(addUserAsync(values))
+              dispatch(updateUserAsync({ id: props?.data[0]?.id, values }))
                 .then((response) => {
                   if (response?.payload?.success) {
                     props.onHide();
@@ -75,7 +75,14 @@ function AddUser(props) {
             validateOnBlur
             validateOnSubmit
           >
-            {({ errors, touched, handleSubmit, values, handleChange }) => (
+            {({
+              errors,
+              touched,
+              handleSubmit,
+              values,
+              handleChange,
+              dirty,
+            }) => (
               <Form onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6}>
@@ -279,8 +286,9 @@ function AddUser(props) {
                     type="submit"
                     variant="success"
                     className=" my-2 me-3  border-0  "
+                    disabled={!dirty}
                   >
-                    <span className=" ">Create</span>
+                    <span className=" ">Update</span>
                   </Button>
                   <Button onClick={props.onHide} variant="danger">
                     Close
@@ -295,4 +303,4 @@ function AddUser(props) {
     </>
   );
 }
-export default AddUser;
+export default EditUser;

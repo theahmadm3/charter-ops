@@ -16,17 +16,19 @@ import {
 } from "../../../../slices/user/userSlice";
 import { HiDotsHorizontal } from "react-icons/hi";
 import AddUser from "./modal/add-user";
+import EditUser from "./modal/edit-user";
 
 const Users = () => {
   const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState("users");
   const [modalAddUser, setModalAddUser] = useState(false);
+  const [modalEditUser, setModalEditUser] = useState(false);
   const [updateUser, setUpdateUser] = useState([]);
 
   const userInfo = useSelector((state) => state?.users);
 
   const handleEditUser = (id) => {
-    setModalEditService(true);
+    setModalEditUser(true);
 
     const updateUser = userInfo?.getAllUsersResponse?.data.filter(
       (data) => data.id === id
@@ -72,6 +74,11 @@ const Users = () => {
   return (
     <AdminLayout>
       <AddUser show={modalAddUser} onHide={() => setModalAddUser(false)} />
+      <EditUser
+        show={modalEditUser}
+        onHide={() => setModalEditUser(false)}
+        data={updateUser}
+      />
 
       <div className="my-3 container">
         <h6 className="mb-4">Users</h6>
