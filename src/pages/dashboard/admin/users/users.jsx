@@ -3,57 +3,44 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteDepartmentAsync,
-  deletePartnershipAsync,
   deleteServiceAsync,
-  deleteSupplierAsync,
   getAllDepartmentsAsync,
-  getAllPartnershipsAsync,
+  getAllRoleAsync,
   getAllServicesAsync,
-  getAllSuppliersAsync,
 } from "../../../../slices/config/configSlice";
-import AddService from "../config/modal/service/add-service";
-import { HiDotsHorizontal } from "react-icons/hi";
-import EditService from "../config/modal/service/edit-service";
-import AddDepartment from "../config/modal/department/add-department";
 import { toast } from "react-toastify";
-import moment from "moment";
-import EditDepartment from "../config/modal/department/edit-department";
-import AddSupplier from "../config/modal/supplier/add-supplier";
-import EditSupplier from "../config/modal/supplier/edit-supplier";
-import AddPartnership from "../config/modal/partnership/add-partnership";
-import EditPartnership from "../config/modal/partnership/edit-partnership";
-import { getAllUsersAsync } from "../../../../slices/user/userSlice";
+
+import {
+  deleteUserAsync,
+  getAllUsersAsync,
+} from "../../../../slices/user/userSlice";
+import { HiDotsHorizontal } from "react-icons/hi";
+import AddUser from "./modal/add-user";
 
 const Users = () => {
   const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState("users");
-  const [modalAddService, setModalAddService] = useState(false);
-  const [modalEditService, setModalEditService] = useState(false);
-  const [modalAddDepartment, setModalAddDepartment] = useState(false);
+  const [modalAddUser, setModalAddUser] = useState(false);
+  const [updateUser, setUpdateUser] = useState([]);
 
-  const configInfo = useSelector((state) => state?.config);
-  const [updateService, setUpdateService] = useState([]);
-  const [updateDepartment, setUpdateDepartment] = useState([]);
-  const [updateSupplier, setUpdateSupplier] = useState([]);
-  const [updatePartnership, setUpdatePartnership] = useState([]);
+  const userInfo = useSelector((state) => state?.users);
 
-  const handleEditService = (id) => {
+  const handleEditUser = (id) => {
     setModalEditService(true);
 
-    const updateService = configInfo?.getAllServicesResponse?.filter(
+    const updateUser = userInfo?.getAllUsersResponse?.data.filter(
       (data) => data.id === id
     );
-    setUpdateService(updateService);
+    setUpdateUser(updateUser);
   };
 
-  const handleDeleteService = (id) => {
-    dispatch(deleteServiceAsync({ id }))
+  const handleDeleteUser = (id) => {
+    dispatch(deleteUserAsync({ id }))
       .then((response) => {
         if (response) {
-          toast.success("Service deleted successfully");
+          toast.success("User deleted successfully");
         } else {
-          toast.error("Error: Service deletion failed");
+          toast.error("Error: User deletion failed");
         }
       })
       .catch((error) => {
@@ -76,6 +63,7 @@ const Users = () => {
   useEffect(() => {
     try {
       dispatch(getAllUsersAsync());
+      dispatch(getAllRoleAsync());
     } catch (error) {
       console.log(error);
     }
@@ -83,10 +71,7 @@ const Users = () => {
 
   return (
     <AdminLayout>
-      <AddService
-        show={modalAddService}
-        onHide={() => setModalAddService(false)}
-      />
+      <AddUser show={modalAddUser} onHide={() => setModalAddUser(false)} />
 
       <div className="my-3 container">
         <h6 className="mb-4">Users</h6>
@@ -105,7 +90,7 @@ const Users = () => {
             <div>
               <div className="my-3 text-end">
                 <Button
-                  onClick={() => setModalAddService(true)}
+                  onClick={() => setModalAddUser(true)}
                   className="shadow"
                 >
                   Add User
@@ -122,24 +107,19 @@ const Users = () => {
                     <th>Status</th>
                   </tr>
                 </thead>
-                {/* <tbody>
-                  {configInfo?.getAllServicesResponse?.length > 0 ? (
-                    configInfo.getAllServicesResponse.map((service, index) => {
-                      const {
-                        service_name,
-                        rate_type,
-                        charge_rate,
-                        currency,
-                        remarks,
-                      } = service;
+                <tbody>
+                  {userInfo?.getAllUsersResponse?.data?.length > 0 ? (
+                    userInfo?.getAllUsersResponse?.data.map((user, index) => {
+                      const { first_name, last_name, email, phone, status } =
+                        user;
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{service_name}</td>
-                          <td>{rate_type}</td>
-                          <td>{charge_rate}</td>
-                          <td>{currency}</td>
-                          <td>{remarks}</td>
+                          <td>{first_name}</td>
+                          <td>{last_name}</td>
+                          <td>{email}</td>
+                          <td>{phone}</td>
+                          <td>{status ? "Active" : "Not Active"}</td>
                           <td>
                             <Dropdown>
                               <Dropdown.Toggle
@@ -152,18 +132,16 @@ const Users = () => {
                               <Dropdown.Menu>
                                 <Dropdown.Item
                                   className="small"
-                                  onClick={() => handleEditService(service.id)}
+                                  onClick={() => handleEditUser(user.id)}
                                 >
                                   Manage
                                 </Dropdown.Item>
-                                <Dropdown.Item
+                                {/* <Dropdown.Item
                                   className="small bg-danger text-white"
-                                  onClick={() =>
-                                    handleDeleteService(service.id)
-                                  }
+                                  onClick={() => handleDeleteUser(user.id)}
                                 >
                                   Delete
-                                </Dropdown.Item>
+                                </Dropdown.Item> */}
                               </Dropdown.Menu>
                             </Dropdown>
                           </td>
@@ -175,7 +153,7 @@ const Users = () => {
                       <td colSpan="7">No services available</td>
                     </tr>
                   )}
-                </tbody> */}
+                </tbody>
               </Table>
             </div>
           </Tab>

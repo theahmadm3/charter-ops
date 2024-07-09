@@ -9,7 +9,7 @@ const Loading = () => {
 
   return (
     <div className="loader-section">
-      <span class="loader"></span>
+      <span className="loader"></span>
     </div>
   );
 };

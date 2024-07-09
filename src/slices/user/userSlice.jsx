@@ -67,12 +67,12 @@ const userSlice = createSlice({
     builder.addCase(addUserAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addUserResponse = action.payload;
-        state.getAllUsersResponse.unshift({
-          id: action.payload?.id,
-          first_name: action.payload?.first_name,
-          email: action.payload?.email,
-          status: action.payload?.status,
-          phone_number: action.payload?.phone_number,
+        state.getAllUsersResponse.data.unshift({
+          id: action.payload?.data?.id,
+          first_name: action.payload?.data?.first_name,
+          email: action.payload?.data?.email,
+          status: action.payload?.data?.status,
+          phone: action.payload?.data?.phone_number,
         });
 
         toast.success(action?.payload?.message);

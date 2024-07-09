@@ -11,7 +11,7 @@ export const GetAllUsers = async () => {
 };
 
 export const AddUser = async (body) => {
-  const response = await PostRequest("/users", body);
+  const response = await PostRequest("/users/create-user", body);
   return response;
 };
 

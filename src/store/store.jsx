@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "../slices/auth/authSlice";
-import userSlice from "../slices/user/userSlice";
 import configSlice from "../slices/config/configSlice";
+import userSlice from "../slices/user/userSlice";
 
 const initialLoadingState = localStorage.getItem("loading") === "true";
 
