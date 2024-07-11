@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteServiceAsync,
   getAllDepartmentsAsync,
+  getAllPartnershipsAsync,
   getAllRoleAsync,
   getAllServicesAsync,
 } from "../../../../slices/config/configSlice";
@@ -64,6 +65,8 @@ const Users = () => {
     try {
       dispatch(getAllUsersAsync());
       dispatch(getAllRoleAsync());
+      dispatch(getAllDepartmentsAsync());
+      dispatch(getAllPartnershipsAsync());
     } catch (error) {
       console.log(error);
     }

@@ -64,6 +64,7 @@ const userSlice = createSlice({
       state.loginResponse = action.payload;
       toast.success(action.payload.message);
       localStorage.setItem("token", action?.payload?.data?.token);
+      localStorage.setItem("expires_at", action?.payload?.data?.expires_at);
       localStorage.setItem("user", JSON.stringify(action?.payload?.data?.user));
     });
 
