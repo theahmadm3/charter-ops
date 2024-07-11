@@ -65,7 +65,7 @@ const Users = () => {
   };
   useEffect(() => {
     try {
-      dispatch(getAllUsersAsync());
+      dispatch(getAllUsersAsync({}));
       dispatch(getAllRoleAsync());
       dispatch(getAllDepartmentsAsync());
       dispatch(getAllPartnershipsAsync());
@@ -94,7 +94,7 @@ const Users = () => {
           <Tab
             eventKey="users"
             title={
-              <span onClick={() => dispatch(getAllServicesAsync())}>Users</span>
+              <span onClick={() => dispatch(getAllUsersAsync({}))}>Users</span>
             }
           >
             <div>
@@ -160,7 +160,7 @@ const Users = () => {
                     })
                   ) : (
                     <tr>
-                      <td colSpan="7">No services available</td>
+                      <td colSpan="7">No Users available</td>
                     </tr>
                   )}
                 </tbody>
@@ -170,7 +170,11 @@ const Users = () => {
           <Tab
             eventKey="partner"
             title={
-              <span onClick={() => dispatch(getAllDepartmentsAsync())}>
+              <span
+                onClick={() =>
+                  dispatch(getAllUsersAsync({ user_type: "partner" }))
+                }
+              >
                 Partner
               </span>
             }

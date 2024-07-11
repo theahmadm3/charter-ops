@@ -10,10 +10,13 @@ import {
   GetAuthUser,
 } from "../../services/user/userService";
 
-export const getAllUsersAsync = createAsyncThunk("users/all", async () => {
-  const response = await GetAllUsers();
-  return response;
-});
+export const getAllUsersAsync = createAsyncThunk(
+  "users/all",
+  async ({ user_type }) => {
+    const response = await GetAllUsers(user_type);
+    return response;
+  }
+);
 
 export const addUserAsync = createAsyncThunk("users/add", async (values) => {
   const response = await AddUser(values);

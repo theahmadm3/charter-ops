@@ -5,8 +5,13 @@ import {
   PutRequest,
 } from "../../util/apiMethods";
 
-export const GetAllUsers = async () => {
-  const response = await GetRequest("/users");
+export const GetAllUsers = async (user_type) => {
+  let url = "/users";
+  if (user_type) {
+    url += `?user-type=${user_type}`;
+  }
+
+  const response = await GetRequest(url);
   return response;
 };
 
