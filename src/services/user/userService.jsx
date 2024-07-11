@@ -21,7 +21,7 @@ export const GetUserById = async (id) => {
 };
 
 export const UpdateUser = async (id, body) => {
-  const response = await PutRequest(`auth/users/${id}/`, body);
+  const response = await PutRequest(`/users/update-user/${id}`, body);
   return response;
 };
 

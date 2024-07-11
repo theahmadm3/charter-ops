@@ -27,8 +27,8 @@ export const getUserByIdAsync = createAsyncThunk("users/by/id", async () => {
 
 export const updateUserAsync = createAsyncThunk(
   "users/update",
-  async ({ id, payload }) => {
-    const response = await UpdateUser(id, payload);
+  async ({ id, values }) => {
+    const response = await UpdateUser(id, values);
     return response;
   }
 );
@@ -66,13 +66,14 @@ const userSlice = createSlice({
 
     builder.addCase(addUserAsync.fulfilled, (state, action) => {
       if (action.payload) {
-        state.addUserResponse = action.payload;
-        state.getAllUsersResponse.data.unshift({
+        state.addUserResponse = action?.payload;
+        state.getAllUsersResponse?.data?.unshift({
           id: action.payload?.data?.id,
           first_name: action.payload?.data?.first_name,
+          last_name: action.payload?.data?.last_name,
           email: action.payload?.data?.email,
           status: action.payload?.data?.status,
-          phone: action.payload?.data?.phone_number,
+          phone: action.payload?.data?.phone,
         });
 
         toast.success(action?.payload?.message);
