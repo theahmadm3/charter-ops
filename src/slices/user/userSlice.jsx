@@ -84,7 +84,7 @@ const userSlice = createSlice({
     });
     builder.addCase(addUserAsync.rejected, (state, action) => {
       state.addUserResponse = action.payload;
-      toast.error(action.payload.message);
+      toast.error(action?.payload?.message);
     });
 
     builder.addCase(updateUserAsync.fulfilled, (state, action) => {

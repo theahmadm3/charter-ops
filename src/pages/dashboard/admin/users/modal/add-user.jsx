@@ -134,43 +134,43 @@ function AddUser(props) {
   const dispatch = useDispatch();
   const configInfo = useSelector((state) => state?.config);
 
-  const validationSchema = Yup.object().shape({
-    user_type: Yup.string().required("User type is required"),
-    full_name: Yup.string()
-      .required("Full name is required")
-      .matches(/^[a-zA-Z0-9\s]+$/, "Only alphanumeric characters are allowed"),
-    email: Yup.string()
-      .required("Email is required")
-      .email("Invalid email address"),
-    role_id: Yup.number()
-      .nullable()
-      .when("user_type", {
-        is: (value) => value === "Staff",
-        then: Yup.number().required("Role is required"),
-        otherwise: Yup.number().nullable(),
-      }),
-    department_id: Yup.number()
-      .nullable()
-      .when("user_type", {
-        is: (value) => value === "Staff",
-        then: Yup.number().required("Department is required"),
-        otherwise: Yup.number().nullable(),
-      }),
-    partnership_type_id: Yup.number()
-      .nullable()
-      .when("user_type", {
-        is: (value) => value === "Partner",
-        then: Yup.number().required("Type of partnership is required"),
-        otherwise: Yup.number().nullable(),
-      }),
-    designation: Yup.string()
-      .nullable()
-      .when("user_type", {
-        is: (value) => value === "Crew",
-        then: Yup.string().required("Designation is required"),
-        otherwise: Yup.string().nullable(),
-      }),
-  });
+  // const validationSchema = Yup.object().shape({
+  //   user_type: Yup.string().required("User type is required"),
+  //   full_name: Yup.string()
+  //     .required("Full name is required")
+  //     .matches(/^[a-zA-Z0-9\s]+$/, "Only alphanumeric characters are allowed"),
+  //   email: Yup.string()
+  //     .required("Email is required")
+  //     .email("Invalid email address"),
+  //   role_id: Yup.number()
+  //     .nullable()
+  //     .when("user_type", {
+  //       is: (value) => value === "Staff",
+  //       then: Yup.number().required("Role is required"),
+  //       otherwise: Yup.number().nullable(),
+  //     }),
+  //   department_id: Yup.number()
+  //     .nullable()
+  //     .when("user_type", {
+  //       is: (value) => value === "Staff",
+  //       then: Yup.number().required("Department is required"),
+  //       otherwise: Yup.number().nullable(),
+  //     }),
+  //   partnership_type_id: Yup.number()
+  //     .nullable()
+  //     .when("user_type", {
+  //       is: (value) => value === "Partner",
+  //       then: Yup.number().required("Type of partnership is required"),
+  //       otherwise: Yup.number().nullable(),
+  //     }),
+  //   designation: Yup.string()
+  //     .nullable()
+  //     .when("user_type", {
+  //       is: (value) => value === "Crew",
+  //       then: Yup.string().required("Designation is required"),
+  //       otherwise: Yup.string().nullable(),
+  //     }),
+  // });
 
   return (
     <Modal
@@ -202,11 +202,11 @@ function AddUser(props) {
             password: "",
             status: true,
           }}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
           onSubmit={(values) => {
             dispatch(addUserAsync(values))
               .then((response) => {
-                if (response) {
+                if (response?.payload?.success) {
                   props.onHide();
                 } else {
                   console.log("Error please try again");

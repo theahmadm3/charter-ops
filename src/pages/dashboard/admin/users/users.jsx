@@ -94,7 +94,13 @@ const Users = () => {
           <Tab
             eventKey="users"
             title={
-              <span onClick={() => dispatch(getAllUsersAsync({}))}>Users</span>
+              <span
+                onClick={() =>
+                  dispatch(getAllUsersAsync({ user_type: "staff" }))
+                }
+              >
+                Users
+              </span>
             }
           >
             <div>

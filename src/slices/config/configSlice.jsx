@@ -2,13 +2,21 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 import {
+  ActivateDepartment,
+  ActivatePartnershipType,
   ActivateRole,
+  ActivateService,
+  ActivateSupplier,
   AddDepartment,
   AddPartnershipType,
   AddRole,
   AddService,
   AddSupplier,
+  DeactivateDepartment,
+  DeactivatePartnershipType,
   DeactivateRole,
+  DeactivateService,
+  DeactivateSupplier,
   DeleteDepartment,
   DeletePartnershipType,
   DeleteService,
@@ -99,6 +107,34 @@ export const deleteServiceAsync = createAsyncThunk(
   }
 );
 
+export const activateServiceAsync = createAsyncThunk(
+  "service/activate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await ActivateService(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deactivateServiceAsync = createAsyncThunk(
+  "service/deactivate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeactivateService(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // Supplier
 export const getAllSuppliersAsync = createAsyncThunk(
   "suppliers/all",
@@ -155,6 +191,34 @@ export const deleteSupplierAsync = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await DeleteSupplier(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const activateSupplierAsync = createAsyncThunk(
+  "suppliers/activate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await ActivateSupplier(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deactivateSupplierAsync = createAsyncThunk(
+  "suppliers/deactivate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeactivateSupplier(id);
 
       return response;
     } catch (error) {
@@ -229,6 +293,34 @@ export const deleteDepartmentAsync = createAsyncThunk(
   }
 );
 
+export const activateDepartmentAsync = createAsyncThunk(
+  "departments/activate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await ActivateDepartment(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deactivateDepartmentAsync = createAsyncThunk(
+  "departments/deactivate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeactivateDepartment(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // Partnership
 export const getAllPartnershipsAsync = createAsyncThunk(
   "partnership/all",
@@ -285,6 +377,34 @@ export const deletePartnershipAsync = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await DeletePartnershipType(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const activatePartnershipAsync = createAsyncThunk(
+  "partnership/activate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await ActivatePartnershipType(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deactivatePartnershipAsync = createAsyncThunk(
+  "partnership/deactivate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeactivatePartnershipType(id);
 
       return response;
     } catch (error) {
@@ -378,21 +498,31 @@ const configSlice = createSlice({
     getServiceByIdResponse: {},
     updateServiceResponse: {},
     deleteServiceResponse: {},
+    activateServiceResponse: {},
+    deactivateServiceResponse: {},
+    // Supplier
     getAllSuppliersResponse: {},
     addSupplierResponse: {},
     getSupplierByIdResponse: {},
     updateSupplierResponse: {},
     deleteSupplierResponse: {},
+    activateSupplierResponse: {},
+    deactivateSupplierResponse: {},
+    // Department
     getAllDepartmentsResponse: {},
     addDepartmentResponse: {},
     getDepartmentByIdResponse: {},
     updateDepartmentResponse: {},
     deleteDepartmentResponse: {},
+    activateDepartmentResponse: {},
     getAllPartnershipTypesResponse: {},
     addPartnershipTypeResponse: {},
     getPartnershipTypeByIdResponse: {},
     updatePartnershipTypeResponse: {},
     deletePartnershipTypeResponse: {},
+    activatePartnershipTypeResponse: {},
+    deactivatePartnershipTypeResponse: {},
+    // Role
     getAllRoleResponse: {},
     addRoleResponse: {},
     getRoleByIdResponse: {},
@@ -456,6 +586,24 @@ const configSlice = createSlice({
     });
 
     builder.addCase(deleteServiceAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(activateServiceAsync.fulfilled, (state, action) => {
+      state.getAllServicesResponse = action.payload;
+      state.activateServiceResponse = action.payload;
+      toast.success(action?.payload?.message);
+    });
+    builder.addCase(activateServiceAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(deactivateServiceAsync.fulfilled, (state, action) => {
+      state.getAllServicesResponse = action.payload;
+      state.deactivateServiceResponse = action.payload;
+      toast.success(action?.payload?.message);
+    });
+    builder.addCase(deactivateServiceAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
 

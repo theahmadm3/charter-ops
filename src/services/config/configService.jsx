@@ -30,6 +30,13 @@ export const DeleteService = async (id) => {
   await DeleteRequest(`/services/${id}`);
 };
 
+export const ActivateService = async (id) => {
+  await PutRequest(`/services/activate/${id}`);
+};
+export const DeactivateService = async (id) => {
+  await PutRequest(`/services/deactivate/${id}`);
+};
+
 // Supplier
 export const GetAllSuppliers = async () => {
   const response = await GetRequest("/suppliers");
@@ -53,6 +60,13 @@ export const UpdateSupplier = async (id, body) => {
 
 export const DeleteSupplier = async (id) => {
   await DeleteRequest(`/suppliers/${id}`);
+};
+
+export const ActivateSupplier = async (id) => {
+  await PutRequest(`/suppliers/activate/${id}`);
+};
+export const DeactivateSupplier = async (id) => {
+  await PutRequest(`/suppliers/deactivate/${id}`);
 };
 
 // Department
@@ -80,6 +94,13 @@ export const DeleteDepartment = async (id) => {
   await DeleteRequest(`/departments/${id}`);
 };
 
+export const ActivateDepartment = async (id) => {
+  await PutRequest(`/departments/activate/${id}`);
+};
+export const DeactivateDepartment = async (id) => {
+  await PutRequest(`/departments/deactivate/${id}`);
+};
+
 // Partnership
 export const GetAllPartnershipTypes = async () => {
   const response = await GetRequest("/partnership_types");
@@ -103,6 +124,13 @@ export const UpdatePartnershipType = async (id, body) => {
 
 export const DeletePartnershipType = async (id) => {
   await DeleteRequest(`/partnership_types/${id}`);
+};
+
+export const ActivatePartnershipType = async (id) => {
+  await PutRequest(`/partnership_types/activate/${id}`);
+};
+export const DeactivatePartnershipType = async (id) => {
+  await PutRequest(`/partnership_types/deactivate/${id}`);
 };
 
 // Role

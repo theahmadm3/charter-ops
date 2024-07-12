@@ -3,6 +3,8 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  activateServiceAsync,
+  deactivateServiceAsync,
   deleteDepartmentAsync,
   deletePartnershipAsync,
   deleteServiceAsync,
@@ -45,33 +47,51 @@ const SystemConfig = () => {
   const handleEditService = (id) => {
     setModalEditService(true);
 
-    const updateService = configInfo?.getAllServicesResponse?.filter(
+    const updateService = configInfo?.getAllServicesResponse?.data?.filter(
       (data) => data.id === id
     );
     setUpdateService(updateService);
   };
 
-  const handleDeleteService = (id) => {
-    dispatch(deleteServiceAsync({ id }))
+  const handleDeactivateService = (id) => {
+    dispatch(deactivateServiceAsync({ id }))
       .then((response) => {
         if (response) {
+          console.log("Disable response", response);
           toast.success("Service deleted successfully");
         } else {
           toast.error("Error: Service deletion failed");
         }
       })
       .catch((error) => {
-        toast.error("Error: Please try again");
         console.error("Error occurred:", error);
+        toast.error("Error occurred: " + error.message);
+      });
+  };
+
+  const handleActivateService = (id) => {
+    dispatch(activateServiceAsync({ id }))
+      .then((response) => {
+        if (response) {
+          console.log("Disable response", response);
+          toast.success("Service activate successfully");
+        } else {
+          toast.error("Error: Service activate failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+        toast.error("Error occurred: " + error.message);
       });
   };
 
   const handleEditDepartment = (id) => {
     setModalEditDepartment(true);
 
-    const updateDepartment = configInfo?.getAllDepartmentsResponse?.filter(
-      (data) => data.id === id
-    );
+    const updateDepartment =
+      configInfo?.getAllDepartmentsResponse?.data?.filter(
+        (data) => data.id === id
+      );
     setUpdateDepartment(updateDepartment);
   };
   const handleDeletDepartment = (id) => {
@@ -92,7 +112,7 @@ const SystemConfig = () => {
   const handleEditSupplier = (id) => {
     setModalEditSupplier(true);
 
-    const updateSupplier = configInfo?.getAllSuppliersResponse?.filter(
+    const updateSupplier = configInfo?.getAllSuppliersResponse?.data?.filter(
       (data) => data.id === id
     );
     setUpdateSupplier(updateSupplier);
@@ -116,7 +136,7 @@ const SystemConfig = () => {
     setModalEditPartnership(true);
 
     const updatePartnership =
-      configInfo?.getAllPartnershipTypesResponse?.filter(
+      configInfo?.getAllPartnershipTypesResponse?.data?.filter(
         (data) => data.id === id
       );
     setUpdatePartnership(updatePartnership);
@@ -228,56 +248,72 @@ const SystemConfig = () => {
                     <th>Charge Rate</th>
                     <th>Currency</th>
                     <th>Remark</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {configInfo?.getAllServicesResponse?.length > 0 ? (
-                    configInfo.getAllServicesResponse.map((service, index) => {
-                      const {
-                        service_name,
-                        rate_type,
-                        charge_rate,
-                        currency,
-                        remarks,
-                      } = service;
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{service_name}</td>
-                          <td>{rate_type}</td>
-                          <td>{charge_rate}</td>
-                          <td>{currency}</td>
-                          <td>{remarks}</td>
-                          <td>
-                            <Dropdown>
-                              <Dropdown.Toggle
-                                variant="light"
-                                className="border-0"
-                              >
-                                <HiDotsHorizontal />
-                              </Dropdown.Toggle>
+                  {configInfo?.getAllServicesResponse?.data?.length > 0 ? (
+                    configInfo.getAllServicesResponse?.data?.map(
+                      (service, index) => {
+                        const {
+                          service_name,
+                          rate_type,
+                          charge_rate,
+                          currency,
+                          remarks,
+                          status,
+                        } = service;
+                        return (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{service_name}</td>
+                            <td>{rate_type}</td>
+                            <td>{charge_rate}</td>
+                            <td>{currency}</td>
+                            <td>{remarks}</td>
+                            <td>{status ? "Active" : "Not Active"}</td>
+                            <td>
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="light"
+                                  className="border-0"
+                                >
+                                  <HiDotsHorizontal />
+                                </Dropdown.Toggle>
 
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  className="small"
-                                  onClick={() => handleEditService(service.id)}
-                                >
-                                  Manage
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  className="small bg-danger text-white"
-                                  onClick={() =>
-                                    handleDeleteService(service.id)
-                                  }
-                                >
-                                  Delete
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </td>
-                        </tr>
-                      );
-                    })
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    className="small"
+                                    onClick={() =>
+                                      handleEditService(service.id)
+                                    }
+                                  >
+                                    Manage
+                                  </Dropdown.Item>
+                                  <Dropdown.Item
+                                    className="small bg-danger text-white"
+                                    onClick={() =>
+                                      handleDeactivateService(service.id)
+                                    }
+                                  >
+                                    Deactivate
+                                  </Dropdown.Item>
+
+                                  <Dropdown.Item
+                                    className="small bg-success text-white"
+                                    onClick={() =>
+                                      handleActivateService(service.id)
+                                    }
+                                  >
+                                    Activate
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )
                   ) : (
                     <tr>
                       <td colSpan="7">No services available</td>
@@ -310,8 +346,8 @@ const SystemConfig = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {configInfo?.getAllDepartmentsResponse?.length > 0 ? (
-                    configInfo.getAllDepartmentsResponse.map(
+                  {configInfo?.getAllDepartmentsResponse?.data?.length > 0 ? (
+                    configInfo?.getAllDepartmentsResponse?.data?.map(
                       (department, index) => {
                         const { name, created_at } = department;
                         return (
@@ -386,8 +422,8 @@ const SystemConfig = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {configInfo?.getAllSuppliersResponse?.length > 0 ? (
-                    configInfo.getAllSuppliersResponse.map(
+                  {configInfo?.getAllSuppliersResponse?.data?.length > 0 ? (
+                    configInfo?.getAllSuppliersResponse?.data?.map(
                       (supplier, index) => {
                         const { name, remarks, created_at } = supplier;
                         return (
@@ -462,8 +498,9 @@ const SystemConfig = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {configInfo?.getAllPartnershipTypesResponse?.length > 0 ? (
-                    configInfo.getAllPartnershipTypesResponse.map(
+                  {configInfo?.getAllPartnershipTypesResponse?.data?.length >
+                  0 ? (
+                    configInfo?.getAllPartnershipTypesResponse?.data?.map(
                       (partnership, index) => {
                         const { name, created_at } = partnership;
                         return (
