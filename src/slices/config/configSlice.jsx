@@ -112,9 +112,9 @@ export const activateServiceAsync = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await ActivateService(id);
-
       return response;
     } catch (error) {
+      console.error("API error:", error); // Log the error
       toast.error(error?.response?.data.message);
       return rejectWithValue(error.message);
     }
@@ -515,6 +515,9 @@ const configSlice = createSlice({
     updateDepartmentResponse: {},
     deleteDepartmentResponse: {},
     activateDepartmentResponse: {},
+    deactivateDepartmentResponse: {},
+
+    // Partnership
     getAllPartnershipTypesResponse: {},
     addPartnershipTypeResponse: {},
     getPartnershipTypeByIdResponse: {},
@@ -541,16 +544,17 @@ const configSlice = createSlice({
     builder.addCase(addServiceAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addServiceResponse = action.payload;
-        state.getAllServicesResponse.unshift({
-          id: action.payload?.id,
-          service_name: action.payload?.service_name,
-          rate_type: action.payload?.rate_type,
-          charge_rate: action.payload?.charge_rate,
-          currency: action.payload?.currency,
-          remarks: action.payload?.remarks,
+        state.getAllServicesResponse.data.unshift({
+          id: action.payload?.data?.id,
+          service_name: action.payload?.data?.service_name,
+          rate_type: action.payload?.data?.rate_type,
+          charge_rate: action.payload?.data?.charge_rate,
+          currency: action.payload?.data?.currency,
+          remarks: action.payload?.data?.remarks,
+          status: action.payload?.data?.status,
         });
 
-        toast.success("Service add successfully");
+        toast.success(action.payload.message);
       }
     });
     builder.addCase(addServiceAsync.rejected, (state, action) => {
@@ -590,18 +594,40 @@ const configSlice = createSlice({
     });
 
     builder.addCase(activateServiceAsync.fulfilled, (state, action) => {
-      state.getAllServicesResponse = action.payload;
-      state.activateServiceResponse = action.payload;
-      toast.success(action?.payload?.message);
+      if (action.payload.success) {
+        state.activateServiceResponse = action.payload;
+        state.getAllServicesResponse.data.unshift({
+          id: action.payload?.data?.id,
+          service_name: action.payload?.data?.service_name,
+          rate_type: action.payload?.data?.rate_type,
+          charge_rate: action.payload?.data?.charge_rate,
+          currency: action.payload?.data?.currency,
+          remarks: action.payload?.data?.remarks,
+          status: action.payload?.data?.status,
+        });
+
+        toast.success(action?.payload?.data?.message);
+      }
     });
     builder.addCase(activateServiceAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
 
     builder.addCase(deactivateServiceAsync.fulfilled, (state, action) => {
-      state.getAllServicesResponse = action.payload;
-      state.deactivateServiceResponse = action.payload;
-      toast.success(action?.payload?.message);
+      if (action.payload.success) {
+        state.deactivateServiceResponse = action.payload;
+        state.getAllServicesResponse.data.unshift({
+          id: action.payload?.data?.id,
+          service_name: action.payload?.data?.service_name,
+          rate_type: action.payload?.data?.rate_type,
+          charge_rate: action.payload?.data?.charge_rate,
+          currency: action.payload?.data?.currency,
+          remarks: action.payload?.data?.remarks,
+          status: action.payload?.data?.status,
+        });
+
+        toast.success(action?.payload?.data?.message);
+      }
     });
     builder.addCase(deactivateServiceAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
@@ -615,14 +641,14 @@ const configSlice = createSlice({
     builder.addCase(addSupplierAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addSupplierResponse = action.payload;
-        state.getAllSuppliersResponse?.unshift({
-          id: action.payload?.id,
-          name: action.payload?.name,
-          remarks: action.payload?.remarks,
-          created_at: action.payload?.created_at,
+        state.getAllSuppliersResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          remarks: action.payload?.data?.remarks,
+          created_at: action.payload?.data?.created_at,
         });
 
-        toast.success("Supplier added successfully");
+        toast.success(action.payload?.data?.message);
       }
     });
     builder.addCase(addSupplierAsync.rejected, (state, action) => {
@@ -654,6 +680,39 @@ const configSlice = createSlice({
       toast.error(action?.payload?.message);
     });
 
+    builder.addCase(activateSupplierAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.activateServiceResponse = action.payload;
+        state.getAllSuppliersResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          remarks: action.payload?.data?.remarks,
+          created_at: action.payload?.data?.created_at,
+        });
+
+        toast.success(action.payload?.data?.message);
+      }
+    });
+    builder.addCase(activateSupplierAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(deactivateSupplierAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.activateServiceResponse = action.payload;
+        state.getAllSuppliersResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          remarks: action.payload?.data?.remarks,
+          created_at: action.payload?.data?.created_at,
+        });
+        toast.success(action.payload?.data?.message);
+      }
+    });
+    builder.addCase(deactivateSupplierAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
     // Department
     builder.addCase(getAllDepartmentsAsync.fulfilled, (state, action) => {
       state.getAllDepartmentsResponse = action.payload;
@@ -662,13 +721,13 @@ const configSlice = createSlice({
     builder.addCase(addDepartmentAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addDepartmentResponse = action.payload;
-        state.getAllDepartmentsResponse.unshift({
-          id: action.payload?.id,
-          name: action.payload?.name,
-          created_at: action.payload?.created_at,
+        state.getAllDepartmentsResponse.data.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          created_at: action.payload?.data?.created_at,
         });
 
-        toast.success("Department added successfully");
+        toast.success(action.payload?.message);
       }
     });
     builder.addCase(addDepartmentAsync.rejected, (state, action) => {
@@ -700,6 +759,38 @@ const configSlice = createSlice({
       toast.error(action?.payload?.message);
     });
 
+    builder.addCase(activateDepartmentAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.activateDepartmentResponse = action.payload;
+        state.getAllDepartmentsResponse.data.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          created_at: action.payload?.data?.created_at,
+        });
+
+        toast.success(action.payload?.message);
+      }
+    });
+    builder.addCase(activateDepartmentAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(deactivateDepartmentAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.deactivateDepartmentResponse = action.payload;
+        state.getAllDepartmentsResponse.data.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          created_at: action.payload?.data?.created_at,
+        });
+
+        toast.success(action.payload?.message);
+      }
+    });
+    builder.addCase(deactivateDepartmentAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
+    });
+
     // Partnership
     builder.addCase(getAllPartnershipsAsync.fulfilled, (state, action) => {
       state.getAllPartnershipTypesResponse = action.payload;
@@ -708,13 +799,13 @@ const configSlice = createSlice({
     builder.addCase(addPartnershipAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addPartnershipTypeResponse = action.payload;
-        state.getAllPartnershipTypesResponse?.unshift({
-          id: action.payload?.id,
-          name: action.payload?.name,
-          created_at: action.payload?.created_at,
+        state.getAllPartnershipTypesResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          created_at: action.payload?.data?.created_at,
         });
 
-        toast.success("Partnership added successfully");
+        toast.success(action?.payload?.data?.message);
       }
     });
     builder.addCase(addPartnershipAsync.rejected, (state, action) => {
@@ -744,6 +835,38 @@ const configSlice = createSlice({
 
     builder.addCase(deletePartnershipAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(activatePartnershipAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.activatePartnershipTypeResponse = action.payload;
+        state.getAllPartnershipTypesResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          created_at: action.payload?.data?.created_at,
+        });
+
+        toast.success(action?.payload?.data?.message);
+      }
+    });
+    builder.addCase(activatePartnershipAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(deactivatePartnershipAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.deactivatePartnershipTypeResponse = action.payload;
+        state.getAllPartnershipTypesResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          created_at: action.payload?.data?.created_at,
+        });
+
+        toast.success(action?.payload?.data?.message);
+      }
+    });
+    builder.addCase(deactivatePartnershipAsync.rejected, (state, action) => {
+      toast.error(action.payload.message);
     });
 
     // Role

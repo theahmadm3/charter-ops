@@ -53,7 +53,7 @@ const Users = () => {
   };
 
   useEffect(() => {
-    const savedActiveKey = localStorage.getItem("activeTab");
+    const savedActiveKey = localStorage.getItem("userActiveTab");
     if (savedActiveKey) {
       setActiveKey(savedActiveKey);
     }
@@ -61,7 +61,7 @@ const Users = () => {
 
   const handleSelect = (key) => {
     setActiveKey(key);
-    localStorage.setItem("activeTab", key);
+    localStorage.setItem("userActiveTab", key);
   };
   useEffect(() => {
     try {

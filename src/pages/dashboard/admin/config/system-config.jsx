@@ -3,14 +3,17 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  activateDepartmentAsync,
+  activatePartnershipAsync,
   activateServiceAsync,
+  activateSupplierAsync,
+  deactivateDepartmentAsync,
+  deactivatePartnershipAsync,
   deactivateServiceAsync,
-  deleteDepartmentAsync,
-  deletePartnershipAsync,
-  deleteServiceAsync,
-  deleteSupplierAsync,
+  deactivateSupplierAsync,
   getAllDepartmentsAsync,
   getAllPartnershipsAsync,
+  getAllRoleAsync,
   getAllServicesAsync,
   getAllSuppliersAsync,
 } from "../../../../slices/config/configSlice";
@@ -18,7 +21,6 @@ import AddService from "./modal/service/add-service";
 import { HiDotsHorizontal } from "react-icons/hi";
 import EditService from "./modal/service/edit-service";
 import AddDepartment from "./modal/department/add-department";
-import { toast } from "react-toastify";
 import moment from "moment";
 import EditDepartment from "./modal/department/edit-department";
 import AddSupplier from "./modal/supplier/add-supplier";
@@ -54,35 +56,31 @@ const SystemConfig = () => {
   };
 
   const handleDeactivateService = (id) => {
-    dispatch(deactivateServiceAsync({ id }))
-      .then((response) => {
-        if (response) {
-          console.log("Disable response", response);
-          toast.success("Service deleted successfully");
-        } else {
-          toast.error("Error: Service deletion failed");
-        }
-      })
-      .catch((error) => {
-        console.error("Error occurred:", error);
-        toast.error("Error occurred: " + error.message);
-      });
+    dispatch(deactivateServiceAsync({ id }));
+  };
+  const handleActivateService = (id) => {
+    dispatch(activateServiceAsync({ id }));
   };
 
-  const handleActivateService = (id) => {
-    dispatch(activateServiceAsync({ id }))
-      .then((response) => {
-        if (response) {
-          console.log("Disable response", response);
-          toast.success("Service activate successfully");
-        } else {
-          toast.error("Error: Service activate failed");
-        }
-      })
-      .catch((error) => {
-        console.error("Error occurred:", error);
-        toast.error("Error occurred: " + error.message);
-      });
+  const handleDeactivateSupplier = (id) => {
+    dispatch(deactivateSupplierAsync({ id }));
+  };
+  const handleActivateSupplier = (id) => {
+    dispatch(activateSupplierAsync({ id }));
+  };
+
+  const handleDeactivatePartnership = (id) => {
+    dispatch(deactivatePartnershipAsync({ id }));
+  };
+  const handleActivatePartnership = (id) => {
+    dispatch(activatePartnershipAsync({ id }));
+  };
+
+  const handleDeactivateDepartment = (id) => {
+    dispatch(deactivateDepartmentAsync({ id }));
+  };
+  const handleActivateDepartment = (id) => {
+    dispatch(activateDepartmentAsync({ id }));
   };
 
   const handleEditDepartment = (id) => {
@@ -94,20 +92,20 @@ const SystemConfig = () => {
       );
     setUpdateDepartment(updateDepartment);
   };
-  const handleDeletDepartment = (id) => {
-    dispatch(deleteDepartmentAsync({ id }))
-      .then((response) => {
-        if (response) {
-          toast.success("Department deleted successfully");
-        } else {
-          toast.error("Error: Service deletion failed");
-        }
-      })
-      .catch((error) => {
-        toast.error("Error: Please try again");
-        console.error("Error occurred:", error);
-      });
-  };
+  // const handleDeletDepartment = (id) => {
+  //   dispatch(deleteDepartmentAsync({ id }))
+  //     .then((response) => {
+  //       if (response) {
+  //         toast.success("Department deleted successfully");
+  //       } else {
+  //         toast.error("Error: Service deletion failed");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       toast.error("Error: Please try again");
+  //       console.error("Error occurred:", error);
+  //     });
+  // };
 
   const handleEditSupplier = (id) => {
     setModalEditSupplier(true);
@@ -117,20 +115,20 @@ const SystemConfig = () => {
     );
     setUpdateSupplier(updateSupplier);
   };
-  const handleDeleteSupplier = (id) => {
-    dispatch(deleteSupplierAsync({ id }))
-      .then((response) => {
-        if (response) {
-          toast.success("Supplier deleted successfully");
-        } else {
-          toast.error("Error: Service deletion failed");
-        }
-      })
-      .catch((error) => {
-        toast.error("Error: Please try again");
-        console.error("Error occurred:", error);
-      });
-  };
+  // const handleDeleteSupplier = (id) => {
+  //   dispatch(deleteSupplierAsync({ id }))
+  //     .then((response) => {
+  //       if (response) {
+  //         toast.success("Supplier deleted successfully");
+  //       } else {
+  //         toast.error("Error: Service deletion failed");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       toast.error("Error: Please try again");
+  //       console.error("Error occurred:", error);
+  //     });
+  // };
 
   const handleEditPartnership = (id) => {
     setModalEditPartnership(true);
@@ -142,23 +140,23 @@ const SystemConfig = () => {
     setUpdatePartnership(updatePartnership);
   };
 
-  const handleDeletePartnership = (id) => {
-    dispatch(deletePartnershipAsync({ id }))
-      .then((response) => {
-        if (response) {
-          toast.success("Partnership deleted successfully");
-        } else {
-          toast.error("Error: Service deletion failed");
-        }
-      })
-      .catch((error) => {
-        toast.error("Error: Please try again");
-        console.error("Error occurred:", error);
-      });
-  };
+  // const handleDeletePartnership = (id) => {
+  //   dispatch(deletePartnershipAsync({ id }))
+  //     .then((response) => {
+  //       if (response) {
+  //         toast.success("Partnership deleted successfully");
+  //       } else {
+  //         toast.error("Error: Service deletion failed");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       toast.error("Error: Please try again");
+  //       console.error("Error occurred:", error);
+  //     });
+  // };
 
   useEffect(() => {
-    const savedActiveKey = localStorage.getItem("activeTab");
+    const savedActiveKey = localStorage.getItem("configActiveTab");
     if (savedActiveKey) {
       setActiveKey(savedActiveKey);
     }
@@ -166,7 +164,7 @@ const SystemConfig = () => {
 
   const handleSelect = (key) => {
     setActiveKey(key);
-    localStorage.setItem("activeTab", key);
+    localStorage.setItem("configActiveTab", key);
   };
   useEffect(() => {
     try {
@@ -174,6 +172,7 @@ const SystemConfig = () => {
       dispatch(getAllPartnershipsAsync());
       dispatch(getAllSuppliersAsync());
       dispatch(getAllDepartmentsAsync());
+      dispatch(getAllRoleAsync());
     } catch (error) {
       console.log(error);
     }
@@ -290,23 +289,25 @@ const SystemConfig = () => {
                                   >
                                     Manage
                                   </Dropdown.Item>
-                                  <Dropdown.Item
-                                    className="small bg-danger text-white"
-                                    onClick={() =>
-                                      handleDeactivateService(service.id)
-                                    }
-                                  >
-                                    Deactivate
-                                  </Dropdown.Item>
-
-                                  <Dropdown.Item
-                                    className="small bg-success text-white"
-                                    onClick={() =>
-                                      handleActivateService(service.id)
-                                    }
-                                  >
-                                    Activate
-                                  </Dropdown.Item>
+                                  {status ? (
+                                    <Dropdown.Item
+                                      className="small bg-danger text-white"
+                                      onClick={() =>
+                                        handleDeactivateService(service.id)
+                                      }
+                                    >
+                                      Deactivate
+                                    </Dropdown.Item>
+                                  ) : (
+                                    <Dropdown.Item
+                                      className="small bg-success text-white"
+                                      onClick={() =>
+                                        handleActivateService(service.id)
+                                      }
+                                    >
+                                      Activate
+                                    </Dropdown.Item>
+                                  )}
                                 </Dropdown.Menu>
                               </Dropdown>
                             </td>
@@ -343,18 +344,20 @@ const SystemConfig = () => {
                     <th>S/N</th>
                     <th>Service Name</th>
                     <th>Date</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {configInfo?.getAllDepartmentsResponse?.data?.length > 0 ? (
                     configInfo?.getAllDepartmentsResponse?.data?.map(
                       (department, index) => {
-                        const { name, created_at } = department;
+                        const { name, created_at, status } = department;
                         return (
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{name}</td>
                             <td>{moment(created_at).format("LL")}</td>
+                            <td>{status ? "Active" : "Not Active"}</td>
 
                             <td>
                               <Dropdown>
@@ -374,14 +377,35 @@ const SystemConfig = () => {
                                   >
                                     Manage
                                   </Dropdown.Item>
-                                  <Dropdown.Item
+                                  {status ? (
+                                    <Dropdown.Item
+                                      className="small bg-danger text-white"
+                                      onClick={() =>
+                                        handleDeactivateDepartment(
+                                          department.id
+                                        )
+                                      }
+                                    >
+                                      Deactivate
+                                    </Dropdown.Item>
+                                  ) : (
+                                    <Dropdown.Item
+                                      className="small bg-success text-white"
+                                      onClick={() =>
+                                        handleActivateDepartment(department.id)
+                                      }
+                                    >
+                                      Activate
+                                    </Dropdown.Item>
+                                  )}
+                                  {/* <Dropdown.Item
                                     className="small bg-danger text-white"
                                     onClick={() =>
                                       handleDeletDepartment(department.id)
                                     }
                                   >
                                     Delete
-                                  </Dropdown.Item>
+                                  </Dropdown.Item> */}
                                 </Dropdown.Menu>
                               </Dropdown>
                             </td>
@@ -419,19 +443,21 @@ const SystemConfig = () => {
                     <th> Name</th>
                     <th> Remark</th>
                     <th>Date</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {configInfo?.getAllSuppliersResponse?.data?.length > 0 ? (
                     configInfo?.getAllSuppliersResponse?.data?.map(
                       (supplier, index) => {
-                        const { name, remarks, created_at } = supplier;
+                        const { name, remarks, created_at, status } = supplier;
                         return (
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{name}</td>
                             <td>{remarks}</td>
                             <td>{moment(created_at).format("LL")}</td>
+                            <td>{status ? "Active" : "Not Active"}</td>
 
                             <td>
                               <Dropdown>
@@ -451,14 +477,34 @@ const SystemConfig = () => {
                                   >
                                     Manage
                                   </Dropdown.Item>
-                                  <Dropdown.Item
+                                  {status ? (
+                                    <Dropdown.Item
+                                      className="small bg-danger text-white"
+                                      onClick={() =>
+                                        handleDeactivateSupplier(supplier.id)
+                                      }
+                                    >
+                                      Deactivate
+                                    </Dropdown.Item>
+                                  ) : (
+                                    <Dropdown.Item
+                                      className="small bg-success text-white"
+                                      onClick={() =>
+                                        handleActivateSupplier(supplier.id)
+                                      }
+                                    >
+                                      Activate
+                                    </Dropdown.Item>
+                                  )}
+
+                                  {/* <Dropdown.Item
                                     className="small bg-danger text-white"
                                     onClick={() =>
                                       handleDeleteSupplier(supplier.id)
                                     }
                                   >
                                     Delete
-                                  </Dropdown.Item>
+                                  </Dropdown.Item> */}
                                 </Dropdown.Menu>
                               </Dropdown>
                             </td>
@@ -495,6 +541,7 @@ const SystemConfig = () => {
                     <th>S/N</th>
                     <th> Name</th>
                     <th>Date</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -502,12 +549,13 @@ const SystemConfig = () => {
                   0 ? (
                     configInfo?.getAllPartnershipTypesResponse?.data?.map(
                       (partnership, index) => {
-                        const { name, created_at } = partnership;
+                        const { name, created_at, status } = partnership;
                         return (
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{name}</td>
                             <td>{moment(created_at).format("LL")}</td>
+                            <td>{status ? "Active" : "Not Active"}</td>
 
                             <td>
                               <Dropdown>
@@ -527,14 +575,39 @@ const SystemConfig = () => {
                                   >
                                     Manage
                                   </Dropdown.Item>
-                                  <Dropdown.Item
+
+                                  {status ? (
+                                    <Dropdown.Item
+                                      className="small bg-danger text-white"
+                                      onClick={() =>
+                                        handleDeactivatePartnership(
+                                          partnership.id
+                                        )
+                                      }
+                                    >
+                                      Deactivate
+                                    </Dropdown.Item>
+                                  ) : (
+                                    <Dropdown.Item
+                                      className="small bg-success text-white"
+                                      onClick={() =>
+                                        handleActivatePartnership(
+                                          partnership.id
+                                        )
+                                      }
+                                    >
+                                      Activate
+                                    </Dropdown.Item>
+                                  )}
+
+                                  {/* <Dropdown.Item
                                     className="small bg-danger text-white"
                                     onClick={() =>
                                       handleDeletePartnership(partnership.id)
                                     }
                                   >
                                     Delete
-                                  </Dropdown.Item>
+                                  </Dropdown.Item> */}
                                 </Dropdown.Menu>
                               </Dropdown>
                             </td>
@@ -542,6 +615,44 @@ const SystemConfig = () => {
                         );
                       }
                     )
+                  ) : (
+                    <tr>
+                      <td colSpan="7">No partnerships available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </div>
+          </Tab>
+          <Tab
+            eventKey="role"
+            title={
+              <span onClick={() => dispatch(getAllRoleAsync())}>Roles</span>
+            }
+          >
+            <div>
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th> Name</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {configInfo?.getAllRoleResponse?.data?.length > 0 ? (
+                    configInfo?.getAllRoleResponse?.data?.map((role, index) => {
+                      const { role_name, created_at, status } = role;
+                      return (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{role_name}</td>
+                          <td>{moment(created_at).format("LL")}</td>
+                          <td>{status ? "Active" : "Not Active"}</td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
                       <td colSpan="7">No partnerships available</td>

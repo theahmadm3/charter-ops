@@ -27,14 +27,28 @@ export const UpdateService = async (id, body) => {
 };
 
 export const DeleteService = async (id) => {
-  await DeleteRequest(`/services/${id}`);
+  const response = await DeleteRequest(`/services/${id}`);
+  return response;
 };
 
 export const ActivateService = async (id) => {
-  await PutRequest(`/services/activate/${id}`);
+  try {
+    const response = await PutRequest(`/services/activate/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error in ActivateService:", error);
+    throw error;
+  }
 };
+
 export const DeactivateService = async (id) => {
-  await PutRequest(`/services/deactivate/${id}`);
+  try {
+    const response = await PutRequest(`/services/deactivate/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error in DeactivateService:", error);
+    throw error;
+  }
 };
 
 // Supplier
@@ -63,10 +77,12 @@ export const DeleteSupplier = async (id) => {
 };
 
 export const ActivateSupplier = async (id) => {
-  await PutRequest(`/suppliers/activate/${id}`);
+  const response = await PutRequest(`/suppliers/activate/${id}`);
+  return response;
 };
 export const DeactivateSupplier = async (id) => {
-  await PutRequest(`/suppliers/deactivate/${id}`);
+  const response = await PutRequest(`/suppliers/deactivate/${id}`);
+  return response;
 };
 
 // Department
@@ -95,10 +111,12 @@ export const DeleteDepartment = async (id) => {
 };
 
 export const ActivateDepartment = async (id) => {
-  await PutRequest(`/departments/activate/${id}`);
+  const response = await PutRequest(`/departments/activate/${id}`);
+  return response;
 };
 export const DeactivateDepartment = async (id) => {
-  await PutRequest(`/departments/deactivate/${id}`);
+  const response = await PutRequest(`/departments/deactivate/${id}`);
+  return response;
 };
 
 // Partnership
@@ -127,10 +145,12 @@ export const DeletePartnershipType = async (id) => {
 };
 
 export const ActivatePartnershipType = async (id) => {
-  await PutRequest(`/partnership_types/activate/${id}`);
+  const response = await PutRequest(`/partnership_types/activate/${id}`);
+  return response;
 };
 export const DeactivatePartnershipType = async (id) => {
-  await PutRequest(`/partnership_types/deactivate/${id}`);
+  const response = await PutRequest(`/partnership_types/deactivate/${id}`);
+  return response;
 };
 
 // Role

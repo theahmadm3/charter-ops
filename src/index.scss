@@ -305,3 +305,7 @@ th {
 .dropdown-toggle::after {
   border: none !important;
 }
+
+.active-btn {
+  background-color: $bg-blue-light !important;
+}
