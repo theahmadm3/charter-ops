@@ -96,7 +96,7 @@ const Users = () => {
             title={
               <span
                 onClick={() =>
-                  dispatch(getAllUsersAsync({ user_type: "staff" }))
+                  dispatch(getAllUsersAsync({ user_type: "Staff" }))
                 }
               >
                 Users
@@ -178,7 +178,7 @@ const Users = () => {
             title={
               <span
                 onClick={() =>
-                  dispatch(getAllUsersAsync({ user_type: "partner" }))
+                  dispatch(getAllUsersAsync({ user_type: "Partner" }))
                 }
               >
                 Partner
@@ -187,7 +187,7 @@ const Users = () => {
           >
             <div>
               <div className="my-3 text-end">
-                <Button onClick={() => setModalAddDepartment(true)}>
+                <Button onClick={() => setModalAddUser(true)}>
                   Add Partner
                 </Button>
               </div>
@@ -202,56 +202,131 @@ const Users = () => {
                     <th>Status</th>
                   </tr>
                 </thead>
-                {/* <tbody>
-                  {configInfo?.getAllDepartmentsResponse?.length > 0 ? (
-                    configInfo.getAllDepartmentsResponse.map(
-                      (department, index) => {
-                        const { name, created_at } = department;
-                        return (
-                          <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{name}</td>
-                            <td>{moment(created_at).format("LL")}</td>
+                <tbody>
+                  {userInfo?.getAllUsersResponse?.data?.length > 0 ? (
+                    userInfo?.getAllUsersResponse?.data.map((user, index) => {
+                      const { first_name, last_name, email, phone, status } =
+                        user;
+                      return (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{first_name}</td>
+                          <td>{last_name}</td>
+                          <td>{email}</td>
+                          <td>{phone}</td>
+                          <td>{status ? "Active" : "Not Active"}</td>
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="light"
+                                className="border-0"
+                              >
+                                <HiDotsHorizontal />
+                              </Dropdown.Toggle>
 
-                            <td>
-                              <Dropdown>
-                                <Dropdown.Toggle
-                                  variant="light"
-                                  className="border-0"
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  className="small"
+                                  onClick={() => handleEditUser(user.id)}
                                 >
-                                  <HiDotsHorizontal />
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu>
-                                  <Dropdown.Item
-                                    className="small"
-                                    onClick={() =>
-                                      handleEditDepartment(department.id)
-                                    }
-                                  >
-                                    Manage
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    className="small bg-danger text-white"
-                                    onClick={() =>
-                                      handleDeletDepartment(department.id)
-                                    }
-                                  >
-                                    Delete
-                                  </Dropdown.Item>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </td>
-                          </tr>
-                        );
-                      }
-                    )
+                                  Manage
+                                </Dropdown.Item>
+                                {/* <Dropdown.Item
+                                  className="small bg-danger text-white"
+                                  onClick={() => handleDeleteUser(user.id)}
+                                >
+                                  Delete
+                                </Dropdown.Item> */}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
-                      <td colSpan="7">No departments available</td>
+                      <td colSpan="7">No Users available</td>
                     </tr>
                   )}
-                </tbody> */}
+                </tbody>
+              </Table>
+            </div>
+          </Tab>
+
+          <Tab
+            eventKey="crew"
+            title={
+              <span
+                onClick={() =>
+                  dispatch(getAllUsersAsync({ user_type: "Crew" }))
+                }
+              >
+                Crew
+              </span>
+            }
+          >
+            <div>
+              <div className="my-3 text-end">
+                <Button onClick={() => setModalAddUser(true)}>Add Crew</Button>
+              </div>
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userInfo?.getAllUsersResponse?.data?.length > 0 ? (
+                    userInfo?.getAllUsersResponse?.data.map((user, index) => {
+                      const { first_name, last_name, email, phone, status } =
+                        user;
+                      return (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{first_name}</td>
+                          <td>{last_name}</td>
+                          <td>{email}</td>
+                          <td>{phone}</td>
+                          <td>{status ? "Active" : "Not Active"}</td>
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="light"
+                                className="border-0"
+                              >
+                                <HiDotsHorizontal />
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  className="small"
+                                  onClick={() => handleEditUser(user.id)}
+                                >
+                                  Manage
+                                </Dropdown.Item>
+                                {/* <Dropdown.Item
+                                  className="small bg-danger text-white"
+                                  onClick={() => handleDeleteUser(user.id)}
+                                >
+                                  Delete
+                                </Dropdown.Item> */}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="7">No Users available</td>
+                    </tr>
+                  )}
+                </tbody>
               </Table>
             </div>
           </Tab>
