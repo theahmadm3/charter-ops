@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { addUserAsync } from "../../../../../../slices/user/userSlice";
 
-const StaffForm = ({ onHide }) => {
+const StaffForm = ({ props }) => {
   const dispatch = useDispatch();
   const configInfo = useSelector((state) => state?.config);
 
@@ -40,7 +40,7 @@ const StaffForm = ({ onHide }) => {
         dispatch(addUserAsync(values))
           .then((response) => {
             if (response?.payload?.success) {
-              onHide();
+              props.onHide();
             } else {
               console.log("Error please try again");
             }

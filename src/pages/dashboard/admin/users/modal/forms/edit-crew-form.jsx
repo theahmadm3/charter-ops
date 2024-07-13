@@ -34,6 +34,7 @@ const EditCrewForm = ({ onHide, data }) => {
         last_name: data?.data[0].last_name,
         email: data?.data[0].email,
         designation: data?.data[0].department_id,
+        role_id: data?.data[0].role_id,
         user_type: "crew",
       }}
       validationSchema={validationSchema}
@@ -124,6 +125,35 @@ const EditCrewForm = ({ onHide, data }) => {
             <Col md={12}>
               <BootstrapForm.Group>
                 <FloatingLabel
+                  controlId="floatingRoleId"
+                  label="Select Role"
+                  className="my-2"
+                >
+                  <BootstrapForm.Control
+                    as="select"
+                    aria-label="Select role"
+                    name="role_id"
+                    value={values.role_id}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Role</option>
+                    {configInfo?.getAllRoleResponse?.data?.map((role) => (
+                      <option value={role.id} key={role.id}>
+                        {role?.role_name}
+                      </option>
+                    ))}{" "}
+                  </BootstrapForm.Control>
+                  {errors.role_id && touched.role_id ? (
+                    <small className="text-danger">{errors.role_id}</small>
+                  ) : null}
+                </FloatingLabel>
+              </BootstrapForm.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <BootstrapForm.Group>
+                <FloatingLabel
                   controlId="floatingDesignation"
                   label="Designation"
                   className="my-2"
@@ -153,7 +183,7 @@ const EditCrewForm = ({ onHide, data }) => {
             </Col>
           </Row>
           <div className="d-flex justify-content-end mt-3">
-            <Button type="submit">Update</Button>
+            <Button type="submit">Save</Button>
           </div>
         </Form>
       )}

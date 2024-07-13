@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { addUserAsync } from "../../../../../../slices/user/userSlice";
 
-const CrewForm = ({ onHide }) => {
+const CrewForm = ({ props }) => {
   const dispatch = useDispatch();
   const configInfo = useSelector((state) => state?.config);
 
@@ -21,6 +21,7 @@ const CrewForm = ({ onHide }) => {
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
+    role_id: Yup.string().required("Role is required"),
     designation: Yup.string().required("Designation is required"),
   });
 
@@ -31,6 +32,7 @@ const CrewForm = ({ onHide }) => {
         last_name: "",
         email: "",
         designation: "",
+        role_id: "",
         user_type: "crew",
       }}
       validationSchema={validationSchema}
@@ -38,7 +40,7 @@ const CrewForm = ({ onHide }) => {
         dispatch(addUserAsync(values))
           .then((response) => {
             if (response?.payload?.success) {
-              onHide();
+              props.onHide();
             } else {
               console.log("Error please try again");
             }
@@ -112,6 +114,35 @@ const CrewForm = ({ onHide }) => {
                   />
                   {errors.email && touched.email ? (
                     <small className="text-danger">{errors.email}</small>
+                  ) : null}
+                </FloatingLabel>
+              </BootstrapForm.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <BootstrapForm.Group>
+                <FloatingLabel
+                  controlId="floatingRoleId"
+                  label="Select Role"
+                  className="my-2"
+                >
+                  <BootstrapForm.Control
+                    as="select"
+                    aria-label="Select role"
+                    name="role_id"
+                    value={values.role_id}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Role</option>
+                    {configInfo?.getAllRoleResponse?.data?.map((role) => (
+                      <option value={role.id} key={role.id}>
+                        {role?.role_name}
+                      </option>
+                    ))}{" "}
+                  </BootstrapForm.Control>
+                  {errors.role_id && touched.role_id ? (
+                    <small className="text-danger">{errors.role_id}</small>
                   ) : null}
                 </FloatingLabel>
               </BootstrapForm.Group>

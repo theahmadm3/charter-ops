@@ -12,6 +12,8 @@ import {
 import { toast } from "react-toastify";
 
 import {
+  activateUserAsync,
+  deactivateUserAsync,
   deleteUserAsync,
   getAllUsersAsync,
 } from "../../../../slices/user/userSlice";
@@ -63,9 +65,17 @@ const Users = () => {
     setActiveKey(key);
     localStorage.setItem("userActiveTab", key);
   };
+
+  const handleDeactivateUser = (id) => {
+    dispatch(deactivateUserAsync({ id }));
+  };
+  const handleActivateUser = (id) => {
+    dispatch(activateUserAsync({ id }));
+  };
+
   useEffect(() => {
     try {
-      dispatch(getAllUsersAsync({}));
+      dispatch(getAllUsersAsync({ user_type: "staff" }));
       dispatch(getAllRoleAsync());
       dispatch(getAllDepartmentsAsync());
       dispatch(getAllPartnershipsAsync());
@@ -96,10 +106,10 @@ const Users = () => {
             title={
               <span
                 onClick={() =>
-                  dispatch(getAllUsersAsync({ user_type: "Staff" }))
+                  dispatch(getAllUsersAsync({ user_type: "staff" }))
                 }
               >
-                Users
+                Staff
               </span>
             }
           >
@@ -152,6 +162,23 @@ const Users = () => {
                                 >
                                   Manage
                                 </Dropdown.Item>
+                                {status ? (
+                                  <Dropdown.Item
+                                    className="small bg-danger text-white"
+                                    onClick={() =>
+                                      handleDeactivateUser(user.id)
+                                    }
+                                  >
+                                    Deactivate
+                                  </Dropdown.Item>
+                                ) : (
+                                  <Dropdown.Item
+                                    className="small bg-success text-white"
+                                    onClick={() => handleActivateUser(user.id)}
+                                  >
+                                    Activate
+                                  </Dropdown.Item>
+                                )}
                                 {/* <Dropdown.Item
                                   className="small bg-danger text-white"
                                   onClick={() => handleDeleteUser(user.id)}
@@ -178,7 +205,7 @@ const Users = () => {
             title={
               <span
                 onClick={() =>
-                  dispatch(getAllUsersAsync({ user_type: "Partner" }))
+                  dispatch(getAllUsersAsync({ user_type: "partner" }))
                 }
               >
                 Partner
@@ -231,6 +258,23 @@ const Users = () => {
                                 >
                                   Manage
                                 </Dropdown.Item>
+                                {status ? (
+                                  <Dropdown.Item
+                                    className="small bg-danger text-white"
+                                    onClick={() =>
+                                      handleDeactivateUser(user.id)
+                                    }
+                                  >
+                                    Deactivate
+                                  </Dropdown.Item>
+                                ) : (
+                                  <Dropdown.Item
+                                    className="small bg-success text-white"
+                                    onClick={() => handleActivateUser(user.id)}
+                                  >
+                                    Activate
+                                  </Dropdown.Item>
+                                )}
                                 {/* <Dropdown.Item
                                   className="small bg-danger text-white"
                                   onClick={() => handleDeleteUser(user.id)}
@@ -258,7 +302,7 @@ const Users = () => {
             title={
               <span
                 onClick={() =>
-                  dispatch(getAllUsersAsync({ user_type: "Crew" }))
+                  dispatch(getAllUsersAsync({ user_type: "crew" }))
                 }
               >
                 Crew
@@ -309,6 +353,23 @@ const Users = () => {
                                 >
                                   Manage
                                 </Dropdown.Item>
+                                {status ? (
+                                  <Dropdown.Item
+                                    className="small bg-danger text-white"
+                                    onClick={() =>
+                                      handleDeactivateUser(user.id)
+                                    }
+                                  >
+                                    Deactivate
+                                  </Dropdown.Item>
+                                ) : (
+                                  <Dropdown.Item
+                                    className="small bg-success text-white"
+                                    onClick={() => handleActivateUser(user.id)}
+                                  >
+                                    Activate
+                                  </Dropdown.Item>
+                                )}
                                 {/* <Dropdown.Item
                                   className="small bg-danger text-white"
                                   onClick={() => handleDeleteUser(user.id)}

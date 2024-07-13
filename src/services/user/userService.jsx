@@ -8,7 +8,7 @@ import {
 export const GetAllUsers = async (user_type) => {
   let url = "/users";
   if (user_type) {
-    url += `?user-type=${user_type}`;
+    url += `?user_type=${user_type}`;
   }
 
   const response = await GetRequest(url);
@@ -31,7 +31,17 @@ export const UpdateUser = async (id, body) => {
 };
 
 export const DeleteUser = async (id) => {
-  await DeleteRequest(`/users/${id}`);
+  const response = await DeleteRequest(`/users/${id}`);
+  return response;
+};
+
+export const DeactivateUser = async (id) => {
+  const response = await PutRequest(`/users/deactivate/${id}`);
+  return response;
+};
+export const ActivateUser = async (id) => {
+  const response = await PutRequest(`/users/activate/${id}`);
+  return response;
 };
 
 export const GetAuthUser = async () => {

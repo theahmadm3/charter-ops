@@ -36,6 +36,7 @@ const EditPartnerForm = ({ onHide, data }) => {
         last_name: data?.data[0].last_name,
         email: data?.data[0].email,
         partnership_type_id: data?.data[0].partnership_type_id,
+        role_id: data?.data[0].role_id,
         user_type: "partner",
       }}
       validationSchema={validationSchema}
@@ -117,6 +118,35 @@ const EditPartnerForm = ({ onHide, data }) => {
                   />
                   {errors.email && touched.email ? (
                     <small className="text-danger">{errors.email}</small>
+                  ) : null}
+                </FloatingLabel>
+              </BootstrapForm.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <BootstrapForm.Group>
+                <FloatingLabel
+                  controlId="floatingRoleId"
+                  label="Select Role"
+                  className="my-2"
+                >
+                  <BootstrapForm.Control
+                    as="select"
+                    aria-label="Select role"
+                    name="role_id"
+                    value={values.role_id}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Role</option>
+                    {configInfo?.getAllRoleResponse?.data?.map((role) => (
+                      <option value={role.id} key={role.id}>
+                        {role?.role_name}
+                      </option>
+                    ))}{" "}
+                  </BootstrapForm.Control>
+                  {errors.role_id && touched.role_id ? (
+                    <small className="text-danger">{errors.role_id}</small>
                   ) : null}
                 </FloatingLabel>
               </BootstrapForm.Group>

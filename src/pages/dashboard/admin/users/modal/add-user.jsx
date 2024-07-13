@@ -44,9 +44,9 @@ function AddUser(props) {
           </Button>
         </ButtonGroup>
 
-        {activeForm === "crew" && <CrewForm />}
-        {activeForm === "staff" && <StaffForm />}
-        {activeForm === "partner" && <PartnerForm />}
+        {activeForm === "crew" && <CrewForm props={props} />}
+        {activeForm === "staff" && <StaffForm props={props} />}
+        {activeForm === "partner" && <PartnerForm props={props} />}
       </Modal.Body>
       <Modal.Footer></Modal.Footer>
     </Modal>

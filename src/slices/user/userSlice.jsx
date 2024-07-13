@@ -8,6 +8,8 @@ import {
   UpdateUser,
   DeleteUser,
   GetAuthUser,
+  DeactivateUser,
+  ActivateUser,
 } from "../../services/user/userService";
 
 export const getAllUsersAsync = createAsyncThunk(
@@ -44,6 +46,22 @@ export const deleteUserAsync = createAsyncThunk(
   }
 );
 
+export const deactivateUserAsync = createAsyncThunk(
+  "users/deactivate",
+  async ({ id }) => {
+    const response = await DeactivateUser(id);
+    return response;
+  }
+);
+
+export const activateUserAsync = createAsyncThunk(
+  "users/activate",
+  async ({ id }) => {
+    const response = await ActivateUser(id);
+    return response;
+  }
+);
+
 export const getAuthUserAsync = createAsyncThunk("users/auth", async () => {
   const response = await GetAuthUser();
   return response;
@@ -59,6 +77,8 @@ const userSlice = createSlice({
     updateUserResponseFail: [],
     addUserResponse: {},
     getAuthUserResponse: {},
+    deactivateUserResponse: {},
+    activateUserResponse: {},
   },
 
   reducers: {},
@@ -117,6 +137,45 @@ const userSlice = createSlice({
 
     builder.addCase(deleteUserAsync.rejected, (state, action) => {
       state.deleteUserResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+    builder.addCase(deactivateUserAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.deactivateUserResponse = action?.payload;
+        state.getAllUsersResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          first_name: action.payload?.data?.first_name,
+          last_name: action.payload?.data?.last_name,
+          email: action.payload?.data?.email,
+          status: action.payload?.data?.status,
+          phone: action.payload?.data?.phone,
+        });
+
+        toast.success(action?.payload?.message);
+      }
+    });
+    builder.addCase(deactivateUserAsync.rejected, (state, action) => {
+      state.deactivateUserResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(activateUserAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.activateUserResponse = action?.payload;
+        state.getAllUsersResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          first_name: action.payload?.data?.first_name,
+          last_name: action.payload?.data?.last_name,
+          email: action.payload?.data?.email,
+          status: action.payload?.data?.status,
+          phone: action.payload?.data?.phone,
+        });
+
+        toast.success(action?.payload?.message);
+      }
+    });
+    builder.addCase(activateUserAsync.rejected, (state, action) => {
+      state.activateUserResponse = action.payload;
       toast.error(action?.payload?.message);
     });
   },
