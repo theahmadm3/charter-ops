@@ -596,19 +596,27 @@ const configSlice = createSlice({
     builder.addCase(activateServiceAsync.fulfilled, (state, action) => {
       if (action.payload.success) {
         state.activateServiceResponse = action.payload;
-        state.getAllServicesResponse.data.unshift({
-          id: action.payload?.data?.id,
-          service_name: action.payload?.data?.service_name,
-          rate_type: action.payload?.data?.rate_type,
-          charge_rate: action.payload?.data?.charge_rate,
-          currency: action.payload?.data?.currency,
-          remarks: action.payload?.data?.remarks,
-          status: action.payload?.data?.status,
-        });
 
-        toast.success(action?.payload?.data?.message);
+        // Filter and replace the existing record with the new record
+        state.getAllServicesResponse.data =
+          state.getAllServicesResponse.data.map((service) =>
+            service.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  service_name: action.payload.data.service_name,
+                  rate_type: action.payload.data.rate_type,
+                  charge_rate: action.payload.data.charge_rate,
+                  currency: action.payload.data.currency,
+                  remarks: action.payload.data.remarks,
+                  status: action.payload.data.status,
+                }
+              : service
+          );
+
+        toast.success(action.payload.message);
       }
     });
+
     builder.addCase(activateServiceAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
@@ -616,19 +624,25 @@ const configSlice = createSlice({
     builder.addCase(deactivateServiceAsync.fulfilled, (state, action) => {
       if (action.payload.success) {
         state.deactivateServiceResponse = action.payload;
-        state.getAllServicesResponse.data.unshift({
-          id: action.payload?.data?.id,
-          service_name: action.payload?.data?.service_name,
-          rate_type: action.payload?.data?.rate_type,
-          charge_rate: action.payload?.data?.charge_rate,
-          currency: action.payload?.data?.currency,
-          remarks: action.payload?.data?.remarks,
-          status: action.payload?.data?.status,
-        });
+        state.getAllServicesResponse.data =
+          state.getAllServicesResponse.data.map((service) =>
+            service.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  service_name: action.payload.data.service_name,
+                  rate_type: action.payload.data.rate_type,
+                  charge_rate: action.payload.data.charge_rate,
+                  currency: action.payload.data.currency,
+                  remarks: action.payload.data.remarks,
+                  status: action.payload.data.status,
+                }
+              : service
+          );
 
-        toast.success(action?.payload?.data?.message);
+        toast.success(action.payload.message);
       }
     });
+
     builder.addCase(deactivateServiceAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
@@ -646,9 +660,10 @@ const configSlice = createSlice({
           name: action.payload?.data?.name,
           remarks: action.payload?.data?.remarks,
           created_at: action.payload?.data?.created_at,
+          status: action.payload?.data?.status,
         });
 
-        toast.success(action.payload?.data?.message);
+        toast.success(action.payload?.message);
       }
     });
     builder.addCase(addSupplierAsync.rejected, (state, action) => {
@@ -683,16 +698,25 @@ const configSlice = createSlice({
     builder.addCase(activateSupplierAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.activateServiceResponse = action.payload;
-        state.getAllSuppliersResponse?.data?.unshift({
-          id: action.payload?.data?.id,
-          name: action.payload?.data?.name,
-          remarks: action.payload?.data?.remarks,
-          created_at: action.payload?.data?.created_at,
-        });
 
-        toast.success(action.payload?.data?.message);
+        // Filter and replace the existing record with the new record
+        state.getAllSuppliersResponse.data =
+          state.getAllSuppliersResponse.data.map((supplier) =>
+            supplier.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  name: action.payload.data.name,
+                  remarks: action.payload.data.remarks,
+                  created_at: action.payload.data.created_at,
+                  status: action.payload.data.status,
+                }
+              : supplier
+          );
+
+        toast.success(action.payload.message);
       }
     });
+
     builder.addCase(activateSupplierAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
@@ -700,15 +724,25 @@ const configSlice = createSlice({
     builder.addCase(deactivateSupplierAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.activateServiceResponse = action.payload;
-        state.getAllSuppliersResponse?.data?.unshift({
-          id: action.payload?.data?.id,
-          name: action.payload?.data?.name,
-          remarks: action.payload?.data?.remarks,
-          created_at: action.payload?.data?.created_at,
-        });
-        toast.success(action.payload?.data?.message);
+
+        // Filter and replace the existing record with the new record
+        state.getAllSuppliersResponse.data =
+          state.getAllSuppliersResponse.data.map((supplier) =>
+            supplier.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  name: action.payload.data.name,
+                  remarks: action.payload.data.remarks,
+                  created_at: action.payload.data.created_at,
+                  status: action.payload.data.status,
+                }
+              : supplier
+          );
+
+        toast.success(action.payload.data.message);
       }
     });
+
     builder.addCase(deactivateSupplierAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
@@ -725,6 +759,7 @@ const configSlice = createSlice({
           id: action.payload?.data?.id,
           name: action.payload?.data?.name,
           created_at: action.payload?.data?.created_at,
+          status: action.payload?.data?.status,
         });
 
         toast.success(action.payload?.message);
@@ -762,15 +797,24 @@ const configSlice = createSlice({
     builder.addCase(activateDepartmentAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.activateDepartmentResponse = action.payload;
-        state.getAllDepartmentsResponse.data.unshift({
-          id: action.payload?.data?.id,
-          name: action.payload?.data?.name,
-          created_at: action.payload?.data?.created_at,
-        });
 
-        toast.success(action.payload?.message);
+        // Filter and replace the existing record with the new record
+        state.getAllDepartmentsResponse.data =
+          state.getAllDepartmentsResponse.data.map((department) =>
+            department.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  name: action.payload.data.name,
+                  created_at: action.payload.data.created_at,
+                  status: action.payload.data.status,
+                }
+              : department
+          );
+
+        toast.success(action.payload.message);
       }
     });
+
     builder.addCase(activateDepartmentAsync.rejected, (state, action) => {
       toast.error(action.payload.message);
     });
@@ -778,15 +822,24 @@ const configSlice = createSlice({
     builder.addCase(deactivateDepartmentAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.deactivateDepartmentResponse = action.payload;
-        state.getAllDepartmentsResponse.data.unshift({
-          id: action.payload?.data?.id,
-          name: action.payload?.data?.name,
-          created_at: action.payload?.data?.created_at,
-        });
 
-        toast.success(action.payload?.message);
+        // Filter and replace the existing record with the new record
+        state.getAllDepartmentsResponse.data =
+          state.getAllDepartmentsResponse.data.map((department) =>
+            department.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  name: action.payload.data.name,
+                  created_at: action.payload.data.created_at,
+                  status: action.payload.data.status,
+                }
+              : department
+          );
+
+        toast.success(action.payload.message);
       }
     });
+
     builder.addCase(deactivateDepartmentAsync.rejected, (state, action) => {
       toast.error(action.payload.message);
     });
@@ -840,15 +893,24 @@ const configSlice = createSlice({
     builder.addCase(activatePartnershipAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.activatePartnershipTypeResponse = action.payload;
-        state.getAllPartnershipTypesResponse?.data?.unshift({
-          id: action.payload?.data?.id,
-          name: action.payload?.data?.name,
-          created_at: action.payload?.data?.created_at,
-        });
 
-        toast.success(action?.payload?.data?.message);
+        // Filter and replace the existing record with the new record
+        state.getAllPartnershipTypesResponse.data =
+          state.getAllPartnershipTypesResponse.data.map((partnershipType) =>
+            partnershipType.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  name: action.payload.data.name,
+                  created_at: action.payload.data.created_at,
+                  status: action.payload.data.status,
+                }
+              : partnershipType
+          );
+
+        toast.success(action.payload.data.message);
       }
     });
+
     builder.addCase(activatePartnershipAsync.rejected, (state, action) => {
       toast.error(action.payload.message);
     });
@@ -860,9 +922,10 @@ const configSlice = createSlice({
           id: action.payload?.data?.id,
           name: action.payload?.data?.name,
           created_at: action.payload?.data?.created_at,
+          status: action.payload?.data?.status,
         });
 
-        toast.success(action?.payload?.data?.message);
+        toast.success(action?.payload?.message);
       }
     });
     builder.addCase(deactivatePartnershipAsync.rejected, (state, action) => {

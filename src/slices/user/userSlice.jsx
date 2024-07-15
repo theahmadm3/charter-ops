@@ -141,19 +141,27 @@ const userSlice = createSlice({
     });
     builder.addCase(deactivateUserAsync.fulfilled, (state, action) => {
       if (action.payload) {
-        state.deactivateUserResponse = action?.payload;
-        state.getAllUsersResponse?.data?.unshift({
-          id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          last_name: action.payload?.data?.last_name,
-          email: action.payload?.data?.email,
-          status: action.payload?.data?.status,
-          phone: action.payload?.data?.phone,
-        });
+        state.deactivateUserResponse = action.payload;
 
-        toast.success(action?.payload?.message);
+        // Filter and replace the existing record with the new record
+        state.getAllUsersResponse.data = state.getAllUsersResponse.data.map(
+          (user) =>
+            user.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  first_name: action.payload.data.first_name,
+                  last_name: action.payload.data.last_name,
+                  email: action.payload.data.email,
+                  status: action.payload.data.status,
+                  phone: action.payload.data.phone,
+                }
+              : user
+        );
+
+        toast.success(action.payload.message);
       }
     });
+
     builder.addCase(deactivateUserAsync.rejected, (state, action) => {
       state.deactivateUserResponse = action.payload;
       toast.error(action?.payload?.message);
@@ -161,19 +169,27 @@ const userSlice = createSlice({
 
     builder.addCase(activateUserAsync.fulfilled, (state, action) => {
       if (action.payload) {
-        state.activateUserResponse = action?.payload;
-        state.getAllUsersResponse?.data?.unshift({
-          id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          last_name: action.payload?.data?.last_name,
-          email: action.payload?.data?.email,
-          status: action.payload?.data?.status,
-          phone: action.payload?.data?.phone,
-        });
+        state.activateUserResponse = action.payload;
 
-        toast.success(action?.payload?.message);
+        // Filter and replace the existing record with the new record
+        state.getAllUsersResponse.data = state.getAllUsersResponse.data.map(
+          (user) =>
+            user.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  first_name: action.payload.data.first_name,
+                  last_name: action.payload.data.last_name,
+                  email: action.payload.data.email,
+                  status: action.payload.data.status,
+                  phone: action.payload.data.phone,
+                }
+              : user
+        );
+
+        toast.success(action.payload.message);
       }
     });
+
     builder.addCase(activateUserAsync.rejected, (state, action) => {
       state.activateUserResponse = action.payload;
       toast.error(action?.payload?.message);
