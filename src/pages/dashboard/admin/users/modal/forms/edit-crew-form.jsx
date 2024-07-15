@@ -24,7 +24,6 @@ const EditCrewForm = ({ onHide, data }) => {
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
-    designation: Yup.string().required("Designation is required"),
   });
 
   return (
@@ -172,9 +171,6 @@ const EditCrewForm = ({ onHide, data }) => {
                     <option value="Mrs">Mrs</option>
                     <option value="Mr">Mr</option>
                   </BootstrapForm.Control>
-                  {errors.designation && touched.designation ? (
-                    <small className="text-danger">{errors.designation}</small>
-                  ) : null}
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
