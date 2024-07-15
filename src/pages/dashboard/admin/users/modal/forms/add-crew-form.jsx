@@ -164,14 +164,11 @@ const CrewForm = ({ props }) => {
                     onChange={handleChange}
                   >
                     <option value="">Select Designation</option>
-
-                    {configInfo?.getAllDepartmentsResponse?.data?.map(
-                      (department) => (
-                        <option value={department.id} key={department.id}>
-                          {department?.name}
-                        </option>
-                      )
-                    )}
+                    <option value="Captain">Captain</option>
+                    <option value="Pilot">Pilot</option>
+                    <option value="Commander">Commander</option>
+                    <option value="Mrs">Mrs</option>
+                    <option value="Mr">Mr</option>
                   </BootstrapForm.Control>
                   {errors.designation && touched.designation ? (
                     <small className="text-danger">{errors.designation}</small>
