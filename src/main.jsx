@@ -15,6 +15,7 @@ import ResetPassword from "./pages/auth/reset-password";
 import AdminDashboard from "./pages/dashboard/admin/dashboard";
 import SystemConfig from "./pages/dashboard/admin/config/system-config.jsx";
 import Users from "./pages/dashboard/admin/users/users";
+import Clients from "./pages/dashboard/admin/client/clients";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,11 @@ const router = createBrowserRouter([
   {
     path: "/admin-users",
     element: <Users />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin-clients",
+    element: <Clients />,
     errorElement: <ErrorPage />,
   },
 ]);

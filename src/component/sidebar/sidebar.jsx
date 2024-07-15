@@ -44,7 +44,7 @@ function SideBar() {
       text: "Fuel Management",
     },
     {
-      to: "/client",
+      to: "/admin-clients",
       icon: <HiUsers className="sidebar-icon" />,
       text: "Client management",
     },
