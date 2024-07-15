@@ -22,7 +22,6 @@ const CrewForm = ({ props }) => {
       .email("Invalid email address")
       .required("Email is required"),
     role_id: Yup.string().required("Role is required"),
-    designation: Yup.string().required("Designation is required"),
   });
 
   return (
@@ -170,9 +169,6 @@ const CrewForm = ({ props }) => {
                     <option value="Mrs">Mrs</option>
                     <option value="Mr">Mr</option>
                   </BootstrapForm.Control>
-                  {errors.designation && touched.designation ? (
-                    <small className="text-danger">{errors.designation}</small>
-                  ) : null}
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
