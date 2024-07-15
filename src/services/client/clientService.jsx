@@ -11,7 +11,7 @@ export const GetAllClients = async () => {
 };
 
 export const AddClient = async (body) => {
-  const response = await PostRequest("/clients/create-client", body);
+  const response = await PostRequest("/clients", body);
   return response;
 };
 

@@ -2,16 +2,20 @@ import { Button, Container, Dropdown, Table } from "react-bootstrap";
 import AdminLayout from "../../../../component/layout/admin-layout";
 import { useDispatch, useSelector } from "react-redux";
 import { HiDotsHorizontal } from "react-icons/hi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAllClientAsync } from "../../../../slices/client/clientSlice";
+import AddClient from "./modal/add-client";
+import { getAllRoleAsync } from "../../../../slices/config/configSlice";
 
 const Clients = () => {
   const clientInfo = useSelector((state) => state?.client);
   const dispatch = useDispatch();
+  const [modalAddClient, setModalAddClient] = useState(false);
 
   useEffect(() => {
     try {
       dispatch(getAllClientAsync());
+      dispatch(getAllRoleAsync());
     } catch (error) {
       console.log(error);
     }
@@ -19,10 +23,15 @@ const Clients = () => {
   return (
     <AdminLayout>
       <Container>
+        <AddClient
+          show={modalAddClient}
+          onHide={() => setModalAddClient(false)}
+        />
+
         <div>
           <div className="my-3 text-end">
-            <Button onClick={() => setModalAddUser(true)} className="shadow">
-              Add CLient
+            <Button onClick={() => setModalAddClient(true)} className="shadow">
+              Add Client
             </Button>
           </div>
           <Table striped bordered hover responsive>
