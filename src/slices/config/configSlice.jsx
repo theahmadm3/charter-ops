@@ -81,13 +81,9 @@ export const updateServiceAsync = createAsyncThunk(
     try {
       const response = await UpdateService(id, values);
 
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        return rejectWithValue("Update failed");
-      }
+      return response;
     } catch (error) {
-      toast.error(error?.response?.data.message);
+      toast.error(error?.response?.message);
       return rejectWithValue(error.message);
     }
   }
@@ -570,8 +566,27 @@ const configSlice = createSlice({
     });
 
     builder.addCase(updateServiceAsync.fulfilled, (state, action) => {
-      state.updateServiceResponse = action.payload;
-      toast.success("Updated successfully");
+      if (action.payload.success) {
+        state.updateServiceResponse = action.payload;
+
+        // Filter and replace the existing record with the new record
+        state.getAllServicesResponse.data =
+          state.getAllServicesResponse.data.map((service) =>
+            service.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  service_name: action.payload.data.service_name,
+                  rate_type: action.payload.data.rate_type,
+                  charge_rate: action.payload.data.charge_rate,
+                  currency: action.payload.data.currency,
+                  remarks: action.payload.data.remarks,
+                  status: action.payload.data.status,
+                }
+              : service
+          );
+
+        toast.success(action.payload.message);
+      }
     });
 
     builder.addCase(updateServiceAsync.rejected, (state, action) => {
@@ -679,8 +694,18 @@ const configSlice = createSlice({
     });
 
     builder.addCase(updateSupplierAsync.fulfilled, (state, action) => {
-      state.updateSupplierResponse = action.payload;
-      toast.success(action?.payload?.message);
+      if (action.payload) {
+        state.updateSupplierResponse = action.payload;
+        state.getAllSuppliersResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          remarks: action.payload?.data?.remarks,
+          created_at: action.payload?.data?.created_at,
+          status: action.payload?.data?.status,
+        });
+
+        toast.success(action.payload?.message);
+      }
     });
 
     builder.addCase(updateSupplierAsync.rejected, (state, action) => {
@@ -778,8 +803,17 @@ const configSlice = createSlice({
     });
 
     builder.addCase(updateDepartmentAsync.fulfilled, (state, action) => {
-      state.updateDepartmentResponse = action.payload;
-      toast.success("Department updated successfully");
+      if (action.payload) {
+        state.updateDepartmentResponse = action.payload;
+        state.getAllDepartmentsResponse.data.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          created_at: action.payload?.data?.created_at,
+          status: action.payload?.data?.status,
+        });
+
+        toast.success(action.payload?.message);
+      }
     });
 
     builder.addCase(updateDepartmentAsync.rejected, (state, action) => {
@@ -856,6 +890,7 @@ const configSlice = createSlice({
           id: action.payload?.data?.id,
           name: action.payload?.data?.name,
           created_at: action.payload?.data?.created_at,
+          status: action.payload?.data?.status,
         });
 
         toast.success(action?.payload?.data?.message);
@@ -874,8 +909,17 @@ const configSlice = createSlice({
     });
 
     builder.addCase(updatePartnershipAsync.fulfilled, (state, action) => {
-      state.updatePartnershipTypeResponse = action.payload;
-      toast.success("Partnership updated successfully");
+      if (action.payload) {
+        state.updatePartnershipTypeResponse = action.payload;
+        state.getAllPartnershipTypesResponse?.data?.unshift({
+          id: action.payload?.data?.id,
+          name: action.payload?.data?.name,
+          created_at: action.payload?.data?.created_at,
+          status: action.payload?.data?.status,
+        });
+
+        toast.success(action?.payload?.message);
+      }
     });
 
     builder.addCase(updatePartnershipAsync.rejected, (state, action) => {
@@ -974,14 +1018,46 @@ const configSlice = createSlice({
     });
 
     builder.addCase(activateRoleAsync.fulfilled, (state, action) => {
-      state.activateRoleResponse = action.payload;
+      if (action.payload) {
+        state.activateRoleResponse = action.payload;
+
+        // Filter and replace the existing record with the new record
+        state.getAllRoleResponse.data = state.getAllRoleResponse.data.map(
+          (role) =>
+            role.id === action.payload.data.id
+              ? {
+                  id: action.payload?.data?.id,
+                  role_name: action.payload?.data?.role_name,
+                  status: action.payload?.data?.status,
+                }
+              : role
+        );
+
+        toast.success(action.payload.message);
+      }
     });
 
     builder.addCase(activateRoleAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
     builder.addCase(deactivateRoleAsync.fulfilled, (state, action) => {
-      state.deactivateRoleResponse = action.payload;
+      if (action.payload) {
+        state.deactivateRoleResponse = action.payload;
+
+        // Filter and replace the existing record with the new record
+        state.getAllRoleResponse.data = state.getAllRoleResponse.data.map(
+          (role) =>
+            role.id === action.payload.data.id
+              ? {
+                  id: action.payload?.data?.id,
+                  role_name: action.payload?.data?.role_name,
+                  status: action.payload?.data?.status,
+                }
+              : role
+        );
+
+        toast.success(action.payload.message);
+      }
     });
 
     builder.addCase(deactivateRoleAsync.rejected, (state, action) => {

@@ -38,10 +38,8 @@ function EditPartnership(props) {
                 })
               )
                 .then((response) => {
-                  if (response) {
+                  if (response.payload.success) {
                     props.onHide();
-                  } else {
-                    console.log("Error please try again");
                   }
                 })
                 .catch((error) => {

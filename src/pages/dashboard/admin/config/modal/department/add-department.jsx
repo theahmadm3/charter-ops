@@ -36,10 +36,8 @@ function AddDepartment(props) {
             onSubmit={(values) => {
               dispatch(addDepartmentAsync({ values }))
                 .then((response) => {
-                  if (response) {
+                  if (response.payload.success) {
                     props.onHide();
-                  } else {
-                    console.log("Error please try again");
                   }
                 })
                 .catch((error) => {

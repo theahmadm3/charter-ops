@@ -174,10 +174,7 @@ export const UpdateRole = async (id, body) => {
   return response;
 };
 export const ActivateRole = async (id, body) => {
-  const response = await PutRequest(
-    `/config/roles/update-role/activate-role/${id}`,
-    body
-  );
+  const response = await PutRequest(`/config/roles/activate-role/${id}`, body);
   return response;
 };
 export const DeactivateRole = async (id, body) => {

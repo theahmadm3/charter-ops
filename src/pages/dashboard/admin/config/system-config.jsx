@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   activateDepartmentAsync,
   activatePartnershipAsync,
+  activateRoleAsync,
   activateServiceAsync,
   activateSupplierAsync,
   deactivateDepartmentAsync,
   deactivatePartnershipAsync,
+  deactivateRoleAsync,
   deactivateServiceAsync,
   deactivateSupplierAsync,
   getAllDepartmentsAsync,
@@ -81,6 +83,13 @@ const SystemConfig = () => {
   };
   const handleActivateDepartment = (id) => {
     dispatch(activateDepartmentAsync({ id }));
+  };
+
+  const handleDeactivateRole = (id) => {
+    dispatch(deactivateRoleAsync({ id }));
+  };
+  const handleActivateRole = (id) => {
+    dispatch(activateRoleAsync({ id }));
   };
 
   const handleEditDepartment = (id) => {
@@ -650,6 +659,52 @@ const SystemConfig = () => {
                           <td>{role_name}</td>
                           <td>{moment(created_at).format("LL")}</td>
                           <td>{status ? "Active" : "Not Active"}</td>
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="light"
+                                className="border-0"
+                              >
+                                <HiDotsHorizontal />
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                {/* <Dropdown.Item
+                                  className="small"
+                                  onClick={() => handleEditPartnership(role.id)}
+                                >
+                                  Manage
+                                </Dropdown.Item> */}
+
+                                {status ? (
+                                  <Dropdown.Item
+                                    className="small bg-danger text-white"
+                                    onClick={() =>
+                                      handleDeactivateRole(role.id)
+                                    }
+                                  >
+                                    Deactivate
+                                  </Dropdown.Item>
+                                ) : (
+                                  <Dropdown.Item
+                                    className="small bg-success text-white"
+                                    onClick={() => handleActivateRole(role.id)}
+                                  >
+                                    Activate
+                                  </Dropdown.Item>
+                                )}
+
+                                {/* <Dropdown.Item
+                                    className="small bg-danger text-white"
+                                    onClick={() =>
+                                      handleDeletePartnership(partnership.id)
+                                    }
+                                  >
+                                    Delete
+                                  </Dropdown.Item> */}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </td>
                         </tr>
                       );
                     })

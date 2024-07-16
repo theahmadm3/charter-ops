@@ -42,13 +42,12 @@ function EditService(props) {
                 updateServiceAsync({ id: props?.data[0]?.id, values: values })
               )
                 .then((response) => {
-                  if (response.payload && !response.error) {
+                  if (response.payload.success) {
                     props.onHide();
-                  } else {
-                    console.log("Error please try again");
                   }
                 })
                 .catch((error) => {
+                  console.log("error", error);
                   // Handle the error case if necessary
                   console.error("Error occurred:", error);
                 });

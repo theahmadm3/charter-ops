@@ -39,10 +39,8 @@ function EditSupplier(props) {
                 })
               )
                 .then((response) => {
-                  if (response) {
+                  if (response.payload.success) {
                     props.onHide();
-                  } else {
-                    console.log("Error please try again");
                   }
                 })
                 .catch((error) => {
@@ -110,7 +108,7 @@ function EditSupplier(props) {
                     className=" my-2 me-3  border-0  "
                     disabled={!dirty}
                   >
-                    <span className=" ">Create</span>
+                    <span className=" ">Update</span>
                   </Button>
                   <Button onClick={props.onHide} variant="danger">
                     Close
