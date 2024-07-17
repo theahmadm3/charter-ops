@@ -17,19 +17,19 @@ const validationSchema = Yup.object().shape({
     .email("Invalid email format")
     .required("Email is required"),
   dob: Yup.date().required("Date of Birth is required").nullable(),
-  type_of_id: Yup.string().required("Type of ID is required"),
+  id_type: Yup.string().required("Type of ID is required"),
   phone: Yup.string()
     .matches(/^\d{10}$/, "Phone number must be 10 digits")
     .required("Phone number is required"),
   title: Yup.string(),
-  id_file_upload: Yup.string().required("ID File Upload is required"), // Add validation for id_file_upload
+  document_id: Yup.string().required("ID File Upload is required"),
 });
 
 const handleFileChange = async (event, setFieldValue) => {
   const file = event.currentTarget.files[0];
   if (file) {
     const base64 = await convertFileToBase64(file);
-    setFieldValue("id_file_upload", base64);
+    setFieldValue("document_id", base64);
   }
 };
 
@@ -64,8 +64,8 @@ function AddClient(props) {
             last_name: "",
             email: "",
             dob: null,
-            id_file_upload: "",
-            type_of_id: "",
+            document_id: "",
+            id_type: "",
             phone: "",
             title: "",
           }}
@@ -75,8 +75,6 @@ function AddClient(props) {
               .then((response) => {
                 if (response?.payload?.success) {
                   props.onHide();
-                } else {
-                  console.log("Error please try again");
                 }
               })
               .catch((error) => {
@@ -153,14 +151,12 @@ function AddClient(props) {
                   <BootstrapForm.Control
                     type="file"
                     accept=".jpg,.jpeg,.png,.pdf"
-                    name="id_file_upload"
+                    name="document_id"
                     onChange={(e) => handleFileChange(e, setFieldValue)}
-                    isInvalid={
-                      touched.id_file_upload && !!errors.id_file_upload
-                    }
+                    isInvalid={touched.document_id && !!errors.document_id}
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.id_file_upload}
+                    {errors.document_id}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
@@ -169,9 +165,9 @@ function AddClient(props) {
                 <FloatingLabel controlId="floatingTypeOfId" label="Type of ID">
                   <BootstrapForm.Control
                     as="select"
-                    name="type_of_id"
+                    name="id_type"
                     onChange={handleChange}
-                    isInvalid={touched.type_of_id && !!errors.type_of_id}
+                    isInvalid={touched.id_type && !!errors.id_type}
                   >
                     <option value="">Select Type of ID</option>
                     <option value="Passport">Passport</option>
@@ -179,7 +175,7 @@ function AddClient(props) {
                     <option value="National ID">National ID</option>
                   </BootstrapForm.Control>
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.type_of_id}
+                    {errors.id_type}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>

@@ -1,16 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-
-import {
-  GetAllUsers,
-  GetUserById,
-  AddUser,
-  UpdateUser,
-  DeleteUser,
-  GetAuthUser,
-  DeactivateUser,
-  ActivateUser,
-} from "../../services/user/userService";
 import {
   ActivateClient,
   AddClient,
@@ -26,10 +15,19 @@ export const getAllClientAsync = createAsyncThunk("client/all", async () => {
   return response;
 });
 
-export const addClientAsync = createAsyncThunk("client/add", async (values) => {
-  const response = await AddClient(values);
-  return response;
-});
+export const addClientAsync = createAsyncThunk(
+  "client/add",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await AddClient(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const getClientByIdAsync = createAsyncThunk("client/by/id", async () => {
   const response = await GetClientById();
