@@ -112,6 +112,7 @@ const EditCrewForm = ({ onHide, data }) => {
                     name="email"
                     value={values.email}
                     onChange={handleChange}
+                    disabled
                   />
                   {errors.email && touched.email ? (
                     <small className="text-danger">{errors.email}</small>
