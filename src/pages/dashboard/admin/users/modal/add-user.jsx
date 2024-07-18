@@ -2,11 +2,14 @@ import { Modal, Button, ButtonGroup } from "react-bootstrap";
 import CrewForm from "./forms/add-crew-form";
 import StaffForm from "./forms/add-staff-form";
 import PartnerForm from "./forms/add-partner-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function AddUser(props) {
-  const [activeForm, setActiveForm] = useState("crew");
-
+  const [activeForm, setActiveForm] = useState(props?.user_type);
+  console.log("user props", props?.user_type);
+  useEffect(() => {
+    setActiveForm(props?.user_type);
+  }, [props?.user_type]);
   return (
     <Modal
       {...props}
@@ -22,13 +25,6 @@ function AddUser(props) {
       <Modal.Body>
         <ButtonGroup className="mb-2">
           <Button
-            variant="light"
-            className={activeForm === "crew" ? "active-btn" : ""}
-            onClick={() => setActiveForm("crew")}
-          >
-            Crew
-          </Button>
-          <Button
             className={activeForm === "staff" ? "active-btn" : ""}
             variant="light"
             onClick={() => setActiveForm("staff")}
@@ -41,6 +37,13 @@ function AddUser(props) {
             onClick={() => setActiveForm("partner")}
           >
             Partner
+          </Button>
+          <Button
+            variant="light"
+            className={activeForm === "crew" ? "active-btn" : ""}
+            onClick={() => setActiveForm("crew")}
+          >
+            Crew
           </Button>
         </ButtonGroup>
 

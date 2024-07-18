@@ -309,3 +309,11 @@ th {
 .active-btn {
   background-color: $bg-blue-light !important;
 }
+
+.table {
+  --bs-table-active-bg: #e9ecef;
+  --bs-table-hover-color: black;
+  --bs-table-hover-bg: #e9ecef  ;
+  --bs-table-striped-color: black;
+  --bs-table-striped-bg: #e9ecef;
+}

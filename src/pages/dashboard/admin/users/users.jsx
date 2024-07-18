@@ -27,6 +27,7 @@ const Users = () => {
   const [modalAddUser, setModalAddUser] = useState(false);
   const [modalEditUser, setModalEditUser] = useState(false);
   const [updateUser, setUpdateUser] = useState([]);
+  const [userType, setUserType] = useState();
 
   const userInfo = useSelector((state) => state?.users);
 
@@ -84,9 +85,18 @@ const Users = () => {
     }
   }, [dispatch]);
 
+  const handleAddUser = (user_type) => {
+    setModalAddUser(true);
+    setUserType(user_type);
+    console.log("user type", user_type);
+  };
   return (
     <AdminLayout>
-      <AddUser show={modalAddUser} onHide={() => setModalAddUser(false)} />
+      <AddUser
+        show={modalAddUser}
+        onHide={() => setModalAddUser(false)}
+        user_type={userType}
+      />
       <EditUser
         show={modalEditUser}
         onHide={() => setModalEditUser(false)}
@@ -116,7 +126,7 @@ const Users = () => {
             <div>
               <div className="my-3 text-end">
                 <Button
-                  onClick={() => setModalAddUser(true)}
+                  onClick={() => handleAddUser("staff")}
                   className="shadow"
                 >
                   Add User
@@ -214,7 +224,7 @@ const Users = () => {
           >
             <div>
               <div className="my-3 text-end">
-                <Button onClick={() => setModalAddUser(true)}>
+                <Button onClick={() => handleAddUser("partner")}>
                   Add Partner
                 </Button>
               </div>
@@ -311,7 +321,7 @@ const Users = () => {
           >
             <div>
               <div className="my-3 text-end">
-                <Button onClick={() => setModalAddUser(true)}>Add Crew</Button>
+                <Button onClick={() => handleAddUser("crew")}>Add Crew</Button>
               </div>
               <Table striped bordered hover responsive>
                 <thead>

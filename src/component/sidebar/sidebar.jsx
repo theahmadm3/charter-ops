@@ -36,7 +36,7 @@ function SideBar() {
     {
       to: "/flight",
       icon: <HiUsers className="sidebar-icon" />,
-      text: "Flight/Aircraft Management",
+      text: "Aircraft Management",
     },
     {
       to: "/fuel",
