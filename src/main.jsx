@@ -16,6 +16,7 @@ import AdminDashboard from "./pages/dashboard/admin/dashboard";
 import SystemConfig from "./pages/dashboard/admin/config/system-config.jsx";
 import Users from "./pages/dashboard/admin/users/users";
 import Clients from "./pages/dashboard/admin/client/clients";
+import Aircraft from "./pages/dashboard/admin/aircraft/aircraft";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,11 @@ const router = createBrowserRouter([
   {
     path: "/admin-clients",
     element: <Clients />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin-aircraft",
+    element: <Aircraft />,
     errorElement: <ErrorPage />,
   },
 ]);

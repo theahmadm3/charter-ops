@@ -34,7 +34,7 @@ function SideBar() {
       text: "Booking Management",
     },
     {
-      to: "/flight",
+      to: "/admin-aircraft",
       icon: <HiUsers className="sidebar-icon" />,
       text: "Aircraft Management",
     },

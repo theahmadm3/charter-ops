@@ -3,6 +3,7 @@ import authSlice from "../slices/auth/authSlice";
 import configSlice from "../slices/config/configSlice";
 import userSlice from "../slices/user/userSlice";
 import clientSlice from "../slices/client/clientSlice";
+import aircraftSlice from "../slices/aircraft/aircraftSlice";
 
 const initialLoadingState = localStorage.getItem("loading") === "true";
 
@@ -12,6 +13,7 @@ export default configureStore({
     users: userSlice,
     config: configSlice,
     client: clientSlice,
+    aircraft: aircraftSlice,
 
     loading: (state = initialLoadingState, action) => {
       if (action.type.endsWith("/pending")) {
