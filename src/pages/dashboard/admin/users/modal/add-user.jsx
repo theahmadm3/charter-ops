@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 
 function AddUser(props) {
   const [activeForm, setActiveForm] = useState(props?.user_type);
-  console.log("user props", props?.user_type);
   useEffect(() => {
     setActiveForm(props?.user_type);
   }, [props?.user_type]);

@@ -88,7 +88,6 @@ const Users = () => {
   const handleAddUser = (user_type) => {
     setModalAddUser(true);
     setUserType(user_type);
-    console.log("user type", user_type);
   };
   return (
     <AdminLayout>
