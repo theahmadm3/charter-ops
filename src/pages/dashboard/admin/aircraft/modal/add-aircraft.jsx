@@ -8,7 +8,7 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { addClientAsync } from "../../../../../slices/client/clientSlice";
+import { addAircraftAsync } from "../../../../../slices/aircraft/aircraftSlice";
 
 const validationSchema = Yup.object().shape({
   owned_by: Yup.string()
@@ -47,7 +47,7 @@ function AddAircraft(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Add New Client
+          Add New Aircraft
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -63,7 +63,7 @@ function AddAircraft(props) {
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            dispatch(addClientAsync(values))
+            dispatch(addAircraftAsync(values))
               .then((response) => {
                 if (response?.payload?.success) {
                   props.onHide();
