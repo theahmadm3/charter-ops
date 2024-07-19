@@ -8,7 +8,6 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { addClientAsync } from "../../../../../slices/client/clientSlice";
 import { addAircraftAsync } from "../../../../../slices/aircraft/aircraftSlice";
 
 const validationSchema = Yup.object().shape({
