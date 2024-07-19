@@ -23,8 +23,9 @@ export const addClientAsync = createAsyncThunk(
 
       return response;
     } catch (error) {
-      toast.error(error?.response?.data.message);
-      return rejectWithValue(error.message);
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
     }
   }
 );

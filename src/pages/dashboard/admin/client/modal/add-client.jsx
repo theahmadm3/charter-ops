@@ -170,9 +170,9 @@ function AddClient(props) {
                     isInvalid={touched.id_type && !!errors.id_type}
                   >
                     <option value="">Select Type of ID</option>
-                    <option value="Passport">Passport</option>
-                    <option value="Driver's License">Driver's License</option>
-                    <option value="National ID">National ID</option>
+                    <option value="passport">Passport</option>
+                    <option value="driving licence">Driver's License</option>
+                    <option value="national id">National ID</option>
                   </BootstrapForm.Control>
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.id_type}

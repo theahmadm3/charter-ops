@@ -8,8 +8,7 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { addClientAsync } from "../../../../../slices/client/clientSlice";
-import { addAircraftAsync } from "../../../../../slices/aircraft/aircraftSlice";
+import { updateAircraftAsync } from "../../../../../slices/aircraft/aircraftSlice";
 
 const validationSchema = Yup.object().shape({
   owned_by: Yup.string()
@@ -36,9 +35,8 @@ const validationSchema = Yup.object().shape({
   remarks: Yup.string().notRequired(),
 });
 
-function AddAircraft(props) {
+function EditAircraft(props) {
   const dispatch = useDispatch();
-
   return (
     <Modal
       {...props}
@@ -48,23 +46,25 @@ function AddAircraft(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Add New Aircraft
+          Update Aircraft
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
           initialValues={{
-            owned_by: "",
-            name: "",
-            pax_capacity: 0,
-            manufacturer: "",
-            luggage_capacity: 0,
-            cruise_speed: 0,
-            remarks: "",
+            owned_by: props?.data?.[0]?.owned_by || "",
+            name: props?.data?.[0]?.name || "",
+            pax_capacity: props?.data?.[0]?.pax_capacity || "",
+            manufacturer: props?.data?.[0]?.manufacturer || "",
+            luggage_capacity: props?.data?.[0]?.luggage_capacity || "",
+            cruise_speed: props?.data?.[0]?.cruise_speed || "",
+            remarks: props?.data?.[0]?.remarks || "",
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            dispatch(addAircraftAsync(values))
+            dispatch(
+              updateAircraftAsync({ id: props?.data?.[0]?.id, values: values })
+            )
               .then((response) => {
                 if (response?.payload?.success) {
                   props.onHide();
@@ -75,7 +75,7 @@ function AddAircraft(props) {
               });
           }}
         >
-          {({ errors, touched, handleSubmit, handleChange }) => (
+          {({ errors, touched, handleSubmit, handleChange, values }) => (
             <Form onSubmit={handleSubmit}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
@@ -85,6 +85,7 @@ function AddAircraft(props) {
                   <BootstrapForm.Control
                     as="select"
                     name="owned_by"
+                    value={values.owned_by}
                     onChange={handleChange}
                     isInvalid={touched.owned_by && !!errors.owned_by}
                   >
@@ -105,6 +106,7 @@ function AddAircraft(props) {
                     type="text"
                     placeholder="Name"
                     name="name"
+                    value={values.name}
                     onChange={handleChange}
                     isInvalid={touched.name && !!errors.name}
                   />
@@ -123,6 +125,7 @@ function AddAircraft(props) {
                     type="number"
                     placeholder="PAX Capacity"
                     name="pax_capacity"
+                    value={values.pax_capacity}
                     onChange={handleChange}
                     isInvalid={touched.pax_capacity && !!errors.pax_capacity}
                   />
@@ -141,6 +144,7 @@ function AddAircraft(props) {
                     type="text"
                     placeholder="Manufacturer"
                     name="manufacturer"
+                    value={values.manufacturer}
                     onChange={handleChange}
                     isInvalid={touched.manufacturer && !!errors.manufacturer}
                   />
@@ -159,6 +163,7 @@ function AddAircraft(props) {
                     type="number"
                     placeholder="Luggage Capacity"
                     name="luggage_capacity"
+                    value={values.luggage_capacity}
                     onChange={handleChange}
                     isInvalid={
                       touched.luggage_capacity && !!errors.luggage_capacity
@@ -179,6 +184,7 @@ function AddAircraft(props) {
                     type="number"
                     placeholder="Cruise Speed"
                     name="cruise_speed"
+                    value={values.cruise_speed}
                     onChange={handleChange}
                     isInvalid={touched.cruise_speed && !!errors.cruise_speed}
                   />
@@ -194,6 +200,7 @@ function AddAircraft(props) {
                     as="textarea"
                     placeholder="Remarks"
                     name="remarks"
+                    value={values.remarks}
                     onChange={handleChange}
                     isInvalid={touched.remarks && !!errors.remarks}
                   />
@@ -203,7 +210,7 @@ function AddAircraft(props) {
                 </FloatingLabel>
               </BootstrapForm.Group>
 
-              <Button type="submit">Save</Button>
+              <Button type="submit">Update</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>
                 Close
               </Button>
@@ -216,4 +223,4 @@ function AddAircraft(props) {
   );
 }
 
-export default AddAircraft;
+export default EditAircraft;

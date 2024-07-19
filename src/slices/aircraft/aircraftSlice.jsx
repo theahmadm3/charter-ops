@@ -104,11 +104,14 @@ const aircraftSlice = createSlice({
         state.addAircraftResponse = action?.payload;
         state.getAllAircraftResponse?.data?.unshift({
           id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          last_name: action.payload?.data?.last_name,
-          email: action.payload?.data?.email,
+          name: action.payload?.data?.name,
+          owned_by: action.payload?.data?.owned_by,
+          pax_capacity: action.payload?.data?.pax_capacity,
+          manufacturer: action.payload?.data?.manufacturer,
+          luggage_capacity: action.payload?.data?.luggage_capacity,
+          cruise_speed: action.payload?.data?.cruise_speed,
           status: action.payload?.data?.status,
-          phone: action.payload?.data?.phone,
+          remarks: action.payload?.data?.remarks,
         });
 
         toast.success(action?.payload?.message);
@@ -125,17 +128,20 @@ const aircraftSlice = createSlice({
 
         // Filter and replace the existing record with the new record
         state.getAllAircraftResponse.data =
-          state.getAllAircraftResponse.data.map((client) =>
-            client.id === action.payload.data.id
+          state.getAllAircraftResponse.data.map((aircraft) =>
+            aircraft.id === action.payload.data.id
               ? {
-                  id: action.payload.data.id,
-                  first_name: action.payload.data.first_name,
-                  last_name: action.payload.data.last_name,
-                  email: action.payload.data.email,
-                  status: action.payload.data.status,
-                  phone: action.payload.data.phone,
+                  id: action.payload?.data?.id,
+                  name: action.payload?.data?.name,
+                  owned_by: action.payload?.data?.owned_by,
+                  pax_capacity: action.payload?.data?.pax_capacity,
+                  manufacturer: action.payload?.data?.manufacturer,
+                  luggage_capacity: action.payload?.data?.luggage_capacity,
+                  cruise_speed: action.payload?.data?.cruise_speed,
+                  status: action.payload?.data?.status,
+                  remarks: action.payload?.data?.remarks,
                 }
-              : client
+              : aircraft
           );
 
         toast.success(action.payload.message);
@@ -172,17 +178,20 @@ const aircraftSlice = createSlice({
 
         // Filter and replace the existing record with the new record
         state.getAllAircraftResponse.data =
-          state.getAllAircraftResponse.data.map((client) =>
-            client.id === action.payload.data.id
+          state.getAllAircraftResponse.data.map((aircraft) =>
+            aircraft.id === action.payload.data.id
               ? {
-                  id: action.payload.data.id,
-                  first_name: action.payload.data.first_name,
-                  last_name: action.payload.data.last_name,
-                  email: action.payload.data.email,
-                  status: action.payload.data.status,
-                  phone: action.payload.data.phone,
+                  id: action.payload?.data?.id,
+                  name: action.payload?.data?.name,
+                  owned_by: action.payload?.data?.owned_by,
+                  pax_capacity: action.payload?.data?.pax_capacity,
+                  manufacturer: action.payload?.data?.manufacturer,
+                  luggage_capacity: action.payload?.data?.luggage_capacity,
+                  cruise_speed: action.payload?.data?.cruise_speed,
+                  status: action.payload?.data?.status,
+                  remarks: action.payload?.data?.remarks,
                 }
-              : client
+              : aircraft
           );
 
         toast.success(action.payload.message);
@@ -200,17 +209,20 @@ const aircraftSlice = createSlice({
 
         // Filter and replace the existing record with the new record
         state.getAllAircraftResponse.data =
-          state.getAllAircraftResponse.data.map((client) =>
-            client.id === action.payload.data.id
+          state.getAllAircraftResponse.data.map((aircraft) =>
+            aircraft.id === action.payload.data.id
               ? {
-                  id: action.payload.data.id,
-                  first_name: action.payload.data.first_name,
-                  last_name: action.payload.data.last_name,
-                  email: action.payload.data.email,
-                  status: action.payload.data.status,
-                  phone: action.payload.data.phone,
+                  id: action.payload?.data?.id,
+                  name: action.payload?.data?.name,
+                  owned_by: action.payload?.data?.owned_by,
+                  pax_capacity: action.payload?.data?.pax_capacity,
+                  manufacturer: action.payload?.data?.manufacturer,
+                  luggage_capacity: action.payload?.data?.luggage_capacity,
+                  cruise_speed: action.payload?.data?.cruise_speed,
+                  status: action.payload?.data?.status,
+                  remarks: action.payload?.data?.remarks,
                 }
-              : client
+              : aircraft
           );
 
         toast.success(action.payload.message);

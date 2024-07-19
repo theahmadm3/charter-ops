@@ -16,6 +16,7 @@ import {
   getAllAircraftsAsync,
 } from "../../../../slices/aircraft/aircraftSlice";
 import AddAircraft from "./modal/add-aircraft";
+import EditAircraft from "./modal/edit-aircraft";
 // import EditClient from "./modal/edit-client";
 
 const Aircraft = () => {
@@ -33,19 +34,19 @@ const Aircraft = () => {
     }
   }, [dispatch]);
 
-  const handleEditClient = (id) => {
-    setModalEditClient(true);
+  const handleEditAircraft = (id) => {
+    setModalEditAircraft(true);
 
-    const updateClient = clientInfo?.getAllClientsResponse?.data?.filter(
+    const updateAircraft = airCraftInfo?.getAllAircraftResponse?.data?.filter(
       (data) => data.id === id
     );
-    setUpdateClient(updateClient);
+    setUpdateAircraft(updateAircraft);
   };
 
   const handleDeactivateAircraft = (id) => {
     dispatch(deactivateAircraftAsync({ id }));
   };
-  const handleActivateClient = (id) => {
+  const handleActivateAircraft = (id) => {
     dispatch(activateAircraftAsync({ id }));
   };
   return (
@@ -55,11 +56,11 @@ const Aircraft = () => {
           show={modalAddAircraft}
           onHide={() => setModalAddAircraft(false)}
         />
-        {/* <EditClient
-          show={modalEditClient}
-          onHide={() => setModalEditClient(false)}
-          data={updateClient}
-        /> */}
+        <EditAircraft
+          show={modalEditAircraft}
+          onHide={() => setModalEditAircraft(false)}
+          data={updateAircraft}
+        />
 
         <div>
           <div className="my-3 text-end">
@@ -74,26 +75,34 @@ const Aircraft = () => {
             <thead>
               <tr>
                 <th>S/N</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone</th>
+                <th>Name</th>
+                <th>Owned By</th>
+                <th>Pax Capacity</th>
+                <th>Manufacturer</th>
+                <th>Luggage Capacity</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
               {airCraftInfo?.getAllAircraftResponse?.data?.length > 0 ? (
                 airCraftInfo?.getAllAircraftResponse?.data.map(
-                  (client, index) => {
-                    const { first_name, last_name, email, phone, status } =
-                      client;
+                  (aircraft, index) => {
+                    const {
+                      name,
+                      owned_by,
+                      pax_capacity,
+                      manufacturer,
+                      luggage_capacity,
+                      status,
+                    } = aircraft;
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>{first_name}</td>
-                        <td>{last_name}</td>
-                        <td>{email}</td>
-                        <td>{phone}</td>
+                        <td>{name}</td>
+                        <td>{owned_by}</td>
+                        <td>{pax_capacity}</td>
+                        <td>{manufacturer}</td>
+                        <td>{luggage_capacity}</td>
                         <td>{status ? "Active" : "Not Active"}</td>
                         <td>
                           <Dropdown>
@@ -107,7 +116,7 @@ const Aircraft = () => {
                             <Dropdown.Menu>
                               <Dropdown.Item
                                 className="small"
-                                onClick={() => handleEditClient(client.id)}
+                                onClick={() => handleEditAircraft(aircraft.id)}
                               >
                                 Manage
                               </Dropdown.Item>
@@ -115,7 +124,7 @@ const Aircraft = () => {
                                 <Dropdown.Item
                                   className="small bg-danger text-white"
                                   onClick={() =>
-                                    handleDeactivateClient(client.id)
+                                    handleDeactivateAircraft(aircraft.id)
                                   }
                                 >
                                   Deactivate
@@ -124,7 +133,7 @@ const Aircraft = () => {
                                 <Dropdown.Item
                                   className="small bg-success text-white"
                                   onClick={() =>
-                                    handleActivateClient(client.id)
+                                    handleActivateAircraft(aircraft.id)
                                   }
                                 >
                                   Activate

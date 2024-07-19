@@ -213,7 +213,7 @@ function EditClient(props) {
                   >
                     <option value="">Select Type of ID</option>
                     <option value="passport">Passport</option>
-                    <option value="driver's license">Driver's License</option>
+                    <option value="driving licence">Driver's License</option>
                     <option value="national id">National ID</option>
                   </BootstrapForm.Control>
                   <BootstrapForm.Control.Feedback type="invalid">
