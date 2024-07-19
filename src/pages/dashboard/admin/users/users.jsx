@@ -103,7 +103,7 @@ const Users = () => {
       />
 
       <div className="my-3 container">
-        <h6 className="mb-4">Users</h6>
+        <h6 className="mb-4">List of Users</h6>
         <Tabs
           activeKey={activeKey}
           onSelect={handleSelect}

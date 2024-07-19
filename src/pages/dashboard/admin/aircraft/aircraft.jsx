@@ -63,6 +63,8 @@ const Aircraft = () => {
         />
 
         <div>
+          <h6 className="mb-4">List of Aircraft</h6>
+
           <div className="my-3 text-end">
             <Button
               onClick={() => setModalAddAircraft(true)}

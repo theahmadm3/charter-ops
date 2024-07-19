@@ -57,6 +57,8 @@ const Clients = () => {
         />
 
         <div>
+          <h6 className="mb-4">List of Clients</h6>
+
           <div className="my-3 text-end">
             <Button onClick={() => setModalAddClient(true)} className="shadow">
               Add Client
