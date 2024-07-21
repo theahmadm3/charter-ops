@@ -1,15 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import {
-  ActivateClient,
-  AddClient,
-  DeactivateClient,
-  DeleteClient,
-  GetAllClients,
-  GetClientById,
-  UpdateClient,
-} from "../../services/client/clientService";
-import {
   ActivateBooking,
   AddBooking,
   DeactivateBooking,

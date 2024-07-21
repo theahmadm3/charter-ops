@@ -4,20 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import {
-  activateClientAsync,
-  deactivateClientAsync,
-  getAllClientAsync,
-} from "../../../../slices/client/clientSlice";
-// import AddClient from "./modal/add-client";
-import { getAllRoleAsync } from "../../../../slices/config/configSlice";
-import {
   activateAircraftAsync,
   deactivateAircraftAsync,
   getAllAircraftsAsync,
 } from "../../../../slices/aircraft/aircraftSlice";
 import AddAircraft from "./modal/add-aircraft";
 import EditAircraft from "./modal/edit-aircraft";
-// import EditClient from "./modal/edit-client";
 
 const Aircraft = () => {
   const airCraftInfo = useSelector((state) => state?.aircraft);

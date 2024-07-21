@@ -3,28 +3,34 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getAllBookingAsync } from "../../../../slices/booking/bookingSlice";
+import {
+  activateBookingAsync,
+  deactivateBookingAsync,
+  getAllBookingAsync,
+} from "../../../../slices/booking/bookingSlice";
+import { useNavigate } from "react-router-dom";
 
 const Booking = () => {
   const dispatch = useDispatch();
   const [updateClient, setUpdateClient] = useState([]);
+  const navigate = useNavigate();
 
   const bookingInfo = useSelector((state) => state?.booking);
 
   const handleEditClient = (id) => {
     setModalEditClient(true);
 
-    const updateClient = clientInfo?.getAllClientsResponse?.data?.filter(
+    const updateClient = bookingInfo?.getAllClientsResponse?.data?.filter(
       (data) => data.id === id
     );
     setUpdateClient(updateClient);
   };
 
-  const handleDeactivateClient = (id) => {
-    dispatch(deactivateClientAsync({ id }));
+  const handleDeactivateBooking = (id) => {
+    dispatch(deactivateBookingAsync({ id }));
   };
-  const handleActivateClient = (id) => {
-    dispatch(activateClientAsync({ id }));
+  const handleActivateBooking = (id) => {
+    dispatch(activateBookingAsync({ id }));
   };
 
   useEffect(() => {
@@ -35,6 +41,9 @@ const Booking = () => {
     }
   }, [dispatch]);
 
+  const handleAdd = () => {
+    navigate("/admin-add-booking");
+  };
   return (
     <AdminLayout>
       <Container>
@@ -42,10 +51,7 @@ const Booking = () => {
           <h6 className="mb-4">List of Bookings</h6>
 
           <div className="my-3 text-end">
-            <Button
-              // onClick={() => setModalAddClient(true)}
-              className="shadow"
-            >
+            <Button onClick={() => handleAdd()} className="shadow">
               Book A Plane
             </Button>
           </div>
@@ -66,9 +72,9 @@ const Booking = () => {
             <tbody>
               {bookingInfo?.getAllBookingResponse?.data?.length > 0 ? (
                 bookingInfo?.getAllBookingResponse?.data.map(
-                  (client, index) => {
+                  (booking, index) => {
                     const { first_name, last_name, email, phone, status } =
-                      client;
+                      booking;
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
@@ -89,7 +95,7 @@ const Booking = () => {
                             <Dropdown.Menu>
                               <Dropdown.Item
                                 className="small"
-                                onClick={() => handleEditClient(client.id)}
+                                onClick={() => handleEditClient(booking.id)}
                               >
                                 Manage
                               </Dropdown.Item>
@@ -97,7 +103,7 @@ const Booking = () => {
                                 <Dropdown.Item
                                   className="small bg-danger text-white"
                                   onClick={() =>
-                                    handleDeactivateClient(client.id)
+                                    handleDeactivateBooking(booking.id)
                                   }
                                 >
                                   Deactivate
@@ -106,7 +112,7 @@ const Booking = () => {
                                 <Dropdown.Item
                                   className="small bg-success text-white"
                                   onClick={() =>
-                                    handleActivateClient(client.id)
+                                    handleActivateBooking(booking.id)
                                   }
                                 >
                                   Activate

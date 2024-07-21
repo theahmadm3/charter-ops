@@ -18,6 +18,7 @@ import Users from "./pages/dashboard/admin/users/users";
 import Clients from "./pages/dashboard/admin/client/clients";
 import Aircraft from "./pages/dashboard/admin/aircraft/aircraft";
 import Booking from "./pages/dashboard/admin/booking/booking";
+import AddBooking from "./pages/dashboard/admin/booking/add-booking.jsx";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,11 @@ const router = createBrowserRouter([
   {
     path: "/admin-booking",
     element: <Booking />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin-add-booking",
+    element: <AddBooking />,
     errorElement: <ErrorPage />,
   },
 ]);
