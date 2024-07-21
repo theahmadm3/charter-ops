@@ -45,7 +45,7 @@ function SideBar() {
       text: "Aircraft Management",
     },
     {
-      to: "/fuel",
+      to: "/admin-fuel",
       icon: <GiFuelTank className="sidebar-icon" />,
       text: "Fuel Management",
     },
