@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { getAllClientAsync } from "../../../../slices/client/clientSlice";
 import { getAllAircraftsAsync } from "../../../../slices/aircraft/aircraftSlice";
 import { getAllServicesAsync } from "../../../../slices/config/configSlice";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
   client: Yup.string().required("Client is required"),
@@ -416,6 +416,7 @@ const AddBooking = () => {
                       <Button
                         type="button"
                         variant="danger"
+                        className="mx-3"
                         onClick={() => handleFormClear(resetForm)}
                       >
                         Clear
