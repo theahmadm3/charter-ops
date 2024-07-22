@@ -24,11 +24,19 @@ export const addAircraftAsync = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await AddAircraft(values);
-
       return response;
     } catch (error) {
-      toast.error(error?.response?.data.message);
-      return rejectWithValue(error.message);
+      const errors = error?.response?.data?.error;
+      if (errors) {
+        for (const [field, messages] of Object.entries(errors)) {
+          messages.forEach((message) => {
+            toast.error(`${field}: ${message}`);
+          });
+        }
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+      return rejectWithValue(error);
     }
   }
 );
