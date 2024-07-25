@@ -26,7 +26,7 @@ export const addAircraftAsync = createAsyncThunk(
       const response = await AddAircraft(values);
       return response;
     } catch (error) {
-      const errors = error?.response?.data?.error;
+      const errors = error?.response?.data.error;
       if (errors) {
         for (const [field, messages] of Object.entries(errors)) {
           messages.forEach((message) => {
@@ -36,7 +36,7 @@ export const addAircraftAsync = createAsyncThunk(
       } else {
         toast.error("An unexpected error occurred.");
       }
-      return rejectWithValue(error);
+      return rejectWithValue(errors);
     }
   }
 );
@@ -97,6 +97,7 @@ const aircraftSlice = createSlice({
     deleteAircraftResponse: {},
     updateAircraftResponseFail: [],
     addAircraftResponse: {},
+    addAircraftError: {},
     deactivateAircraftResponse: {},
     activateAircraftResponse: {},
   },
@@ -126,7 +127,8 @@ const aircraftSlice = createSlice({
       }
     });
     builder.addCase(addAircraftAsync.rejected, (state, action) => {
-      state.addAircraftResponse = action.payload;
+      state.addAircraftError = action.payload;
+      console.log("acction from slice", action);
       toast.error(action?.payload?.message);
     });
 

@@ -14,8 +14,16 @@ import { useEffect, useState } from "react";
 
 const validationSchema = Yup.object({
   owned_by: Yup.string().required("Aircraft ownership is required"),
-  model: Yup.string().required("Aircraft model is required"),
-  manufacturer: Yup.string(),
+  model: Yup.string()
+    .required("Aircraft model is required")
+    .matches(
+      /^[a-zA-Z0-9]+$/,
+      "The model field must only contain letters and numbers."
+    ),
+  manufacturer: Yup.string().matches(
+    /^[a-zA-Z0-9]+$/,
+    "The manufacturer field must only contain letters and numbers."
+  ),
   total_seat_capacity: Yup.number()
     .required("Total seat capacity is required")
     .positive("Must be a positive number"),
@@ -36,7 +44,10 @@ const validationSchema = Yup.object({
   fuel_capacity: Yup.number()
     .required("Fuel capacity is required")
     .positive("Must be a positive number"),
-  engine_type: Yup.string(),
+  engine_type: Yup.string().matches(
+    /^[a-zA-Z0-9]+$/,
+    "The engine type field must only contain letters and numbers."
+  ),
   inflight_services: Yup.array().min(
     1,
     "At least one inflight service must be selected"
@@ -53,8 +64,8 @@ function AddAircraft(props) {
   const [remainingSeats, setRemainingSeats] = useState(0);
   const [feedback, setfeedback] = useState("");
   const airCraftInfo = useSelector((state) => state?.aircraft);
+  const errors = airCraftInfo?.addAircraftError?.response?.data || {};
 
-  console.log("feedback", airCraftInfo);
   return (
     <Modal
       {...props}
@@ -90,17 +101,16 @@ function AddAircraft(props) {
             remarks: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            dispatch(addAircraftAsync(values))
-              .then((response) => {
-                if (response?.payload?.success) {
-                  props.onHide();
-                }
-              })
-              .catch((error) => {
-                setfeedback(error);
-                console.error("Error occurred:", error);
-              });
+          onSubmit={async (values) => {
+            try {
+              const response = await dispatch(addAircraftAsync(values));
+              if (response?.payload?.success) {
+                props.onHide();
+              }
+            } catch (error) {
+              setfeedback(error);
+              console.error("Error occurred:", error);
+            }
           }}
         >
           {({
@@ -240,6 +250,7 @@ function AddAircraft(props) {
                             ].map((classType) => (
                               <div key={classType} className="mb-2">
                                 <BootstrapForm.Check
+                                  inline
                                   type="checkbox"
                                   id={`class_configuration.${classType}`}
                                   label={classType
@@ -385,6 +396,7 @@ function AddAircraft(props) {
                         {["Meals", "Wi-fi"].map((service) => (
                           <BootstrapForm.Check
                             key={service}
+                            inline
                             type="checkbox"
                             id={`inflight_services.${service}`}
                             label={service}
