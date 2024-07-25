@@ -62,7 +62,7 @@ const validationSchema = Yup.object({
 function AddAircraft(props) {
   const dispatch = useDispatch();
   const [remainingSeats, setRemainingSeats] = useState(0);
-  const [feedback, setfeedback] = useState("");
+  const [feedback, setFeedback] = useState("");
   const airCraftInfo = useSelector((state) => state?.aircraft);
   const errors = airCraftInfo?.addAircraftError?.response?.data || {};
 
@@ -108,7 +108,7 @@ function AddAircraft(props) {
                 props.onHide();
               }
             } catch (error) {
-              setfeedback(error);
+              setFeedback(error);
               console.error("Error occurred:", error);
             }
           }}
@@ -258,20 +258,22 @@ function AddAircraft(props) {
                                     .toUpperCase()}
                                   name={`class_configuration.${classType}`}
                                   onChange={(e) => {
+                                    const newValue = e.target.checked ? 1 : 0;
                                     setFieldValue(
                                       `class_configuration.${classType}`,
-                                      e.target.checked
-                                        ? 0
-                                        : values.class_configuration[classType]
+                                      newValue
                                     );
                                   }}
                                   isInvalid={
                                     touched.class_configuration?.[classType] &&
                                     !!errors.class_configuration?.[classType]
                                   }
+                                  checked={
+                                    values.class_configuration[classType] === 1
+                                  }
                                 />
-                                {values.class_configuration[classType] !==
-                                  0 && (
+                                {/* {values.class_configuration[classType] ===
+                                  1 && (
                                   <BootstrapForm.Control
                                     type="number"
                                     placeholder={`${classType
@@ -285,8 +287,11 @@ function AddAircraft(props) {
                                       ] &&
                                       !!errors.class_configuration?.[classType]
                                     }
+                                    value={
+                                      values.class_configuration[classType]
+                                    }
                                   />
-                                )}
+                                )} */}
                                 <BootstrapForm.Control.Feedback type="invalid">
                                   {errors.class_configuration?.[classType]}
                                 </BootstrapForm.Control.Feedback>
@@ -401,11 +406,19 @@ function AddAircraft(props) {
                             id={`inflight_services.${service}`}
                             label={service}
                             name="inflight_services"
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              const newValue = e.target.checked
+                                ? [...values.inflight_services, service]
+                                : values.inflight_services.filter(
+                                    (item) => item !== service
+                                  );
+                              setFieldValue("inflight_services", newValue);
+                            }}
                             isInvalid={
                               touched.inflight_services &&
                               !!errors.inflight_services
                             }
+                            checked={values.inflight_services.includes(service)}
                           />
                         ))}
                         <BootstrapForm.Control.Feedback type="invalid">
