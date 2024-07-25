@@ -306,7 +306,7 @@ function AddAircraft(props) {
                     <BootstrapForm.Group className="mb-3">
                       <FloatingLabel
                         controlId="floatingLuggageCapacity"
-                        label="Luggage Capacity"
+                        label="Luggage Capacity (kg)"
                       >
                         <BootstrapForm.Control
                           type="number"
