@@ -21,7 +21,7 @@ const CrewForm = ({ props }) => {
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
-    role_id: Yup.string().required("Role is required"),
+    // role_id: Yup.string().required("Role is required"),
   });
 
   return (
@@ -31,7 +31,6 @@ const CrewForm = ({ props }) => {
         last_name: "",
         email: "",
         designation: "",
-        role_id: "",
         user_type: "crew",
       }}
       validationSchema={validationSchema}
@@ -119,7 +118,7 @@ const CrewForm = ({ props }) => {
               </BootstrapForm.Group>
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col md={12}>
               <BootstrapForm.Group>
                 <FloatingLabel
@@ -147,7 +146,7 @@ const CrewForm = ({ props }) => {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
-          </Row>
+          </Row> */}
           <Row>
             <Col md={12}>
               <BootstrapForm.Group>

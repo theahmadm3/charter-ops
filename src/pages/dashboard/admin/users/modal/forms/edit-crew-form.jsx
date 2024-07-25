@@ -33,7 +33,6 @@ const EditCrewForm = ({ onHide, data }) => {
         last_name: data?.data[0].last_name,
         email: data?.data[0].email,
         designation: data?.data[0].department_id,
-        role_id: data?.data[0].role_id,
         user_type: "crew",
       }}
       validationSchema={validationSchema}
@@ -121,7 +120,7 @@ const EditCrewForm = ({ onHide, data }) => {
               </BootstrapForm.Group>
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col md={12}>
               <BootstrapForm.Group>
                 <FloatingLabel
@@ -149,7 +148,7 @@ const EditCrewForm = ({ onHide, data }) => {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
-          </Row>
+          </Row> */}
           <Row>
             <Col md={12}>
               <BootstrapForm.Group>
