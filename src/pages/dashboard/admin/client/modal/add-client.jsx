@@ -9,6 +9,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { addClientAsync } from "../../../../../slices/client/clientSlice";
+import { countries } from "../../../../../util/data";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("First name is required"),
@@ -19,10 +20,14 @@ const validationSchema = Yup.object().shape({
   dob: Yup.date().required("Date of Birth is required").nullable(),
   id_type: Yup.string().required("Type of ID is required"),
   phone: Yup.string()
-    .matches(/^\d{10}$/, "Phone number must be 10 digits")
+    .matches(
+      /^\+?[0-9]{11,15}$/,
+      "Invalid phone number, must be between 11 to 15 digits and can optionally start with a +"
+    )
     .required("Phone number is required"),
   title: Yup.string(),
   document_id: Yup.string().required("ID File Upload is required"),
+  nationality: Yup.string().required("Nationality is required"),
 });
 
 const handleFileChange = async (event, setFieldValue) => {
@@ -67,6 +72,7 @@ function AddClient(props) {
             document_id: "",
             id_type: "",
             phone: "",
+            nationality: "",
             title: "",
           }}
           validationSchema={validationSchema}
@@ -176,6 +182,28 @@ function AddClient(props) {
                   </BootstrapForm.Control>
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.id_type}
+                  </BootstrapForm.Control.Feedback>
+                </FloatingLabel>
+              </BootstrapForm.Group>
+
+              <BootstrapForm.Group className="mb-3">
+                <FloatingLabel controlId="floatingTypeOfId" label="Nationality">
+                  <BootstrapForm.Control
+                    as="select"
+                    name="nationality"
+                    onChange={handleChange}
+                    isInvalid={touched.nationality && !!errors.nationality}
+                  >
+                    <option value="">Select Nationality</option>
+                    {countries.map((country, index) => (
+                      <option value={country} key={index}>
+                        {" "}
+                        {country}{" "}
+                      </option>
+                    ))}
+                  </BootstrapForm.Control>
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.nationality}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
