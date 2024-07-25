@@ -70,6 +70,7 @@ function EditClient(props) {
             id_type: props?.data?.[0]?.id_type || "",
             phone: props?.data?.[0]?.phone || "",
             title: props?.data?.[0]?.title || "",
+            nationality: props?.data?.[0]?.nationality || "",
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
@@ -218,6 +219,29 @@ function EditClient(props) {
                   </BootstrapForm.Control>
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.id_type}
+                  </BootstrapForm.Control.Feedback>
+                </FloatingLabel>
+              </BootstrapForm.Group>
+
+              <BootstrapForm.Group className="mb-3">
+                <FloatingLabel controlId="floatingTypeOfId" label="Nationality">
+                  <BootstrapForm.Control
+                    as="select"
+                    name="nationality"
+                    onChange={handleChange}
+                    isInvalid={touched.nationality && !!errors.nationality}
+                    value={values?.nationality}
+                  >
+                    <option value="">Select Nationality</option>
+                    {countries.map((country, index) => (
+                      <option value={country} key={index}>
+                        {" "}
+                        {country}{" "}
+                      </option>
+                    ))}
+                  </BootstrapForm.Control>
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.nationality}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
