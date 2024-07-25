@@ -98,12 +98,6 @@ function EditClient(props) {
             values,
           }) => (
             <Form onSubmit={handleSubmit}>
-              {/* {feedback && (
-                <div>
-                  <p className="text-danger">{feedback}</p>
-                </div>
-              )} */}
-
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel controlId="floatingFirstName" label="First Name">
                   <BootstrapForm.Control
@@ -261,30 +255,6 @@ function EditClient(props) {
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.phone}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingTitle" label="Title">
-                  <BootstrapForm.Control
-                    as="select"
-                    name="title"
-                    onChange={handleChange}
-                    isInvalid={touched.title && !!errors.title}
-                    value={values?.title}
-                  >
-                    <option value="">Select Title</option>
-                    <option value="dr">Dr</option>
-                    <option value="mrs">Mrs</option>
-                    <option value="mr">Mr</option>
-                    <option value="alhaji">Alhaji</option>
-                    <option value="hajiya">Hajiya</option>
-                    <option value="honorable">Honorable</option>
-                    <option value="senator">Senator</option>
-                  </BootstrapForm.Control>
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.title}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>

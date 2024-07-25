@@ -91,6 +91,28 @@ function AddClient(props) {
           {({ errors, touched, handleSubmit, setFieldValue, handleChange }) => (
             <Form onSubmit={handleSubmit}>
               <BootstrapForm.Group className="mb-3">
+                <FloatingLabel controlId="floatingTitle" label="Title">
+                  <BootstrapForm.Control
+                    as="select"
+                    name="title"
+                    onChange={handleChange}
+                    isInvalid={touched.title && !!errors.title}
+                  >
+                    <option value="">Select Title</option>
+                    <option value="Dr">Dr</option>
+                    <option value="Mrs">Mrs</option>
+                    <option value="Mr">Mr</option>
+                    <option value="Alhaji">Alhaji</option>
+                    <option value="Hajiya">Hajiya</option>
+                    <option value="Honorable">Honorable</option>
+                    <option value="Senator">Senator</option>
+                  </BootstrapForm.Control>
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.title}
+                  </BootstrapForm.Control.Feedback>
+                </FloatingLabel>
+              </BootstrapForm.Group>
+              <BootstrapForm.Group className="mb-3">
                 <FloatingLabel controlId="floatingFirstName" label="First Name">
                   <BootstrapForm.Control
                     type="text"
@@ -222,29 +244,6 @@ function AddClient(props) {
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.phone}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingTitle" label="Title">
-                  <BootstrapForm.Control
-                    as="select"
-                    name="title"
-                    onChange={handleChange}
-                    isInvalid={touched.title && !!errors.title}
-                  >
-                    <option value="">Select Title</option>
-                    <option value="Dr">Dr</option>
-                    <option value="Mrs">Mrs</option>
-                    <option value="Mr">Mr</option>
-                    <option value="Alhaji">Alhaji</option>
-                    <option value="Hajiya">Hajiya</option>
-                    <option value="Honorable">Honorable</option>
-                    <option value="Senator">Senator</option>
-                  </BootstrapForm.Control>
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.title}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
