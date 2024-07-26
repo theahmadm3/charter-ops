@@ -317,3 +317,105 @@ th {
   --bs-table-striped-color: black;
   --bs-table-striped-bg: #e9ecef;
 }
+
+
+
+// stepper
+
+
+
+ul {
+  display: table;
+  list-style: none;
+  position: relative;
+  width: 100%;
+  background: #f7f7f8;
+  border-radius: 5px;
+  padding-top: 10px;
+  padding-right: 0;
+  padding-bottom: 10px;
+  padding-left: 0;
+}
+
+ul li {
+  display: table-cell;
+  text-align: center;
+  width: 1%;
+}
+ul li > a:before {
+  border-top: 4px solid #c8c7cc;
+  content: "";
+  display: block;
+  font-size: 0;
+  height: 1px;
+  overflow: hidden;
+  position: relative;
+  top: 21px;
+  width: 100%;
+  z-index: 1;
+}
+
+ul .stepNumber {
+  background-color: #ffffff;
+  border: 5px solid #c8c7cc;
+  border-radius: 100% 100% 100% 100%;
+  color: #546474;
+  display: inline-block;
+  font-size: 15px;
+  height: 40px;
+  line-height: 30px;
+  position: relative;
+  text-align: center;
+  width: 40px;
+  z-index: 2;
+}
+
+ul li > a.selected .stepDesc,
+li > a.done .stepDesc {
+  color: #2b3d53;
+}
+
+ul li .stepDesc {
+  color: #8e8e93;
+  /*     color: #000; */
+  display: block;
+  font-size: 14px;
+  margin-top: 4px;
+  max-width: 100%;
+  table-layout: fixed;
+  text-align: center;
+  word-wrap: break-word;
+  z-index: 104;
+}
+
+.activeStep {
+  border-color: rgb(175, 34, 34);
+}
+
+.activeStepNumber {
+  background-color: #ffffff;
+  border: 5px solid #003c71;
+  border-radius: 100% 100% 100% 100%;
+  color: #546474;
+  display: inline-block;
+  font-size: 15px;
+  height: 40px;
+  line-height: 30px;
+  position: relative;
+  text-align: center;
+  width: 40px;
+  z-index: 2;
+}
+
+ul li > a.activeStep:before {
+  border-top: 4px solid #003c71; /* Change the color to red or any other desired color */
+  content: "";
+  display: block;
+  font-size: 0;
+  height: 1px;
+  overflow: hidden;
+  position: relative;
+  top: 21px;
+  width: 100%;
+  z-index: 1;
+}

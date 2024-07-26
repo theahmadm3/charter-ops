@@ -9,7 +9,7 @@ import {
   Table,
 } from "react-bootstrap";
 import AdminLayout from "../../../../component/layout/admin-layout";
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -17,6 +17,10 @@ import { getAllClientAsync } from "../../../../slices/client/clientSlice";
 import { getAllAircraftsAsync } from "../../../../slices/aircraft/aircraftSlice";
 import { getAllServicesAsync } from "../../../../slices/config/configSlice";
 import { FaTrash } from "react-icons/fa";
+import Stepper from "../../../../component/stepper/stepper";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 const validationSchema = Yup.object().shape({
   client: Yup.string().required("Client is required"),
@@ -36,7 +40,7 @@ const validationSchema = Yup.object().shape({
 const AddBooking = () => {
   const dispatch = useDispatch();
   const [bookings, setBookings] = useState([]);
-
+  const [step, setStep] = useState(0);
   const clientInfo = useSelector((state) => state?.client);
   const airCraftInfo = useSelector((state) => state?.aircraft);
   const serviceInfo = useSelector((state) => state?.config);
@@ -111,14 +115,103 @@ const AddBooking = () => {
     resetForm();
   };
 
+  const steps = [
+    { component: "Step one", label: "Service Type" },
+    { component: "Step two", label: "Appointment" },
+    { component: "Step three", label: "Applicant Data" },
+    { component: "Step four", label: "Payment" },
+  ];
+
+  const handleStepClick = (stepIndex) => {
+    setStep(+1);
+    // const isValid = validateStep(step);
+
+    // if (isValid) {
+    //   dispatch(setCurrentStep(stepIndex));
+    // } else {
+    //   toast.info("Please complete the current step before proceeding.");
+    // }
+  };
+
+  const localAirports = ["Abuja", "Lagos", "Port Harcourt"];
+  const internationalAirports = ["London", "Dubai", "Paris"];
+  const destinations = ["Kano", "Kaduna", "Enugu"];
+  const aircraftTypes = ["Jet 1", "Jet 2", "Jet 3"];
+
+  const validationSchema = Yup.object().shape({
+    trip_type: Yup.string().required("Trip type is required"),
+    from: Yup.string().required("Departure airport is required"),
+    to: Yup.string()
+      .required("Destination airport is required")
+      .notOneOf([Yup.ref("from")], "Origin and destination cannot be the same"),
+    departure_date: Yup.date()
+      .required("Departure date and time are required")
+      .min(new Date(), "Departure date cannot be in the past"),
+    return_date: Yup.date().min(
+      Yup.ref("departure_date"),
+      "Return date cannot be before departure date"
+    ),
+    passengers: Yup.object().shape({
+      adults: Yup.number()
+        .min(1, "At least one adult is required")
+        .required("Number of adults is required"),
+      children: Yup.number().min(0).required("Number of children is required"),
+      infants: Yup.number().min(0).required("Number of infants is required"),
+    }),
+    aircraft_type: Yup.string().required("Aircraft type is required"),
+    multi_leg_route: Yup.boolean(),
+    legs: Yup.array().when("multi_leg_route", {
+      is: true,
+      then: Yup.array().of(
+        Yup.object().shape({
+          from: Yup.string().required("From airport is required"),
+          to: Yup.string().required("To airport is required"),
+          departure_date: Yup.date().required(
+            "Departure date and time are required"
+          ),
+          arrival_date: Yup.date()
+            .required("Arrival date and time are required")
+            .min(
+              Yup.ref("departure_date"),
+              "Arrival date cannot be before departure date"
+            ),
+        })
+      ),
+    }),
+  });
+
+  const initialValues = {
+    trip_type: "local",
+    from: "",
+    to: "",
+    departure_date: new Date(),
+    return_date: "",
+    passengers: {
+      adults: 1,
+      children: 0,
+      infants: 0,
+    },
+    aircraft_type: "",
+    multi_leg_route: false,
+    legs: [],
+  };
+
   return (
     <AdminLayout>
       <Container fluid>
         <Row>
           <Col md={6}>
             <h5>Create new booking</h5>
-
-            <Formik
+            {/* <Stepper
+              steps={steps}
+              activeStep={step}
+              onClick={(step) => handleStepClick(step)}
+            />
+            {step === 0 && "Form one"}
+            {step === 1 && "Form two"}
+            {step === 2 && "From three"}
+            {step === 3 && "From four"} */}
+            {/* <Formik
               initialValues={{
                 client: "",
                 title: "",
@@ -423,6 +516,460 @@ const AddBooking = () => {
                       </Button>
                     </Col>
                   </Row>
+                </Form>
+              )}
+            </Formik> */}
+
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={(values) => {
+                console.log(values);
+                // Handle form submission
+              }}
+            >
+              {({
+                values,
+                setFieldValue,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                errors,
+                touched,
+              }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Row>
+                    <Col md={12}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingTripType"
+                          label="Select Trip Type"
+                          className="my-2"
+                        >
+                          <Form.Control
+                            as="select"
+                            name="trip_type"
+                            value={values.trip_type}
+                            onChange={(e) => {
+                              setFieldValue("trip_type", e.target.value);
+                              if (e.target.value === "local") {
+                                setFieldValue("from", localAirports[0]);
+                              }
+                            }}
+                          >
+                            <option value="local">Local</option>
+                            <option value="international">International</option>
+                          </Form.Control>
+                        </FloatingLabel>
+                      </BootstrapForm.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col md={6}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingFrom"
+                          label="From"
+                          className="my-2"
+                        >
+                          <Form.Control
+                            as="select"
+                            name="from"
+                            value={values.from}
+                            onChange={handleChange}
+                            disabled={values.trip_type === "international"}
+                          >
+                            {values.trip_type === "local"
+                              ? localAirports.map((airport) => (
+                                  <option value={airport} key={airport}>
+                                    {airport}
+                                  </option>
+                                ))
+                              : internationalAirports.map((airport) => (
+                                  <option value={airport} key={airport}>
+                                    {airport}
+                                  </option>
+                                ))}
+                          </Form.Control>
+                        </FloatingLabel>
+                        <ErrorMessage
+                          name="from"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+
+                    <Col md={6}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingTo"
+                          label="To"
+                          className="my-2"
+                        >
+                          {/* <Autocomplete
+                            items={destinations}
+                            getItemValue={(item) => item}
+                            renderItem={(item, isHighlighted) => (
+                              <div
+                                key={item}
+                                style={{
+                                  background: isHighlighted
+                                    ? "lightgray"
+                                    : "white",
+                                }}
+                              >
+                                {item}
+                              </div>
+                            )}
+                            value={values.to}
+                            onChange={(e) =>
+                              setFieldValue("to", e.target.value)
+                            }
+                            onSelect={(value) => setFieldValue("to", value)}
+                          /> */}
+                        </FloatingLabel>
+                        <ErrorMessage
+                          name="to"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col md={6}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingDepartureDate"
+                          label="Departure Date and Time"
+                          className="my-2"
+                        >
+                          <DatePicker
+                            selected={values.departure_date}
+                            onChange={(date) =>
+                              setFieldValue("departure_date", date)
+                            }
+                            showTimeSelect
+                            dateFormat="Pp"
+                            minDate={new Date()}
+                          />
+                        </FloatingLabel>
+                        <ErrorMessage
+                          name="departure_date"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+
+                    <Col md={6}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingReturnDate"
+                          label="Return Date and Time"
+                          className="my-2"
+                        >
+                          <DatePicker
+                            selected={values.return_date}
+                            onChange={(date) =>
+                              setFieldValue("return_date", date)
+                            }
+                            showTimeSelect
+                            dateFormat="Pp"
+                            minDate={values.departure_date}
+                          />
+                        </FloatingLabel>
+                        <ErrorMessage
+                          name="return_date"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col md={4}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingAdults"
+                          label="Number of Adults"
+                          className="my-2"
+                        >
+                          <Form.Control
+                            as="select"
+                            name="passengers.adults"
+                            value={values.passengers.adults}
+                            onChange={handleChange}
+                          >
+                            {[...Array(10).keys()].map((num) => (
+                              <option value={num + 1} key={num}>
+                                {num + 1}
+                              </option>
+                            ))}
+                          </Form.Control>
+                        </FloatingLabel>
+                        <ErrorMessage
+                          name="passengers.adults"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+
+                    <Col md={4}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingChildren"
+                          label="Number of Children"
+                          className="my-2"
+                        >
+                          <Form.Control
+                            as="select"
+                            name="passengers.children"
+                            value={values.passengers.children}
+                            onChange={handleChange}
+                          >
+                            {[...Array(6).keys()].map((num) => (
+                              <option value={num} key={num}>
+                                {num}
+                              </option>
+                            ))}
+                          </Form.Control>
+                        </FloatingLabel>
+                        <ErrorMessage
+                          name="passengers.children"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+
+                    <Col md={4}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingInfants"
+                          label="Number of Infants"
+                          className="my-2"
+                        >
+                          <Form.Control
+                            as="select"
+                            name="passengers.infants"
+                            value={values.passengers.infants}
+                            onChange={handleChange}
+                          >
+                            {[...Array(3).keys()].map((num) => (
+                              <option value={num} key={num}>
+                                {num}
+                              </option>
+                            ))}
+                          </Form.Control>
+                        </FloatingLabel>
+                        <ErrorMessage
+                          name="passengers.infants"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col md={12}>
+                      <BootstrapForm.Group>
+                        <FloatingLabel
+                          controlId="floatingAircraftType"
+                          label="Aircraft Type"
+                          className="my-2"
+                        >
+                          <Form.Control
+                            as="select"
+                            name="aircraft_type"
+                            value={values.aircraft_type}
+                            onChange={handleChange}
+                          >
+                            {aircraftTypes.map((type) => (
+                              <option value={type} key={type}>
+                                {type}
+                              </option>
+                            ))}
+                          </Form.Control>
+                        </FloatingLabel>
+                        <ErrorMessage
+                          name="aircraft_type"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col md={12}>
+                      <BootstrapForm.Group>
+                        <Form.Check
+                          type="checkbox"
+                          label="Multi-Leg Route"
+                          name="multi_leg_route"
+                          checked={values.multi_leg_route}
+                          onChange={() =>
+                            setFieldValue(
+                              "multi_leg_route",
+                              !values.multi_leg_route
+                            )
+                          }
+                        />
+                      </BootstrapForm.Group>
+                    </Col>
+                  </Row>
+
+                  {values.multi_leg_route && (
+                    <div>
+                      {values.legs.map((leg, index) => (
+                        <div key={index}>
+                          <h5>Leg {index + 1}</h5>
+                          <Row>
+                            <Col md={6}>
+                              <BootstrapForm.Group>
+                                <FloatingLabel
+                                  controlId={`floatingLegFrom${index}`}
+                                  label="From"
+                                  className="my-2"
+                                >
+                                  <Form.Control
+                                    as="select"
+                                    name={`legs.${index}.from`}
+                                    value={leg.from}
+                                    onChange={handleChange}
+                                  >
+                                    {localAirports
+                                      .concat(internationalAirports)
+                                      .map((airport) => (
+                                        <option value={airport} key={airport}>
+                                          {airport}
+                                        </option>
+                                      ))}
+                                  </Form.Control>
+                                </FloatingLabel>
+                                <ErrorMessage
+                                  name={`legs.${index}.from`}
+                                  component="div"
+                                  className="text-danger"
+                                />
+                              </BootstrapForm.Group>
+                            </Col>
+
+                            <Col md={6}>
+                              <BootstrapForm.Group>
+                                <FloatingLabel
+                                  controlId={`floatingLegTo${index}`}
+                                  label="To"
+                                  className="my-2"
+                                >
+                                  <Autocomplete
+                                    items={destinations}
+                                    getItemValue={(item) => item}
+                                    renderItem={(item, isHighlighted) => (
+                                      <div
+                                        key={item}
+                                        style={{
+                                          background: isHighlighted
+                                            ? "lightgray"
+                                            : "white",
+                                        }}
+                                      >
+                                        {item}
+                                      </div>
+                                    )}
+                                    value={leg.to}
+                                    onChange={(e) =>
+                                      setFieldValue(
+                                        `legs.${index}.to`,
+                                        e.target.value
+                                      )
+                                    }
+                                    onSelect={(value) =>
+                                      setFieldValue(`legs.${index}.to`, value)
+                                    }
+                                  />
+                                </FloatingLabel>
+                                <ErrorMessage
+                                  name={`legs.${index}.to`}
+                                  component="div"
+                                  className="text-danger"
+                                />
+                              </BootstrapForm.Group>
+                            </Col>
+                          </Row>
+
+                          <Row>
+                            <Col md={6}>
+                              <BootstrapForm.Group>
+                                <FloatingLabel
+                                  controlId={`floatingLegDepartureDate${index}`}
+                                  label="Departure Date and Time"
+                                  className="my-2"
+                                >
+                                  <DatePicker
+                                    selected={leg.departure_date}
+                                    onChange={(date) =>
+                                      setFieldValue(
+                                        `legs.${index}.departure_date`,
+                                        date
+                                      )
+                                    }
+                                    showTimeSelect
+                                    dateFormat="Pp"
+                                    minDate={new Date()}
+                                  />
+                                </FloatingLabel>
+                                <ErrorMessage
+                                  name={`legs.${index}.departure_date`}
+                                  component="div"
+                                  className="text-danger"
+                                />
+                              </BootstrapForm.Group>
+                            </Col>
+
+                            <Col md={6}>
+                              <BootstrapForm.Group>
+                                <FloatingLabel
+                                  controlId={`floatingLegArrivalDate${index}`}
+                                  label="Arrival Date and Time"
+                                  className="my-2"
+                                >
+                                  <DatePicker
+                                    selected={leg.arrival_date}
+                                    onChange={(date) =>
+                                      setFieldValue(
+                                        `legs.${index}.arrival_date`,
+                                        date
+                                      )
+                                    }
+                                    showTimeSelect
+                                    dateFormat="Pp"
+                                    minDate={leg.departure_date}
+                                  />
+                                </FloatingLabel>
+                                <ErrorMessage
+                                  name={`legs.${index}.arrival_date`}
+                                  component="div"
+                                  className="text-danger"
+                                />
+                              </BootstrapForm.Group>
+                            </Col>
+                          </Row>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="d-flex justify-content-end mt-3">
+                    <Button type="submit">Save</Button>
+                  </div>
                 </Form>
               )}
             </Formik>

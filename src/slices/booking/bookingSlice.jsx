@@ -90,7 +90,11 @@ const bookingSlice = createSlice({
     activateBookingResponse: {},
   },
 
-  reducers: {},
+  reducers: {
+    setCurrentStep(state, action) {
+      state.currentStep = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllBookingAsync.fulfilled, (state, action) => {
       state.getAllBookingResponse = action.payload;
@@ -220,5 +224,7 @@ const bookingSlice = createSlice({
     });
   },
 });
+
+export const { setCurrentStep } = bookingSlice.actions;
 
 export default bookingSlice.reducer;

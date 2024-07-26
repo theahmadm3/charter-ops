@@ -73,15 +73,27 @@ const Booking = () => {
               {bookingInfo?.getAllBookingResponse?.data?.length > 0 ? (
                 bookingInfo?.getAllBookingResponse?.data.map(
                   (booking, index) => {
-                    const { first_name, last_name, email, phone, status } =
-                      booking;
+                    const {
+                      from_location,
+                      to_location,
+                      rate,
+                      pax,
+                      flight_date,
+                      flight_time,
+                      client_id,
+                      payment_status,
+                      status,
+                    } = booking;
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>{first_name}</td>
-                        <td>{last_name}</td>
-                        <td>{email}</td>
-                        <td>{phone}</td>
+                        <td>{from_location + " " + to_location}</td>
+                        <td>{rate}</td>
+                        <td>{pax}</td>
+                        <td>{flight_date}</td>
+                        <td>{flight_time}</td>
+                        <td>{client_id}</td>
+                        <td>{payment_status}</td>
                         <td>{status ? "Active" : "Not Active"}</td>
                         <td>
                           <Dropdown>
@@ -95,25 +107,25 @@ const Booking = () => {
                             <Dropdown.Menu>
                               <Dropdown.Item
                                 className="small"
-                                onClick={() => handleEditClient(booking.id)}
+                                // onClick={() => handleEditClient(booking.id)}
                               >
                                 Manage
                               </Dropdown.Item>
                               {status ? (
                                 <Dropdown.Item
                                   className="small bg-danger text-white"
-                                  onClick={() =>
-                                    handleDeactivateBooking(booking.id)
-                                  }
+                                  // onClick={() =>
+                                  //   handleDeactivateBooking(booking.id)
+                                  // }
                                 >
                                   Deactivate
                                 </Dropdown.Item>
                               ) : (
                                 <Dropdown.Item
                                   className="small bg-success text-white"
-                                  onClick={() =>
-                                    handleActivateBooking(booking.id)
-                                  }
+                                  // onClick={() =>
+                                  //   handleActivateBooking(booking.id)
+                                  // }
                                 >
                                   Activate
                                 </Dropdown.Item>
