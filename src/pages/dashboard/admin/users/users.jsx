@@ -329,22 +329,27 @@ const Users = () => {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
+                    <th>Designation</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {userInfo?.getAllUsersResponse?.data?.length > 0 ? (
                     userInfo?.getAllUsersResponse?.data.map((user, index) => {
-                      const { first_name, last_name, email, phone, status } =
-                        user;
+                      const {
+                        first_name,
+                        last_name,
+                        email,
+                        designation,
+                        status,
+                      } = user;
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{first_name}</td>
                           <td>{last_name}</td>
                           <td>{email}</td>
-                          <td>{phone}</td>
+                          <td>{designation}</td>
                           <td>{status ? "Active" : "Not Active"}</td>
                           <td>
                             <Dropdown>
