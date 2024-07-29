@@ -88,6 +88,7 @@ const bookingSlice = createSlice({
     addBookingResponse: {},
     deactivateBookingResponse: {},
     activateBookingResponse: {},
+    currentStep: "0",
   },
 
   reducers: {
