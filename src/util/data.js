@@ -232,3 +232,127 @@ export const countries = [
   "Zambia",
   "Zimbabwe",
 ];
+
+export const localAirports = [
+  { id: "ABV", name: "Nnamdi Azikiwe International Airport, Abuja" },
+  { id: "LOS", name: "Murtala Muhammed International Airport, Lagos" },
+  { id: "PHC", name: "Port Harcourt International Airport, Port Harcourt" },
+  { id: "KAN", name: "Mallam Aminu Kano International Airport, Kano" },
+  { id: "ABA", name: "Aba Airport, Aba" },
+  { id: "ENU", name: "Enugu Airport, Enugu" },
+  { id: "JOS", name: "Jos Airport, Jos" },
+  { id: "ILR", name: "Ilorin Airport, Ilorin" },
+  { id: "MDG", name: "Maiduguri Airport, Maiduguri" },
+  { id: "OSU", name: "Osubi Airport, Warri" },
+  { id: "SUK", name: "Sukur Airport, Sukur" },
+  { id: "ZAR", name: "Zaria Airport, Zaria" },
+];
+
+export const internationalAirports = [
+  // North America
+  { id: "JFK", name: "John F. Kennedy International Airport, New York, USA" },
+  { id: "LAX", name: "Los Angeles International Airport, Los Angeles, USA" },
+  { id: "ORD", name: "O'Hare International Airport, Chicago, USA" },
+  { id: "YYZ", name: "Toronto Pearson International Airport, Toronto, Canada" },
+  { id: "YVR", name: "Vancouver International Airport, Vancouver, Canada" },
+
+  // Europe
+  { id: "LHR", name: "Heathrow Airport, London, UK" },
+  { id: "CDG", name: "Charles de Gaulle Airport, Paris, France" },
+  { id: "FRA", name: "Frankfurt Airport, Frankfurt, Germany" },
+  { id: "AMS", name: "Amsterdam Airport Schiphol, Amsterdam, Netherlands" },
+  { id: "MAD", name: "Adolfo Suárez Madrid-Barajas Airport, Madrid, Spain" },
+  { id: "ZRH", name: "Zurich Airport, Zurich, Switzerland" },
+
+  // Asia
+  { id: "DXB", name: "Dubai International Airport, Dubai, UAE" },
+  { id: "HKG", name: "Hong Kong International Airport, Hong Kong" },
+  { id: "ICN", name: "Incheon International Airport, Seoul, South Korea" },
+  { id: "NRT", name: "Narita International Airport, Tokyo, Japan" },
+  { id: "SIN", name: "Singapore Changi Airport, Singapore" },
+  { id: "BKK", name: "Suvarnabhumi Airport, Bangkok, Thailand" },
+
+  // South America
+  {
+    id: "GRU",
+    name: "São Paulo/Guarulhos–Governador André Franco Montoro International Airport, São Paulo, Brazil",
+  },
+  {
+    id: "EZE",
+    name: "Ministro Pistarini International Airport, Buenos Aires, Argentina",
+  },
+
+  // Australia
+  { id: "SYD", name: "Sydney Kingsford Smith Airport, Sydney, Australia" },
+  { id: "MEL", name: "Melbourne Airport, Melbourne, Australia" },
+
+  // Africa (excluding Nigeria)
+  {
+    id: "CPT",
+    name: "Cape Town International Airport, Cape Town, South Africa",
+  },
+  {
+    id: "JNB",
+    name: "O.R. Tambo International Airport, Johannesburg, South Africa",
+  },
+  { id: "NBO", name: "Jomo Kenyatta International Airport, Nairobi, Kenya" },
+  { id: "ACC", name: "Kotoka International Airport, Accra, Ghana" },
+
+  // Middle East
+  { id: "TLV", name: "Ben Gurion International Airport, Tel Aviv, Israel" },
+  { id: "DOH", name: "Hamad International Airport, Doha, Qatar" },
+
+  // Central America and Caribbean
+  { id: "PTY", name: "Tocumen International Airport, Panama City, Panama" },
+  {
+    id: "SJU",
+    name: "Luis Muñoz Marín International Airport, San Juan, Puerto Rico",
+  },
+];
+
+export const airports = [
+  {
+    value: "LOS",
+    label: "Murtala Muhammed International Airport, Lagos (LOS)",
+  },
+  {
+    value: "ABV",
+    label: "Nnamdi Azikiwe International Airport, Abuja (ABV)",
+  },
+  {
+    value: "PHC",
+    label: "Port Harcourt International Airport, Port Harcourt (PHC)",
+  },
+  {
+    value: "KAN",
+    label: "Mallam Aminu Kano International Airport, Kano (KAN)",
+  },
+  { value: "ENU", label: "Akanu Ibiam International Airport, Enugu (ENU)" },
+  {
+    value: "CBQ",
+    label: "Margaret Ekpo International Airport, Calabar (CBQ)",
+  },
+  {
+    value: "SOK",
+    label: "Sadiq Abubakar III International Airport, Sokoto (SOK)",
+  },
+  { value: "AKR", label: "Akure Airport, Akure (AKR)" },
+  { value: "BNI", label: "Benin Airport, Benin City (BNI)" },
+  { value: "IBA", label: "Ibadan Airport, Ibadan (IBA)" },
+  {
+    value: "JFK",
+    label: "John F. Kennedy International Airport, New York (JFK)",
+  },
+  { value: "LHR", label: "Heathrow Airport, London (LHR)" },
+  { value: "HND", label: "Tokyo Haneda Airport, Tokyo (HND)" },
+  { value: "DXB", label: "Dubai International Airport, Dubai (DXB)" },
+  { value: "CDG", label: "Charles de Gaulle Airport, Paris (CDG)" },
+  { value: "SIN", label: "Singapore Changi Airport, Singapore (SIN)" },
+  { value: "SYD", label: "Sydney Kingsford Smith Airport, Sydney (SYD)" },
+  { value: "HKG", label: "Hong Kong International Airport, Hong Kong (HKG)" },
+  {
+    value: "LAX",
+    label: "Los Angeles International Airport, Los Angeles (LAX)",
+  },
+  { value: "FRA", label: "Frankfurt Airport, Frankfurt (FRA)" },
+];
