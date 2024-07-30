@@ -520,7 +520,7 @@ function EditAircraft(props) {
                 </Col>
               </Row>
 
-              <Button type="submit">Save</Button>
+              <Button type="submit">Update</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>
                 Close
               </Button>
