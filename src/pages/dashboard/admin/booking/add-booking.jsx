@@ -16,6 +16,7 @@ import { setCurrentStep } from "../../../../slices/booking/bookingSlice";
 import BookingStepOne from "./steps/step-one/step-one";
 import BookingStepTwo from "./steps/step-two/step-two";
 import BookingStepThree from "./steps/step-three/step-three";
+import BookingStepFour from "./steps/step-four/step-four";
 
 const AddBooking = () => {
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ const AddBooking = () => {
             {step === 0 && <BookingStepOne />}
             {step === 1 && <BookingStepTwo />}
             {step === 2 && <BookingStepThree />}
+            {step === 3 && <BookingStepFour />}
           </Col>
         </Row>
       </Container>

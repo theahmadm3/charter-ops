@@ -320,7 +320,7 @@ th {
 
 // stepper
 
-ul {
+.stepper-container {
   display: table;
   list-style: none;
   position: relative;
@@ -333,12 +333,13 @@ ul {
   padding-left: 0;
 }
 
-ul li {
+.stepper-item {
   display: table-cell;
   text-align: center;
   width: 1%;
 }
-ul li > a:before {
+
+.stepper-link:before {
   border-top: 4px solid #c8c7cc;
   content: "";
   display: block;
@@ -351,10 +352,10 @@ ul li > a:before {
   z-index: 1;
 }
 
-ul .stepNumber {
+.stepper-number {
   background-color: #ffffff;
   border: 5px solid #c8c7cc;
-  border-radius: 100% 100% 100% 100%;
+  border-radius: 100%;
   color: #546474;
   display: inline-block;
   font-size: 15px;
@@ -366,12 +367,12 @@ ul .stepNumber {
   z-index: 2;
 }
 
-ul li > a.selected .stepDesc,
-li > a.done .stepDesc {
-  color: #2b3d53;
+.stepper-link.selected .stepper-desc,
+.stepper-link.done .stepper-desc {
+  color: #02152c;
 }
 
-ul li .stepDesc {
+.stepper-desc {
   color: #8e8e93;
   display: block;
   font-size: 14px;
@@ -383,14 +384,14 @@ ul li .stepDesc {
   z-index: 104;
 }
 
-.activeStep {
+.stepper-active {
   border-color: rgb(175, 34, 34);
 }
 
-.activeStepNumber {
+.stepper-active-number {
   background-color: #ffffff;
   border: 5px solid $bg-blue-light;
-  border-radius: 100% 100% 100% 100%;
+  border-radius: 100%;
   color: #546474;
   display: inline-block;
   font-size: 15px;
@@ -402,8 +403,8 @@ ul li .stepDesc {
   z-index: 2;
 }
 
-ul li > a.activeStep:before {
-  border-top: 4px solid $bg-blue-light;
+.stepper-link.active:before {
+  border-top: 4px solid red;
   content: "";
   display: block;
   font-size: 0;

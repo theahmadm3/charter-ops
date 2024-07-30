@@ -37,7 +37,7 @@ const nationalityOptions = [
   // Add more options as needed
 ];
 
-function BookingStepThree() {
+function BookingStepFour() {
   const handleSubmit = () => {};
   const dispatch = useDispatch();
 
@@ -216,7 +216,7 @@ function BookingStepThree() {
               <Button
                 variant="white"
                 className="border border-main-color text-end"
-                onClick={handleNext}
+                // onClick={handleNext}
               >
                 Next
               </Button>
@@ -228,4 +228,4 @@ function BookingStepThree() {
     </>
   );
 }
-export default BookingStepThree;
+export default BookingStepFour;
