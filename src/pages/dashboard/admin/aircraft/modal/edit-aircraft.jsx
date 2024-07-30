@@ -285,7 +285,7 @@ function EditAircraft(props) {
                                   !!errors.class_configuration?.[name]
                                 }
                               />
-                              {values.class_configuration[name] === 1 && (
+                              {/* {values.class_configuration[name] === 1 && (
                                 <BootstrapForm.Control
                                   type="number"
                                   placeholder={`${label} seats`}
@@ -311,7 +311,7 @@ function EditAircraft(props) {
                                   }
                                   value={values.class_configuration[name]}
                                 />
-                              )}
+                              )} */}
                               <BootstrapForm.Control.Feedback type="invalid">
                                 {errors.class_configuration?.[name]}
                               </BootstrapForm.Control.Feedback>
