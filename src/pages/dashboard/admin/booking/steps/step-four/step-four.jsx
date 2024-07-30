@@ -56,12 +56,16 @@ function BookingStepFour() {
       <Formik
         initialValues={{
           name: "",
-          dateOfBirth: "",
+          date_of_birth: "",
           gender: "",
           nationality: "",
           email: "",
-          phoneNumber: "",
-          specialRequests: "",
+          phone_number: "",
+          special_requests: "",
+          in_flight_catering: "",
+          special_requests_service: "",
+          extra_baggage: "",
+          premium_membership: false,
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -71,136 +75,59 @@ function BookingStepFour() {
             <Row>
               <Col md={6}>
                 <BootstrapForm.Group className="mb-3">
-                  <FloatingLabel controlId="floatingName" label="Name">
-                    <BootstrapForm.Control
-                      type="text"
-                      name="name"
-                      value={values.name}
-                      onChange={handleChange}
-                      isInvalid={touched.name && !!errors.name}
-                    />
-                    <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.name}
-                    </BootstrapForm.Control.Feedback>
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-              <Col md={6}>
-                <BootstrapForm.Group className="mb-3">
-                  <FloatingLabel
-                    controlId="floatingDateOfBirth"
-                    label="Date of Birth"
-                  >
-                    <BootstrapForm.Control
-                      type="date"
-                      name="dateOfBirth"
-                      value={values.dateOfBirth}
-                      onChange={handleChange}
-                      isInvalid={touched.dateOfBirth && !!errors.dateOfBirth}
-                    />
-                    <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.dateOfBirth}
-                    </BootstrapForm.Control.Feedback>
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-              <Col md={6}>
-                <BootstrapForm.Group className="mb-3">
-                  <FloatingLabel controlId="floatingGender" label="Gender">
-                    <BootstrapForm.Control
-                      as="select"
-                      name="gender"
-                      value={values.gender}
-                      onChange={handleChange}
-                      isInvalid={touched.gender && !!errors.gender}
-                    >
-                      <option value="">Select Gender</option>
-                      {genderOptions.map((option) => (
-                        <option value={option.id} key={option.id}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </BootstrapForm.Control>
-                    <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.gender}
-                    </BootstrapForm.Control.Feedback>
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-              <Col md={6}>
-                <BootstrapForm.Group className="mb-3">
-                  <FloatingLabel
-                    controlId="floatingNationality"
-                    label="Nationality"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="nationality"
-                      value={values.nationality}
-                      onChange={handleChange}
-                      isInvalid={touched.nationality && !!errors.nationality}
-                    >
-                      <option value="">Select Nationality</option>
-                      {nationalityOptions.map((option) => (
-                        <option value={option.id} key={option.id}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </BootstrapForm.Control>
-                    <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.nationality}
-                    </BootstrapForm.Control.Feedback>
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-              <Col md={6}>
-                <BootstrapForm.Group className="mb-3">
-                  <FloatingLabel controlId="floatingEmail" label="Email">
-                    <BootstrapForm.Control
-                      type="email"
-                      name="email"
-                      value={values.email}
-                      onChange={handleChange}
-                      isInvalid={touched.email && !!errors.email}
-                    />
-                    <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.email}
-                    </BootstrapForm.Control.Feedback>
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-              <Col md={6}>
-                <BootstrapForm.Group className="mb-3">
-                  <FloatingLabel
-                    controlId="floatingPhoneNumber"
-                    label="Phone Number"
-                  >
-                    <BootstrapForm.Control
-                      type="text"
-                      name="phoneNumber"
-                      value={values.phoneNumber}
-                      onChange={handleChange}
-                      isInvalid={touched.phoneNumber && !!errors.phoneNumber}
-                    />
-                    <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.phoneNumber}
-                    </BootstrapForm.Control.Feedback>
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-              <Col md={12}>
-                <BootstrapForm.Group className="mb-3">
                   <FloatingLabel
                     controlId="floatingSpecialRequests"
                     label="Special Requests"
                   >
                     <BootstrapForm.Control
                       as="textarea"
-                      name="specialRequests"
-                      value={values.specialRequests}
+                      name="special_requests"
+                      value={values.special_requests}
                       onChange={handleChange}
                     />
                   </FloatingLabel>
+                </BootstrapForm.Group>
+              </Col>
+              <Col md={6}>
+                <BootstrapForm.Group className="mb-3">
+                  <FloatingLabel
+                    controlId="floatingInFlightCatering"
+                    label="In-Flight Catering"
+                  >
+                    <BootstrapForm.Control
+                      as="textarea"
+                      name="in_flight_catering"
+                      value={values.in_flight_catering}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>
+                </BootstrapForm.Group>
+              </Col>
+              <Col md={6}>
+                <BootstrapForm.Group className="mb-3">
+                  <FloatingLabel
+                    controlId="floatingExtraBaggage"
+                    label="Extra Baggage"
+                  >
+                    <BootstrapForm.Control
+                      type="number"
+                      name="extra_baggage"
+                      value={values.extra_baggage}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>
+                </BootstrapForm.Group>
+              </Col>
+              <Col md={12}>
+                <BootstrapForm.Group className="mb-3">
+                  <BootstrapForm.Check
+                    type="checkbox"
+                    id="premiumMembership"
+                    name="premium_membership"
+                    label="Premium Membership"
+                    // checked={values.premium_membership}
+                    onChange={handleChange}
+                  />
                 </BootstrapForm.Group>
               </Col>
             </Row>
@@ -216,7 +143,7 @@ function BookingStepFour() {
               <Button
                 variant="white"
                 className="border border-main-color text-end"
-                // onClick={handleNext}
+                onClick={handleNext}
               >
                 Next
               </Button>

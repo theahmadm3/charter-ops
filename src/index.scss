@@ -337,6 +337,13 @@ th {
   display: table-cell;
   text-align: center;
   width: 1%;
+  position: relative;
+}
+
+.stepper-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .stepper-link:before {
@@ -346,8 +353,10 @@ th {
   font-size: 0;
   height: 1px;
   overflow: hidden;
-  position: relative;
+  position: absolute;
   top: 21px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   z-index: 1;
 }
@@ -369,7 +378,7 @@ th {
 
 .stepper-link.selected .stepper-desc,
 .stepper-link.done .stepper-desc {
-  color: #02152c;
+  color: #2b3d53;
 }
 
 .stepper-desc {
@@ -378,19 +387,18 @@ th {
   font-size: 14px;
   margin-top: 4px;
   max-width: 100%;
-  table-layout: fixed;
   text-align: center;
   word-wrap: break-word;
   z-index: 104;
 }
 
-.stepper-active {
-  border-color: rgb(175, 34, 34);
+.stepper-active:before {
+  border-top: 4px solid #a5c0f4; 
 }
 
 .stepper-active-number {
   background-color: #ffffff;
-  border: 5px solid $bg-blue-light;
+  border: 5px solid #a5c0f4; 
   border-radius: 100%;
   color: #546474;
   display: inline-block;
@@ -401,17 +409,4 @@ th {
   text-align: center;
   width: 40px;
   z-index: 2;
-}
-
-.stepper-link.active:before {
-  border-top: 4px solid red;
-  content: "";
-  display: block;
-  font-size: 0;
-  height: 1px;
-  overflow: hidden;
-  position: relative;
-  top: 21px;
-  width: 100%;
-  z-index: 1;
 }

@@ -17,6 +17,8 @@ import BookingStepOne from "./steps/step-one/step-one";
 import BookingStepTwo from "./steps/step-two/step-two";
 import BookingStepThree from "./steps/step-three/step-three";
 import BookingStepFour from "./steps/step-four/step-four";
+import BookingStepFive from "./steps/step-five/step-five";
+import BookingStepSix from "./steps/step-six/step-six";
 
 const AddBooking = () => {
   const dispatch = useDispatch();
@@ -27,8 +29,9 @@ const AddBooking = () => {
     { component: <BookingStepOne />, label: "Booking process" },
     { component: <BookingStepTwo />, label: "Flight Selection" },
     { component: <BookingStepThree />, label: "Passenger Information" },
-    { component: "Step four", label: "Additional Services" },
-    { component: "Step four", label: "Awaiting approval " },
+    { component: <BookingStepFour />, label: "Additional Services" },
+    { component: <BookingStepFive />, label: "Awaiting approval " },
+    { component: <BookingStepSix />, label: "Payment process" },
   ];
 
   const handleStepClick = () => {
@@ -63,6 +66,8 @@ const AddBooking = () => {
             {step === 1 && <BookingStepTwo />}
             {step === 2 && <BookingStepThree />}
             {step === 3 && <BookingStepFour />}
+            {step === 4 && <BookingStepFive />}
+            {step === 5 && <BookingStepSix />}
           </Col>
         </Row>
       </Container>
