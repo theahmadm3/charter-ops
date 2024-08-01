@@ -14,27 +14,29 @@ function Stepper({ steps, activeStep, onClick, validateStep }) {
 
   return (
     <div>
-      <ul className="anchor shadow p-3">
+      <ul className="stepper-container">
         {steps.map((step, index) => (
-          <li key={index}>
+          <li key={index} className="stepper-item">
             <Link
               to={`#step-${index + 1}`}
-              className={index <= activeStep ? "activeStep" : "disabled"}
+              className={`stepper-link ${
+                index <= activeStep ? "stepper-active" : "disabled"
+              }`}
               rel={index + 1}
               onClick={() => handleStepClick(index)}
             >
               <div
                 className={
                   index <= activeStep
-                    ? "activeStepNumber"
+                    ? "stepper-active-number"
                     : index === activeStep
-                    ? "activeStepNumber"
-                    : "stepNumber"
+                    ? "stepper-active-number"
+                    : "stepper-number"
                 }
               >
                 {index + 1}
               </div>
-              <span className="stepDesc">
+              <span className="stepper-desc">
                 <small>{step.label}</small>
               </span>
             </Link>

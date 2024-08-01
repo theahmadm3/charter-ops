@@ -285,7 +285,7 @@ function EditAircraft(props) {
                                   !!errors.class_configuration?.[name]
                                 }
                               />
-                              {values.class_configuration[name] === 1 && (
+                              {/* {values.class_configuration[name] === 1 && (
                                 <BootstrapForm.Control
                                   type="number"
                                   placeholder={`${label} seats`}
@@ -311,7 +311,7 @@ function EditAircraft(props) {
                                   }
                                   value={values.class_configuration[name]}
                                 />
-                              )}
+                              )} */}
                               <BootstrapForm.Control.Feedback type="invalid">
                                 {errors.class_configuration?.[name]}
                               </BootstrapForm.Control.Feedback>
@@ -520,7 +520,7 @@ function EditAircraft(props) {
                 </Col>
               </Row>
 
-              <Button type="submit">Save</Button>
+              <Button type="submit">Update</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>
                 Close
               </Button>

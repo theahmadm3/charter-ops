@@ -320,7 +320,7 @@ th {
 
 // stepper
 
-ul {
+.stepper-container {
   display: table;
   list-style: none;
   position: relative;
@@ -333,28 +333,38 @@ ul {
   padding-left: 0;
 }
 
-ul li {
+.stepper-item {
   display: table-cell;
   text-align: center;
   width: 1%;
+  position: relative;
 }
-ul li > a:before {
+
+.stepper-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.stepper-link:before {
   border-top: 4px solid #c8c7cc;
   content: "";
   display: block;
   font-size: 0;
   height: 1px;
   overflow: hidden;
-  position: relative;
+  position: absolute;
   top: 21px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   z-index: 1;
 }
 
-ul .stepNumber {
+.stepper-number {
   background-color: #ffffff;
   border: 5px solid #c8c7cc;
-  border-radius: 100% 100% 100% 100%;
+  border-radius: 100%;
   color: #546474;
   display: inline-block;
   font-size: 15px;
@@ -366,31 +376,30 @@ ul .stepNumber {
   z-index: 2;
 }
 
-ul li > a.selected .stepDesc,
-li > a.done .stepDesc {
+.stepper-link.selected .stepper-desc,
+.stepper-link.done .stepper-desc {
   color: #2b3d53;
 }
 
-ul li .stepDesc {
+.stepper-desc {
   color: #8e8e93;
   display: block;
   font-size: 14px;
   margin-top: 4px;
   max-width: 100%;
-  table-layout: fixed;
   text-align: center;
   word-wrap: break-word;
   z-index: 104;
 }
 
-.activeStep {
-  border-color: rgb(175, 34, 34);
+.stepper-active:before {
+  border-top: 4px solid #a5c0f4; 
 }
 
-.activeStepNumber {
+.stepper-active-number {
   background-color: #ffffff;
-  border: 5px solid $bg-blue-light;
-  border-radius: 100% 100% 100% 100%;
+  border: 5px solid #a5c0f4; 
+  border-radius: 100%;
   color: #546474;
   display: inline-block;
   font-size: 15px;
@@ -400,17 +409,4 @@ ul li .stepDesc {
   text-align: center;
   width: 40px;
   z-index: 2;
-}
-
-ul li > a.activeStep:before {
-  border-top: 4px solid $bg-blue-light;
-  content: "";
-  display: block;
-  font-size: 0;
-  height: 1px;
-  overflow: hidden;
-  position: relative;
-  top: 21px;
-  width: 100%;
-  z-index: 1;
 }
