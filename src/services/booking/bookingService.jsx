@@ -39,3 +39,28 @@ export const ActivateBooking = async (id) => {
   const response = await PutRequest(`/bookings/activate/${id}`);
   return response;
 };
+
+export const AddBookingStep01 = async (body) => {
+  const response = await PostRequest("/booking/step1", body);
+  return response;
+};
+
+export const AddBookingStep02 = async (bookingId, body) => {
+  const response = await PostRequest(
+    `/booking/${bookingId}/select-aircraft`,
+    body
+  );
+  return response;
+};
+export const AddBookingStep03 = async (bookingId, body) => {
+  const response = await PostRequest(`/booking/${bookingId}/passengers`, body);
+  return response;
+};
+
+export const AddBookingStep04 = async (bookingId, body) => {
+  const response = await PostRequest(
+    `/booking/${bookingId}/additional-services`,
+    body
+  );
+  return response;
+};

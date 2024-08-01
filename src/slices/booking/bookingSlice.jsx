@@ -3,6 +3,10 @@ import { toast } from "react-toastify";
 import {
   ActivateBooking,
   AddBooking,
+  AddBookingStep01,
+  AddBookingStep02,
+  AddBookingStep03,
+  AddBookingStep04,
   DeactivateBooking,
   DeleteBooking,
   GetAllBookings,
@@ -76,6 +80,66 @@ export const activateBookingAsync = createAsyncThunk(
   }
 );
 
+export const addBookingStepOneAsync = createAsyncThunk(
+  "booking/add/step/1",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await AddBookingStep01(values);
+
+      return response;
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const addBookingStepTwoAsync = createAsyncThunk(
+  "booking/add/step/2",
+  async ({ bookingId, values }, { rejectWithValue }) => {
+    try {
+      const response = await AddBookingStep02(bookingId, values);
+
+      return response;
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const addBookingStepThreeAsync = createAsyncThunk(
+  "booking/add/step/3",
+  async ({ bookingId, values }, { rejectWithValue }) => {
+    try {
+      const response = await AddBookingStep03(bookingId, values);
+
+      return response;
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const addBookingStepFourAsync = createAsyncThunk(
+  "booking/add/step/4",
+  async ({ bookingId, values }, { rejectWithValue }) => {
+    try {
+      const response = await AddBookingStep04(bookingId, values);
+
+      return response;
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 const bookingSlice = createSlice({
   name: "booking",
   initialState: {
@@ -88,6 +152,10 @@ const bookingSlice = createSlice({
     addBookingResponse: {},
     deactivateBookingResponse: {},
     activateBookingResponse: {},
+    addBookingStepOneResponse: {},
+    addBookingStepTwoResponse: {},
+    addBookingStepThreeResponse: {},
+    addBookingStepFourResponse: {},
   },
 
   reducers: {
@@ -117,6 +185,42 @@ const bookingSlice = createSlice({
     });
     builder.addCase(addBookingAsync.rejected, (state, action) => {
       state.addBookingResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(addBookingStepOneAsync.fulfilled, (state, action) => {
+      state.addBookingStepOneResponse = action?.payload;
+      toast.success(action?.payload?.message);
+    });
+    builder.addCase(addBookingStepOneAsync.rejected, (state, action) => {
+      state.addBookingStepOneResponse = action?.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(addBookingStepTwoAsync.fulfilled, (state, action) => {
+      state.addBookingStepTwoResponse = action?.payload;
+      toast.success(action?.payload?.message);
+    });
+    builder.addCase(addBookingStepTwoAsync.rejected, (state, action) => {
+      state.addBookingStepTwoResponse = action?.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(addBookingStepThreeAsync.fulfilled, (state, action) => {
+      state.addBookingStepThreeResponse = action?.payload;
+      toast.success(action?.payload?.message);
+    });
+    builder.addCase(addBookingStepThreeAsync.rejected, (state, action) => {
+      state.addBookingStepThreeResponse = action?.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(addBookingStepFourAsync.fulfilled, (state, action) => {
+      state.addBookingStepFourResponse = action?.payload;
+      toast.success(action?.payload?.message);
+    });
+    builder.addCase(addBookingStepFourAsync.rejected, (state, action) => {
+      state.addBookingStepFourResponse = action?.payload;
       toast.error(action?.payload?.message);
     });
 
