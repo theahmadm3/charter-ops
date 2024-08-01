@@ -69,11 +69,13 @@ const Aircraft = () => {
             <thead>
               <tr>
                 <th>S/N</th>
-                <th>Name</th>
+                <th>Model</th>
                 <th>Owned By</th>
-                <th>Pax Capacity</th>
-                <th>Manufacturer</th>
+                <th>Pax</th>
                 <th>Luggage Capacity</th>
+                <th>Flight Range </th>
+                <th> Fuel Capacity</th>
+                <th>In Flight Services</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -82,21 +84,36 @@ const Aircraft = () => {
                 airCraftInfo?.getAllAircraftResponse?.data.map(
                   (aircraft, index) => {
                     const {
-                      name,
+                      model,
                       owned_by,
                       pax_capacity,
-                      manufacturer,
                       luggage_capacity,
+                      max_flight_range,
+                      fuel_capacity,
+                      inflight_services,
                       status,
                     } = aircraft;
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>{name}</td>
+                        <td>{model}</td>
                         <td>{owned_by}</td>
                         <td>{pax_capacity}</td>
-                        <td>{manufacturer}</td>
                         <td>{luggage_capacity}</td>
+                        <td>{max_flight_range}</td>
+                        <td>{fuel_capacity}</td>
+                        <td>
+                          {inflight_services && inflight_services.length > 0 ? (
+                            inflight_services.map((service, idx) => (
+                              <span key={idx}>
+                                {service}
+                                {idx < inflight_services.length - 1 ? ", " : ""}
+                              </span>
+                            ))
+                          ) : (
+                            <span>No services available</span>
+                          )}
+                        </td>
                         <td>{status ? "Active" : "Not Active"}</td>
                         <td>
                           <Dropdown>
@@ -106,7 +123,6 @@ const Aircraft = () => {
                             >
                               <HiDotsHorizontal />
                             </Dropdown.Toggle>
-
                             <Dropdown.Menu>
                               <Dropdown.Item
                                 className="small"
@@ -134,11 +150,11 @@ const Aircraft = () => {
                                 </Dropdown.Item>
                               )}
                               {/* <Dropdown.Item
-                                  className="small bg-danger text-white"
-                                  onClick={() => handleDeleteUser(user.id)}
-                                >
-                                  Delete
-                                </Dropdown.Item> */}
+                    className="small bg-danger text-white"
+                    onClick={() => handleDeleteUser(user.id)}
+                  >
+                    Delete
+                  </Dropdown.Item> */}
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>
@@ -148,7 +164,7 @@ const Aircraft = () => {
                 )
               ) : (
                 <tr>
-                  <td colSpan="7">
+                  <td colSpan="11">
                     <p className="text-center">No aircrafts available</p>
                   </td>
                 </tr>

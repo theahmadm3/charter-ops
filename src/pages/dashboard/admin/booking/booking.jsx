@@ -59,13 +59,15 @@ const Booking = () => {
             <thead>
               <tr>
                 <th>S/N</th>
-                <th>Route</th>
-                <th>Rates</th>
-                <th>Pax</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Booked By</th>
-                <th>Paid To</th>
+                <th>Trip Type</th>
+                <th>From</th>
+                <th>Destination</th>
+                <th>Date / Time</th>
+                <th>Number of Pax</th>
+                <th>Aircraft Name</th>
+                <th>Request Status</th>
+                <th>Payment Status</th>
+                <th>Created By</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -76,25 +78,27 @@ const Booking = () => {
                     const {
                       from_location,
                       to_location,
-                      rate,
                       pax,
                       flight_date,
                       flight_time,
-                      client_id,
+                      trip_type,
                       payment_status,
+                      aircraft_id,
+                      client_id,
                       status,
                     } = booking;
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>{from_location + " " + to_location}</td>
-                        <td>{rate}</td>
+                        <td> {trip_type} </td>
+                        <td>{from_location}</td>
+                        <td>{to_location}</td>
+                        <td>{flight_date + " , " + flight_time}</td>
                         <td>{pax}</td>
-                        <td>{flight_date}</td>
-                        <td>{flight_time}</td>
-                        <td>{client_id}</td>
-                        <td>{payment_status}</td>
+                        <td>{aircraft_id}</td>
                         <td>{status ? "Active" : "Not Active"}</td>
+                        <td>{payment_status}</td>
+                        <td> {client_id} </td>
                         <td>
                           <Dropdown>
                             <Dropdown.Toggle
@@ -110,6 +114,12 @@ const Booking = () => {
                                 // onClick={() => handleEditClient(booking.id)}
                               >
                                 Manage
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                className="small"
+                                // onClick={() => handleEditClient(booking.id)}
+                              >
+                                Paid
                               </Dropdown.Item>
                               {status ? (
                                 <Dropdown.Item

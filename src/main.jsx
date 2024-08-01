@@ -20,6 +20,7 @@ import Aircraft from "./pages/dashboard/admin/aircraft/aircraft";
 import Booking from "./pages/dashboard/admin/booking/booking";
 import AddBooking from "./pages/dashboard/admin/booking/add-booking.jsx";
 import Fuels from "./pages/dashboard/admin/fuel/fuel.jsx";
+import FirstTimeLogin from "./pages/auth/first-time-login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,13 @@ const router = createBrowserRouter([
     element: <Login />,
     errorElement: <ErrorPage />,
   },
+
+  {
+    path: "/first-time-login",
+    element: <FirstTimeLogin />,
+    errorElement: <ErrorPage />,
+  },
+
   {
     path: "/forget-password",
     element: <ForgetPassword />,

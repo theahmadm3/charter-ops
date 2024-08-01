@@ -30,8 +30,8 @@ const AddBooking = () => {
     { component: <BookingStepTwo />, label: "Flight Selection" },
     { component: <BookingStepThree />, label: "Passenger Information" },
     { component: <BookingStepFour />, label: "Additional Services" },
-    { component: <BookingStepFive />, label: "Awaiting approval " },
-    { component: <BookingStepSix />, label: "Payment process" },
+    // { component: <BookingStepFive />, label: "Awaiting approval " },
+    // { component: <BookingStepSix />, label: "Payment process" },
   ];
 
   const handleStepClick = () => {

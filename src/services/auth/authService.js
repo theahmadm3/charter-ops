@@ -15,6 +15,11 @@ export const resetPassword = async (credentials) => {
   return response;
 };
 
+export const firstTimeLogin = async (credentials) => {
+  const response = await PostRequest("/users/first-time-login", credentials);
+  return response;
+};
+
 export const logout = async () => {
   const response = await PostRequest("/users/logout");
   return response;
