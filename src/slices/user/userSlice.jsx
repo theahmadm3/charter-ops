@@ -10,6 +10,7 @@ import {
   GetAuthUser,
   DeactivateUser,
   ActivateUser,
+  GetActivityLog,
 } from "../../services/user/userService";
 
 export const getAllUsersAsync = createAsyncThunk(
@@ -84,6 +85,14 @@ export const getAuthUserAsync = createAsyncThunk("users/auth", async () => {
   return response;
 });
 
+export const getActivityLogAsync = createAsyncThunk(
+  "users/activity/log",
+  async () => {
+    const response = await GetActivityLog();
+    return response;
+  }
+);
+
 const userSlice = createSlice({
   name: "users",
   initialState: {
@@ -96,6 +105,7 @@ const userSlice = createSlice({
     getAuthUserResponse: {},
     deactivateUserResponse: {},
     activateUserResponse: {},
+    getActivityLogResponse: {},
   },
 
   reducers: {},
@@ -209,6 +219,13 @@ const userSlice = createSlice({
 
     builder.addCase(activateUserAsync.rejected, (state, action) => {
       state.activateUserResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+    builder.addCase(getActivityLogAsync.fulfilled, (state, action) => {
+      state.getActivityLogResponse = action.payload;
+    });
+
+    builder.addCase(getActivityLogAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
   },

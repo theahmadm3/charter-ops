@@ -3,8 +3,14 @@ import AdminLayout from "../../../component/layout/admin-layout";
 import { FaPlaneUp } from "react-icons/fa6";
 import DateTimeDisplay from "../../../util/date";
 import { BarChart } from "../../../component/charts/bar";
+import moment from "moment";
+import { useEffect } from "react";
+import { getActivityLogAsync } from "../../../slices/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const AdminDashboard = () => {
+  const dispatch = useDispatch();
+
   const user = localStorage.getItem("user");
   let loginUser = null;
 
@@ -15,6 +21,15 @@ const AdminDashboard = () => {
       console.error("Error parsing 'user' from localStorage:", error);
     }
   }
+
+  useEffect(() => {
+    try {
+      dispatch(getActivityLogAsync());
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
+
   return (
     <AdminLayout>
       <Container fluid>
@@ -22,16 +37,29 @@ const AdminDashboard = () => {
           <Col md={6}>
             <Card className=" bg-color-1 ">
               <Card.Body>
-                <h2 className="text-capitalize">
-                  Welcome,{" "}
-                  <span className="text-capitalize">
-                    {loginUser?.first_name}
-                  </span>{" "}
-                </h2>
-                <p>
-                  {" "}
-                  <DateTimeDisplay />{" "}
-                </p>
+                <Row>
+                  <Col md={6}>
+                    <h2 className="text-capitalize">
+                      Welcome,{" "}
+                      <span className="text-capitalize">
+                        {loginUser?.first_name}
+                      </span>{" "}
+                    </h2>
+                    <p>
+                      {" "}
+                      <DateTimeDisplay />{" "}
+                    </p>
+                  </Col>
+                  <Col md={6}>
+                    <p className="mt-4">
+                      {" "}
+                      <small>
+                        Last Login:{" "}
+                        {moment(loginUser?.last_seen_at).format("lll")}
+                      </small>{" "}
+                    </p>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>

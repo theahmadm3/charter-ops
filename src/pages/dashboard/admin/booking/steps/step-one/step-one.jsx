@@ -21,30 +21,29 @@ import {
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
-import { setCurrentStep } from "../../../../../../slices/booking/bookingSlice";
+import {
+  addBookingStepOneAsync,
+  setCurrentStep,
+} from "../../../../../../slices/booking/bookingSlice";
 import { FaPlus, FaTrash } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
   trip_type: Yup.string().required("Trip type is required"),
-  from: Yup.string().required("Departure airport is required"),
-  to: Yup.string()
-    .required("Destination airport is required")
-    .notOneOf([Yup.ref("from")], "Origin and destination cannot be the same"),
-  departure_date: Yup.date()
-    .required("Departure date and time are required")
-    .min(new Date(), "Departure date cannot be in the past"),
-  return_date: Yup.date().min(
-    Yup.ref("departure_date"),
-    "Return date cannot be before departure date"
-  ),
-  passengers: Yup.object().shape({
-    adults: Yup.number()
-      .min(1, "At least one adult is required")
-      .required("Number of adults is required"),
-    children: Yup.number().min(0).required("Number of children is required"),
-    infants: Yup.number().min(0).required("Number of infants is required"),
-  }),
-  aircraft_type: Yup.string().required("Aircraft type is required"),
+  from_location: Yup.string().required("Departure airport is required"),
+  to_loaction: Yup.string().required("Destination airport is required"),
+  // .notOneOf([Yup.ref("from")], "Origin and destination cannot be the same"),
+  // flight_date: Yup.date().required("Departure date and time are required"),
+  // .min(new Date(), "Departure date cannot be in the past"),
+  // return_datetime: Yup.date().min(
+  //   Yup.ref("flight_date"),
+  //   "Return date cannot be before departure date"
+  // ),
+  num_adults: Yup.number()
+    .min(1, "At least one adult is required")
+    .required("Number of adults is required"),
+  num_children: Yup.number().min(0).required("Number of children is required"),
+  num_infants: Yup.number().min(0).required("Number of infants is required"),
+  aircraft_type_id: Yup.string().required("Aircraft type is required"),
   multi_leg_route: Yup.boolean(),
   legs: Yup.array().when("multi_leg_route", {
     is: true,
@@ -67,19 +66,16 @@ const validationSchema = Yup.object().shape({
 });
 
 const initialValues = {
-  trip_type: "local",
-  from: "",
-  to: "",
-  departure_date: new Date(),
-  return_date: "",
-  passengers: {
-    adults: 1,
-    children: 0,
-    infants: 0,
-  },
-  aircraft_type: "",
-  multi_leg_route: false,
-  legs: [],
+  trip_type: "",
+  from_location: "",
+  to_loaction: "",
+  flight_date: "",
+  return_datetime: "",
+  num_adults: 0,
+  num_children: 0,
+  num_infants: 0,
+  aircraft_type_id: "",
+  multi_leg: false,
 };
 
 function BookingStepOne() {
@@ -90,9 +86,8 @@ function BookingStepOne() {
   const [from_airport, onChangeFrom] = useState(new Date());
   const [isChecked, setIsChecked] = useState(false);
   const [legs, setLegs] = useState([
-    { id: Date.now(), from: "", to: "", departure_date: "", return_date: "" },
+    { from: "", to: "", departure_date: "", return_date: "" },
   ]);
-  console.log("legssss", legs);
 
   const handleAddLeg = () => {
     setLegs([
@@ -156,8 +151,25 @@ function BookingStepOne() {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          console.log(values);
-          // Handle form submission
+          const payload = {
+            ...values,
+            flight_date: to_airport,
+            return_datetime: from_airport,
+          };
+          dispatch(addBookingStepOneAsync(payload))
+            .then((response) => {
+              console.log("response");
+              if (response?.payload?.success) {
+                // Handle success (e.g., show a message or redirect)
+                const current = bookingInfo?.currentStep;
+                dispatch(setCurrentStep(current + 1));
+              } else {
+                console.log("Error please try again");
+              }
+            })
+            .catch((error) => {
+              console.error("Error occurred:", error);
+            });
         }}
       >
         {({
@@ -207,8 +219,8 @@ function BookingStepOne() {
                   >
                     <BootstrapForm.Control
                       as="select"
-                      name="aircraft_type"
-                      value={values.aircraft_type}
+                      name="aircraft_type_id"
+                      value={values.aircraft_type_id}
                       onChange={handleChange}
                     >
                       {airCraftInfo?.getAllAircraftResponse?.data?.map(
@@ -221,7 +233,7 @@ function BookingStepOne() {
                     </BootstrapForm.Control>
                   </FloatingLabel>
                   <ErrorMessage
-                    name="aircraft_type"
+                    name="aircraft_type_id"
                     component="div"
                     className="text-danger"
                   />
@@ -238,8 +250,8 @@ function BookingStepOne() {
                   >
                     <BootstrapForm.Control
                       as="select"
-                      name="from"
-                      value={values.from}
+                      name="from_location"
+                      value={values.from_location}
                       onChange={handleChange}
                       // disabled={values.trip_type === "international"}
                     >
@@ -279,8 +291,8 @@ function BookingStepOne() {
                   >
                     <BootstrapForm.Control
                       as="select"
-                      name="to"
-                      value={values.to}
+                      name="to_loaction"
+                      value={values.to_loaction}
                       onChange={handleChange}
                       // disabled={values.trip_type === "international"}
                     >
@@ -288,7 +300,9 @@ function BookingStepOne() {
 
                       {values.trip_type === "local" &&
                         localAirports
-                          .filter((airport) => airport.value !== values.from)
+                          .filter(
+                            (airport) => airport.value !== values.from_location
+                          )
                           .map((airport) => (
                             <option value={airport.value} key={airport.value}>
                               {airport.name}
@@ -297,7 +311,9 @@ function BookingStepOne() {
 
                       {values.trip_type === "international" &&
                         internationalAirports
-                          .filter((airport) => airport.value !== values.from)
+                          .filter(
+                            (airport) => airport.value !== values.from_location
+                          )
                           .map((airport) => (
                             <option value={airport.value} key={airport.value}>
                               {airport.name}
@@ -306,7 +322,7 @@ function BookingStepOne() {
                     </BootstrapForm.Control>
                   </FloatingLabel>
                   <ErrorMessage
-                    name="to"
+                    name="to_loaction"
                     component="div"
                     className="text-danger"
                   />
@@ -323,7 +339,7 @@ function BookingStepOne() {
                     minDate={new Date()}
                   />
                   <ErrorMessage
-                    name="departure_date"
+                    name="flight_date"
                     component="div"
                     className="text-danger"
                   />
@@ -339,7 +355,7 @@ function BookingStepOne() {
                     minDate={to_airport || new Date()}
                   />
                   <ErrorMessage
-                    name="return_date"
+                    name="return_datetime"
                     component="div"
                     className="text-danger"
                   />
@@ -356,8 +372,8 @@ function BookingStepOne() {
                   >
                     <BootstrapForm.Control
                       as="select"
-                      name="passengers.adults"
-                      value={values.passengers.adults}
+                      name="num_adults"
+                      value={values.num_adults}
                       onChange={handleChange}
                     >
                       {[...Array(10).keys()].map((num) => (
@@ -368,7 +384,7 @@ function BookingStepOne() {
                     </BootstrapForm.Control>
                   </FloatingLabel>
                   <ErrorMessage
-                    name="passengers.adults"
+                    name="num_adults"
                     component="div"
                     className="text-danger"
                   />
@@ -384,8 +400,8 @@ function BookingStepOne() {
                   >
                     <BootstrapForm.Control
                       as="select"
-                      name="passengers.children"
-                      value={values.passengers.children}
+                      name="num_children"
+                      value={values.num_children}
                       onChange={handleChange}
                     >
                       {[...Array(6).keys()].map((num) => (
@@ -396,7 +412,7 @@ function BookingStepOne() {
                     </BootstrapForm.Control>
                   </FloatingLabel>
                   <ErrorMessage
-                    name="passengers.children"
+                    name="num_children"
                     component="div"
                     className="text-danger"
                   />
@@ -412,8 +428,8 @@ function BookingStepOne() {
                   >
                     <BootstrapForm.Control
                       as="select"
-                      name="passengers.infants"
-                      value={values.passengers.infants}
+                      name="num_infants"
+                      value={values.num_infants}
                       onChange={handleChange}
                     >
                       {[...Array(3).keys()].map((num) => (
@@ -424,7 +440,7 @@ function BookingStepOne() {
                     </BootstrapForm.Control>
                   </FloatingLabel>
                   <ErrorMessage
-                    name="passengers.infants"
+                    name="num_infants"
                     component="div"
                     className="text-danger"
                   />
@@ -439,7 +455,7 @@ function BookingStepOne() {
                     <BootstrapForm.Check
                       type="checkbox"
                       label="Multi-Leg Route"
-                      name="multi_leg_route"
+                      name="multi_leg"
                       checked={isChecked}
                       onChange={handleCheckboxChange}
                     />
@@ -626,7 +642,7 @@ function BookingStepOne() {
               >
                 Next
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit">Save </Button>
             </div>
           </Form>
         )}

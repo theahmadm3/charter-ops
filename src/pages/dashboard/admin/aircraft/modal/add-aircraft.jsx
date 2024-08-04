@@ -228,7 +228,7 @@ function AddAircraft(props) {
                         <BootstrapForm.Control.Feedback type="invalid">
                           {errors.total_seat_capacity}
                         </BootstrapForm.Control.Feedback>
-                        <div>Remaining Seats: {remainingSeats}</div>
+                        {/* <div>Remaining Seats: {remainingSeats}</div> */}
                       </FloatingLabel>
                     </BootstrapForm.Group>
                   </Col>
