@@ -2,7 +2,10 @@ import { Formik, Form, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import { getAllClientAsync } from "../../../../../../slices/client/clientSlice";
 import { getAllAircraftsAsync } from "../../../../../../slices/aircraft/aircraftSlice";
-import { getAllServicesAsync } from "../../../../../../slices/config/configSlice";
+import {
+  getAllPartnershipsAsync,
+  getAllServicesAsync,
+} from "../../../../../../slices/config/configSlice";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
@@ -30,7 +33,7 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 const validationSchema = Yup.object().shape({
   trip_type: Yup.string().required("Trip type is required"),
   from_location: Yup.string().required("Departure airport is required"),
-  to_loaction: Yup.string().required("Destination airport is required"),
+  to_location: Yup.string().required("Destination airport is required"),
   // .notOneOf([Yup.ref("from")], "Origin and destination cannot be the same"),
   // flight_date: Yup.date().required("Departure date and time are required"),
   // .min(new Date(), "Departure date cannot be in the past"),
@@ -43,7 +46,7 @@ const validationSchema = Yup.object().shape({
     .required("Number of adults is required"),
   num_children: Yup.number().min(0).required("Number of children is required"),
   num_infants: Yup.number().min(0).required("Number of infants is required"),
-  aircraft_type_id: Yup.string().required("Aircraft type is required"),
+  // aircraft_type_id: Yup.string().required("Aircraft type is required"),
   multi_leg_route: Yup.boolean(),
   legs: Yup.array().when("multi_leg_route", {
     is: true,
@@ -68,14 +71,14 @@ const validationSchema = Yup.object().shape({
 const initialValues = {
   trip_type: "",
   from_location: "",
-  to_loaction: "",
+  to_location: "",
   flight_date: "",
-  return_datetime: "",
+  return_date: "",
   num_adults: 0,
   num_children: 0,
   num_infants: 0,
-  aircraft_type_id: "",
-  multi_leg: false,
+  // aircraft_type_id: 0,
+  multi_leg: null,
 };
 
 function BookingStepOne() {
@@ -86,7 +89,7 @@ function BookingStepOne() {
   const [from_airport, onChangeFrom] = useState(new Date());
   const [isChecked, setIsChecked] = useState(false);
   const [legs, setLegs] = useState([
-    { from: "", to: "", departure_date: "", return_date: "" },
+    { from: "", to: "", departure_date_time: "", arrival_date_time: "" },
   ]);
 
   const handleAddLeg = () => {
@@ -115,7 +118,6 @@ function BookingStepOne() {
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
   };
-
   const handleNext = () => {
     const current = bookingInfo?.currentStep;
     dispatch(setCurrentStep(current + 1));
@@ -137,7 +139,7 @@ function BookingStepOne() {
   useEffect(() => {
     try {
       dispatch(getAllClientAsync());
-      dispatch(getAllAircraftsAsync());
+      dispatch(getAllPartnershipsAsync());
       dispatch(getAllServicesAsync());
       dispatch(setCurrentStep(0));
     } catch (error) {
@@ -154,7 +156,13 @@ function BookingStepOne() {
           const payload = {
             ...values,
             flight_date: to_airport,
-            return_datetime: from_airport,
+            return_date: from_airport,
+            num_adults: Number(values.num_adults),
+            num_children: Number(values.num_children),
+            num_infants: Number(values.num_infants),
+            // aircraft_type_id: Number(values.aircraft_type_id),
+            multi_leg: isChecked,
+            ...(isChecked && legs && { legs }),
           };
           dispatch(addBookingStepOneAsync(payload))
             .then((response) => {
@@ -209,7 +217,7 @@ function BookingStepOne() {
                   </FloatingLabel>
                 </BootstrapForm.Group>
               </Col>
-
+              {/* 
               <Col md={6}>
                 <BootstrapForm.Group>
                   <FloatingLabel
@@ -223,7 +231,9 @@ function BookingStepOne() {
                       value={values.aircraft_type_id}
                       onChange={handleChange}
                     >
-                      {airCraftInfo?.getAllAircraftResponse?.data?.map(
+                      <option value="">Select aircraft type</option>
+
+                      {serviceInfo?.getAllPartnershipTypesResponse?.data?.map(
                         (type) => (
                           <option value={type.id} key={type.id}>
                             {type.name}
@@ -238,7 +248,7 @@ function BookingStepOne() {
                     className="text-danger"
                   />
                 </BootstrapForm.Group>
-              </Col>
+              </Col> */}
             </Row>
             <Row>
               <Col md={6}>
@@ -291,8 +301,8 @@ function BookingStepOne() {
                   >
                     <BootstrapForm.Control
                       as="select"
-                      name="to_loaction"
-                      value={values.to_loaction}
+                      name="to_location"
+                      value={values.to_location}
                       onChange={handleChange}
                       // disabled={values.trip_type === "international"}
                     >
@@ -322,7 +332,7 @@ function BookingStepOne() {
                     </BootstrapForm.Control>
                   </FloatingLabel>
                   <ErrorMessage
-                    name="to_loaction"
+                    name="to_location"
                     component="div"
                     className="text-danger"
                   />
@@ -355,7 +365,7 @@ function BookingStepOne() {
                     minDate={to_airport || new Date()}
                   />
                   <ErrorMessage
-                    name="return_datetime"
+                    name="return_date"
                     component="div"
                     className="text-danger"
                   />
@@ -568,15 +578,15 @@ function BookingStepOne() {
                               onChange={(date) =>
                                 handleLegChange(leg.id, {
                                   target: {
-                                    name: "departure_date",
+                                    name: "departure_date_time",
                                     value: date,
                                   },
                                 })
                               }
-                              value={leg.departure_date}
+                              value={leg.departure_date_time}
                             />
                             <ErrorMessage
-                              name={`legs[${index}].departure_date`}
+                              name={`legs[${index}].departure_date_time`}
                               component="div"
                               className="text-danger"
                             />
@@ -589,13 +599,16 @@ function BookingStepOne() {
                             <DateTimePicker
                               onChange={(date) =>
                                 handleLegChange(leg.id, {
-                                  target: { name: "return_date", value: date },
+                                  target: {
+                                    name: "arrival_date_time",
+                                    value: date,
+                                  },
                                 })
                               }
-                              value={leg.return_date}
+                              value={leg.arrival_date_time}
                             />
                             <ErrorMessage
-                              name={`legs[${index}].return_date`}
+                              name={`legs[${index}].arrival_date_time`}
                               component="div"
                               className="text-danger"
                             />

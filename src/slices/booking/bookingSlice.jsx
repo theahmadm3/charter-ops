@@ -88,7 +88,8 @@ export const addBookingStepOneAsync = createAsyncThunk(
 
       return response;
     } catch (error) {
-      const errorMessage = error?.response?.data?.error || error.message;
+      const errorMessage =
+        error?.response?.data?.error || error.response?.data?.message;
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
