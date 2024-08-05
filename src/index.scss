@@ -393,12 +393,12 @@ th {
 }
 
 .stepper-active:before {
-  border-top: 4px solid #a5c0f4; 
+  border-top: 4px solid #a5c0f4;
 }
 
 .stepper-active-number {
   background-color: #ffffff;
-  border: 5px solid #a5c0f4; 
+  border: 5px solid #a5c0f4;
   border-radius: 100%;
   color: #546474;
   display: inline-block;
@@ -409,4 +409,9 @@ th {
   text-align: center;
   width: 40px;
   z-index: 2;
+}
+
+.activity-log-card {
+  height: 25rem !important;
+  overflow: auto;
 }

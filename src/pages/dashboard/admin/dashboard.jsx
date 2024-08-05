@@ -6,10 +6,13 @@ import { BarChart } from "../../../component/charts/bar";
 import moment from "moment";
 import { useEffect } from "react";
 import { getActivityLogAsync } from "../../../slices/user/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
+  const activityLog = useSelector(
+    (state) => state?.users.getActivityLogResponse
+  );
 
   const user = localStorage.getItem("user");
   let loginUser = null;
@@ -164,7 +167,7 @@ const AdminDashboard = () => {
           </Col>
           <Col md={6}>
             <section>
-              <Card className="my-4">
+              <Card className="my-4 activity-log-card">
                 <Card.Body>
                   <Table>
                     <thead>
@@ -173,19 +176,25 @@ const AdminDashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <p>
-                            Chris
-                            <br />
-                            <small> Booked a flight</small>
-                          </p>
-                        </td>
-                        <td>
-                          <small>10:00</small>
-                          <p className="text-success">Dec 24, 2023</p>
-                        </td>
-                      </tr>
+                      {activityLog?.data?.map((activityLog, index) => (
+                        <tr key={index}>
+                          <td>
+                            <p>
+                              {activityLog?.user_id}
+                              <br />
+                              <small> {activityLog?.activity} </small>
+                            </p>
+                          </td>
+                          <td>
+                            <span className="text-success">
+                              {" "}
+                              {moment(activityLog?.created_at).format(
+                                "lll"
+                              )}{" "}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
                 </Card.Body>
