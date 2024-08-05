@@ -67,7 +67,8 @@ const Login = () => {
                             if (result?.payload?.data?.user?.first_login) {
                               navigate("/first-time-login");
                             } else {
-                              window.location.href = "/admin-dashboard";
+                              navigate("/admin-dashboard");
+                              // window.location.href = "/admin-dashboard";
                             }
                             // Check if the login was successful
                           } else {
