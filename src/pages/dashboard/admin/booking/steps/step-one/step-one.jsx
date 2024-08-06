@@ -386,6 +386,7 @@ function BookingStepOne() {
                       value={values.num_adults}
                       onChange={handleChange}
                     >
+                      <option value="">Select Number of Adults</option>
                       {[...Array(10).keys()].map((num) => (
                         <option value={num + 1} key={num}>
                           {num + 1}
@@ -414,6 +415,8 @@ function BookingStepOne() {
                       value={values.num_children}
                       onChange={handleChange}
                     >
+                      <option value="">Select Number of Children</option>
+
                       {[...Array(6).keys()].map((num) => (
                         <option value={num} key={num}>
                           {num}
@@ -442,6 +445,8 @@ function BookingStepOne() {
                       value={values.num_infants}
                       onChange={handleChange}
                     >
+                      <option value="">Select Number of Infants</option>
+
                       {[...Array(3).keys()].map((num) => (
                         <option value={num} key={num}>
                           {num}
