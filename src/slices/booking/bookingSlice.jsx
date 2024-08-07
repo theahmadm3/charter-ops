@@ -10,6 +10,7 @@ import {
   DeactivateBooking,
   DeleteBooking,
   GetAllBookings,
+  GetAvailableAircraftBookingById,
   GetBookingById,
   UpdateBooking,
 } from "../../services/booking/bookingService";
@@ -141,6 +142,21 @@ export const addBookingStepFourAsync = createAsyncThunk(
   }
 );
 
+export const getAvailableAircraftAsync = createAsyncThunk(
+  "available/aircraft",
+  async ({ bookingId }, { rejectWithValue }) => {
+    try {
+      const response = await GetAvailableAircraftBookingById(bookingId);
+
+      return response;
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 const bookingSlice = createSlice({
   name: "booking",
   initialState: {
@@ -157,6 +173,7 @@ const bookingSlice = createSlice({
     addBookingStepTwoResponse: {},
     addBookingStepThreeResponse: {},
     addBookingStepFourResponse: {},
+    getAvailableAircraftResponse: {},
     currentStep: "0",
   },
 
@@ -326,6 +343,16 @@ const bookingSlice = createSlice({
 
     builder.addCase(activateBookingAsync.rejected, (state, action) => {
       state.activateBookingResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(getAvailableAircraftAsync.fulfilled, (state, action) => {
+      state.getAvailableAircraftResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(getAvailableAircraftAsync.rejected, (state, action) => {
+      state.getAvailableAircraftResponse = action.payload;
       toast.error(action?.payload?.message);
     });
   },

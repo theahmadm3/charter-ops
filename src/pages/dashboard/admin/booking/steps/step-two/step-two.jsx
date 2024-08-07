@@ -9,7 +9,11 @@ import {
   Button,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentStep } from "../../../../../../slices/booking/bookingSlice";
+import {
+  addBookingStepTwoAsync,
+  getAvailableAircraftAsync,
+  setCurrentStep,
+} from "../../../../../../slices/booking/bookingSlice";
 import { addUserAsync } from "../../../../../../slices/user/userSlice"; // Assuming you have this action
 
 const validationSchema = Yup.object({
@@ -41,13 +45,30 @@ function BookingStepTwo() {
   };
 
   useEffect(() => {
+    try {
+      dispatch(
+        getAvailableAircraftAsync({
+          bookingId: bookingInfo?.addBookingStepOneResponse?.data.id,
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
     // Initialize aircraft options when airCraftInfo changes
     setAircraftOptions(airCraftInfo?.getAllAircraftResponse?.data || []);
   }, [airCraftInfo]);
 
   const handleSubmit = (values) => {
     // Adjust the payload if necessary
-    dispatch(addUserAsync({ ...values, aircraft: selectedAircraft }))
+    dispatch(
+      addBookingStepTwoAsync({
+        bookingId: bookingInfo?.addBookingStepOneResponse?.data.id,
+        values,
+      })
+    )
       .then((response) => {
         if (response?.payload?.success) {
           // Handle success (e.g., show a message or redirect)
@@ -101,7 +122,7 @@ function BookingStepTwo() {
   return (
     <Formik
       initialValues={{
-        aircraft: "",
+        aircraft_id: "",
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
@@ -126,11 +147,13 @@ function BookingStepTwo() {
                     isInvalid={touched.aircraft && !!errors.aircraft}
                   >
                     <option value="">Choose Available Aircraft</option>
-                    {aircraftOptions.map((type) => (
-                      <option value={type.id} key={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
+                    {bookingInfo?.getAvailableAircraftResponse?.data?.map(
+                      (type) => (
+                        <option value={type.id} key={type.id}>
+                          {type.name}
+                        </option>
+                      )
+                    )}
                   </BootstrapForm.Control>
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.aircraft}
