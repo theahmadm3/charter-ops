@@ -66,6 +66,8 @@ export const AddBookingStep04 = async (bookingId, body) => {
 };
 
 export const GetAvailableAircraftBookingById = async (bookingId) => {
-  const response = await GetRequest(`/available-aircraft?${bookingId}`);
+  const response = await GetRequest(
+    `/available-aircraft?booking_id =${bookingId}`
+  );
   return response;
 };
