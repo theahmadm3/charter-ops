@@ -180,7 +180,7 @@ const AdminDashboard = () => {
                         <tr key={index}>
                           <td>
                             <p>
-                              {activityLog?.user_id}
+                              {activityLog?.full_name}
                               <br />
                               <small> {activityLog?.activity} </small>
                             </p>
