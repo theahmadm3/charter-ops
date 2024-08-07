@@ -65,7 +65,7 @@ const Login = () => {
 
                           if (loginAsync.fulfilled.match(result)) {
                             if (result?.payload?.data?.user?.first_login) {
-                              navigate("/first-time-login");
+                              window.location.href = "/first-time-login";
                             } else {
                               // navigate("/admin-dashboard");
                               window.location.href = "/admin-dashboard";
