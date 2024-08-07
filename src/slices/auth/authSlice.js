@@ -8,12 +8,26 @@ import {
   resetPassword,
 } from "../../services/auth/authService";
 
+// export const loginAsync = createAsyncThunk(
+//   "users/login",
+//   async ({ credentials }) => {
+//     const response = await login(credentials);
+
+//     return response;
+//   }
+// );
+
 export const loginAsync = createAsyncThunk(
   "users/login",
-  async ({ credentials }) => {
-    const response = await login(credentials);
-
-    return response;
+  async ({ credentials }, thunkAPI) => {
+    try {
+      const response = await login(credentials);
+      return response;
+    } catch (error) {
+      // Handle errors here
+      toast.error(error?.response?.data?.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
 
@@ -88,7 +102,7 @@ const userSlice = createSlice({
       state.loginResponse = action.payload;
     });
     builder.addCase(loginAsync.rejected, (state, action) => {
-      toast.error("Login failed!");
+      // toast.error("Login failed!");
       state.loginResponse = action.payload;
     });
     builder.addCase(forgetPasswordAsnyc.fulfilled, (state, action) => {
