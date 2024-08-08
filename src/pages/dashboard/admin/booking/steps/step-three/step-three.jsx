@@ -9,6 +9,7 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentStep } from "../../../../../../slices/booking/bookingSlice";
+import { nationalityOptions } from "../../../../../../util/data";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -28,13 +29,6 @@ const genderOptions = [
   { id: "male", name: "Male" },
   { id: "female", name: "Female" },
   { id: "other", name: "Other" },
-];
-
-const nationalityOptions = [
-  { id: "us", name: "United States" },
-  { id: "uk", name: "United Kingdom" },
-  { id: "ca", name: "Canada" },
-  // Add more options as needed
 ];
 
 function BookingStepThree() {
@@ -142,7 +136,7 @@ function BookingStepThree() {
                     >
                       <option value="">Select Nationality</option>
                       {nationalityOptions.map((option) => (
-                        <option value={option.id} key={option.id}>
+                        <option value={option.name} key={option.id}>
                           {option.name}
                         </option>
                       ))}
@@ -213,14 +207,14 @@ function BookingStepThree() {
               >
                 Back
               </Button>
-              <Button
+              {/* <Button
                 variant="white"
                 className="border border-main-color text-end"
                 onClick={handleNext}
               >
                 Next
-              </Button>
-              <Button type="submit">Save</Button>
+              </Button> */}
+              <Button type="submit">Proceed</Button>
             </div>
           </Form>
         )}

@@ -660,7 +660,7 @@ function BookingStepOne() {
               >
                 Next
               </Button>
-              <Button type="submit">Save </Button>
+              <Button type="submit">Proceed </Button>
             </div>
           </Form>
         )}

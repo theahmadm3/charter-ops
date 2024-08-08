@@ -52,7 +52,7 @@ const Booking = () => {
 
           <div className="my-3 text-end">
             <Button onClick={() => handleAdd()} className="shadow">
-              Book A Plane
+              Book A Flight
             </Button>
           </div>
           <Table striped bordered hover responsive>

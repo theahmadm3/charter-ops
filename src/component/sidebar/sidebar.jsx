@@ -25,25 +25,22 @@ function SideBar() {
       text: "Dashboard",
     },
     {
-      to: "/admin-users",
-      icon: <FaUser className="sidebar-icon" />,
-      text: "Users",
+      to: "/admin-booking",
+      icon: <PiAirplaneInFlightFill className="sidebar-icon" />,
+      text: "Flight Management",
+    },
+
+    {
+      to: "/admin-aircraft",
+      icon: <MdLocalAirport className="sidebar-icon" />,
+      text: "Aircraft Management",
     },
     {
       to: "/transaction",
       icon: <MdOutlineReceipt className="sidebar-icon" />,
       text: "Transaction & Payment",
     },
-    {
-      to: "/admin-booking",
-      icon: <PiAirplaneInFlightFill className="sidebar-icon" />,
-      text: "Booking Management",
-    },
-    {
-      to: "/admin-aircraft",
-      icon: <MdLocalAirport className="sidebar-icon" />,
-      text: "Aircraft Management",
-    },
+
     {
       to: "/admin-fuel",
       icon: <GiFuelTank className="sidebar-icon" />,
@@ -58,6 +55,11 @@ function SideBar() {
       to: "/statistics",
       icon: <MdOutlineBarChart className="sidebar-icon" />,
       text: "Statistics & Reporting",
+    },
+    {
+      to: "/admin-users",
+      icon: <FaUser className="sidebar-icon" />,
+      text: "Users",
     },
     {
       to: "/admin-config",

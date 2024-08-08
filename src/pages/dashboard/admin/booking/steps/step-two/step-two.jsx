@@ -7,6 +7,7 @@ import {
   FloatingLabel,
   Form as BootstrapForm,
   Button,
+  Card,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,10 +15,9 @@ import {
   getAvailableAircraftAsync,
   setCurrentStep,
 } from "../../../../../../slices/booking/bookingSlice";
-import { addUserAsync } from "../../../../../../slices/user/userSlice"; // Assuming you have this action
 
 const validationSchema = Yup.object({
-  aircraft: Yup.string().required("Aircraft is required"),
+  aircraft_id: Yup.string().required("Aircraft is required"),
 });
 
 function BookingStepTwo() {
@@ -32,6 +32,7 @@ function BookingStepTwo() {
     dispatch(setCurrentStep(current + 1));
   };
 
+  const bookingData = bookingInfo?.getAvailableAircraftResponse?.data;
   const handleBack = () => {
     const current = bookingInfo?.currentStep;
     dispatch(setCurrentStep(current - 1));
@@ -65,13 +66,14 @@ function BookingStepTwo() {
     // Adjust the payload if necessary
     dispatch(
       addBookingStepTwoAsync({
-        bookingId: bookingInfo?.addBookingStepOneResponse?.data.id,
+        bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
         values,
       })
     )
       .then((response) => {
         if (response?.payload?.success) {
-          // Handle success (e.g., show a message or redirect)
+          const current = bookingInfo?.currentStep;
+          dispatch(setCurrentStep(current + 1));
         } else {
           console.log("Error please try again");
         }
@@ -83,41 +85,49 @@ function BookingStepTwo() {
 
   if (selectedAircraft) return null;
 
-  const {
-    id,
-    name,
-    model,
-    manufacturer,
-    engine_type,
-    pax_capacity,
-    total_seat_capacity,
-    luggage_capacity,
-    max_flight_range,
-    fuel_capacity,
-    cruise_speed,
-    crew_capacity,
-    inflight_services,
-    class_configuration,
-    remarks,
-    created_at,
-  } = selectedAircraft;
+  // const {
+  //   id,
+  //   name,
+  //   model,
+  //   manufacturer,
+  //   engine_type,
+  //   pax_capacity,
+  //   total_seat_capacity,
+  //   luggage_capacity,
+  //   max_flight_range,
+  //   fuel_capacity,
+  //   cruise_speed,
+  //   crew_capacity,
+  //   inflight_services,
+  //   class_configuration,
+  //   remarks,
+  //   created_at,
+  // } = selectedAircraft;
 
-  const details = [
-    { key: "ID" },
-    { key: "Name" },
-    { key: "Model" },
-    { key: "Manufacturer" },
-    { key: "Engine Type" },
-    { key: "Pax Capacity" },
-    { key: "Total Seat Capacity" },
-    { key: "Luggage Capacity" },
-    { key: "Max Flight Range" },
-    { key: "Fuel Capacity" },
-    { key: "Cruise Speed" },
-    { key: "Crew Capacity" },
+  // const details = [
+  //   { key: "ID" },
+  //   { key: "Name" },
+  //   { key: "Model" },
+  //   { key: "Manufacturer" },
+  //   { key: "Engine Type" },
+  //   { key: "Pax Capacity" },
+  //   { key: "Total Seat Capacity" },
+  //   { key: "Luggage Capacity" },
+  //   { key: "Max Flight Range" },
+  //   { key: "Fuel Capacity" },
+  //   { key: "Cruise Speed" },
+  //   { key: "Crew Capacity" },
 
-    { key: "Remarks", value: remarks },
-  ];
+  //   { key: "Remarks", value: remarks },
+  // ];
+
+  // console.log("available", bookingInfo?.getAvailableAircraftResponse);
+
+  const [selectedAircraftId, setSelectedAircraftId] = useState(null);
+
+  const handleCardClick = (id) => {
+    setSelectedAircraftId(id);
+  };
 
   return (
     <Formik
@@ -138,29 +148,107 @@ function BookingStepTwo() {
                 >
                   <BootstrapForm.Control
                     as="select"
-                    name="aircraft"
+                    name="aircraft_id"
                     // onChange={(event) => {
                     //   handleChange(event);
                     //   handleSelectedAircraft(event);
                     // }}
-                    value={values.aircraft}
-                    isInvalid={touched.aircraft && !!errors.aircraft}
+                    onChange={handleChange}
+                    value={values.aircraft_id}
+                    isInvalid={touched.aircraft_id && !!errors.aircraft_id}
                   >
                     <option value="">Choose Available Aircraft</option>
-                    {bookingInfo?.getAvailableAircraftResponse?.data?.map(
-                      (type) => (
+                    {Array.isArray(
+                      bookingInfo?.getAvailableAircraftResponse
+                    ) ? (
+                      bookingInfo.getAvailableAircraftResponse.map((type) => (
                         <option value={type.id} key={type.id}>
                           {type.name}
                         </option>
-                      )
+                      ))
+                    ) : (
+                      <option disabled>No aircraft available</option>
                     )}
                   </BootstrapForm.Control>
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.aircraft}
+                    {errors.aircraft_id}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
+          </Row>
+          <Row>
+            {Array.isArray(bookingInfo?.getAvailableAircraftResponse) ? (
+              bookingInfo.getAvailableAircraftResponse.map((aircraft) => (
+                <Col md={6} key={aircraft.id} className="mb-4">
+                  <Card
+                    className={`aircraft-card ${
+                      selectedAircraftId === aircraft.id ? "selected" : ""
+                    }`}
+                    onClick={() => handleCardClick(aircraft.id)}
+                  >
+                    <Card.Body>
+                      <h3>{aircraft.name}</h3>
+                      <Row>
+                        <Col md={4}>
+                          <Card.Text>
+                            <strong>ID:</strong> {aircraft.id}
+                          </Card.Text>
+                          <Card.Text>
+                            <strong>Model:</strong> {aircraft.model}
+                          </Card.Text>
+                        </Col>
+                        <Col md={4}>
+                          <Card.Text>
+                            <strong>Luggage Capacity:</strong>{" "}
+                            {aircraft.luggage_capacity}
+                          </Card.Text>
+                          <Card.Text>
+                            <strong>Cruise Speed:</strong>{" "}
+                            {aircraft.cruise_speed}
+                          </Card.Text>
+                        </Col>
+
+                        <Col md={4}>
+                          <Card.Text>
+                            <strong>Crew Capacity:</strong>{" "}
+                            {aircraft.crew_capacity}
+                          </Card.Text>
+                          <Card.Text>
+                            <strong>Engine Type</strong> {aircraft.engine_type}
+                          </Card.Text>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={12}>
+                          <p>Class Configuration</p>
+                        </Col>
+                        <Col md={4}>
+                          <Card.Text>
+                            <strong>Business:</strong>{" "}
+                            {aircraft.class_configuration?.business}
+                          </Card.Text>
+                        </Col>
+                        <Col md={4}>
+                          <Card.Text>
+                            <strong>Economy:</strong>{" "}
+                            {aircraft.class_configuration?.economy}
+                          </Card.Text>
+                        </Col>
+                        <Col md={4}>
+                          <Card.Text>
+                            <strong>First Class:</strong>{" "}
+                            {aircraft.class_configuration?.first_class}
+                          </Card.Text>
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))
+            ) : (
+              <p>No aircraft available.</p>
+            )}
           </Row>
 
           {/* {values.aircraft && (
@@ -192,14 +280,14 @@ function BookingStepTwo() {
             >
               Back
             </Button>
-            <Button
+            {/* <Button
               variant="white"
               className="border border-main-color text-end"
               onClick={handleNext}
             >
               Next
-            </Button>
-            <Button type="submit">Save</Button>
+            </Button> */}
+            <Button type="submit">Proceed</Button>
           </div>
         </Form>
       )}
