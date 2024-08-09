@@ -127,7 +127,6 @@ td {
   position: relative;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
   animation: rotate 1s linear infinite;
 }
 
@@ -136,12 +135,11 @@ td {
   position: absolute;
   width: 0;
   height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
   border-bottom: 50px solid #FF3D00;
   top: 25px;
   left: 0;
-  transform: rotate(45deg);
 }
 
 .loader::after {
@@ -149,12 +147,22 @@ td {
   position: absolute;
   width: 0;
   height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
   border-top: 40px solid #FF3D00;
-  top: 55px;
-  left: 20px;
+  top: 30px;
+  left: -30px;
   transform: rotate(-45deg);
+}
+
+.loader div {
+  position: absolute;
+  width: 50px;
+  height: 10px;
+  background-color: #FF3D00;
+  top: 40px;
+  left: 25px;
+  transform: rotate(45deg);
 }
 
 @keyframes rotate {
@@ -162,6 +170,7 @@ td {
     transform: rotate(360deg);
   }
 }
+
 
 
 
