@@ -21,6 +21,7 @@ import Booking from "./pages/dashboard/admin/booking/booking";
 import AddBooking from "./pages/dashboard/admin/booking/add-booking.jsx";
 import Fuels from "./pages/dashboard/admin/fuel/fuel.jsx";
 import FirstTimeLogin from "./pages/auth/first-time-login.jsx";
+import { ProtectedRoute } from "./util/privateRoutes.jsx";
 
 const router = createBrowserRouter([
   {
@@ -48,42 +49,76 @@ const router = createBrowserRouter([
 
   {
     path: "/admin-dashboard",
-    element: <AdminDashboard />,
+    element: (
+      <ProtectedRoute>
+        <AdminDashboard />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-config",
-    element: <SystemConfig />,
+    element: (
+      <ProtectedRoute>
+        <SystemConfig />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-users",
-    element: <Users />,
+    element: (
+      <ProtectedRoute>
+        <Users />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-clients",
-    element: <Clients />,
+    element: (
+      <ProtectedRoute>
+        <Clients />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-aircraft",
-    element: <Aircraft />,
+    element: (
+      <ProtectedRoute>
+        <Aircraft />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-booking",
-    element: <Booking />,
+    element: (
+      <ProtectedRoute>
+        <Booking />{" "}
+      </ProtectedRoute>
+    ),
+
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-add-booking",
-    element: <AddBooking />,
+    element: (
+      <ProtectedRoute>
+        <AddBooking />{" "}
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-fuel",
-    element: <Fuels />,
+    element: (
+      <ProtectedRoute>
+        <Fuels />{" "}
+      </ProtectedRoute>
+    ),
+
     errorElement: <ErrorPage />,
   },
 ]);
