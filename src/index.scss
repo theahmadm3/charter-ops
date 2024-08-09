@@ -126,15 +126,18 @@ td {
 .svg-calLoader {
   width: 230px;
   height: 230px;
-  transform-origin: 115px 115px;
+  transform-origin: 115px 115px; /* Center of the SVG */
   animation: 2.4s linear infinite loader-spin;
 }
 
 .cal-loader__plane {
-  fill: $c-hilight;
+  fill: #FF3D00; /* Replace with your highlight color */
 }
+
 .cal-loader__path {
-  stroke: $c-front;
+  stroke: #FFF; /* Replace with your stroke color */
+  stroke-width: 2; /* Adjust as needed */
+  fill: none;
   animation: 2.4s ease-in-out infinite loader-path;
 }
 
@@ -143,6 +146,7 @@ td {
     transform: rotate(360deg);
   }
 }
+
 @keyframes loader-path {
   0% {
     stroke-dasharray: 0, 580, 0, 0, 0, 0, 0, 0, 0;
