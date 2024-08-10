@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     .email("Invalid email format")
     .required("Email is required"),
   dob: Yup.date().required("Date of Birth is required").nullable(),
-  id_type: Yup.string().required("Type of ID is required"),
+  // id_type: Yup.string().required("Type of ID is required"),
   phone: Yup.string()
     .matches(
       /^\+?[0-9]{11,15}$/,
@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
     )
     .required("Phone number is required"),
   title: Yup.string(),
-  document_id: Yup.string().required("ID File Upload is required"),
+  // document_id: Yup.string().required("ID File Upload is required"),
   nationality: Yup.string().required("Nationality is required"),
 });
 
@@ -72,7 +72,7 @@ function AddClient(props) {
             document_id: "",
             id_type: "",
             phone: "",
-            nationality: "",
+            // nationality: "",
             title: "",
           }}
           validationSchema={validationSchema}
@@ -208,7 +208,7 @@ function AddClient(props) {
                 </FloatingLabel>
               </BootstrapForm.Group>
 
-              <BootstrapForm.Group className="mb-3">
+              {/* <BootstrapForm.Group className="mb-3">
                 <FloatingLabel controlId="floatingTypeOfId" label="Nationality">
                   <BootstrapForm.Control
                     as="select"
@@ -228,7 +228,7 @@ function AddClient(props) {
                     {errors.nationality}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
-              </BootstrapForm.Group>
+              </BootstrapForm.Group> */}
 
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel

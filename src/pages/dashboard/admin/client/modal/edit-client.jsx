@@ -17,13 +17,13 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email format")
     .required("Email is required"),
-  dob: Yup.date().required("Date of Birth is required").nullable(),
-  id_type: Yup.string().required("Type of ID is required"),
+  // dob: Yup.date().required("Date of Birth is required").nullable(),
+  // id_type: Yup.string().required("Type of ID is required"),
   phone: Yup.string()
     .matches(/^\d{10}$/, "Phone number must be 10 digits")
     .required("Phone number is required"),
   title: Yup.string(),
-  document_id: Yup.string().required("ID File Upload is required"),
+  // document_id: Yup.string().required("ID File Upload is required"),
 });
 
 const handleFileChange = async (event, setFieldValue) => {
@@ -70,7 +70,7 @@ function EditClient(props) {
             id_type: props?.data?.[0]?.id_type || "",
             phone: props?.data?.[0]?.phone || "",
             title: props?.data?.[0]?.title || "",
-            nationality: props?.data?.[0]?.nationality || "",
+            // nationality: props?.data?.[0]?.nationality || "",
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
@@ -217,7 +217,7 @@ function EditClient(props) {
                 </FloatingLabel>
               </BootstrapForm.Group>
 
-              <BootstrapForm.Group className="mb-3">
+              {/* <BootstrapForm.Group className="mb-3">
                 <FloatingLabel controlId="floatingTypeOfId" label="Nationality">
                   <BootstrapForm.Control
                     as="select"
@@ -238,7 +238,7 @@ function EditClient(props) {
                     {errors.nationality}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
-              </BootstrapForm.Group>
+              </BootstrapForm.Group> */}
 
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
