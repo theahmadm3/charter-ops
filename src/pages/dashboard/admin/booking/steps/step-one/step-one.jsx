@@ -41,12 +41,7 @@ const validationSchema = Yup.object().shape({
   //   Yup.ref("flight_date"),
   //   "Return date cannot be before departure date"
   // ),
-  num_adults: Yup.number()
-    .min(1, "At least one adult is required")
-    .required("Number of adults is required"),
-  num_children: Yup.number().min(0).required("Number of children is required"),
-  num_infants: Yup.number().min(0).required("Number of infants is required"),
-  // aircraft_type_id: Yup.string().required("Aircraft type is required"),
+
   multi_leg_route: Yup.boolean(),
   legs: Yup.array().when("multi_leg_route", {
     is: true,
@@ -74,10 +69,7 @@ const initialValues = {
   to_location: "",
   flight_date: "",
   return_date: "",
-  num_adults: 0,
-  num_children: 0,
-  num_infants: 0,
-  // aircraft_type_id: 0,
+
   multi_leg: null,
 };
 
@@ -110,9 +102,6 @@ function BookingStepOne() {
     );
   };
 
-  const clientInfo = useSelector((state) => state?.client);
-  const airCraftInfo = useSelector((state) => state?.aircraft);
-  const serviceInfo = useSelector((state) => state?.config);
   const bookingInfo = useSelector((state) => state?.booking);
 
   const handleCheckboxChange = (e) => {
@@ -121,11 +110,6 @@ function BookingStepOne() {
   const handleNext = () => {
     const current = bookingInfo?.currentStep;
     dispatch(setCurrentStep(current + 1));
-  };
-
-  const handleBack = () => {
-    const current = bookingInfo?.currentStep;
-    dispatch(setCurrentStep(current - 1));
   };
 
   const handleRemove = (index) => {
@@ -157,9 +141,7 @@ function BookingStepOne() {
             ...values,
             flight_date: to_airport,
             return_date: from_airport,
-            num_adults: Number(values.num_adults),
-            num_children: Number(values.num_children),
-            num_infants: Number(values.num_infants),
+
             // aircraft_type_id: Number(values.aircraft_type_id),
             multi_leg: isChecked,
             ...(isChecked && legs && { legs }),
@@ -366,96 +348,6 @@ function BookingStepOne() {
                   />
                   <ErrorMessage
                     name="return_date"
-                    component="div"
-                    className="text-danger"
-                  />
-                </BootstrapForm.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={4}>
-                <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingAdults"
-                    label="Number of Adults"
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="num_adults"
-                      value={values.num_adults}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Number of Adults</option>
-                      {[...Array(10).keys()].map((num) => (
-                        <option value={num + 1} key={num}>
-                          {num + 1}
-                        </option>
-                      ))}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
-                  <ErrorMessage
-                    name="num_adults"
-                    component="div"
-                    className="text-danger"
-                  />
-                </BootstrapForm.Group>
-              </Col>
-
-              <Col md={4}>
-                <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingChildren"
-                    label="Number of Children"
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="num_children"
-                      value={values.num_children}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Number of Children</option>
-
-                      {[...Array(6).keys()].map((num) => (
-                        <option value={num} key={num}>
-                          {num}
-                        </option>
-                      ))}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
-                  <ErrorMessage
-                    name="num_children"
-                    component="div"
-                    className="text-danger"
-                  />
-                </BootstrapForm.Group>
-              </Col>
-
-              <Col md={4}>
-                <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingInfants"
-                    label="Number of Infants"
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="num_infants"
-                      value={values.num_infants}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Number of Infants</option>
-
-                      {[...Array(3).keys()].map((num) => (
-                        <option value={num} key={num}>
-                          {num}
-                        </option>
-                      ))}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
-                  <ErrorMessage
-                    name="num_infants"
                     component="div"
                     className="text-danger"
                   />

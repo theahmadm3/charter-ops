@@ -28,8 +28,11 @@ const AddBooking = () => {
   const steps = [
     { component: <BookingStepOne />, label: "Booking process" },
     { component: <BookingStepTwo />, label: "Flight Selection" },
-    { component: <BookingStepThree />, label: "Passenger Information" },
-    { component: <BookingStepFour />, label: "Additional Services" },
+    { component: <BookingStepThree />, label: "Additional Services" },
+    {
+      component: <BookingStepFour />,
+      label: "Passenger Information",
+    },
     // { component: <BookingStepFive />, label: "Awaiting approval " },
     // { component: <BookingStepSix />, label: "Payment process" },
   ];
