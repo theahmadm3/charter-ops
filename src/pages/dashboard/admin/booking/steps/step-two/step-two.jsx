@@ -17,7 +17,7 @@ import {
 } from "../../../../../../slices/booking/bookingSlice";
 
 const validationSchema = Yup.object({
-  aircraft_id: Yup.string().required("Aircraft is required"),
+  // aircraft_id: Yup.string().required("Aircraft is required"),
 });
 
 function BookingStepTwo() {
@@ -64,10 +64,14 @@ function BookingStepTwo() {
 
   const handleSubmit = (values) => {
     // Adjust the payload if necessary
+    const payload = {
+      ...values,
+      aircraft_id: selectedAircraftId,
+    };
     dispatch(
       addBookingStepTwoAsync({
         bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
-        values,
+        values: payload,
       })
     )
       .then((response) => {
@@ -85,44 +89,6 @@ function BookingStepTwo() {
 
   if (selectedAircraft) return null;
 
-  // const {
-  //   id,
-  //   name,
-  //   model,
-  //   manufacturer,
-  //   engine_type,
-  //   pax_capacity,
-  //   total_seat_capacity,
-  //   luggage_capacity,
-  //   max_flight_range,
-  //   fuel_capacity,
-  //   cruise_speed,
-  //   crew_capacity,
-  //   inflight_services,
-  //   class_configuration,
-  //   remarks,
-  //   created_at,
-  // } = selectedAircraft;
-
-  // const details = [
-  //   { key: "ID" },
-  //   { key: "Name" },
-  //   { key: "Model" },
-  //   { key: "Manufacturer" },
-  //   { key: "Engine Type" },
-  //   { key: "Pax Capacity" },
-  //   { key: "Total Seat Capacity" },
-  //   { key: "Luggage Capacity" },
-  //   { key: "Max Flight Range" },
-  //   { key: "Fuel Capacity" },
-  //   { key: "Cruise Speed" },
-  //   { key: "Crew Capacity" },
-
-  //   { key: "Remarks", value: remarks },
-  // ];
-
-  // console.log("available", bookingInfo?.getAvailableAircraftResponse);
-
   const [selectedAircraftId, setSelectedAircraftId] = useState(null);
 
   const handleCardClick = (id) => {
@@ -139,7 +105,7 @@ function BookingStepTwo() {
     >
       {({ errors, touched, handleSubmit, values, handleChange }) => (
         <Form onSubmit={handleSubmit}>
-          <Row>
+          {/* <Row>
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
@@ -176,7 +142,7 @@ function BookingStepTwo() {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
-          </Row>
+          </Row> */}
           <Row>
             {Array.isArray(bookingInfo?.getAvailableAircraftResponse) ? (
               bookingInfo.getAvailableAircraftResponse.map((aircraft) => (
@@ -195,17 +161,7 @@ function BookingStepTwo() {
                             <strong>ID:</strong> {aircraft.id}
                           </Card.Text>
                           <Card.Text>
-                            <strong>Model:</strong> {aircraft.model}
-                          </Card.Text>
-                        </Col>
-                        <Col md={4}>
-                          <Card.Text>
-                            <strong>Luggage Capacity:</strong>{" "}
-                            {aircraft.luggage_capacity}
-                          </Card.Text>
-                          <Card.Text>
-                            <strong>Cruise Speed:</strong>{" "}
-                            {aircraft.cruise_speed}
+                            <strong>Aircraft Type:</strong> {aircraft.model}
                           </Card.Text>
                         </Col>
 
@@ -213,32 +169,6 @@ function BookingStepTwo() {
                           <Card.Text>
                             <strong>Crew Capacity:</strong>{" "}
                             {aircraft.crew_capacity}
-                          </Card.Text>
-                          <Card.Text>
-                            <strong>Engine Type</strong> {aircraft.engine_type}
-                          </Card.Text>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col md={12}>
-                          <p>Class Configuration</p>
-                        </Col>
-                        <Col md={4}>
-                          <Card.Text>
-                            <strong>Business:</strong>{" "}
-                            {aircraft.class_configuration?.business}
-                          </Card.Text>
-                        </Col>
-                        <Col md={4}>
-                          <Card.Text>
-                            <strong>Economy:</strong>{" "}
-                            {aircraft.class_configuration?.economy}
-                          </Card.Text>
-                        </Col>
-                        <Col md={4}>
-                          <Card.Text>
-                            <strong>First Class:</strong>{" "}
-                            {aircraft.class_configuration?.first_class}
                           </Card.Text>
                         </Col>
                       </Row>

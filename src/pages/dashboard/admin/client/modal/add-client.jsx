@@ -156,9 +156,26 @@ function AddClient(props) {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
+              <BootstrapForm.Group className="mb-3">
+                <FloatingLabel
+                  controlId="floatingPhoneNumber"
+                  label="Phone Number"
+                >
+                  <BootstrapForm.Control
+                    type="tel"
+                    placeholder="Phone Number"
+                    name="phone"
+                    onChange={handleChange}
+                    isInvalid={touched.phone && !!errors.phone}
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.phone}
+                  </BootstrapForm.Control.Feedback>
+                </FloatingLabel>
+              </BootstrapForm.Group>
 
               <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingDob" label="Date of Birth">
+                <FloatingLabel controlId="floatingDob" label="Birthday">
                   <BootstrapForm.Control
                     type="date"
                     name="dob"
@@ -167,24 +184,6 @@ function AddClient(props) {
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.dob}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingIdFileUpload"
-                  label="ID File Upload"
-                >
-                  <BootstrapForm.Control
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    name="document_id"
-                    onChange={(e) => handleFileChange(e, setFieldValue)}
-                    isInvalid={touched.document_id && !!errors.document_id}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.document_id}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
@@ -204,6 +203,24 @@ function AddClient(props) {
                   </BootstrapForm.Control>
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.id_type}
+                  </BootstrapForm.Control.Feedback>
+                </FloatingLabel>
+              </BootstrapForm.Group>
+
+              <BootstrapForm.Group className="mb-3">
+                <FloatingLabel
+                  controlId="floatingIdFileUpload"
+                  label="ID File Upload"
+                >
+                  <BootstrapForm.Control
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    name="document_id"
+                    onChange={(e) => handleFileChange(e, setFieldValue)}
+                    isInvalid={touched.document_id && !!errors.document_id}
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.document_id}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
@@ -229,24 +246,6 @@ function AddClient(props) {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group> */}
-
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingPhoneNumber"
-                  label="Phone Number"
-                >
-                  <BootstrapForm.Control
-                    type="tel"
-                    placeholder="Phone Number"
-                    name="phone"
-                    onChange={handleChange}
-                    isInvalid={touched.phone && !!errors.phone}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.phone}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
 
               <Button type="submit">Save</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>

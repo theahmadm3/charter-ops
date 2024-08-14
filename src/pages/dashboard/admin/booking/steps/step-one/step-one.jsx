@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
   //   Yup.ref("flight_date"),
   //   "Return date cannot be before departure date"
   // ),
-
+  client_id: Yup.string().required("Client is required"),
   multi_leg_route: Yup.boolean(),
   legs: Yup.array().when("multi_leg_route", {
     is: true,
@@ -69,16 +69,17 @@ const initialValues = {
   to_location: "",
   flight_date: "",
   return_date: "",
-
+  client_id: "",
   multi_leg: null,
+  passenger_no: "",
 };
 
 function BookingStepOne() {
   const [bookings, setBookings] = useState([]);
   const dispatch = useDispatch();
 
-  const [to_airport, onChangeTo] = useState(new Date());
-  const [from_airport, onChangeFrom] = useState(new Date());
+  const [to_airport, onChangeTo] = useState("");
+  const [from_airport, onChangeFrom] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const [legs, setLegs] = useState([
     { from: "", to: "", departure_date_time: "", arrival_date_time: "" },
@@ -101,6 +102,7 @@ function BookingStepOne() {
       legs.map((leg) => (leg.id === id ? { ...leg, [name]: value } : leg))
     );
   };
+  const clientInfo = useSelector((state) => state?.client);
 
   const bookingInfo = useSelector((state) => state?.booking);
 
@@ -124,7 +126,7 @@ function BookingStepOne() {
     try {
       dispatch(getAllClientAsync());
       dispatch(getAllPartnershipsAsync());
-      dispatch(getAllServicesAsync());
+      // dispatch(getAllServicesAsync());
       dispatch(setCurrentStep(0));
     } catch (error) {
       console.log(error);
@@ -199,38 +201,6 @@ function BookingStepOne() {
                   </FloatingLabel>
                 </BootstrapForm.Group>
               </Col>
-              {/* 
-              <Col md={6}>
-                <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingAircraftType"
-                    label="Aircraft Type"
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="aircraft_type_id"
-                      value={values.aircraft_type_id}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select aircraft type</option>
-
-                      {serviceInfo?.getAllPartnershipTypesResponse?.data?.map(
-                        (type) => (
-                          <option value={type.id} key={type.id}>
-                            {type.name}
-                          </option>
-                        )
-                      )}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
-                  <ErrorMessage
-                    name="aircraft_type_id"
-                    component="div"
-                    className="text-danger"
-                  />
-                </BootstrapForm.Group>
-              </Col> */}
             </Row>
             <Row>
               <Col md={6}>
@@ -267,7 +237,7 @@ function BookingStepOne() {
                     </BootstrapForm.Control>
                   </FloatingLabel>
                   <ErrorMessage
-                    name="from"
+                    name="from_location"
                     component="div"
                     className="text-danger"
                   />
@@ -351,6 +321,60 @@ function BookingStepOne() {
                     component="div"
                     className="text-danger"
                   />
+                </BootstrapForm.Group>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col md={6}>
+                <BootstrapForm.Group>
+                  <FloatingLabel
+                    controlId="floatingAircraftType"
+                    label="Client"
+                    className=""
+                  >
+                    <BootstrapForm.Control
+                      as="select"
+                      name="client_id"
+                      value={values.client_id}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Client</option>
+
+                      {clientInfo?.getAllClientsResponse?.data?.map(
+                        (client) => (
+                          <option value={client.id} key={client.id}>
+                            {client.first_name + " " + client.last_name}
+                          </option>
+                        )
+                      )}
+                    </BootstrapForm.Control>
+                  </FloatingLabel>
+                  <ErrorMessage
+                    name="client_id"
+                    component="div"
+                    className="text-danger"
+                  />
+                </BootstrapForm.Group>
+              </Col>
+
+              <Col md={6}>
+                <BootstrapForm.Group className="">
+                  <FloatingLabel
+                    controlId="floatingCrewCapacity"
+                    label="Passenger number"
+                  >
+                    <BootstrapForm.Control
+                      type="number"
+                      placeholder="Passenger Number"
+                      name="passenger_no"
+                      onChange={handleChange}
+                      isInvalid={touched.passenger_no && !!errors.passenger_no}
+                    />
+                    <BootstrapForm.Control.Feedback type="invalid">
+                      {errors.passenger_no}
+                    </BootstrapForm.Control.Feedback>
+                  </FloatingLabel>
                 </BootstrapForm.Group>
               </Col>
             </Row>

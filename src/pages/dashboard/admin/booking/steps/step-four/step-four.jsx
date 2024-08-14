@@ -6,6 +6,7 @@ import {
   Row,
   Form as BootstrapForm,
   FloatingLabel,
+  Alert,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,26 +17,27 @@ import { nationalityOptions } from "../../../../../../util/data";
 import { useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { ImNotification } from "react-icons/im";
 
 // Validation schema
 const validationSchema = Yup.object({
-  first_name: Yup.string().required("First name is required"),
-  last_name: Yup.string().required("Last name is required"),
-  date_of_birth: Yup.date()
-    .required("Date of Birth is required")
-    .max(new Date(), "Date of Birth cannot be in the future"),
-  gender: Yup.string().required("Gender is required"),
-  nationality: Yup.string().required("Nationality is required"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  phone: Yup.string().required("Phone number is required"),
-  special_requests: Yup.string(),
-  num_adults: Yup.number()
-    .min(1, "At least one adult is required")
-    .required("Number of adults is required"),
-  num_children: Yup.number().min(0).required("Number of children is required"),
-  num_infants: Yup.number().min(0).required("Number of infants is required"),
+  // first_name: Yup.string().required("First name is required"),
+  // last_name: Yup.string().required("Last name is required"),
+  // date_of_birth: Yup.date()
+  //   .required("Date of Birth is required")
+  //   .max(new Date(), "Date of Birth cannot be in the future"),
+  // gender: Yup.string().required("Gender is required"),
+  // nationality: Yup.string().required("Nationality is required"),
+  // email: Yup.string()
+  //   .email("Invalid email address")
+  //   .required("Email is required"),
+  // phone: Yup.string().required("Phone number is required"),
+  // special_requests: Yup.string(),
+  // num_adults: Yup.number()
+  //   .min(1, "At least one adult is required")
+  //   .required("Number of adults is required"),
+  // num_children: Yup.number().min(0).required("Number of children is required"),
+  // num_infants: Yup.number().min(0).required("Number of infants is required"),
 });
 
 // Gender options
@@ -83,6 +85,23 @@ function BookingStepFour() {
     ]);
   };
 
+  const handleFileChange = async (event, setFieldValue) => {
+    const file = event.currentTarget.files[0];
+    if (file) {
+      const base64 = await convertFileToBase64(file);
+      setFieldValue("id_card", base64);
+    }
+  };
+
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleRemovePassenger = (id) => {
     setPassengers(passengers.filter((passenger) => passenger.id !== id));
   };
@@ -97,23 +116,24 @@ function BookingStepFour() {
   };
 
   const handleSubmit = (values) => {
-    // Assuming `values` is an object that needs to be formatted into a passenger object
     const formattedValues = {
-      first_name: values.first_name,
-      last_name: values.last_name,
-      email: values.email,
-      phone: values.phone,
+      first_name: values.first_name || "none",
+      last_name: values.last_name || "none",
+      email: values.email || "none",
+      phone: values.phone || "none",
       gender: values.gender,
-      nationality: values.nationality,
-      date_of_birth: values.date_of_birth,
-      special_requests: values.special_requests,
+      nationality: values.nationality || "none",
+      date_of_birth: values.date_of_birth || "none",
+      special_requests: values.special_requests || "none",
       num_adults: Number(values.num_adults),
       num_children: Number(values.num_children),
       num_infants: Number(values.num_infants),
     };
 
     const payload = {
-      passengers: [formattedValues, ...passengers],
+      passengers: isChecked
+        ? [...passengers, formattedValues]
+        : [formattedValues],
     };
 
     dispatch(
@@ -151,12 +171,27 @@ function BookingStepFour() {
         num_adults: 0,
         num_children: 0,
         num_infants: 0,
+        id_card: "",
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ errors, touched, handleChange, values, handleSubmit }) => (
+      {({
+        errors,
+        touched,
+        handleChange,
+        values,
+        handleSubmit,
+        setFieldValue,
+      }) => (
         <Form onSubmit={handleSubmit}>
+          <Alert variant="warning">
+            <p className="mb-0">
+              {" "}
+              <ImNotification className="me-4" />
+              This form is optional
+            </p>
+          </Alert>
           <Row>
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
@@ -318,8 +353,10 @@ function BookingStepFour() {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
+          </Row>
 
-            <Col md={4}>
+          <Row>
+            <Col md={2}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingNumAdults"
@@ -339,7 +376,7 @@ function BookingStepFour() {
               </BootstrapForm.Group>
             </Col>
 
-            <Col md={4}>
+            <Col md={2}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingNumChildren"
@@ -359,7 +396,7 @@ function BookingStepFour() {
               </BootstrapForm.Group>
             </Col>
 
-            <Col md={4}>
+            <Col md={2}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingNumInfants"
@@ -374,6 +411,26 @@ function BookingStepFour() {
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.num_infants}
+                  </BootstrapForm.Control.Feedback>
+                </FloatingLabel>
+              </BootstrapForm.Group>
+            </Col>
+
+            <Col md={6}>
+              <BootstrapForm.Group className="mb-3">
+                <FloatingLabel
+                  controlId="floatingNumInfants"
+                  label="Upload ID Card"
+                >
+                  <BootstrapForm.Control
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    name="id_card"
+                    onChange={(e) => handleFileChange(e, setFieldValue)}
+                    isInvalid={touched.id_card && !!errors.id_card}
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.id_card}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>

@@ -147,7 +147,26 @@ function EditClient(props) {
               </BootstrapForm.Group>
 
               <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingDob" label="Date of Birth">
+                <FloatingLabel
+                  controlId="floatingPhoneNumber"
+                  label="Phone Number"
+                >
+                  <BootstrapForm.Control
+                    type="tel"
+                    placeholder="Phone Number"
+                    name="phone"
+                    value={values?.phone}
+                    onChange={handleChange}
+                    isInvalid={touched.phone && !!errors.phone}
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.phone}
+                  </BootstrapForm.Control.Feedback>
+                </FloatingLabel>
+              </BootstrapForm.Group>
+
+              <BootstrapForm.Group className="mb-3">
+                <FloatingLabel controlId="floatingDob" label="Birthday">
                   <BootstrapForm.Control
                     type="date"
                     name="dob"
@@ -239,25 +258,6 @@ function EditClient(props) {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group> */}
-
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingPhoneNumber"
-                  label="Phone Number"
-                >
-                  <BootstrapForm.Control
-                    type="tel"
-                    placeholder="Phone Number"
-                    name="phone"
-                    value={values?.phone}
-                    onChange={handleChange}
-                    isInvalid={touched.phone && !!errors.phone}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.phone}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
 
               <Button type="submit">Update</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>

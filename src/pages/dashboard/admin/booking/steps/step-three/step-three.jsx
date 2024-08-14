@@ -14,12 +14,8 @@ import {
 } from "../../../../../../slices/booking/bookingSlice";
 
 const validationSchema = Yup.object({
-  special_requests: Yup.string().required("Special requests are required"),
-  in_flight_catering: Yup.string().required("In-flight catering is required"),
-  extra_baggage: Yup.number()
-    .typeError("Extra baggage must be a number")
-    .required("Extra baggage is required")
-    .positive("Extra baggage must be a positive number"),
+  special_requests: Yup.string().notRequired("Special requests are required"),
+
   premium_membership: Yup.boolean(),
 });
 
@@ -62,8 +58,7 @@ function BookingStepThree() {
       <Formik
         initialValues={{
           special_requests: "",
-          in_flight_catering: "",
-          extra_baggage: "",
+
           premium_membership: false,
         }}
         validationSchema={validationSchema}
@@ -76,7 +71,7 @@ function BookingStepThree() {
                 <BootstrapForm.Group className="mb-3">
                   <FloatingLabel
                     controlId="floatingSpecialRequests"
-                    label="Special Requests"
+                    label="Special Requests (Optional)"
                   >
                     <BootstrapForm.Control
                       as="textarea"
@@ -93,48 +88,7 @@ function BookingStepThree() {
                   </FloatingLabel>
                 </BootstrapForm.Group>
               </Col>
-              <Col md={6}>
-                <BootstrapForm.Group className="mb-3">
-                  <FloatingLabel
-                    controlId="floatingInFlightCatering"
-                    label="In-Flight Catering"
-                  >
-                    <BootstrapForm.Control
-                      as="textarea"
-                      name="in_flight_catering"
-                      value={values.in_flight_catering}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <ErrorMessage
-                      name="in_flight_catering"
-                      component="div"
-                      className="text-danger"
-                    />
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-              <Col md={6}>
-                <BootstrapForm.Group className="mb-3">
-                  <FloatingLabel
-                    controlId="floatingExtraBaggage"
-                    label="Extra Baggage"
-                  >
-                    <BootstrapForm.Control
-                      type="number"
-                      name="extra_baggage"
-                      value={values.extra_baggage}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <ErrorMessage
-                      name="extra_baggage"
-                      component="div"
-                      className="text-danger"
-                    />
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
+
               <Col md={12}>
                 <BootstrapForm.Group className="mb-3">
                   <BootstrapForm.Check
