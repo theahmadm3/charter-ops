@@ -55,7 +55,7 @@ const Booking = () => {
               Book A Flight
             </Button>
           </div>
-          <Table striped bordered hover responsive>
+          <Table striped hover responsive>
             <thead>
               <tr>
                 <th>S/N</th>

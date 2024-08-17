@@ -122,7 +122,6 @@ td {
 //   }
 // }
 
-
 .svg-calLoader {
   width: 230px;
   height: 230px;
@@ -131,11 +130,11 @@ td {
 }
 
 .cal-loader__plane {
-  fill: #FF3D00; /* Replace with your highlight color */
+  fill: #ff3d00; /* Replace with your highlight color */
 }
 
 .cal-loader__path {
-  stroke: #FFF; /* Replace with your stroke color */
+  stroke: #fff; /* Replace with your stroke color */
   stroke-width: 2; /* Adjust as needed */
   fill: none;
   animation: 2.4s ease-in-out infinite loader-path;
@@ -158,10 +157,6 @@ td {
     stroke-dasharray: 0, 580, 0, 0, 0, 0, 0, 0, 0;
   }
 }
-
-
-
-
 
 .real {
   display: flex;
@@ -315,8 +310,22 @@ td {
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
   // border-radius: 50px;
-  // border-bottom: 5px solid $bg-blue-light !important;
-  margin-bottom: 0.5rem;
+  border-bottom: 5px solid $bg-blue-light !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  // margin-bottom: 0.5rem;
+  background: transparent !important;
+  // border: none !important;
+}
+
+.nav-tabs .nav-link:focus,
+.nav-tabs .nav-link:hover {
+  border-color: none !important;
+}
+
+.nav-tabs .nav-link {
+  color: #06232c;
 }
 
 td,

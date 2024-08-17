@@ -131,7 +131,7 @@ const Users = () => {
                   Add User
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -227,7 +227,7 @@ const Users = () => {
                   Add Partner
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -322,7 +322,7 @@ const Users = () => {
               <div className="my-3 text-end">
                 <Button onClick={() => handleAddUser("crew")}>Add Crew</Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>

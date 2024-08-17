@@ -247,7 +247,7 @@ const SystemConfig = () => {
                   Add Service
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -347,7 +347,7 @@ const SystemConfig = () => {
                   Add Department
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -445,7 +445,7 @@ const SystemConfig = () => {
                   Add Supplier
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -544,7 +544,7 @@ const SystemConfig = () => {
                   Add Partnership
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -640,7 +640,7 @@ const SystemConfig = () => {
             }
           >
             <div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
