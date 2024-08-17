@@ -5,6 +5,8 @@ import {
   Form as BootstrapForm,
   FloatingLabel,
   Image,
+  Row,
+  Col,
 } from "react-bootstrap";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -98,166 +100,199 @@ function EditClient(props) {
             values,
           }) => (
             <Form onSubmit={handleSubmit}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingFirstName" label="First Name">
-                  <BootstrapForm.Control
-                    type="text"
-                    placeholder="First Name"
-                    name="first_name"
-                    value={values?.first_name}
-                    onChange={handleChange}
-                    isInvalid={touched.first_name && !!errors.first_name}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.first_name}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
+              <Row>
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel controlId="floatingTitle" label="Title">
+                      <BootstrapForm.Control
+                        as="select"
+                        name="title"
+                        onChange={handleChange}
+                        isInvalid={touched.title && !!errors.title}
+                      >
+                        <option value="">Select Title</option>
+                        <option value="Dr">Dr</option>
+                        <option value="Mrs">Mrs</option>
+                        <option value="Mr">Mr</option>
+                        <option value="Alhaji">Alhaji</option>
+                        <option value="Hajiya">Hajiya</option>
+                        <option value="Honorable">Honorable</option>
+                        <option value="Senator">Senator</option>
+                      </BootstrapForm.Control>
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.title}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col>
 
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingLastName" label="Last Name">
-                  <BootstrapForm.Control
-                    type="text"
-                    placeholder="Last Name"
-                    name="last_name"
-                    onChange={handleChange}
-                    value={values?.last_name}
-                    isInvalid={touched.last_name && !!errors.last_name}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.last_name}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingFirstName"
+                      label="First Name"
+                    >
+                      <BootstrapForm.Control
+                        type="text"
+                        placeholder="First Name"
+                        name="first_name"
+                        value={values?.first_name}
+                        onChange={handleChange}
+                        isInvalid={touched.first_name && !!errors.first_name}
+                      />
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.first_name}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col>
+              </Row>
 
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingEmail" label="Email">
-                  <BootstrapForm.Control
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    onChange={handleChange}
-                    value={values?.email}
-                    isInvalid={touched.email && !!errors.email}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.email}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
+              <Row>
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingLastName"
+                      label="Last Name"
+                    >
+                      <BootstrapForm.Control
+                        type="text"
+                        placeholder="Last Name"
+                        name="last_name"
+                        onChange={handleChange}
+                        value={values?.last_name}
+                        isInvalid={touched.last_name && !!errors.last_name}
+                      />
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.last_name}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col>
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel controlId="floatingEmail" label="Email">
+                      <BootstrapForm.Control
+                        type="email"
+                        placeholder="Email"
+                        name="email"
+                        onChange={handleChange}
+                        value={values?.email}
+                        isInvalid={touched.email && !!errors.email}
+                      />
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.email}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col>
+              </Row>
 
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingPhoneNumber"
-                  label="Phone Number"
-                >
-                  <BootstrapForm.Control
-                    type="tel"
-                    placeholder="Phone Number"
-                    name="phone"
-                    value={values?.phone}
-                    onChange={handleChange}
-                    isInvalid={touched.phone && !!errors.phone}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.phone}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
+              <Row>
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingPhoneNumber"
+                      label="Phone Number"
+                    >
+                      <BootstrapForm.Control
+                        type="tel"
+                        placeholder="Phone Number"
+                        name="phone"
+                        value={values?.phone}
+                        onChange={handleChange}
+                        isInvalid={touched.phone && !!errors.phone}
+                      />
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.phone}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col>
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel controlId="floatingDob" label="Birthday">
+                      <BootstrapForm.Control
+                        type="date"
+                        name="dob"
+                        onChange={handleChange}
+                        value={values?.dob}
+                        isInvalid={touched.dob && !!errors.dob}
+                      />
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.dob}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col>
+              </Row>
 
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingDob" label="Birthday">
-                  <BootstrapForm.Control
-                    type="date"
-                    name="dob"
-                    onChange={handleChange}
-                    value={values?.dob}
-                    isInvalid={touched.dob && !!errors.dob}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.dob}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
+              <Row>
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingTypeOfId"
+                      label="Type of ID"
+                    >
+                      <BootstrapForm.Control
+                        as="select"
+                        name="id_type"
+                        onChange={handleChange}
+                        isInvalid={touched.id_type && !!errors.id_type}
+                        value={values?.id_type}
+                      >
+                        <option value="">Select Type of ID</option>
+                        <option value="passport">Passport</option>
+                        <option value="driving licence">
+                          Driver's License
+                        </option>
+                        <option value="national id">National ID</option>
+                      </BootstrapForm.Control>
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.id_type}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col>
 
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingIdFileUpload"
-                  label="ID File Upload"
-                >
-                  <BootstrapForm.Control
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    name="document_id"
-                    onChange={(e) => handleFileChange(e, setFieldValue)}
-                    isInvalid={touched.document_id && !!errors.document_id}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.document_id}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-              {props?.data[0]?.document_base64 ? (
-                <>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    className="btn btn-primary mb-3 shadow"
-                    onClick={() => setShowImage(!showImage)}
-                  >
-                    {showImage ? "Hide File" : "Show File"}
-                  </Button>
-                  {showImage && (
-                    <Image
-                      src={props?.data[0]?.document_base64}
-                      className="img-fluid"
-                    />
-                  )}
-                </>
-              ) : null}
-
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingTypeOfId" label="Type of ID">
-                  <BootstrapForm.Control
-                    as="select"
-                    name="id_type"
-                    onChange={handleChange}
-                    isInvalid={touched.id_type && !!errors.id_type}
-                    value={values?.id_type}
-                  >
-                    <option value="">Select Type of ID</option>
-                    <option value="passport">Passport</option>
-                    <option value="driving licence">Driver's License</option>
-                    <option value="national id">National ID</option>
-                  </BootstrapForm.Control>
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.id_type}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-
-              {/* <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingTypeOfId" label="Nationality">
-                  <BootstrapForm.Control
-                    as="select"
-                    name="nationality"
-                    onChange={handleChange}
-                    isInvalid={touched.nationality && !!errors.nationality}
-                    value={values?.nationality}
-                  >
-                    <option value="">Select Nationality</option>
-                    {countries.map((country, index) => (
-                      <option value={country} key={index}>
-                        {" "}
-                        {country}{" "}
-                      </option>
-                    ))}
-                  </BootstrapForm.Control>
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.nationality}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group> */}
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingIdFileUpload"
+                      label="ID File Upload"
+                    >
+                      <BootstrapForm.Control
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.pdf"
+                        name="document_id"
+                        onChange={(e) => handleFileChange(e, setFieldValue)}
+                        isInvalid={touched.document_id && !!errors.document_id}
+                      />
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.document_id}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                  {props?.data[0]?.document_base64 ? (
+                    <>
+                      <Button
+                        variant="light"
+                        size="sm"
+                        className="btn btn-primary mb-3 shadow"
+                        onClick={() => setShowImage(!showImage)}
+                      >
+                        {showImage ? "Hide File" : "Show File"}
+                      </Button>
+                      {showImage && (
+                        <Image
+                          src={props?.data[0]?.document_base64}
+                          className="img-fluid"
+                        />
+                      )}
+                    </>
+                  ) : null}
+                </Col>
+              </Row>
 
               <Button type="submit">Update</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>
