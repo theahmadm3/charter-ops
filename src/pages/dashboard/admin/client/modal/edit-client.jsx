@@ -107,6 +107,7 @@ function EditClient(props) {
                       <BootstrapForm.Control
                         as="select"
                         name="title"
+                        value={values.title}
                         onChange={handleChange}
                         isInvalid={touched.title && !!errors.title}
                       >
@@ -125,18 +126,21 @@ function EditClient(props) {
                     </FloatingLabel>
                   </BootstrapForm.Group>
                 </Col>
-
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingFirstName"
-                      label="First Name"
+                      label={
+                        <div>
+                          First Name <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="text"
                         placeholder="First Name"
                         name="first_name"
-                        value={values?.first_name}
+                        value={values.first_name}
                         onChange={handleChange}
                         isInvalid={touched.first_name && !!errors.first_name}
                       />
@@ -153,14 +157,18 @@ function EditClient(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingLastName"
-                      label="Last Name"
+                      label={
+                        <div>
+                          Last Name <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="text"
                         placeholder="Last Name"
                         name="last_name"
+                        value={values.last_name}
                         onChange={handleChange}
-                        value={values?.last_name}
                         isInvalid={touched.last_name && !!errors.last_name}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
@@ -171,13 +179,20 @@ function EditClient(props) {
                 </Col>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel controlId="floatingEmail" label="Email">
+                    <FloatingLabel
+                      controlId="floatingEmail"
+                      label={
+                        <div>
+                          Email <span className="text-danger">*</span>
+                        </div>
+                      }
+                    >
                       <BootstrapForm.Control
                         type="email"
                         placeholder="Email"
                         name="email"
+                        value={values.email}
                         onChange={handleChange}
-                        value={values?.email}
                         isInvalid={touched.email && !!errors.email}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
@@ -193,13 +208,17 @@ function EditClient(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingPhoneNumber"
-                      label="Phone Number"
+                      label={
+                        <div>
+                          Phone Number <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="tel"
                         placeholder="Phone Number"
                         name="phone"
-                        value={values?.phone}
+                        value={values.phone}
                         onChange={handleChange}
                         isInvalid={touched.phone && !!errors.phone}
                       />
@@ -215,8 +234,8 @@ function EditClient(props) {
                       <BootstrapForm.Control
                         type="date"
                         name="dob"
+                        value={values.dob}
                         onChange={handleChange}
-                        value={values?.dob}
                         isInvalid={touched.dob && !!errors.dob}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
@@ -237,9 +256,9 @@ function EditClient(props) {
                       <BootstrapForm.Control
                         as="select"
                         name="id_type"
+                        value={values.id_type}
                         onChange={handleChange}
                         isInvalid={touched.id_type && !!errors.id_type}
-                        value={values?.id_type}
                       >
                         <option value="">Select Type of ID</option>
                         <option value="passport">Passport</option>
@@ -254,7 +273,6 @@ function EditClient(props) {
                     </FloatingLabel>
                   </BootstrapForm.Group>
                 </Col>
-
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
@@ -273,28 +291,10 @@ function EditClient(props) {
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
-                  {props?.data[0]?.document_base64 ? (
-                    <>
-                      <Button
-                        variant="light"
-                        size="sm"
-                        className="btn btn-primary mb-3 shadow"
-                        onClick={() => setShowImage(!showImage)}
-                      >
-                        {showImage ? "Hide File" : "Show File"}
-                      </Button>
-                      {showImage && (
-                        <Image
-                          src={props?.data[0]?.document_base64}
-                          className="img-fluid"
-                        />
-                      )}
-                    </>
-                  ) : null}
                 </Col>
               </Row>
 
-              <Button type="submit">Update</Button>
+              <Button type="submit">Save</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>
                 Close
               </Button>

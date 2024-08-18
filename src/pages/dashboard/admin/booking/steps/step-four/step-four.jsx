@@ -18,6 +18,7 @@ import { useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ImNotification } from "react-icons/im";
+import { toast } from "react-toastify";
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -145,12 +146,21 @@ function BookingStepFour() {
       .then((response) => {
         if (response?.payload?.success) {
           navigate(-1);
-        } else {
-          console.log("Error please try again");
+        } else if (response?.payload) {
+          // const errorMessage = response.payload;
+          // General error message
+          // toast.error(errorMessage);
+          // Check and display validation errors if present
+          // if (response.payload?.errors) {
+          //   Object.values(response.payload.errors).forEach((errorArray) => {
+          //     errorArray.forEach((errMsg) => toast.error(errMsg));
+          //   });
+          // }
         }
       })
       .catch((error) => {
         console.error("Error occurred:", error);
+        toast.error("An unexpected error occurred.");
       });
   };
 

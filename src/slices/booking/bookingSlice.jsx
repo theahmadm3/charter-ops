@@ -117,11 +117,23 @@ export const addBookingStepThreeAsync = createAsyncThunk(
   async ({ bookingId, values }, { rejectWithValue }) => {
     try {
       const response = await AddBookingStep03(bookingId, values);
-
       return response;
     } catch (error) {
-      const errorMessage = error?.response?.data?.error || error.message;
+      console.log("error from slice", error);
+
+      const errorResponse = error?.response?.data;
+
+      // Show the general error message
+      const errorMessage = errorResponse?.message || error.message;
       toast.error(errorMessage);
+
+      // If there are validation errors, show them as well
+      if (errorResponse?.errors) {
+        Object.values(errorResponse.errors).forEach((errorArray) => {
+          errorArray.forEach((errMsg) => toast.error(errMsg));
+        });
+      }
+
       return rejectWithValue(errorMessage);
     }
   }
@@ -132,11 +144,21 @@ export const addBookingStepFourAsync = createAsyncThunk(
   async ({ bookingId, values }, { rejectWithValue }) => {
     try {
       const response = await AddBookingStep04(bookingId, values);
-
       return response;
     } catch (error) {
-      const errorMessage = error?.response?.data?.error || error.message;
+      const errorResponse = error?.response;
+
+      // Show the general error message
+      const errorMessage = errorResponse?.message || error.message;
       toast.error(errorMessage);
+
+      // If there are detailed validation errors, show them as well
+      if (errorResponse?.errors) {
+        Object.values(errorResponse.errors).forEach((errorArray) => {
+          errorArray.forEach((errMsg) => toast.error(errMsg));
+        });
+      }
+
       return rejectWithValue(errorMessage);
     }
   }

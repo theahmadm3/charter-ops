@@ -91,25 +91,13 @@ function EditAircraft(props) {
         <Formik
           initialValues={{
             owned_by: props.data?.[0]?.owned_by || "",
-            model: props.data?.[0]?.model || "",
-            manufacturer: props.data?.[0]?.manufacturer || "",
             total_seat_capacity: props.data?.[0]?.total_seat_capacity || "",
-            class_configuration: {
-              economy: props.data?.[0]?.class_configuration?.economy || 0,
-              extra_legroom:
-                props.data?.[0]?.class_configuration?.extra_legroom || 0,
-              business: props.data?.[0]?.class_configuration?.business || 0,
-              first_class:
-                props.data?.[0]?.class_configuration?.first_class || 0,
-            },
-            luggage_capacity: props.data?.[0]?.luggage_capacity || "",
-            max_flight_range: props.data?.[0]?.max_flight_range || "",
-            fuel_capacity: props.data?.[0]?.fuel_capacity || "",
-            engine_type: props.data?.[0]?.engine_type || "",
             inflight_services: props.data?.[0]?.inflight_services || [],
             crew_capacity: props.data?.[0]?.crew_capacity || "",
-            cruise_speed: props.data?.[0]?.cruise_speed || "",
-            remarks: props.data?.[0]?.remarks || "",
+            location: props.data?.[0]?.location || "",
+            aircraft_type: props.data?.[0]?.aircraft_type || "",
+            image: props.data?.[0]?.image || "",
+            registration_no: props.data?.[0]?.registration_no || "",
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
@@ -142,14 +130,19 @@ function EditAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingOwnedBy"
-                      label="Aircraft Owned By"
+                      label={
+                        <div>
+                          Aircraft Owned By{" "}
+                          <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         as="select"
                         name="owned_by"
+                        value={values.owned_by}
                         onChange={handleChange}
                         isInvalid={touched.owned_by && !!errors.owned_by}
-                        value={values.owned_by}
                       >
                         <option value="">Choose one</option>
                         <option value="company owned">Company Owned</option>
@@ -166,18 +159,24 @@ function EditAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingModel"
-                      label="Aircraft Model"
+                      label={
+                        <div>
+                          Aircraft Type <span className="text-danger"> *</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="text"
-                        placeholder="Aircraft Model"
-                        name="model"
+                        placeholder="Aircraft type"
+                        name="aircraft_type"
+                        value={values.aircraft_type}
                         onChange={handleChange}
-                        isInvalid={touched.model && !!errors.model}
-                        value={values.model}
+                        isInvalid={
+                          touched.aircraft_type && !!errors.aircraft_type
+                        }
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.model}
+                        {errors.aircraft_type}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
@@ -189,20 +188,20 @@ function EditAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingManufacturer"
-                      label="Manufacturer"
+                      label="Registration No."
                     >
                       <BootstrapForm.Control
                         type="text"
-                        placeholder="Manufacturer"
-                        name="manufacturer"
+                        placeholder="registration_no"
+                        name="registration_no"
+                        value={values.registration_no}
                         onChange={handleChange}
                         isInvalid={
-                          touched.manufacturer && !!errors.manufacturer
+                          touched.registration_no && !!errors.registration_no
                         }
-                        value={values.manufacturer}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.manufacturer}
+                        {errors.registration_no}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
@@ -211,135 +210,26 @@ function EditAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingTotalSeatCapacity"
-                      label="Total Seat Capacity"
+                      label={
+                        <div>
+                          Total Seat Capacity{" "}
+                          <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="number"
                         placeholder="Total Seat Capacity"
                         name="total_seat_capacity"
-                        onChange={(e) => {
-                          handleChange(e);
-                          const totalSeats = e.target.value;
-                          const usedSeats =
-                            (values.class_configuration.economy || 0) +
-                            (values.class_configuration.extra_legroom || 0) +
-                            (values.class_configuration.business || 0) +
-                            (values.class_configuration.first_class || 0);
-                          setRemainingSeats(totalSeats - usedSeats);
-                        }}
+                        value={values.total_seat_capacity}
+                        onChange={handleChange}
                         isInvalid={
                           touched.total_seat_capacity &&
                           !!errors.total_seat_capacity
                         }
-                        value={values.total_seat_capacity}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
                         {errors.total_seat_capacity}
-                      </BootstrapForm.Control.Feedback>
-                      {/* <div>Remaining Seats: {remainingSeats}</div> */}
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={6}>
-                  <FieldArray
-                    name="class_configuration"
-                    render={() => (
-                      <BootstrapForm.Group className="mb-3">
-                        <label>Class Configuration</label>
-                        <div>
-                          {[
-                            { name: "economy", label: "Economy" },
-                            { name: "extra_legroom", label: "Extra Legroom" },
-                            { name: "business", label: "Business" },
-                            { name: "first_class", label: "First Class" },
-                          ].map(({ name, label }) => (
-                            <div key={name} className="mb-2">
-                              <BootstrapForm.Check
-                                inline
-                                type="checkbox"
-                                id={`class_configuration.${name}`}
-                                label={label}
-                                name={`class_configuration.${name}`}
-                                onChange={(e) => {
-                                  const newValue = e.target.checked ? 1 : 0;
-                                  setFieldValue(
-                                    `class_configuration.${name}`,
-                                    newValue
-                                  );
-                                  const totalSeats = values.total_seat_capacity;
-                                  const usedSeats =
-                                    (values.class_configuration.economy || 0) +
-                                    (values.class_configuration.extra_legroom ||
-                                      0) +
-                                    (values.class_configuration.business || 0) +
-                                    (values.class_configuration.first_class ||
-                                      0);
-                                  setRemainingSeats(totalSeats - usedSeats);
-                                }}
-                                checked={values.class_configuration[name] === 1}
-                                isInvalid={
-                                  touched.class_configuration?.[name] &&
-                                  !!errors.class_configuration?.[name]
-                                }
-                              />
-                              {/* {values.class_configuration[name] === 1 && (
-                                <BootstrapForm.Control
-                                  type="number"
-                                  placeholder={`${label} seats`}
-                                  name={`class_configuration.${name}`}
-                                  onChange={(e) => {
-                                    handleChange(e);
-                                    const totalSeats =
-                                      values.total_seat_capacity;
-                                    const usedSeats =
-                                      (values.class_configuration.economy ||
-                                        0) +
-                                      (values.class_configuration
-                                        .extra_legroom || 0) +
-                                      (values.class_configuration.business ||
-                                        0) +
-                                      (values.class_configuration.first_class ||
-                                        0);
-                                    setRemainingSeats(totalSeats - usedSeats);
-                                  }}
-                                  isInvalid={
-                                    touched.class_configuration?.[name] &&
-                                    !!errors.class_configuration?.[name]
-                                  }
-                                  value={values.class_configuration[name]}
-                                />
-                              )} */}
-                              <BootstrapForm.Control.Feedback type="invalid">
-                                {errors.class_configuration?.[name]}
-                              </BootstrapForm.Control.Feedback>
-                            </div>
-                          ))}
-                        </div>
-                      </BootstrapForm.Group>
-                    )}
-                  />
-                </Col>
-                <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel
-                      controlId="floatingLuggageCapacity"
-                      label="Luggage Capacity (kg)"
-                    >
-                      <BootstrapForm.Control
-                        type="number"
-                        placeholder="Luggage Capacity"
-                        name="luggage_capacity"
-                        onChange={handleChange}
-                        isInvalid={
-                          touched.luggage_capacity && !!errors.luggage_capacity
-                        }
-                        value={values.luggage_capacity}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.luggage_capacity}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
@@ -351,20 +241,22 @@ function EditAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingMaxFlightRange"
-                      label="Maximum Flight Range (Km or miles)"
+                      label={
+                        <div>
+                          Location <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
-                        type="number"
-                        placeholder="Maximum Flight Range"
-                        name="max_flight_range"
+                        type="text"
+                        placeholder="Location"
+                        name="location"
+                        value={values.location}
                         onChange={handleChange}
-                        isInvalid={
-                          touched.max_flight_range && !!errors.max_flight_range
-                        }
-                        value={values.max_flight_range}
+                        isInvalid={touched.location && !!errors.location}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.max_flight_range}
+                        {errors.location}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
@@ -372,21 +264,25 @@ function EditAircraft(props) {
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
-                      controlId="floatingFuelCapacity"
-                      label="Fuel Capacity (liters or gallons)"
+                      controlId="floatingCrewCapacity"
+                      label={
+                        <div>
+                          Crew Capacity <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="number"
-                        placeholder="Fuel Capacity"
-                        name="fuel_capacity"
+                        placeholder="Crew Capacity"
+                        name="crew_capacity"
+                        value={values.crew_capacity}
                         onChange={handleChange}
                         isInvalid={
-                          touched.fuel_capacity && !!errors.fuel_capacity
+                          touched.crew_capacity && !!errors.crew_capacity
                         }
-                        value={values.fuel_capacity}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.fuel_capacity}
+                        {errors.crew_capacity}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
@@ -396,27 +292,9 @@ function EditAircraft(props) {
               <Row>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel
-                      controlId="floatingEngineType"
-                      label="Engine Type"
-                    >
-                      <BootstrapForm.Control
-                        type="text"
-                        placeholder="Engine Type"
-                        name="engine_type"
-                        onChange={handleChange}
-                        isInvalid={touched.engine_type && !!errors.engine_type}
-                        value={values.engine_type}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.engine_type}
-                      </BootstrapForm.Control.Feedback>
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-                <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
-                    <label>Inflight Services</label>
+                    <label>
+                      Inflight Services <span className="text-danger"> *</span>
+                    </label>
                     <div>
                       {["Meals", "Wi-fi"].map((service) => (
                         <BootstrapForm.Check
@@ -427,22 +305,18 @@ function EditAircraft(props) {
                           label={service}
                           name="inflight_services"
                           onChange={(e) => {
-                            const newServices = [...values.inflight_services];
-                            if (e.target.checked) {
-                              newServices.push(service);
-                            } else {
-                              const index = newServices.indexOf(service);
-                              if (index > -1) {
-                                newServices.splice(index, 1);
-                              }
-                            }
-                            setFieldValue("inflight_services", newServices);
+                            const newValue = e.target.checked
+                              ? [...values.inflight_services, service]
+                              : values.inflight_services.filter(
+                                  (item) => item !== service
+                                );
+                            setFieldValue("inflight_services", newValue);
                           }}
-                          checked={values.inflight_services.includes(service)}
                           isInvalid={
                             touched.inflight_services &&
                             !!errors.inflight_services
                           }
+                          checked={values.inflight_services.includes(service)}
                         />
                       ))}
                       <BootstrapForm.Control.Feedback type="invalid">
@@ -451,76 +325,32 @@ function EditAircraft(props) {
                     </div>
                   </BootstrapForm.Group>
                 </Col>
-              </Row>
-
-              <Row>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
-                      controlId="floatingCrewCapacity"
-                      label="Crew Capacity"
+                      controlId="floatingIdFileUpload"
+                      label={
+                        <div>
+                          Image Upload <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
-                        type="number"
-                        placeholder="Crew Capacity"
-                        name="crew_capacity"
-                        onChange={handleChange}
-                        isInvalid={
-                          touched.crew_capacity && !!errors.crew_capacity
-                        }
-                        value={values.crew_capacity}
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.pdf"
+                        name="image"
+                        onChange={(e) => handleFileChange(e, setFieldValue)}
+                        isInvalid={touched.image && !!errors.image}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.crew_capacity}
-                      </BootstrapForm.Control.Feedback>
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-                <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel
-                      controlId="floatingCruiseSpeed"
-                      label="Cruise Speed"
-                    >
-                      <BootstrapForm.Control
-                        type="number"
-                        placeholder="Cruise Speed"
-                        name="cruise_speed"
-                        onChange={handleChange}
-                        isInvalid={
-                          touched.cruise_speed && !!errors.cruise_speed
-                        }
-                        value={values.cruise_speed}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.cruise_speed}
+                        {errors.image}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
                 </Col>
               </Row>
 
-              <Row>
-                <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel controlId="floatingRemarks" label="Remarks">
-                      <BootstrapForm.Control
-                        as="textarea"
-                        placeholder="Remarks"
-                        name="remarks"
-                        onChange={handleChange}
-                        isInvalid={touched.remarks && !!errors.remarks}
-                        value={values.remarks}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.remarks}
-                      </BootstrapForm.Control.Feedback>
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-              </Row>
-
-              <Button type="submit">Update</Button>
+              <Button type="submit">Save</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>
                 Close
               </Button>

@@ -179,7 +179,11 @@ function BookingStepOne() {
                 <BootstrapForm.Group>
                   <FloatingLabel
                     controlId="floatingTripType"
-                    label="Select Trip Type"
+                    label={
+                      <span>
+                        Select Trip Type <span className="text-danger">*</span>
+                      </span>
+                    }
                     className="my-2"
                   >
                     <BootstrapForm.Control
@@ -207,7 +211,11 @@ function BookingStepOne() {
                 <BootstrapForm.Group>
                   <FloatingLabel
                     controlId="floatingFrom"
-                    label="From"
+                    label={
+                      <div>
+                        From <span className="text-danger">*</span>{" "}
+                      </div>
+                    }
                     className="my-2"
                   >
                     <BootstrapForm.Control
@@ -248,7 +256,11 @@ function BookingStepOne() {
                 <BootstrapForm.Group>
                   <FloatingLabel
                     controlId="floatingTo"
-                    label="To"
+                    label={
+                      <div>
+                        To <span className="text-danger">*</span>{" "}
+                      </div>
+                    }
                     className="my-2"
                   >
                     <BootstrapForm.Control
@@ -330,7 +342,11 @@ function BookingStepOne() {
                 <BootstrapForm.Group>
                   <FloatingLabel
                     controlId="floatingAircraftType"
-                    label="Client"
+                    label={
+                      <div>
+                        Client <span className="text-danger">*</span>{" "}
+                      </div>
+                    }
                     className=""
                   >
                     <BootstrapForm.Control

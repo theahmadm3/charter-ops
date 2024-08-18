@@ -110,11 +110,17 @@ function AddAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingOwnedBy"
-                      label="Aircraft Owned By"
+                      label={
+                        <div>
+                          Aircraft Owned By{" "}
+                          <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         as="select"
                         name="owned_by"
+                        value={values.owned_by}
                         onChange={handleChange}
                         isInvalid={touched.owned_by && !!errors.owned_by}
                       >
@@ -133,12 +139,17 @@ function AddAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingModel"
-                      label="Aircraft Type"
+                      label={
+                        <div>
+                          Aircraft Type <span className="text-danger"> *</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="text"
                         placeholder="Aircraft type"
                         name="aircraft_type"
+                        value={values.aircraft_type}
                         onChange={handleChange}
                         isInvalid={
                           touched.aircraft_type && !!errors.aircraft_type
@@ -163,6 +174,7 @@ function AddAircraft(props) {
                         type="text"
                         placeholder="registration_no"
                         name="registration_no"
+                        value={values.registration_no}
                         onChange={handleChange}
                         isInvalid={
                           touched.registration_no && !!errors.registration_no
@@ -178,12 +190,18 @@ function AddAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingTotalSeatCapacity"
-                      label="Total Seat Capacity"
+                      label={
+                        <div>
+                          Total Seat Capacity{" "}
+                          <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="number"
                         placeholder="Total Seat Capacity"
                         name="total_seat_capacity"
+                        value={values.total_seat_capacity}
                         onChange={handleChange}
                         isInvalid={
                           touched.total_seat_capacity &&
@@ -203,12 +221,17 @@ function AddAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingMaxFlightRange"
-                      label="Location"
+                      label={
+                        <div>
+                          Location <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
-                        type="number"
-                        placeholder="location"
+                        type="text"
+                        placeholder="Location"
                         name="location"
+                        value={values.location}
                         onChange={handleChange}
                         isInvalid={touched.location && !!errors.location}
                       />
@@ -222,12 +245,17 @@ function AddAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingCrewCapacity"
-                      label="Crew Capacity"
+                      label={
+                        <div>
+                          Crew Capacity <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="number"
                         placeholder="Crew Capacity"
                         name="crew_capacity"
+                        value={values.crew_capacity}
                         onChange={handleChange}
                         isInvalid={
                           touched.crew_capacity && !!errors.crew_capacity
@@ -244,7 +272,9 @@ function AddAircraft(props) {
               <Row>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <label>Inflight Services</label>
+                    <label>
+                      Inflight Services <span className="text-danger"> *</span>
+                    </label>
                     <div>
                       {["Meals", "Wi-fi"].map((service) => (
                         <BootstrapForm.Check
@@ -279,7 +309,11 @@ function AddAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingIdFileUpload"
-                      label="Image Upload"
+                      label={
+                        <div>
+                          Image Upload <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="file"

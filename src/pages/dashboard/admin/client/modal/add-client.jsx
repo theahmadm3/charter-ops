@@ -89,7 +89,14 @@ function AddClient(props) {
               });
           }}
         >
-          {({ errors, touched, handleSubmit, setFieldValue, handleChange }) => (
+          {({
+            errors,
+            touched,
+            handleSubmit,
+            setFieldValue,
+            handleChange,
+            values,
+          }) => (
             <Form onSubmit={handleSubmit}>
               <Row>
                 <Col md={6}>
@@ -98,6 +105,7 @@ function AddClient(props) {
                       <BootstrapForm.Control
                         as="select"
                         name="title"
+                        value={values.title}
                         onChange={handleChange}
                         isInvalid={touched.title && !!errors.title}
                       >
@@ -120,12 +128,17 @@ function AddClient(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingFirstName"
-                      label="First Name"
+                      label={
+                        <div>
+                          First Name <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="text"
                         placeholder="First Name"
                         name="first_name"
+                        value={values.first_name}
                         onChange={handleChange}
                         isInvalid={touched.first_name && !!errors.first_name}
                       />
@@ -142,12 +155,17 @@ function AddClient(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingLastName"
-                      label="Last Name"
+                      label={
+                        <div>
+                          Last Name <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="text"
                         placeholder="Last Name"
                         name="last_name"
+                        value={values.last_name}
                         onChange={handleChange}
                         isInvalid={touched.last_name && !!errors.last_name}
                       />
@@ -159,11 +177,19 @@ function AddClient(props) {
                 </Col>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel controlId="floatingEmail" label="Email">
+                    <FloatingLabel
+                      controlId="floatingEmail"
+                      label={
+                        <div>
+                          Email <span className="text-danger">*</span>
+                        </div>
+                      }
+                    >
                       <BootstrapForm.Control
                         type="email"
                         placeholder="Email"
                         name="email"
+                        value={values.email}
                         onChange={handleChange}
                         isInvalid={touched.email && !!errors.email}
                       />
@@ -174,17 +200,23 @@ function AddClient(props) {
                   </BootstrapForm.Group>
                 </Col>
               </Row>
+
               <Row>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingPhoneNumber"
-                      label="Phone Number"
+                      label={
+                        <div>
+                          Phone Number <span className="text-danger">*</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="tel"
                         placeholder="Phone Number"
                         name="phone"
+                        value={values.phone}
                         onChange={handleChange}
                         isInvalid={touched.phone && !!errors.phone}
                       />
@@ -200,6 +232,7 @@ function AddClient(props) {
                       <BootstrapForm.Control
                         type="date"
                         name="dob"
+                        value={values.dob}
                         onChange={handleChange}
                         isInvalid={touched.dob && !!errors.dob}
                       />
@@ -221,6 +254,7 @@ function AddClient(props) {
                       <BootstrapForm.Control
                         as="select"
                         name="id_type"
+                        value={values.id_type}
                         onChange={handleChange}
                         isInvalid={touched.id_type && !!errors.id_type}
                       >
