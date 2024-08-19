@@ -71,7 +71,7 @@ const initialValues = {
   return_date: "",
   client_id: "",
   multi_leg: null,
-  passenger_count: "",
+  pax: "",
 };
 
 function BookingStepOne() {
@@ -383,14 +383,12 @@ function BookingStepOne() {
                     <BootstrapForm.Control
                       type="number"
                       placeholder="Passenger Number"
-                      name="passenger_count"
+                      name="pax"
                       onChange={handleChange}
-                      isInvalid={
-                        touched.passenger_count && !!errors.passenger_count
-                      }
+                      isInvalid={touched.pax && !!errors.pax}
                     />
                     <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.passenger_count}
+                      {errors.pax}
                     </BootstrapForm.Control.Feedback>
                   </FloatingLabel>
                 </BootstrapForm.Group>
