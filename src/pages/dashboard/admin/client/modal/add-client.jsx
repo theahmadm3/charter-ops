@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
     )
     .required("Phone number is required"),
   title: Yup.string(),
-  // document_id: Yup.string().required("ID File Upload is required"),
+  document_id: Yup.string().required("ID File Upload is required"),
   // nationality: Yup.string().required("Nationality is required"),
 });
 
