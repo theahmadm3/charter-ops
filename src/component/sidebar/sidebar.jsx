@@ -27,14 +27,14 @@ function SideBar() {
     {
       to: "/admin-booking",
       icon: <PiAirplaneInFlightFill className="sidebar-icon" />,
-      text: "Flight Management",
+      text: "Flight/Aircraft Management",
     },
 
-    {
-      to: "/admin-aircraft",
-      icon: <MdLocalAirport className="sidebar-icon" />,
-      text: "Aircraft Management",
-    },
+    // {
+    //   to: "/admin-aircraft",
+    //   icon: <MdLocalAirport className="sidebar-icon" />,
+    //   text: "Aircraft Management",
+    // },
     {
       to: "/transaction",
       icon: <MdOutlineReceipt className="sidebar-icon" />,
@@ -49,7 +49,7 @@ function SideBar() {
     {
       to: "/admin-clients",
       icon: <IoIosPeople className="sidebar-icon" />,
-      text: "Client Management",
+      text: "Passenger Record",
     },
     {
       to: "/statistics",
