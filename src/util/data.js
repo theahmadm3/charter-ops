@@ -327,7 +327,10 @@ export const airports = [
     value: "KAN",
     label: "Mallam Aminu Kano International Airport, Kano (KAN)",
   },
-  { value: "ENU", label: "Akanu Ibiam International Airport, Enugu (ENU)" },
+  {
+    value: "ENU",
+    label: "Akanu Ibiam International Airport, Enugu (ENU)",
+  },
   {
     value: "CBQ",
     label: "Margaret Ekpo International Airport, Calabar (CBQ)",
@@ -336,25 +339,58 @@ export const airports = [
     value: "SOK",
     label: "Sadiq Abubakar III International Airport, Sokoto (SOK)",
   },
-  { value: "AKR", label: "Akure Airport, Akure (AKR)" },
-  { value: "BNI", label: "Benin Airport, Benin City (BNI)" },
-  { value: "IBA", label: "Ibadan Airport, Ibadan (IBA)" },
+  {
+    value: "AKR",
+    label: "Akure Airport, Akure (AKR)",
+  },
+  {
+    value: "BNI",
+    label: "Benin Airport, Benin City (BNI)",
+  },
+  {
+    value: "IBA",
+    label: "Ibadan Airport, Ibadan (IBA)",
+  },
   {
     value: "JFK",
     label: "John F. Kennedy International Airport, New York (JFK)",
   },
-  { value: "LHR", label: "Heathrow Airport, London (LHR)" },
-  { value: "HND", label: "Tokyo Haneda Airport, Tokyo (HND)" },
-  { value: "DXB", label: "Dubai International Airport, Dubai (DXB)" },
-  { value: "CDG", label: "Charles de Gaulle Airport, Paris (CDG)" },
-  { value: "SIN", label: "Singapore Changi Airport, Singapore (SIN)" },
-  { value: "SYD", label: "Sydney Kingsford Smith Airport, Sydney (SYD)" },
-  { value: "HKG", label: "Hong Kong International Airport, Hong Kong (HKG)" },
+  {
+    value: "LHR",
+    label: "Heathrow Airport, London (LHR)",
+  },
+  {
+    value: "HND",
+    label: "Tokyo Haneda Airport, Tokyo (HND)",
+  },
+  {
+    value: "DXB",
+    label: "Dubai International Airport, Dubai (DXB)",
+  },
+  {
+    value: "CDG",
+    label: "Charles de Gaulle Airport, Paris (CDG)",
+  },
+  {
+    value: "SIN",
+    label: "Singapore Changi Airport, Singapore (SIN)",
+  },
+  {
+    value: "SYD",
+    label: "Sydney Kingsford Smith Airport, Sydney (SYD)",
+  },
+  {
+    value: "HKG",
+    label: "Hong Kong International Airport, Hong Kong (HKG)",
+  },
   {
     value: "LAX",
     label: "Los Angeles International Airport, Los Angeles (LAX)",
   },
-  { value: "FRA", label: "Frankfurt Airport, Frankfurt (FRA)" },
+  {
+    value: "FRA",
+    label: "Frankfurt Airport, Frankfurt (FRA)",
+  },
 ];
 
 export const nationalityOptions = [

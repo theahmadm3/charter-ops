@@ -21,6 +21,7 @@ const validationSchema = Yup.object({
       "The model field must only contain letters and numbers."
     ),
   location: Yup.string().required("Location is required"),
+  reg_no: Yup.string().required("Registration number is required"),
   total_seat_capacity: Yup.number()
     .required("Total seat capacity is required")
     .positive("Must be a positive number"),
@@ -80,7 +81,7 @@ function AddAircraft(props) {
             image: "",
             inflight_services: [],
             crew_capacity: 0,
-            registration_no: "",
+            reg_no: "",
             location: "",
           }}
           validationSchema={validationSchema}
@@ -172,16 +173,14 @@ function AddAircraft(props) {
                     >
                       <BootstrapForm.Control
                         type="text"
-                        placeholder="registration_no"
-                        name="registration_no"
-                        value={values.registration_no}
+                        placeholder="reg_no"
+                        name="reg_no"
+                        value={values.reg_no}
                         onChange={handleChange}
-                        isInvalid={
-                          touched.registration_no && !!errors.registration_no
-                        }
+                        isInvalid={touched.reg_no && !!errors.reg_no}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.registration_no}
+                        {errors.reg_no}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>

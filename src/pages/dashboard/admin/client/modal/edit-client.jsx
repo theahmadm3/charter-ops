@@ -58,7 +58,7 @@ function EditClient(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Update Client
+          Update Passenger
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

@@ -97,7 +97,7 @@ function EditAircraft(props) {
             location: props.data?.[0]?.location || "",
             aircraft_type: props.data?.[0]?.aircraft_type || "",
             image: props.data?.[0]?.image || "",
-            registration_no: props.data?.[0]?.registration_no || "",
+            reg_no: props.data?.[0]?.reg_no || "",
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
@@ -192,16 +192,14 @@ function EditAircraft(props) {
                     >
                       <BootstrapForm.Control
                         type="text"
-                        placeholder="registration_no"
-                        name="registration_no"
-                        value={values.registration_no}
+                        placeholder="reg_no"
+                        name="reg_no"
+                        value={values.reg_no}
                         onChange={handleChange}
-                        isInvalid={
-                          touched.registration_no && !!errors.registration_no
-                        }
+                        isInvalid={touched.reg_no && !!errors.reg_no}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.registration_no}
+                        {errors.reg_no}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>

@@ -125,10 +125,10 @@ const Booking = () => {
                     <th>Date / Time</th>
                     <th>Number of Pax</th>
                     <th>Aircraft Name</th>
-                    <th>Request Status</th>
                     <th>Payment Status</th>
                     <th>Created By</th>
                     <th>Status</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -145,7 +145,7 @@ const Booking = () => {
                           payment_status,
                           aircraft,
                           bookedBy,
-                          status,
+                          booking_process_stage,
                         } = booking;
                         return (
                           <tr key={index}>
@@ -156,9 +156,9 @@ const Booking = () => {
                             <td>{flight_date + " , " + return_date}</td>
                             <td>{pax}</td>
                             <td>{aircraft?.name}</td>
-                            <td>{status ? "Active" : "Not Active"}</td>
                             <td>{payment_status}</td>
                             <td> {bookedBy?.first_name} </td>
+                            <td> {booking_process_stage} </td>
                             <td>
                               <Dropdown>
                                 <Dropdown.Toggle

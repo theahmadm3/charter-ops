@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
+  airports,
   internationalAirports,
   localAirports,
 } from "../../../../../../util/data";
@@ -71,7 +72,7 @@ const initialValues = {
   return_date: "",
   client_id: "",
   multi_leg: null,
-  pax: "",
+  passenger_count: "",
 };
 
 function BookingStepOne() {
@@ -144,15 +145,13 @@ function BookingStepOne() {
             flight_date: to_airport,
             return_date: from_airport,
 
-            // aircraft_type_id: Number(values.aircraft_type_id),
+            client_id: Number(values.client_id),
             multi_leg: isChecked,
             ...(isChecked && legs && { legs }),
           };
           dispatch(addBookingStepOneAsync(payload))
             .then((response) => {
-              console.log("response");
               if (response?.payload?.success) {
-                // Handle success (e.g., show a message or redirect)
                 const current = bookingInfo?.currentStep;
                 dispatch(setCurrentStep(current + 1));
               } else {
@@ -227,21 +226,19 @@ function BookingStepOne() {
                     >
                       <option value="">Select airport</option>
 
-                      {values.trip_type === "local"
-                        ? localAirports.map((airport) => (
-                            <option value={airport.name} key={airport.name}>
-                              {airport.name}
-                            </option>
-                          ))
-                        : null}
+                      {airports.map((airport) => (
+                        <option value={airport.label} key={airport.label}>
+                          {airport.label}
+                        </option>
+                      ))}
 
-                      {values.trip_type === "international"
+                      {/* {values.trip_type === "international"
                         ? internationalAirports.map((airport) => (
                             <option value={airport.name} key={airport.id}>
                               {airport.name}
                             </option>
                           ))
-                        : null}
+                        : null} */}
                     </BootstrapForm.Control>
                   </FloatingLabel>
                   <ErrorMessage
@@ -383,12 +380,14 @@ function BookingStepOne() {
                     <BootstrapForm.Control
                       type="number"
                       placeholder="Passenger Number"
-                      name="pax"
+                      name="passenger_count"
                       onChange={handleChange}
-                      isInvalid={touched.pax && !!errors.pax}
+                      isInvalid={
+                        touched.passenger_count && !!errors.passenger_count
+                      }
                     />
                     <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.pax}
+                      {errors.passenger_count}
                     </BootstrapForm.Control.Feedback>
                   </FloatingLabel>
                 </BootstrapForm.Group>
