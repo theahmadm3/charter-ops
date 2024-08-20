@@ -67,7 +67,7 @@ const Booking = () => {
   };
 
   useEffect(() => {
-    const savedActiveKey = localStorage.getItem("userActiveTab");
+    const savedActiveKey = localStorage.getItem("bookActiveTab");
     if (savedActiveKey) {
       setActiveKey(savedActiveKey);
     }
@@ -75,7 +75,7 @@ const Booking = () => {
 
   const handleSelect = (key) => {
     setActiveKey(key);
-    localStorage.setItem("userActiveTab", key);
+    localStorage.setItem("bookActiveTab", key);
   };
   return (
     <AdminLayout>
