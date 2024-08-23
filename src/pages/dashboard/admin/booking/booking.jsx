@@ -17,8 +17,9 @@ import {
 } from "../../../../slices/aircraft/aircraftSlice";
 import AddAircraft from "../aircraft/modal/add-aircraft";
 import EditAircraft from "../aircraft/modal/edit-aircraft";
+import ManageBookingModal from "./modals/manage-booking";
 
-const Booking = () => {
+const Booking = (props) => {
   const dispatch = useDispatch();
   const [viewData, setViewdata] = useState([]);
   const [viewBooking, setViewBooking] = useState(false);
@@ -29,6 +30,8 @@ const Booking = () => {
   const [updateAircraft, setUpdateAircraft] = useState([]);
   const airCraftInfo = useSelector((state) => state?.aircraft);
   const bookingInfo = useSelector((state) => state?.booking);
+  const [updateBooking, setUpdateBooking] = useState([]);
+  const [manageBooking, setManageBooking] = useState(false);
 
   const handleEditAircraft = (id) => {
     setModalEditAircraft(true);
@@ -77,12 +80,26 @@ const Booking = () => {
     setActiveKey(key);
     localStorage.setItem("bookActiveTab", key);
   };
+
+  const handleEditBooking = (id) => {
+    const updateBooking = bookingInfo?.getAllBookingResponse?.data?.filter(
+      (data) => data.id === id
+    );
+    setUpdateBooking(updateBooking);
+    setManageBooking(true);
+  };
+
   return (
     <AdminLayout>
       <ViewBooking
         show={viewBooking}
         onHide={() => setViewBooking(false)}
         data={viewData}
+      />
+      <ManageBookingModal
+        show={manageBooking}
+        onHide={() => setManageBooking(false)}
+        data={updateBooking}
       />
 
       <AddAircraft
@@ -180,7 +197,9 @@ const Booking = () => {
 
                                   <Dropdown.Item
                                     className="small"
-                                    // onClick={() => handleEditClient(booking.id)}
+                                    onClick={() =>
+                                      handleEditBooking(booking.id)
+                                    }
                                   >
                                     Manage
                                   </Dropdown.Item>

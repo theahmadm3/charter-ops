@@ -30,7 +30,9 @@ import {
   setCurrentStep,
 } from "../../../../../../slices/booking/bookingSlice";
 import { FaPlus, FaTrash } from "react-icons/fa";
-
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 const validationSchema = Yup.object().shape({
   trip_type: Yup.string().required("Trip type is required"),
   from_location: Yup.string().required("Departure airport is required"),
