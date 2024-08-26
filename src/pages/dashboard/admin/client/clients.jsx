@@ -61,7 +61,7 @@ const Clients = () => {
 
           <div className="my-3 text-end">
             <Button onClick={() => setModalAddClient(true)} className="shadow">
-              Add Client
+              Add Passenger
             </Button>
           </div>
           <Table striped hover responsive>
