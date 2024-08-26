@@ -99,8 +99,8 @@ function EditBookingStepThree(props) {
               </Col>
             </Row>
 
-            <div className="d-flex justify-content-end mt-3">
-              <Button type="submit">Update</Button>
+            <div className="my-3">
+              <Button type="submit">Update Additional Service</Button>
             </div>
           </Form>
         )}

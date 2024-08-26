@@ -648,8 +648,8 @@ function EditBookingStepFour(props) {
             </>
           )}
 
-          <div className="d-flex justify-content-end mt-3">
-            <Button type="submit">Update</Button>
+          <div className=" my-3">
+            <Button type="submit">Update Passenger Information </Button>
           </div>
         </Form>
       )}

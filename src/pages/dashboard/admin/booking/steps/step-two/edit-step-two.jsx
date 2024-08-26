@@ -199,8 +199,8 @@ function EditBookingStepTwo(props) {
             </Row>
           )} */}
 
-          <div className="d-flex justify-content-end my-3">
-            <Button type="submit">Update</Button>
+          <div className=" my-3">
+            <Button type="submit">Update Flight Information</Button>
           </div>
         </Form>
       )}

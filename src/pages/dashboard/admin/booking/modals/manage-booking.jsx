@@ -4,6 +4,7 @@ import BookingStepThree from "../steps/step-three/step-three";
 import EditBookingStepOne from "../steps/step-one/edit-step-one";
 import EditBookingStepTwo from "../steps/step-two/edit-step-two";
 import EditBookingStepFour from "../steps/step-four/edit-step-four";
+import EditBookingStepThree from "../steps/step-three/edit-step-three";
 
 const ManageBookingModal = (props) => {
   return (
@@ -32,7 +33,7 @@ const ManageBookingModal = (props) => {
           <div className="bg-color-1 text-white p-3 mb-4">
             <span>Additional Service</span>
           </div>
-          <BookingStepThree data={props?.data} />
+          <EditBookingStepThree data={props?.data} />
           <div className="bg-color-1 text-white p-3 mb-4">
             <span> Passenger Information </span>
           </div>
