@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   activateBookingAsync,
+  bookingStatusAsync,
   deactivateBookingAsync,
   getAllBookingAsync,
 } from "../../../../slices/booking/bookingSlice";
@@ -87,6 +88,17 @@ const Booking = (props) => {
     );
     setUpdateBooking(updateBooking);
     setManageBooking(true);
+  };
+
+  const handleBookingStatus = (id) => {
+    dispatch(
+      bookingStatusAsync({
+        booking_id: id,
+        values: {
+          status: "pending",
+        },
+      })
+    );
   };
 
   return (
@@ -209,25 +221,16 @@ const Booking = (props) => {
                                   >
                                     Paid
                                   </Dropdown.Item>
-                                  {status ? (
-                                    <Dropdown.Item
-                                      className="small bg-danger text-white"
-                                      // onClick={() =>
-                                      //   handleDeactivateBooking(booking.id)
-                                      // }
-                                    >
-                                      Deactivate
-                                    </Dropdown.Item>
-                                  ) : (
-                                    <Dropdown.Item
-                                      className="small bg-success text-white"
-                                      // onClick={() =>
-                                      //   handleActivateBooking(booking.id)
-                                      // }
-                                    >
-                                      Activate
-                                    </Dropdown.Item>
-                                  )}
+
+                                  <Dropdown.Item
+                                    className="small"
+                                    onClick={() =>
+                                      handleBookingStatus(booking.id)
+                                    }
+                                  >
+                                    Update Status
+                                  </Dropdown.Item>
+
                                   {/* <Dropdown.Item
                                   className="small bg-danger text-white"
                                   onClick={() => handleDeleteUser(user.id)}

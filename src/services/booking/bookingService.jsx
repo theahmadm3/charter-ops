@@ -71,3 +71,8 @@ export const GetAvailableAircraftBookingById = async (bookingId) => {
   );
   return response;
 };
+
+export const BookingStatus = async (booking_id, body) => {
+  const response = await PutRequest(`/bookings/${booking_id}/status`, body);
+  return response;
+};

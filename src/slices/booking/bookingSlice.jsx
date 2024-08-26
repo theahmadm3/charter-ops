@@ -7,6 +7,7 @@ import {
   AddBookingStep02,
   AddBookingStep03,
   AddBookingStep04,
+  BookingStatus,
   DeactivateBooking,
   DeleteBooking,
   GetAllBookings,
@@ -179,6 +180,14 @@ export const getAvailableAircraftAsync = createAsyncThunk(
   }
 );
 
+export const bookingStatusAsync = createAsyncThunk(
+  "booking/status",
+  async ({ booking_id, values }) => {
+    const response = await BookingStatus(booking_id, values);
+    return response;
+  }
+);
+
 const bookingSlice = createSlice({
   name: "booking",
   initialState: {
@@ -196,6 +205,7 @@ const bookingSlice = createSlice({
     addBookingStepThreeResponse: {},
     addBookingStepFourResponse: {},
     getAvailableAircraftResponse: {},
+    bookingStatusResponse: {},
     currentStep: "0",
   },
 
@@ -375,6 +385,34 @@ const bookingSlice = createSlice({
 
     builder.addCase(getAvailableAircraftAsync.rejected, (state, action) => {
       state.getAvailableAircraftResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(bookingStatusAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.bookingStatusResponse = action.payload;
+
+        // // Filter and replace the existing record with the new record
+        // state.getAllBookingResponse.data = state.getAllBookingResponse.data.map(
+        //   (client) =>
+        //     client.id === action.payload.data.id
+        //       ? {
+        //           id: action.payload.data.id,
+        //           first_name: action.payload.data.first_name,
+        //           last_name: action.payload.data.last_name,
+        //           email: action.payload.data.email,
+        //           status: action.payload.data.status,
+        //           phone: action.payload.data.phone,
+        //         }
+        //       : client
+        // );
+
+        toast.success(action.payload.message);
+      }
+    });
+
+    builder.addCase(bookingStatusAsync.rejected, (state, action) => {
+      state.bookingStatusResponse = action.payload;
       toast.error(action?.payload?.message);
     });
   },
