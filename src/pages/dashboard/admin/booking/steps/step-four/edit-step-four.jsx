@@ -170,18 +170,18 @@ function EditBookingStepFour(props) {
   return (
     <Formik
       initialValues={{
-        first_name: props?.data[0]?.first_name,
-        last_name: props?.data[0]?.last_name,
-        date_of_birth: props?.data[0]?.date_of_birth,
-        gender: props?.data[0]?.gender,
-        nationality: props?.data[0]?.nationality,
-        email: props?.data[0]?.email,
-        phone: props?.data[0]?.phone,
-        special_requests: props?.data[0]?.special_requests,
-        num_adults: props?.data[0]?.num_adults,
-        num_children: props?.data[0]?.num_children,
-        num_infants: props?.data[0]?.num_infants,
-        id_card: props?.data[0]?.id_card,
+        first_name: props?.data[0]?.passengers[0]?.first_name,
+        last_name: props?.data[0]?.passengers[0]?.last_name,
+        date_of_birth: props?.data[0]?.passengers[0]?.date_of_birth,
+        gender: props?.data[0]?.passengers[0]?.gender,
+        nationality: props?.data[0]?.passengers[0]?.nationality,
+        email: props?.data[0]?.passengers[0]?.email,
+        phone: props?.data[0]?.passengers[0]?.phone,
+        special_requests: props?.data[0]?.passengers[0]?.special_requests,
+        num_adults: props?.data[0]?.passengers[0]?.num_adults,
+        num_children: props?.data[0]?.passengers[0]?.num_children,
+        num_infants: props?.data[0]?.passengers[0]?.num_infants,
+        id_card: props?.data[0]?.passengers[0]?.id_card,
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}

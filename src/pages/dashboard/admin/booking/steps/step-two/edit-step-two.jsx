@@ -67,7 +67,7 @@ function EditBookingStepTwo(props) {
     };
     dispatch(
       addBookingStepTwoAsync({
-        bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
+        bookingId: props?.data[0]?.id,
         values: payload,
       })
     )
@@ -95,7 +95,7 @@ function EditBookingStepTwo(props) {
   return (
     <Formik
       initialValues={{
-        aircraft_id: props?.data[0]?.id,
+        aircraft_id: props?.data[0]?.aircraft?.id,
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
@@ -162,7 +162,7 @@ function EditBookingStepTwo(props) {
                           </Card.Text>
                         </Col>
 
-                        <Col md={4}>
+                        <Col md={6}>
                           <Card.Text>
                             <strong>Crew Capacity:</strong>{" "}
                             {aircraft.crew_capacity}
