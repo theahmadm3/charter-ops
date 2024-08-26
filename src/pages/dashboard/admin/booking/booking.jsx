@@ -243,7 +243,7 @@ const Booking = (props) => {
                     )
                   ) : (
                     <tr className="text-center">
-                      <td colSpan="9">No booking available</td>
+                      <td colSpan="10">No booking available</td>
                     </tr>
                   )}
                 </tbody>
