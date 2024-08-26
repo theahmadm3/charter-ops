@@ -118,14 +118,14 @@ function EditBookingStepFour(props) {
 
   const handleSubmit = (values) => {
     const formattedValues = {
-      first_name: values.first_name || "none",
-      last_name: values.last_name || "none",
-      email: values.email || "none",
-      phone: values.phone || "none",
+      first_name: values.first_name || "",
+      last_name: values.last_name || "",
+      email: values.email || "",
+      phone: values.phone || "",
       gender: values.gender,
-      nationality: values.nationality || "none",
-      date_of_birth: values.date_of_birth || "none",
-      special_requests: values.special_requests || "none",
+      nationality: values.nationality || "",
+      date_of_birth: values.date_of_birth || "",
+      special_requests: values.special_requests || "",
       num_adults: Number(values.num_adults),
       num_children: Number(values.num_children),
       num_infants: Number(values.num_infants),
@@ -139,7 +139,7 @@ function EditBookingStepFour(props) {
 
     dispatch(
       addBookingStepThreeAsync({
-        bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
+        bookingId: props?.data[0]?.id,
         values: payload,
       })
     )
@@ -182,6 +182,7 @@ function EditBookingStepFour(props) {
         num_children: props?.data[0]?.passengers[0]?.num_children,
         num_infants: props?.data[0]?.passengers[0]?.num_infants,
         id_card: props?.data[0]?.passengers[0]?.id_card,
+        id: props?.data[0]?.id,
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
