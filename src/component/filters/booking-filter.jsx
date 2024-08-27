@@ -125,35 +125,43 @@ const BookingFilter = () => {
                   </FloatingLabel>
                 </Form.Group>
               </Col>
-              <Col md={3}>
-                <label>Date</label>
-                <DatePicker
-                  className="form-control py-3 mt-1 w-100"
-                  selectsRange={true}
-                  startDate={startDate}
-                  endDate={endDate}
-                  onChange={handleDateChange}
-                  isClearable={true}
-                />
+
+              <Col md={2}>
+                <Form.Group>
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Flight Date"
+                    className="my-2"
+                  >
+                    <DatePicker
+                      className="form-control my-2"
+                      selectsRange={true}
+                      startDate={startDate}
+                      endDate={endDate}
+                      onChange={handleDateChange}
+                      isClearable={true}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
               </Col>
 
               <Col md={2}>
                 <Button
                   type="submit"
                   variant="success"
-                  className=" my-2 me-3 py-3  border-0  "
+                  className="my-2 me-3 py-3 border-0"
                 >
-                  <span className=" ">
+                  <span>
                     <IoChevronForward />
                   </span>
                 </Button>
 
                 <Button
                   variant="danger"
-                  className=" my-2 me-3 py-3  border-0  "
+                  className="my-2 me-3 py-3 border-0"
                   onClick={handleFetch}
                 >
-                  <span className=" ">
+                  <span>
                     <MdCancel />
                   </span>
                 </Button>

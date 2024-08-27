@@ -1,17 +1,14 @@
 import { Formik, Form, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import { getAllClientAsync } from "../../../../../../slices/client/clientSlice";
-import { getAllAircraftsAsync } from "../../../../../../slices/aircraft/aircraftSlice";
-import {
-  getAllPartnershipsAsync,
-  getAllServicesAsync,
-} from "../../../../../../slices/config/configSlice";
+import { getAllPartnershipsAsync } from "../../../../../../slices/config/configSlice";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   airports,
   internationalAirports,
   localAirports,
+  worldAirports,
 } from "../../../../../../util/data";
 import DateTimePicker from "react-datetime-picker";
 import {
@@ -33,10 +30,13 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
+import Select from "react-select";
+import { toast } from "react-toastify";
+
 const validationSchema = Yup.object().shape({
-  trip_type: Yup.string().required("Trip type is required"),
-  from_location: Yup.string().required("Departure airport is required"),
-  to_location: Yup.string().required("Destination airport is required"),
+  // trip_type: Yup.string().required("Trip type is required"),
+  // from_location: Yup.string().required("Departure airport is required"),
+  // to_location: Yup.string().required("Destination airport is required"),
   // .notOneOf([Yup.ref("from")], "Origin and destination cannot be the same"),
   // flight_date: Yup.date().required("Departure date and time are required"),
   // .min(new Date(), "Departure date cannot be in the past"),
@@ -69,7 +69,6 @@ const validationSchema = Yup.object().shape({
 function EditBookingStepOne(props) {
   const [bookings, setBookings] = useState([]);
   const dispatch = useDispatch();
-  console.log(" info 1errrrrrrrrrrr", props);
   const [to_airport, onChangeTo] = useState(
     props?.data[0]?.flight_date
       ? new Date(props?.data[0]?.flight_date)
@@ -133,6 +132,19 @@ function EditBookingStepOne(props) {
     }
   }, [dispatch]);
 
+  const airFrom = props?.data[0]?.from_location
+    ? {
+        value: props.data[0].from_location,
+        label: props.data[0].from_location,
+      }
+    : null;
+
+  const airTo = props?.data[0]?.to_location
+    ? {
+        value: props.data[0].to_location,
+        label: props.data[0].to_location,
+      }
+    : null;
   return (
     <>
       <Formik
@@ -148,29 +160,86 @@ function EditBookingStepOne(props) {
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
+          const { from_location, to_location } = values;
+
+          // Check each field individually and show a toast if any field is missing
+          if (!to_airport) {
+            toast.error("Please fill out the Flight Date");
+            return;
+          }
+
+          if (!from_airport) {
+            toast.error("Please fill out the Return Date");
+            return;
+          }
+
+          if (!from_location) {
+            toast.error("Please fill out the From Location");
+            return;
+          }
+
+          if (!to_location) {
+            toast.error("Please fill out the To Location");
+            return;
+          }
+
           const payload = {
             ...values,
             flight_date: to_airport,
             return_date: from_airport,
-            id: props?.data[0]?.id,
-
+            from_location: from_location.label,
+            to_location: to_location.label,
             client_id: Number(values.client_id),
             multi_leg: isChecked,
             ...(isChecked && legs && { legs }),
           };
+
           dispatch(addBookingStepOneAsync(payload))
             .then((response) => {
               if (response?.payload?.success) {
                 const current = bookingInfo?.currentStep;
                 dispatch(setCurrentStep(current + 1));
               } else {
-                console.log("Error please try again");
+                toast.error("Error please try again");
               }
             })
             .catch((error) => {
               console.error("Error occurred:", error);
+              toast.error(
+                "An unexpected error occurred. Please try again later."
+              );
             });
         }}
+
+        // onSubmit={(values) => {
+        //   const selectedToLocation = values.amenities.map(
+        //     (to_loca) => to_loca.value
+        //   );
+
+        //   const payload = {
+        //     ...values,
+        //     flight_date: to_airport,
+        //     return_date: from_airport,
+        //     id: props?.data[0]?.id,
+
+        //     client_id: Number(values.client_id),
+        //     multi_leg: isChecked,
+        //     ...(isChecked && legs && { legs }),
+        //   };
+
+        //   dispatch(addBookingStepOneAsync(payload))
+        //     .then((response) => {
+        //       if (response?.payload?.success) {
+        //         const current = bookingInfo?.currentStep;
+        //         dispatch(setCurrentStep(current + 1));
+        //       } else {
+        //         console.log("Error please try again");
+        //       }
+        //     })
+        //     .catch((error) => {
+        //       console.error("Error occurred:", error);
+        //     });
+        // }}
       >
         {({
           values,
@@ -182,74 +251,23 @@ function EditBookingStepOne(props) {
           touched,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mt-5">
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingTripType"
-                    label={
-                      <span>
-                        Select Trip Type <span className="text-danger">*</span>
-                      </span>
+                  <Select
+                    defaultValue={airFrom}
+                    // value={values.from_location}
+                    options={worldAirports?.map((option) => ({
+                      value: option.id,
+                      label: option.name,
+                    }))}
+                    className=" form-control"
+                    classNamePrefix="from_location"
+                    onChange={(selectedOptions) =>
+                      setFieldValue("from_location", selectedOptions)
                     }
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="trip_type"
-                      value={values.trip_type}
-                      onChange={(e) => {
-                        setFieldValue("trip_type", e.target.value);
-                        if (e.target.value === "local") {
-                          // setFieldValue("from", localAirports[0]);
-                        }
-                      }}
-                    >
-                      <option value="">Select trip type</option>
+                  />
 
-                      <option value="local">Local</option>
-                      <option value="international">International</option>
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={6}>
-                <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingFrom"
-                    label={
-                      <div>
-                        From <span className="text-danger">*</span>{" "}
-                      </div>
-                    }
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="from_location"
-                      value={values.from_location}
-                      onChange={handleChange}
-                      // disabled={values.trip_type === "international"}
-                    >
-                      <option value="">Select airport</option>
-
-                      {airports.map((airport) => (
-                        <option value={airport.label} key={airport.label}>
-                          {airport.label}
-                        </option>
-                      ))}
-
-                      {/* {values.trip_type === "international"
-                        ? internationalAirports.map((airport) => (
-                            <option value={airport.name} key={airport.id}>
-                              {airport.name}
-                            </option>
-                          ))
-                        : null} */}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
                   <ErrorMessage
                     name="from_location"
                     component="div"
@@ -260,47 +278,20 @@ function EditBookingStepOne(props) {
 
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingTo"
-                    label={
-                      <div>
-                        To <span className="text-danger">*</span>{" "}
-                      </div>
+                  <Select
+                    defaultValue={airTo}
+                    // value={values.to_location}
+                    options={worldAirports?.map((option) => ({
+                      value: option.id,
+                      label: option.name,
+                    }))}
+                    className=" form-control"
+                    classNamePrefix="to_location"
+                    onChange={(selectedOptions) =>
+                      setFieldValue("to_location", selectedOptions)
                     }
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="to_location"
-                      value={values.to_location}
-                      onChange={handleChange}
-                      // disabled={values.trip_type === "international"}
-                    >
-                      <option value="">Select airport</option>
+                  />
 
-                      {values.trip_type === "local" &&
-                        localAirports
-                          .filter(
-                            (airport) => airport.value !== values.from_location
-                          )
-                          .map((airport) => (
-                            <option value={airport.value} key={airport.value}>
-                              {airport.name}
-                            </option>
-                          ))}
-
-                      {values.trip_type === "international" &&
-                        internationalAirports
-                          .filter(
-                            (airport) => airport.value !== values.from_location
-                          )
-                          .map((airport) => (
-                            <option value={airport.value} key={airport.value}>
-                              {airport.name}
-                            </option>
-                          ))}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
                   <ErrorMessage
                     name="to_location"
                     component="div"

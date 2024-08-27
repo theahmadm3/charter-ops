@@ -12,6 +12,7 @@ import {
   airports,
   internationalAirports,
   localAirports,
+  worldAirports,
 } from "../../../../../../util/data";
 import DateTimePicker from "react-datetime-picker";
 import {
@@ -33,10 +34,14 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
+
+import Select from "react-select";
+import { toast } from "react-toastify";
+
 const validationSchema = Yup.object().shape({
-  trip_type: Yup.string().required("Trip type is required"),
-  from_location: Yup.string().required("Departure airport is required"),
-  to_location: Yup.string().required("Destination airport is required"),
+  // trip_type: Yup.string().required("Trip type is required"),
+  // from_location: Yup.string().required("Departure airport is required"),
+  // to_location: Yup.string().required("Destination airport is required"),
   // .notOneOf([Yup.ref("from")], "Origin and destination cannot be the same"),
   // flight_date: Yup.date().required("Departure date and time are required"),
   // .min(new Date(), "Departure date cannot be in the past"),
@@ -142,26 +147,54 @@ function BookingStepOne() {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
+          const { from_location, to_location } = values;
+
+          // Check each field individually and show a toast if any field is missing
+          if (!to_airport) {
+            toast.error("Please fill out the Flight Date");
+            return;
+          }
+
+          if (!from_airport) {
+            toast.error("Please fill out the Return Date");
+            return;
+          }
+
+          if (!from_location) {
+            toast.error("Please fill out the From Location");
+            return;
+          }
+
+          if (!to_location) {
+            toast.error("Please fill out the To Location");
+            return;
+          }
+
           const payload = {
             ...values,
             flight_date: to_airport,
             return_date: from_airport,
-
+            from_location: from_location.label,
+            to_location: to_location.label,
             client_id: Number(values.client_id),
             multi_leg: isChecked,
             ...(isChecked && legs && { legs }),
           };
+
           dispatch(addBookingStepOneAsync(payload))
             .then((response) => {
               if (response?.payload?.success) {
                 const current = bookingInfo?.currentStep;
                 dispatch(setCurrentStep(current + 1));
               } else {
-                console.log("Error please try again");
+                toast.error("Error please try again");
               }
             })
             .catch((error) => {
               console.error("Error occurred:", error);
+              toast.error(
+                "An unexpected error occurred. Please try again later."
+              );
             });
         }}
       >
@@ -175,7 +208,7 @@ function BookingStepOne() {
           touched,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Row>
+            {/* <Row>
               <Col md={6}>
                 <BootstrapForm.Group>
                   <FloatingLabel
@@ -206,43 +239,23 @@ function BookingStepOne() {
                   </FloatingLabel>
                 </BootstrapForm.Group>
               </Col>
-            </Row>
-            <Row>
+            </Row> */}
+            <Row className="mt-5">
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingFrom"
-                    label={
-                      <div>
-                        From <span className="text-danger">*</span>{" "}
-                      </div>
+                  <Select
+                    value={values.from_location}
+                    options={worldAirports?.map((option) => ({
+                      value: option.id,
+                      label: option.name,
+                    }))}
+                    className=" form-control"
+                    classNamePrefix="from_location"
+                    onChange={(selectedOptions) =>
+                      setFieldValue("from_location", selectedOptions)
                     }
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="from_location"
-                      value={values.from_location}
-                      onChange={handleChange}
-                      // disabled={values.trip_type === "international"}
-                    >
-                      <option value="">Select airport</option>
+                  />
 
-                      {airports.map((airport) => (
-                        <option value={airport.label} key={airport.label}>
-                          {airport.label}
-                        </option>
-                      ))}
-
-                      {/* {values.trip_type === "international"
-                        ? internationalAirports.map((airport) => (
-                            <option value={airport.name} key={airport.id}>
-                              {airport.name}
-                            </option>
-                          ))
-                        : null} */}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
                   <ErrorMessage
                     name="from_location"
                     component="div"
@@ -253,47 +266,19 @@ function BookingStepOne() {
 
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingTo"
-                    label={
-                      <div>
-                        To <span className="text-danger">*</span>{" "}
-                      </div>
+                  <Select
+                    value={values.to_location}
+                    options={worldAirports?.map((option) => ({
+                      value: option.id,
+                      label: option.name,
+                    }))}
+                    className=" form-control"
+                    classNamePrefix="to_location"
+                    onChange={(selectedOptions) =>
+                      setFieldValue("to_location", selectedOptions)
                     }
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="to_location"
-                      value={values.to_location}
-                      onChange={handleChange}
-                      // disabled={values.trip_type === "international"}
-                    >
-                      <option value="">Select airport</option>
+                  />
 
-                      {values.trip_type === "local" &&
-                        localAirports
-                          .filter(
-                            (airport) => airport.value !== values.from_location
-                          )
-                          .map((airport) => (
-                            <option value={airport.value} key={airport.value}>
-                              {airport.name}
-                            </option>
-                          ))}
-
-                      {values.trip_type === "international" &&
-                        internationalAirports
-                          .filter(
-                            (airport) => airport.value !== values.from_location
-                          )
-                          .map((airport) => (
-                            <option value={airport.value} key={airport.value}>
-                              {airport.name}
-                            </option>
-                          ))}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
                   <ErrorMessage
                     name="to_location"
                     component="div"
@@ -302,6 +287,7 @@ function BookingStepOne() {
                 </BootstrapForm.Group>
               </Col>
             </Row>
+
             <Row className="my-4">
               <Col md={6}>
                 <BootstrapForm.Group>
@@ -586,13 +572,13 @@ function BookingStepOne() {
                 Back
               </Button> */}
 
-              <Button
+              {/* <Button
                 variant="white"
                 className="border  border-main-color text-end"
                 onClick={() => handleNext()}
               >
                 Next
-              </Button>
+              </Button> */}
               <Button type="submit">Proceed </Button>
             </div>
           </Form>
