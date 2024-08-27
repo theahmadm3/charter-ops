@@ -1,10 +1,20 @@
-import { Button, Container, Dropdown, Tab, Table, Tabs } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Dropdown,
+  Row,
+  Tab,
+  Table,
+  Tabs,
+} from "react-bootstrap";
 import AdminLayout from "../../../../component/layout/admin-layout";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   activateBookingAsync,
+  bookingPaymentStatusAsync,
   bookingStatusAsync,
   deactivateBookingAsync,
   getAllBookingAsync,
@@ -19,6 +29,8 @@ import {
 import AddAircraft from "../aircraft/modal/add-aircraft";
 import EditAircraft from "../aircraft/modal/edit-aircraft";
 import ManageBookingModal from "./modals/manage-booking";
+import UpdateStatusModal from "./modals/updated-status";
+import BookingFilter from "../../../../component/filters/booking-filter";
 
 const Booking = (props) => {
   const dispatch = useDispatch();
@@ -33,6 +45,7 @@ const Booking = (props) => {
   const bookingInfo = useSelector((state) => state?.booking);
   const [updateBooking, setUpdateBooking] = useState([]);
   const [manageBooking, setManageBooking] = useState(false);
+  const [updateBookingStatus, setUpdateBookingStatus] = useState(false);
 
   const handleEditAircraft = (id) => {
     setModalEditAircraft(true);
@@ -52,7 +65,7 @@ const Booking = (props) => {
 
   useEffect(() => {
     try {
-      dispatch(getAllBookingAsync());
+      dispatch(getAllBookingAsync({}));
     } catch (error) {
       console.log(error);
     }
@@ -91,11 +104,20 @@ const Booking = (props) => {
   };
 
   const handleBookingStatus = (id) => {
+    const updateBooking = bookingInfo?.getAllBookingResponse?.data?.filter(
+      (data) => data.id === id
+    );
+    setUpdateBooking(updateBooking);
+
+    setUpdateBookingStatus(true);
+  };
+
+  const handleBookingPaymentStatus = (id) => {
     dispatch(
-      bookingStatusAsync({
+      bookingPaymentStatusAsync({
         booking_id: id,
         values: {
-          status: "pending",
+          payment_status: "paid",
         },
       })
     );
@@ -107,6 +129,11 @@ const Booking = (props) => {
         show={viewBooking}
         onHide={() => setViewBooking(false)}
         data={viewData}
+      />
+      <UpdateStatusModal
+        show={updateBookingStatus}
+        onHide={() => setUpdateBookingStatus(false)}
+        data={updateBooking}
       />
       <ManageBookingModal
         show={manageBooking}
@@ -139,11 +166,16 @@ const Booking = (props) => {
                 </span>
               }
             >
-              <div className="my-3 text-end">
-                <Button onClick={() => handleAdd()} className="shadow">
-                  Book A Flight
-                </Button>
-              </div>
+              <Row className="my-3">
+                <Col md={10}>
+                  <BookingFilter />
+                </Col>
+                <Col md={2}>
+                  <Button onClick={() => handleAdd()} className="shadow mt-3">
+                    Book A Flight
+                  </Button>
+                </Col>
+              </Row>
               <Table striped hover responsive>
                 <thead>
                   <tr>
@@ -174,7 +206,7 @@ const Booking = (props) => {
                           payment_status,
                           aircraft,
                           bookedBy,
-                          booking_process_stage,
+                          status,
                         } = booking;
                         return (
                           <tr key={index}>
@@ -187,7 +219,10 @@ const Booking = (props) => {
                             <td>{aircraft?.name}</td>
                             <td>{payment_status}</td>
                             <td> {bookedBy?.first_name} </td>
-                            <td> {booking_process_stage} </td>
+                            <td>
+                              {" "}
+                              {status === "no_show" ? "no show" : status}{" "}
+                            </td>
                             <td>
                               <Dropdown>
                                 <Dropdown.Toggle
@@ -215,12 +250,17 @@ const Booking = (props) => {
                                   >
                                     Manage
                                   </Dropdown.Item>
-                                  <Dropdown.Item
-                                    className="small"
-                                    // onClick={() => handleEditClient(booking.id)}
-                                  >
-                                    Paid
-                                  </Dropdown.Item>
+
+                                  {payment_status === "pending" ? (
+                                    <Dropdown.Item
+                                      className="small"
+                                      onClick={() =>
+                                        handleBookingPaymentStatus(booking.id)
+                                      }
+                                    >
+                                      Paid
+                                    </Dropdown.Item>
+                                  ) : null}
 
                                   <Dropdown.Item
                                     className="small"

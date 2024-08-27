@@ -5,8 +5,29 @@ import {
   PutRequest,
 } from "../../util/apiMethods";
 
-export const GetAllBookings = async () => {
-  const response = await GetRequest("/bookings");
+export const GetAllBookings = async (params) => {
+  // Initialize an empty array to hold query string parts
+  const queryParams = [];
+
+  // Add parameters to the query string array only if they have a value
+  if (params.payment_status)
+    queryParams.push(`payment_status=${params.payment_status}`);
+  if (params.status) queryParams.push(`status=${params.status}`);
+  if (params.aircraft_reg_no)
+    queryParams.push(`aircraft_reg_no=${params.aircraft_reg_no}`);
+  if (params.trip_type) queryParams.push(`trip_type=${params.trip_type}`);
+  if (params.aircraft_name)
+    queryParams.push(`aircraft_name=${params.aircraft_name}`);
+  if (params.flight_date)
+    queryParams.push(`flight_date=${encodeURIComponent(params.flight_date)}`);
+  if (params.return_date)
+    queryParams.push(`return_date=${encodeURIComponent(params.return_date)}`);
+
+  // Join the query string parts with "&"
+  const queryString = queryParams.length ? `?${queryParams.join("&")}` : "";
+
+  // Make the request with the query string if it exists
+  const response = await GetRequest(`/bookings${queryString}`);
   return response;
 };
 
@@ -74,5 +95,13 @@ export const GetAvailableAircraftBookingById = async (bookingId) => {
 
 export const BookingStatus = async (booking_id, body) => {
   const response = await PutRequest(`/bookings/${booking_id}/status`, body);
+  return response;
+};
+
+export const BookingPaymentStatus = async (booking_id, body) => {
+  const response = await PutRequest(
+    `/bookings/${booking_id}/payment-status`,
+    body
+  );
   return response;
 };

@@ -7,6 +7,7 @@ import {
   AddBookingStep02,
   AddBookingStep03,
   AddBookingStep04,
+  BookingPaymentStatus,
   BookingStatus,
   DeactivateBooking,
   DeleteBooking,
@@ -16,10 +17,13 @@ import {
   UpdateBooking,
 } from "../../services/booking/bookingService";
 
-export const getAllBookingAsync = createAsyncThunk("booking/all", async () => {
-  const response = await GetAllBookings();
-  return response;
-});
+export const getAllBookingAsync = createAsyncThunk(
+  "booking/all",
+  async (params) => {
+    const response = await GetAllBookings(params);
+    return response;
+  }
+);
 
 export const addBookingAsync = createAsyncThunk(
   "booking/add",
@@ -120,8 +124,6 @@ export const addBookingStepThreeAsync = createAsyncThunk(
       const response = await AddBookingStep03(bookingId, values);
       return response;
     } catch (error) {
-      console.log("error from slice", error);
-
       const errorResponse = error?.response?.data;
 
       // Show the general error message
@@ -182,9 +184,29 @@ export const getAvailableAircraftAsync = createAsyncThunk(
 
 export const bookingStatusAsync = createAsyncThunk(
   "booking/status",
-  async ({ booking_id, values }) => {
-    const response = await BookingStatus(booking_id, values);
-    return response;
+  async ({ booking_id, values }, { rejectWithValue }) => {
+    try {
+      const response = await BookingStatus(booking_id, values);
+      return response;
+    } catch (error) {
+      const errorMessage = error.message || error?.response?.data?.error;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const bookingPaymentStatusAsync = createAsyncThunk(
+  "booking/payment/status",
+  async ({ booking_id, values }, { rejectWithValue }) => {
+    try {
+      const response = await BookingPaymentStatus(booking_id, values);
+      return response;
+    } catch (error) {
+      const errorMessage = error.message || error?.response?.data?.error;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
   }
 );
 
@@ -206,6 +228,7 @@ const bookingSlice = createSlice({
     addBookingStepFourResponse: {},
     getAvailableAircraftResponse: {},
     bookingStatusResponse: {},
+    bookingPaymentStatusResponse: {},
     currentStep: "0",
   },
 
@@ -393,19 +416,19 @@ const bookingSlice = createSlice({
         state.bookingStatusResponse = action.payload;
 
         // // Filter and replace the existing record with the new record
-        // state.getAllBookingResponse.data = state.getAllBookingResponse.data.map(
-        //   (client) =>
-        //     client.id === action.payload.data.id
-        //       ? {
-        //           id: action.payload.data.id,
-        //           first_name: action.payload.data.first_name,
-        //           last_name: action.payload.data.last_name,
-        //           email: action.payload.data.email,
-        //           status: action.payload.data.status,
-        //           phone: action.payload.data.phone,
-        //         }
-        //       : client
-        // );
+        state.getAllBookingResponse.data = state.getAllBookingResponse.data.map(
+          (client) =>
+            client.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  from_location: action.payload.data.from_location,
+                  to_location: action.payload.data.to_location,
+                  pax: action.payload.data.pax,
+                  status: action.payload.data.status,
+                  payment_status: action.payload.data.payment_status,
+                }
+              : client
+        );
 
         toast.success(action.payload.message);
       }
@@ -413,6 +436,34 @@ const bookingSlice = createSlice({
 
     builder.addCase(bookingStatusAsync.rejected, (state, action) => {
       state.bookingStatusResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(bookingPaymentStatusAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.bookingPaymentStatusResponse = action.payload;
+
+        // Filter and replace the existing record with the new record
+        state.getAllBookingResponse.data = state.getAllBookingResponse.data.map(
+          (client) =>
+            client.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  from_location: action.payload.data.from_location,
+                  to_location: action.payload.data.to_location,
+                  pax: action.payload.data.pax,
+                  status: action.payload.data.status,
+                  payment_status: action.payload.data.payment_status,
+                }
+              : client
+        );
+
+        toast.success(action.payload.message);
+      }
+    });
+
+    builder.addCase(bookingPaymentStatusAsync.rejected, (state, action) => {
+      state.bookingPaymentStatusResponse = action.payload;
       toast.error(action?.payload?.message);
     });
   },
