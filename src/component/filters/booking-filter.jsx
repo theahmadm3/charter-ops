@@ -1,16 +1,26 @@
-import { Formik } from "formik";
+import { Formik, useFormikContext } from "formik";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { getAllBookingAsync } from "../../slices/booking/bookingSlice";
 import { Button, Col, FloatingLabel, Form, Row } from "react-bootstrap";
 import { IoChevronForward } from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
+import { useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import moment from "moment";
 
 const BookingFilter = () => {
   const dispatch = useDispatch();
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
 
   const handleFetch = async () => {
     await dispatch(getAllBookingAsync({}));
+  };
+
+  const handleDateChange = (update) => {
+    setDateRange(update);
   };
 
   return (
@@ -18,25 +28,25 @@ const BookingFilter = () => {
       <Formik
         initialValues={{
           service_name: "",
-          rate_type: "",
-          charge_rate: "",
-          currency: "",
-          remarks: "",
+          trip_type: "",
+          aircraft_reg_no: "",
+          status: "",
         }}
         validationSchema={Yup.object().shape({
-          //   service_name: Yup.string()
-          //     .required("Service name is required")
-          //     .min(3, "The service name must be at least 3 characters"),
-          //   rate_type: Yup.string().required("Rate type is required"),
-          //   charge_rate: Yup.string().required("Charge rate is required"),
-          //   currency: Yup.string().required("Currency is required"),
+          // Add your validation rules here
         })}
         onSubmit={(values) => {
-          dispatch(getAllBookingAsync(values))
+          const payload = {
+            ...values,
+            flight_date: startDate
+              ? moment(startDate).format("YYYY-MM-DD")
+              : "",
+            return_date: endDate ? moment(endDate).format("YYYY-MM-DD") : "",
+          };
+          dispatch(getAllBookingAsync(payload))
             .then((response) => {
               if (response.payload.success) {
-                // Uncomment the next line if you want to hide the form/modal on success
-                // props.onHide();
+                // Handle success
               }
             })
             .catch((error) => {
@@ -50,7 +60,7 @@ const BookingFilter = () => {
         {({ errors, touched, handleSubmit, values, handleChange }) => (
           <Form onSubmit={handleSubmit}>
             <Row>
-              <Col md={3}>
+              <Col md={2}>
                 <Form.Group>
                   <FloatingLabel
                     controlId="floatingInput"
@@ -74,7 +84,7 @@ const BookingFilter = () => {
                 </Form.Group>
               </Col>
 
-              <Col md={3}>
+              <Col md={2}>
                 <Form.Group>
                   <FloatingLabel
                     controlId="floatingInput"
@@ -92,7 +102,7 @@ const BookingFilter = () => {
                 </Form.Group>
               </Col>
 
-              <Col md={3}>
+              <Col md={2}>
                 <Form.Group>
                   <FloatingLabel
                     controlId="floatingInput"
@@ -115,6 +125,17 @@ const BookingFilter = () => {
                   </FloatingLabel>
                 </Form.Group>
               </Col>
+              <Col md={3}>
+                <label>Date</label>
+                <DatePicker
+                  className="form-control py-3 mt-1 w-100"
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={handleDateChange}
+                  isClearable={true}
+                />
+              </Col>
 
               <Col md={2}>
                 <Button
@@ -133,7 +154,7 @@ const BookingFilter = () => {
                   onClick={handleFetch}
                 >
                   <span className=" ">
-                    <MdCancel />{" "}
+                    <MdCancel />
                   </span>
                 </Button>
               </Col>
