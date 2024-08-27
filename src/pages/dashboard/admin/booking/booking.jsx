@@ -13,10 +13,7 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
-  activateBookingAsync,
   bookingPaymentStatusAsync,
-  bookingStatusAsync,
-  deactivateBookingAsync,
   getAllBookingAsync,
 } from "../../../../slices/booking/bookingSlice";
 import { useNavigate } from "react-router-dom";
