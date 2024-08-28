@@ -164,10 +164,10 @@ const CrewForm = ({ props }) => {
                   >
                     <option value="">Select Designation</option>
                     <option value="Captain">Captain</option>
-                    <option value="Pilot">Pilot</option>
-                    <option value="Commander">Commander</option>
-                    <option value="Mrs">Mrs</option>
-                    <option value="Mr">Mr</option>
+                    <option value="Senior first officer">Senior first officer</option>
+                    <option value="First Officer">First officer</option>
+                    <option value="Cabin executive">Cabin executive</option>
+                   
                   </BootstrapForm.Control>
                 </FloatingLabel>
               </BootstrapForm.Group>
