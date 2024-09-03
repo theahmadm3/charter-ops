@@ -14,6 +14,9 @@ import {
   GetAllBookings,
   GetAvailableAircraftBookingById,
   GetBookingById,
+  GetBookingReceipt,
+  GetBookingTripConfirmation,
+  GetBookingTripSheet,
   UpdateBooking,
 } from "../../services/booking/bookingService";
 
@@ -210,6 +213,55 @@ export const bookingPaymentStatusAsync = createAsyncThunk(
   }
 );
 
+
+
+export const getBookingReceiptAsync = createAsyncThunk(
+  "booking/receipt",
+  async ({ booking_id }, { rejectWithValue }) => {
+    try {
+      const response = await GetBookingReceipt(booking_id);
+      return response;
+    } catch (error) {
+      const errorMessage = error.message || error?.response?.data?.error;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getBookingTripSheetAsync = createAsyncThunk(
+  "booking/trip/sheet",
+  async ({ booking_id }, { rejectWithValue }) => {
+    try {
+      const response = await GetBookingTripSheet(booking_id);
+      return response;
+    } catch (error) {
+      const errorMessage = error.message || error?.response?.data?.error;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+
+export const getBookingConfirmationSheetAsync = createAsyncThunk(
+  "booking/trip/confirmation",
+  async ({ booking_id }, { rejectWithValue }) => {
+    try {
+      const response = await GetBookingTripConfirmation(booking_id);
+      return response;
+    } catch (error) {
+      const errorMessage = error.message || error?.response?.data?.error;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+
+
+
+
 const bookingSlice = createSlice({
   name: "booking",
   initialState: {
@@ -229,6 +281,9 @@ const bookingSlice = createSlice({
     getAvailableAircraftResponse: {},
     bookingStatusResponse: {},
     bookingPaymentStatusResponse: {},
+    getBookingReceiptResponse:{},
+    getBookingTripSheetResponse:{},
+    getBookingConfirmationSheetResponse:{},
     currentStep: "0",
   },
 
@@ -466,6 +521,41 @@ const bookingSlice = createSlice({
       state.bookingPaymentStatusResponse = action.payload;
       toast.error(action?.payload?.message);
     });
+
+    builder.addCase(getBookingReceiptAsync.fulfilled, (state, action) => {
+      state.getBookingReceiptResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(getBookingReceiptAsync.rejected, (state, action) => {
+      state.getBookingReceiptResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(getBookingTripSheetAsync.fulfilled, (state, action) => {
+      state.getBookingTripSheetResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(getBookingTripSheetAsync.rejected, (state, action) => {
+      state.getBookingTripSheetResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+
+    builder.addCase(getBookingConfirmationSheetAsync.fulfilled, (state, action) => {
+      state.getBookingConfirmationSheetResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(getBookingConfirmationSheetAsync.rejected, (state, action) => {
+      state.getBookingConfirmationSheetResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+
+
+
   },
 });
 

@@ -15,6 +15,9 @@ import { useEffect, useState } from "react";
 import {
   bookingPaymentStatusAsync,
   getAllBookingAsync,
+  getBookingConfirmationSheetAsync,
+  getBookingReceiptAsync,
+  getBookingTripSheetAsync,
 } from "../../../../slices/booking/bookingSlice";
 import { useNavigate } from "react-router-dom";
 import ViewBooking from "./modals/view-booking";
@@ -119,6 +122,32 @@ const Booking = (props) => {
       })
     );
   };
+
+
+  const handleViewReceipt = (id) => {
+    dispatch(
+      getBookingReceiptAsync({
+        booking_id: id,
+      })
+    );
+  }
+
+  const handleViewTripSheet = (id) => {
+    dispatch(
+      getBookingTripSheetAsync({
+        booking_id: id,
+      })
+    );
+  }
+
+  
+  const handleViewConfirmation = (id) => {
+    dispatch(
+      getBookingConfirmationSheetAsync({
+        booking_id: id,
+      })
+    );
+  }
 
   return (
     <AdminLayout>
@@ -268,12 +297,24 @@ const Booking = (props) => {
                                     Update Status
                                   </Dropdown.Item>
 
-                                  {/* <Dropdown.Item
-                                  className="small bg-danger text-white"
-                                  onClick={() => handleDeleteUser(user.id)}
+                                  <Dropdown.Item
+                                  className="small"
+                                  onClick={() => handleViewReceipt(booking.id)}
                                 >
-                                  Delete
-                                </Dropdown.Item> */}
+                                  View Receipt
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  className="small"
+                                  onClick={() => handleViewTripSheet(booking.id)}
+                                >
+                                  View Trip Sheet
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  className="small"
+                                  onClick={() => handleViewConfirmation(booking.id)}
+                                >
+                                  View Confirmation Sheet
+                                </Dropdown.Item>
                                 </Dropdown.Menu>
                               </Dropdown>
                             </td>
