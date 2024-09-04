@@ -206,14 +206,15 @@ const Booking = (props) => {
                 <thead>
                   <tr>
                     <th>S/N</th>
-                    <th>Trip Type</th>
-                    <th>From</th>
-                    <th>Destination</th>
-                    <th>Date / Time</th>
-                    <th>Number of Pax</th>
+                    {/* <th>Trip Type</th> */}
+                    <th>Departure</th>
+                    <th>Departure Time/Date</th>
+                    <th>Arrival</th>
+                    <th>Arrival Time/Date</th>
+                    {/* <th>Number of Pax</th> */}
                     <th>Aircraft Name</th>
                     <th>Payment Status</th>
-                    <th>Created By</th>
+                    {/* <th>Created By</th> */}
                     <th>Status</th>
                     <th></th>
                   </tr>
@@ -237,14 +238,15 @@ const Booking = (props) => {
                         return (
                           <tr key={index}>
                             <td>{index + 1}</td>
-                            <td> {trip_type} </td>
+                            {/* <td> {trip_type} </td> */}
                             <td>{from_location}</td>
+                            <td>{flight_date}</td>
                             <td>{to_location}</td>
-                            <td>{flight_date + " , " + return_date}</td>
-                            <td>{pax}</td>
+                            <td>{return_date}</td>
+                            {/* <td>{pax}</td> */}
                             <td>{aircraft?.name}</td>
                             <td>{payment_status}</td>
-                            <td> {bookedBy?.first_name} </td>
+                            {/* <td> {bookedBy?.first_name} </td> */}
                             <td>
                               {" "}
                               {status === "no_show" ? "no show" : status}{" "}
