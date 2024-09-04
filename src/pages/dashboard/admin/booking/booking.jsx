@@ -31,11 +31,19 @@ import EditAircraft from "../aircraft/modal/edit-aircraft";
 import ManageBookingModal from "./modals/manage-booking";
 import UpdateStatusModal from "./modals/updated-status";
 import BookingFilter from "../../../../component/filters/booking-filter";
+import { pdfjs } from "react-pdf";
+import { toast } from "react-toastify";
+import * as pdfjsLib from 'pdfjs-dist';
+import 'pdfjs-dist/web/pdf_viewer.css';
+import ViewBookingFile from "./modals/view-files";
+
 
 const Booking = (props) => {
   const dispatch = useDispatch();
   const [viewData, setViewdata] = useState([]);
   const [viewBooking, setViewBooking] = useState(false);
+  const [viewBookingFileModal, setViewBookingFileModal] = useState(false);
+  const [bookingFile, setBookingFile] = useState("")
   const navigate = useNavigate();
   const [activeKey, setActiveKey] = useState("flight");
   const [modalAddAircraft, setModalAddAircraft] = useState(false);
@@ -46,6 +54,11 @@ const Booking = (props) => {
   const [updateBooking, setUpdateBooking] = useState([]);
   const [manageBooking, setManageBooking] = useState(false);
   const [updateBookingStatus, setUpdateBookingStatus] = useState(false);
+
+
+  
+
+
 
   const handleEditAircraft = (id) => {
     setModalEditAircraft(true);
@@ -124,13 +137,35 @@ const Booking = (props) => {
   };
 
 
-  const handleViewReceipt = (id) => {
-    dispatch(
-      getBookingReceiptAsync({
-        booking_id: id,
-      })
-    );
-  }
+
+  const handleViewReceipt = async (id) => {
+    try {
+      const response = await dispatch(
+        getBookingReceiptAsync({
+          booking_id: id,
+        })
+      );
+  
+      if (response?.payload) {
+        setViewBookingFileModal(true);
+  
+        const pdfData = response.payload; // Assuming the payload is the PDF binary data
+        setBookingFile(pdfData); // Update the state with the PDF data
+
+        toast.success('Booking receipt fetched successfully!');
+      } else {
+        toast.error('Failed to fetch the booking receipt.');
+      }
+    } catch (error) {
+      console.error('Error fetching the booking receipt:', error);
+      toast.error('An error occurred while fetching the receipt.');
+    }
+  };
+  
+
+  
+
+
 
   const handleViewTripSheet = (id) => {
     dispatch(
@@ -151,10 +186,17 @@ const Booking = (props) => {
 
   return (
     <AdminLayout>
+
       <ViewBooking
         show={viewBooking}
         onHide={() => setViewBooking(false)}
         data={viewData}
+      />
+
+<ViewBookingFile
+        show={viewBookingFileModal}
+        onHide={() => setViewBookingFileModal(false)}
+        data={bookingFile}
       />
       <UpdateStatusModal
         show={updateBookingStatus}

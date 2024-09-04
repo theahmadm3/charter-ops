@@ -109,7 +109,7 @@ export const BookingPaymentStatus = async (booking_id, body) => {
 
 export const GetBookingReceipt = async (booking_id) => {
   const response = await GetRequest(
-    `/receipt-preview/${booking_id}`
+    `/bookings/receipt-preview/${booking_id}`
   );
   return response;
 };
@@ -117,14 +117,14 @@ export const GetBookingReceipt = async (booking_id) => {
 
 export const GetBookingTripSheet = async (booking_id) => {
   const response = await GetRequest(
-    `/trip-sheet-preview/${booking_id}`
+    `/bookings/trip-sheet-preview/${booking_id}`
   );
   return response;
 };
 
 export const GetBookingTripConfirmation = async (booking_id) => {
   const response = await GetRequest(
-    `/trip-confirmation-preview/${booking_id}`
+    `/bookings/trip-confirmation-preview/${booking_id}`
   );
   return response;
 };
