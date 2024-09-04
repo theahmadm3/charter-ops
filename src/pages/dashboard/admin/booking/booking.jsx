@@ -193,11 +193,11 @@ const Booking = (props) => {
               }
             >
               <Row className="my-3">
-                <Col md={10}>
+                <Col md={11}>
                   <BookingFilter />
                 </Col>
-                <Col md={2}>
-                  <Button onClick={() => handleAdd()} className="shadow mt-3">
+                <Col md={1}>
+                  <Button onClick={() => handleAdd()} className="shadow mt-3" size="sm">
                     Book A Flight
                   </Button>
                 </Col>
@@ -212,7 +212,7 @@ const Booking = (props) => {
                     <th>Arrival</th>
                     <th>Arrival Time/Date</th>
                     {/* <th>Number of Pax</th> */}
-                    <th>Aircraft Name</th>
+                    {/* <th>Aircraft Name</th> */}
                     <th>Payment Status</th>
                     {/* <th>Created By</th> */}
                     <th>Status</th>
@@ -244,7 +244,7 @@ const Booking = (props) => {
                             <td>{to_location}</td>
                             <td>{return_date}</td>
                             {/* <td>{pax}</td> */}
-                            <td>{aircraft?.name}</td>
+                            {/* <td>{aircraft?.name}</td> */}
                             <td>{payment_status}</td>
                             {/* <td> {bookedBy?.first_name} </td> */}
                             <td>

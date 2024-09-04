@@ -126,22 +126,17 @@ const BookingFilter = () => {
                 </Form.Group>
               </Col>
 
-              <Col md={2}>
+              <Col md={3}>
                 <Form.Group>
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Flight Date"
-                    className="my-2"
-                  >
+               <p className="m-0 p-0">Flight date</p>
                     <DatePicker
-                      className="form-control my-2"
+                      className="form-control mb-2"
                       selectsRange={true}
                       startDate={startDate}
                       endDate={endDate}
                       onChange={handleDateChange}
                       isClearable={true}
                     />
-                  </FloatingLabel>
                 </Form.Group>
               </Col>
 
