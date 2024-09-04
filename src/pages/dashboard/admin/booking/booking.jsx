@@ -208,9 +208,9 @@ const Booking = (props) => {
                     <th>S/N</th>
                     {/* <th>Trip Type</th> */}
                     <th>Departure</th>
-                    <th>Departure Time/Date</th>
+                    <th>Departure Date/Time</th>
                     <th>Arrival</th>
-                    <th>Arrival Time/Date</th>
+                    <th>Arrival Date/Time</th>
                     {/* <th>Number of Pax</th> */}
                     {/* <th>Aircraft Name</th> */}
                     <th>Payment Status</th>
