@@ -161,28 +161,56 @@ const Booking = (props) => {
       toast.error('An error occurred while fetching the receipt.');
     }
   };
+
+
+  const handleViewTripSheet = async (id) => {
+    try {
+      const response = await dispatch(
+        getBookingTripSheetAsync({
+          booking_id: id,
+        })
+      );
   
-
+      if (response?.payload) {
+        setViewBookingFileModal(true); 
+        
+        const tripSheetData = response.payload; 
+        setBookingFile(tripSheetData); 
   
-
-
-
-  const handleViewTripSheet = (id) => {
-    dispatch(
-      getBookingTripSheetAsync({
-        booking_id: id,
-      })
-    );
-  }
-
+        toast.success('Trip sheet fetched successfully!');
+      } else {
+        toast.error('Failed to fetch the trip sheet.');
+      }
+    } catch (error) {
+      console.error('Error fetching the trip sheet:', error);
+      toast.error('An error occurred while fetching the trip sheet.');
+    }
+  };
   
-  const handleViewConfirmation = (id) => {
-    dispatch(
-      getBookingConfirmationSheetAsync({
-        booking_id: id,
-      })
-    );
-  }
+  const handleViewConfirmation = async (id) => {
+    try {
+      const response = await dispatch(
+        getBookingConfirmationSheetAsync({
+          booking_id: id,
+        })
+      );
+  
+      if (response?.payload) {
+        setViewBookingFileModal(true); // Assuming you're using the same modal for different files
+        
+        const confirmationSheetData = response.payload; // Assuming the payload is the confirmation sheet PDF binary data
+        setBookingFile(confirmationSheetData); // Update the state with the confirmation sheet data
+  
+        toast.success('Confirmation sheet fetched successfully!');
+      } else {
+        toast.error('Failed to fetch the confirmation sheet.');
+      }
+    } catch (error) {
+      console.error('Error fetching the confirmation sheet:', error);
+      toast.error('An error occurred while fetching the confirmation sheet.');
+    }
+  };
+  
 
   return (
     <AdminLayout>

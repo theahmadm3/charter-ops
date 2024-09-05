@@ -1,13 +1,29 @@
 import { Modal } from "react-bootstrap";
-import { Viewer } from "@react-pdf-viewer/core";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { useSelector } from "react-redux";
 
 const ViewBookingFile = (props) => {
-  const bookingReceipt = useSelector(
-    (state) => state?.booking?.getBookingReceiptResponse
-  );
+
+  console.log("view file props", props?.data)
+  // const bookingReceipt = useSelector(
+  //   (state) => state?.booking?.getBookingReceiptResponse
+  // );
+
+
+  // Helper function to create a Blob URL if the receipt is raw PDF data
+  const createBlobURL = (pdfData) => {
+    try {
+      const blob = new Blob([pdfData], { type: "application/pdf" });
+      return URL.createObjectURL(blob);
+    } catch (error) {
+      console.error("Error creating Blob URL:", error);
+      return null;
+    }
+  };
+
+  // Use the raw PDF data as Blob URL or directly as a URL if it's already a link
+  const pdfFile = props?.data?.startsWith("%PDF") // Check if it's raw PDF data
+    ? createBlobURL(props?.data)
+    : props?.data; // Else assume it's a URL
 
   return (
     <>
@@ -19,21 +35,22 @@ const ViewBookingFile = (props) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Booking File
+            Booking Document
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="bg-color-1 p-3 mb-3">
-            <h6>Flight File</h6>
-          </div>
+         
 
-          <div className="pdf-container">
-            {bookingReceipt ? (
-              <Viewer fileUrl={bookingReceipt} />
-            ) : (
-              <p>No PDF available</p>
-            )}
-          </div>
+          {pdfFile ? (
+            <iframe
+              src={pdfFile}
+              title="Booking Receipt PDF"
+              width="100%"
+              height="600px"
+            />
+          ) : (
+            <p>No PDF available or failed to load PDF.</p>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <button className="btn btn-primary" onClick={props.onHide}>
