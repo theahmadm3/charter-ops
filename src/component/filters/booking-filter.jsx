@@ -60,7 +60,7 @@ const BookingFilter = () => {
         {({ errors, touched, handleSubmit, values, handleChange }) => (
           <Form onSubmit={handleSubmit}>
             <Row>
-              <Col md={2}>
+              {/* <Col md={2}>
                 <Form.Group>
                   <FloatingLabel
                     controlId="floatingInput"
@@ -82,9 +82,9 @@ const BookingFilter = () => {
                     ) : null}
                   </FloatingLabel>
                 </Form.Group>
-              </Col>
+              </Col> */}
 
-              <Col md={2}>
+              <Col md={3}>
                 <Form.Group>
                   <FloatingLabel
                     controlId="floatingInput"
@@ -102,7 +102,7 @@ const BookingFilter = () => {
                 </Form.Group>
               </Col>
 
-              <Col md={2}>
+              <Col md={3}>
                 <Form.Group>
                   <FloatingLabel
                     controlId="floatingInput"
@@ -128,15 +128,15 @@ const BookingFilter = () => {
 
               <Col md={3}>
                 <Form.Group>
-               <p className="m-0 p-0">Flight date</p>
-                    <DatePicker
-                      className="form-control mb-2"
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      onChange={handleDateChange}
-                      isClearable={true}
-                    />
+                  <p className="m-0 p-0">Flight date</p>
+                  <DatePicker
+                    className="form-control mb-2"
+                    selectsRange={true}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={handleDateChange}
+                    isClearable={true}
+                  />
                 </Form.Group>
               </Col>
 

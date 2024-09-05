@@ -1,13 +1,9 @@
 import { Modal } from "react-bootstrap";
-import { useSelector } from "react-redux";
 
 const ViewBookingFile = (props) => {
-
-  console.log("view file props", props?.data)
   // const bookingReceipt = useSelector(
   //   (state) => state?.booking?.getBookingReceiptResponse
   // );
-
 
   // Helper function to create a Blob URL if the receipt is raw PDF data
   const createBlobURL = (pdfData) => {
@@ -39,8 +35,6 @@ const ViewBookingFile = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-         
-
           {pdfFile ? (
             <iframe
               src={pdfFile}

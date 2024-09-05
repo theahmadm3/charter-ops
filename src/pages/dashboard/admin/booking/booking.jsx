@@ -31,19 +31,15 @@ import EditAircraft from "../aircraft/modal/edit-aircraft";
 import ManageBookingModal from "./modals/manage-booking";
 import UpdateStatusModal from "./modals/updated-status";
 import BookingFilter from "../../../../component/filters/booking-filter";
-import { pdfjs } from "react-pdf";
 import { toast } from "react-toastify";
-import * as pdfjsLib from 'pdfjs-dist';
-import 'pdfjs-dist/web/pdf_viewer.css';
 import ViewBookingFile from "./modals/view-files";
 
-
-const Booking = (props) => {
+const Booking = () => {
   const dispatch = useDispatch();
   const [viewData, setViewdata] = useState([]);
   const [viewBooking, setViewBooking] = useState(false);
   const [viewBookingFileModal, setViewBookingFileModal] = useState(false);
-  const [bookingFile, setBookingFile] = useState("")
+  const [bookingFile, setBookingFile] = useState("");
   const navigate = useNavigate();
   const [activeKey, setActiveKey] = useState("flight");
   const [modalAddAircraft, setModalAddAircraft] = useState(false);
@@ -55,10 +51,7 @@ const Booking = (props) => {
   const [manageBooking, setManageBooking] = useState(false);
   const [updateBookingStatus, setUpdateBookingStatus] = useState(false);
 
-
-  
-
-
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
   const handleEditAircraft = (id) => {
     setModalEditAircraft(true);
@@ -136,8 +129,6 @@ const Booking = (props) => {
     );
   };
 
-
-
   const handleViewReceipt = async (id) => {
     try {
       const response = await dispatch(
@@ -145,23 +136,23 @@ const Booking = (props) => {
           booking_id: id,
         })
       );
-  
+
       if (response?.payload) {
         setViewBookingFileModal(true);
-  
-        const pdfData = response.payload; // Assuming the payload is the PDF binary data
+        const pdfData = baseUrl + `bookings/receipt-preview/${id}`;
+
+        // const pdfData = response.payload; // Assuming the payload is the PDF binary data
         setBookingFile(pdfData); // Update the state with the PDF data
 
-        toast.success('Booking receipt fetched successfully!');
+        toast.success("Booking receipt fetched successfully!");
       } else {
-        toast.error('Failed to fetch the booking receipt.');
+        toast.error("Failed to fetch the booking receipt.");
       }
     } catch (error) {
-      console.error('Error fetching the booking receipt:', error);
-      toast.error('An error occurred while fetching the receipt.');
+      console.error("Error fetching the booking receipt:", error);
+      toast.error("An error occurred while fetching the receipt.");
     }
   };
-
 
   const handleViewTripSheet = async (id) => {
     try {
@@ -170,23 +161,23 @@ const Booking = (props) => {
           booking_id: id,
         })
       );
-  
+
       if (response?.payload) {
-        setViewBookingFileModal(true); 
-        
-        const tripSheetData = response.payload; 
-        setBookingFile(tripSheetData); 
-  
-        toast.success('Trip sheet fetched successfully!');
+        setViewBookingFileModal(true);
+        const tripSheetData = baseUrl + `bookings/trip-sheet-preview/${id}`;
+
+        setBookingFile(tripSheetData);
+
+        toast.success("Trip sheet fetched successfully!");
       } else {
-        toast.error('Failed to fetch the trip sheet.');
+        toast.error("Failed to fetch the trip sheet.");
       }
     } catch (error) {
-      console.error('Error fetching the trip sheet:', error);
-      toast.error('An error occurred while fetching the trip sheet.');
+      console.error("Error fetching the trip sheet:", error);
+      toast.error("An error occurred while fetching the trip sheet.");
     }
   };
-  
+
   const handleViewConfirmation = async (id) => {
     try {
       const response = await dispatch(
@@ -194,34 +185,33 @@ const Booking = (props) => {
           booking_id: id,
         })
       );
-  
+
       if (response?.payload) {
         setViewBookingFileModal(true); // Assuming you're using the same modal for different files
-        
-        const confirmationSheetData = response.payload; // Assuming the payload is the confirmation sheet PDF binary data
+        const confirmationSheetData =
+          baseUrl + `bookings/trip-confirmation-preview/${id}`;
+
         setBookingFile(confirmationSheetData); // Update the state with the confirmation sheet data
-  
-        toast.success('Confirmation sheet fetched successfully!');
+
+        toast.success("Confirmation sheet fetched successfully!");
       } else {
-        toast.error('Failed to fetch the confirmation sheet.');
+        toast.error("Failed to fetch the confirmation sheet.");
       }
     } catch (error) {
-      console.error('Error fetching the confirmation sheet:', error);
-      toast.error('An error occurred while fetching the confirmation sheet.');
+      console.error("Error fetching the confirmation sheet:", error);
+      toast.error("An error occurred while fetching the confirmation sheet.");
     }
   };
-  
 
   return (
     <AdminLayout>
-
       <ViewBooking
         show={viewBooking}
         onHide={() => setViewBooking(false)}
         data={viewData}
       />
 
-<ViewBookingFile
+      <ViewBookingFile
         show={viewBookingFileModal}
         onHide={() => setViewBookingFileModal(false)}
         data={bookingFile}
@@ -263,11 +253,15 @@ const Booking = (props) => {
               }
             >
               <Row className="my-3">
-                <Col md={11}>
+                <Col md={10}>
                   <BookingFilter />
                 </Col>
-                <Col md={1}>
-                  <Button onClick={() => handleAdd()} className="shadow mt-3" size="sm">
+                <Col>
+                  <Button
+                    onClick={() => handleAdd()}
+                    className="shadow mt-3"
+                    // size="sm"
+                  >
                     Book A Flight
                   </Button>
                 </Col>
@@ -370,23 +364,29 @@ const Booking = (props) => {
                                   </Dropdown.Item>
 
                                   <Dropdown.Item
-                                  className="small"
-                                  onClick={() => handleViewReceipt(booking.id)}
-                                >
-                                  View Receipt
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  className="small"
-                                  onClick={() => handleViewTripSheet(booking.id)}
-                                >
-                                  View Trip Sheet
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  className="small"
-                                  onClick={() => handleViewConfirmation(booking.id)}
-                                >
-                                  View Confirmation Sheet
-                                </Dropdown.Item>
+                                    className="small"
+                                    onClick={() =>
+                                      handleViewReceipt(booking.id)
+                                    }
+                                  >
+                                    View Receipt
+                                  </Dropdown.Item>
+                                  <Dropdown.Item
+                                    className="small"
+                                    onClick={() =>
+                                      handleViewTripSheet(booking.id)
+                                    }
+                                  >
+                                    View Trip Sheet
+                                  </Dropdown.Item>
+                                  <Dropdown.Item
+                                    className="small"
+                                    onClick={() =>
+                                      handleViewConfirmation(booking.id)
+                                    }
+                                  >
+                                    View Confirmation Sheet
+                                  </Dropdown.Item>
                                 </Dropdown.Menu>
                               </Dropdown>
                             </td>
