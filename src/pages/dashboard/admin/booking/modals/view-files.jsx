@@ -1,54 +1,13 @@
 import { Modal } from "react-bootstrap";
-import { Document, Page, pdfjs } from "react-pdf";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.js",
-  import.meta.url
-).toString();
-
-
-// const base64ToUint8Array = (base64) => {
-//   const binaryString = window.atob(base64);
-//   const len = binaryString.length;
-//   const bytes = new Uint8Array(len);
-//   for (let i = 0; i < len; i++) {
-//     bytes[i] = binaryString.charCodeAt(i);
-//   }
-//   return bytes;
-// };
-
-
-const base64ToUint8Array = (base64) => {
-  // Convert URL-safe Base64 to standard Base64
-  const standardBase64 = base64
-    .replace(/-/g, '+')  // Convert '-' to '+'
-    .replace(/_/g, '/'); // Convert '_' to '/'
-
-  // Add padding if necessary
-  const padding = standardBase64.length % 4 === 0 ? '' : '='.repeat(4 - (standardBase64.length % 4));
-  const base64WithPadding = standardBase64 + padding;
-
-  // Decode the Base64 string
-  const binaryString = window.atob(base64WithPadding);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-
-  return bytes;
-};
-
+import { Viewer } from "@react-pdf-viewer/core";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import { useSelector } from "react-redux";
 
 const ViewBookingFile = (props) => {
-  console.log("pdf props", props)
-  const { data } = props;
-
-  // Convert the base64-encoded string to a Uint8Array
-  const pdfBinary = base64ToUint8Array(data);
+  const bookingReceipt = useSelector(
+    (state) => state?.booking?.getBookingReceiptResponse
+  );
 
   return (
     <>
@@ -64,16 +23,23 @@ const ViewBookingFile = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="bg-color-1 p-3">
+          <div className="bg-color-1 p-3 mb-3">
             <h6>Flight File</h6>
           </div>
+
           <div className="pdf-container">
-            <Document file={pdfBinary} className="pdf-document">
-              <Page pageNumber={1} width={780} />
-            </Document>
+            {bookingReceipt ? (
+              <Viewer fileUrl={bookingReceipt} />
+            ) : (
+              <p>No PDF available</p>
+            )}
           </div>
         </Modal.Body>
-        <Modal.Footer></Modal.Footer>
+        <Modal.Footer>
+          <button className="btn btn-primary" onClick={props.onHide}>
+            Close
+          </button>
+        </Modal.Footer>
       </Modal>
     </>
   );
