@@ -161,12 +161,12 @@ function BookingStepOne() {
           }
 
           if (!from_location) {
-            toast.error("Please fill out the From Location");
+            toast.error("Please fill out the Departure Airport");
             return;
           }
 
           if (!to_location) {
-            toast.error("Please fill out the To Location");
+            toast.error("Please fill out the Destination Airport");
             return;
           }
 
@@ -208,46 +208,15 @@ function BookingStepOne() {
           touched,
         }) => (
           <Form onSubmit={handleSubmit}>
-            {/* <Row>
-              <Col md={6}>
-                <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingTripType"
-                    label={
-                      <span>
-                        Select Trip Type <span className="text-danger">*</span>
-                      </span>
-                    }
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="trip_type"
-                      value={values.trip_type}
-                      onChange={(e) => {
-                        setFieldValue("trip_type", e.target.value);
-                        if (e.target.value === "local") {
-                          // setFieldValue("from", localAirports[0]);
-                        }
-                      }}
-                    >
-                      <option value="">Select trip type</option>
-
-                      <option value="local">Local</option>
-                      <option value="international">International</option>
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-            </Row> */}
             <Row className="mt-5">
               <Col md={6}>
                 <BootstrapForm.Group>
+                  <label>Select Departure Airport</label>
                   <Select
                     value={values.from_location}
                     options={worldAirports?.map((option) => ({
-                      value: option.id,
-                      label: option.name,
+                      value: option.iata,
+                      label: `${option.name} (${option.iata})`,
                     }))}
                     className=" form-control"
                     classNamePrefix="from_location"
@@ -266,11 +235,13 @@ function BookingStepOne() {
 
               <Col md={6}>
                 <BootstrapForm.Group>
+                  <label>Select Destination Airport</label>
+
                   <Select
                     value={values.to_location}
                     options={worldAirports?.map((option) => ({
-                      value: option.id,
-                      label: option.name,
+                      value: option.iata,
+                      label: `${option.name} (${option.iata})`,
                     }))}
                     className=" form-control"
                     classNamePrefix="to_location"
@@ -325,32 +296,27 @@ function BookingStepOne() {
             <Row>
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingAircraftType"
-                    label={
-                      <div>
-                        Client <span className="text-danger">*</span>{" "}
-                      </div>
-                    }
-                    className=""
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="client_id"
-                      value={values.client_id}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Client</option>
+                  <label>
+                    <div>
+                      Client <span className="text-danger">*</span>{" "}
+                    </div>
+                  </label>
 
-                      {clientInfo?.getAllClientsResponse?.data?.map(
-                        (client) => (
-                          <option value={client.id} key={client.id}>
-                            {client.first_name + " " + client.last_name}
-                          </option>
-                        )
-                      )}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
+                  <BootstrapForm.Control
+                    as="select"
+                    className="py-3"
+                    name="client_id"
+                    value={values.client_id}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Client</option>
+
+                    {clientInfo?.getAllClientsResponse?.data?.map((client) => (
+                      <option value={client.id} key={client.id}>
+                        {client.first_name + " " + client.last_name}
+                      </option>
+                    ))}
+                  </BootstrapForm.Control>
                   <ErrorMessage
                     name="client_id"
                     component="div"
@@ -361,23 +327,21 @@ function BookingStepOne() {
 
               <Col md={6}>
                 <BootstrapForm.Group className="">
-                  <FloatingLabel
-                    controlId="floatingCrewCapacity"
-                    label="Passenger number"
-                  >
-                    <BootstrapForm.Control
-                      type="number"
-                      placeholder="Passenger Number"
-                      name="passenger_count"
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.passenger_count && !!errors.passenger_count
-                      }
-                    />
-                    <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.passenger_count}
-                    </BootstrapForm.Control.Feedback>
-                  </FloatingLabel>
+                  <label>Passenger number</label>
+
+                  <BootstrapForm.Control
+                    type="number"
+                    placeholder="Passenger Number"
+                    name="passenger_count"
+                    onChange={handleChange}
+                    className="py-3"
+                    isInvalid={
+                      touched.passenger_count && !!errors.passenger_count
+                    }
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.passenger_count}
+                  </BootstrapForm.Control.Feedback>
                 </BootstrapForm.Group>
               </Col>
             </Row>
