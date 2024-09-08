@@ -145,7 +145,7 @@ function EditBookingStepFour(props) {
     )
       .then((response) => {
         if (response?.payload?.success) {
-          navigate(-1);
+          // navigate(-1);
         } else if (response?.payload) {
           // const errorMessage = response.payload;
           // General error message
