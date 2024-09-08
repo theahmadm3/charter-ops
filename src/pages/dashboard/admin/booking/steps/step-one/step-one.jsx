@@ -72,7 +72,6 @@ const validationSchema = Yup.object().shape({
 });
 
 const initialValues = {
-  trip_type: "",
   from_location: "",
   to_location: "",
   flight_date: "",
