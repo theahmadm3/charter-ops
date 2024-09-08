@@ -253,12 +253,14 @@ function EditBookingStepOne(props) {
             <Row className="mt-5">
               <Col md={6}>
                 <BootstrapForm.Group>
+                  <label>Select Departure Airport</label>
+
                   <Select
                     defaultValue={airFrom}
                     // value={values.from_location}
                     options={worldAirports?.map((option) => ({
-                      value: option.id,
-                      label: option.name,
+                      value: option.iata,
+                      label: `${option.name} (${option.iata})`,
                     }))}
                     className=" form-control"
                     classNamePrefix="from_location"
@@ -277,12 +279,14 @@ function EditBookingStepOne(props) {
 
               <Col md={6}>
                 <BootstrapForm.Group>
+                  <label>Select Destination Airport</label>
+
                   <Select
                     defaultValue={airTo}
                     // value={values.to_location}
                     options={worldAirports?.map((option) => ({
-                      value: option.id,
-                      label: option.name,
+                      value: option.iata,
+                      label: `${option.name} (${option.iata})`,
                     }))}
                     className=" form-control"
                     classNamePrefix="to_location"
@@ -336,32 +340,25 @@ function EditBookingStepOne(props) {
             <Row>
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingAircraftType"
-                    label={
-                      <div>
-                        Client <span className="text-danger">*</span>{" "}
-                      </div>
-                    }
-                    className=""
+                  <label>
+                    <div>
+                      Client <span className="text-danger">*</span>{" "}
+                    </div>
+                  </label>
+                  <BootstrapForm.Control
+                    as="select"
+                    name="client_id"
+                    value={values.client_id}
+                    onChange={handleChange}
                   >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="client_id"
-                      value={values.client_id}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Client</option>
+                    <option value="">Select Client</option>
 
-                      {clientInfo?.getAllClientsResponse?.data?.map(
-                        (client) => (
-                          <option value={client.id} key={client.id}>
-                            {client.first_name + " " + client.last_name}
-                          </option>
-                        )
-                      )}
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
+                    {clientInfo?.getAllClientsResponse?.data?.map((client) => (
+                      <option value={client.id} key={client.id}>
+                        {client.first_name + " " + client.last_name}
+                      </option>
+                    ))}
+                  </BootstrapForm.Control>
                   <ErrorMessage
                     name="client_id"
                     component="div"
@@ -372,24 +369,21 @@ function EditBookingStepOne(props) {
 
               <Col md={6}>
                 <BootstrapForm.Group className="">
-                  <FloatingLabel
-                    controlId="floatingCrewCapacity"
-                    label="Passenger number"
-                  >
-                    <BootstrapForm.Control
-                      value={values?.passenger_count}
-                      type="number"
-                      placeholder="Passenger Number"
-                      name="passenger_count"
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.passenger_count && !!errors.passenger_count
-                      }
-                    />
-                    <BootstrapForm.Control.Feedback type="invalid">
-                      {errors.passenger_count}
-                    </BootstrapForm.Control.Feedback>
-                  </FloatingLabel>
+                  <label>Passenger number</label>
+
+                  <BootstrapForm.Control
+                    value={values?.passenger_count}
+                    type="number"
+                    placeholder="Passenger Number"
+                    name="passenger_count"
+                    onChange={handleChange}
+                    isInvalid={
+                      touched.passenger_count && !!errors.passenger_count
+                    }
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.passenger_count}
+                  </BootstrapForm.Control.Feedback>
                 </BootstrapForm.Group>
               </Col>
             </Row>
