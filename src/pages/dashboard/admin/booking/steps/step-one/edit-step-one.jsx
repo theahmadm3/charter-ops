@@ -149,7 +149,6 @@ function EditBookingStepOne(props) {
     <>
       <Formik
         initialValues={{
-          trip_type: props?.data[0]?.trip_type,
           from_location: props?.data[0]?.from_location,
           to_location: props?.data[0]?.to_location,
           flight_date: props?.data[0]?.flight_date,
@@ -187,8 +186,8 @@ function EditBookingStepOne(props) {
             ...values,
             flight_date: to_airport,
             return_date: from_airport,
-            from_location: from_location.label,
-            to_location: to_location.label,
+            from_location: from_location.label || airFrom?.label,
+            to_location: to_location.label || airTo?.label,
             client_id: Number(values.client_id),
             multi_leg: isChecked,
             ...(isChecked && legs && { legs }),
@@ -378,6 +377,7 @@ function EditBookingStepOne(props) {
                     label="Passenger number"
                   >
                     <BootstrapForm.Control
+                      value={values?.passenger_count}
                       type="number"
                       placeholder="Passenger Number"
                       name="passenger_count"
