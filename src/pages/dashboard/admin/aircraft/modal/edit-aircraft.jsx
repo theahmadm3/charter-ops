@@ -335,7 +335,7 @@ function EditAircraft(props) {
                     >
                       <BootstrapForm.Control
                         type="file"
-                        accept=".jpg,.jpeg,.png,.pdf"
+                        accept=".jpg,.jpeg,.png"
                         name="image"
                         onChange={(e) => handleFileChange(e, setFieldValue)}
                         isInvalid={touched.image && !!errors.image}

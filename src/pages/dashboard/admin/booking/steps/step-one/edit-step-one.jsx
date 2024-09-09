@@ -209,42 +209,11 @@ function EditBookingStepOne(props) {
               );
             });
         }}
-
-        // onSubmit={(values) => {
-        //   const selectedToLocation = values.amenities.map(
-        //     (to_loca) => to_loca.value
-        //   );
-
-        //   const payload = {
-        //     ...values,
-        //     flight_date: to_airport,
-        //     return_date: from_airport,
-        //     id: props?.data[0]?.id,
-
-        //     client_id: Number(values.client_id),
-        //     multi_leg: isChecked,
-        //     ...(isChecked && legs && { legs }),
-        //   };
-
-        //   dispatch(addBookingStepOneAsync(payload))
-        //     .then((response) => {
-        //       if (response?.payload?.success) {
-        //         const current = bookingInfo?.currentStep;
-        //         dispatch(setCurrentStep(current + 1));
-        //       } else {
-        //         console.log("Error please try again");
-        //       }
-        //     })
-        //     .catch((error) => {
-        //       console.error("Error occurred:", error);
-        //     });
-        // }}
       >
         {({
           values,
           setFieldValue,
           handleChange,
-          handleBlur,
           handleSubmit,
           errors,
           touched,
@@ -257,7 +226,6 @@ function EditBookingStepOne(props) {
 
                   <Select
                     defaultValue={airFrom}
-                    // value={values.from_location}
                     options={worldAirports?.map((option) => ({
                       value: option.iata,
                       label: `${option.name} (${option.iata})`,

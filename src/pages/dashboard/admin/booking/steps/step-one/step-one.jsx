@@ -173,11 +173,18 @@ function BookingStepOne() {
             ...values,
             flight_date: to_airport,
             return_date: from_airport,
-            from_location: from_location.label,
-            to_location: to_location.label,
+            from_location: from_location?.label, // Send only the label for from_location
+            to_location: to_location?.label, // Send only the label for to_location
             client_id: Number(values.client_id),
             multi_leg: isChecked,
-            ...(isChecked && legs && { legs }),
+            ...(isChecked &&
+              legs && {
+                legs: legs.map((leg) => ({
+                  ...leg,
+                  from: leg.from.label, // Extract only the label for from
+                  to: leg.to.label, // Extract only the label for to
+                })),
+              }),
           };
 
           dispatch(addBookingStepOneAsync(payload))
@@ -368,38 +375,24 @@ function BookingStepOne() {
                       <Row>
                         <Col md={6}>
                           <BootstrapForm.Group>
-                            <FloatingLabel
-                              controlId={`floatingFrom-${leg.id}`}
-                              label="From"
-                              className="my-2"
-                            >
-                              <BootstrapForm.Control
-                                as="select"
-                                name="from"
-                                value={leg.from}
-                                onChange={(e) => handleLegChange(leg.id, e)}
-                              >
-                                <option value="">Select airport</option>
-                                {values.trip_type === "local" &&
-                                  localAirports.map((airport) => (
-                                    <option
-                                      value={airport.name}
-                                      key={airport.name}
-                                    >
-                                      {airport.name}
-                                    </option>
-                                  ))}
-                                {values.trip_type === "international" &&
-                                  internationalAirports.map((airport) => (
-                                    <option
-                                      value={airport.name}
-                                      key={airport.id}
-                                    >
-                                      {airport.name}
-                                    </option>
-                                  ))}
-                              </BootstrapForm.Control>
-                            </FloatingLabel>
+                            <label>Select Departure Airport</label>
+                            <Select
+                              value={leg.from}
+                              options={worldAirports?.map((option) => ({
+                                value: option.iata,
+                                label: `${option.name} (${option.iata})`,
+                              }))}
+                              className="form-control"
+                              classNamePrefix="from_location"
+                              onChange={(selectedOptions) =>
+                                handleLegChange(leg.id, {
+                                  target: {
+                                    name: "from",
+                                    value: selectedOptions,
+                                  },
+                                })
+                              }
+                            />
                             <ErrorMessage
                               name={`legs[${index}].from`}
                               component="div"
@@ -410,46 +403,24 @@ function BookingStepOne() {
 
                         <Col md={6}>
                           <BootstrapForm.Group>
-                            <FloatingLabel
-                              controlId={`floatingTo-${leg.id}`}
-                              label="To"
-                              className="my-2"
-                            >
-                              <BootstrapForm.Control
-                                as="select"
-                                name="to"
-                                value={leg.to}
-                                onChange={(e) => handleLegChange(leg.id, e)}
-                              >
-                                <option value="">Select airport</option>
-                                {values.trip_type === "local" &&
-                                  localAirports
-                                    .filter(
-                                      (airport) => airport.name !== leg.from
-                                    )
-                                    .map((airport) => (
-                                      <option
-                                        value={airport.name}
-                                        key={airport.name}
-                                      >
-                                        {airport.name}
-                                      </option>
-                                    ))}
-                                {values.trip_type === "international" &&
-                                  internationalAirports
-                                    .filter(
-                                      (airport) => airport.name !== leg.from
-                                    )
-                                    .map((airport) => (
-                                      <option
-                                        value={airport.name}
-                                        key={airport.name}
-                                      >
-                                        {airport.name}
-                                      </option>
-                                    ))}
-                              </BootstrapForm.Control>
-                            </FloatingLabel>
+                            <label>Select Destination Airport</label>
+                            <Select
+                              value={leg.to}
+                              options={worldAirports?.map((option) => ({
+                                value: option.iata,
+                                label: `${option.name} (${option.iata})`,
+                              }))}
+                              className="form-control"
+                              classNamePrefix="to_location"
+                              onChange={(selectedOptions) =>
+                                handleLegChange(leg.id, {
+                                  target: {
+                                    name: "to",
+                                    value: selectedOptions,
+                                  },
+                                })
+                              }
+                            />
                             <ErrorMessage
                               name={`legs[${index}].to`}
                               component="div"
