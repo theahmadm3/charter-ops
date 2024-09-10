@@ -442,6 +442,7 @@ function BookingStepOne() {
                                 })
                               }
                               value={leg.departure_date_time}
+                              minDate={new Date()}
                             />
                             <ErrorMessage
                               name={`legs[${index}].departure_date_time`}
@@ -464,6 +465,7 @@ function BookingStepOne() {
                                 })
                               }
                               value={leg.arrival_date_time}
+                              minDate={new Date()}
                             />
                             <ErrorMessage
                               name={`legs[${index}].arrival_date_time`}
