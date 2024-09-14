@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 
-function Stepper({ steps, activeStep, onClick, validateStep }) {
+function Stepper({ steps, activeStep, onClick }) {
   const handleStepClick = (stepIndex) => {
-    if (stepIndex > activeStep && validateStep && !validateStep(activeStep)) {
-      // Prevent moving to the next step if the validation fails
-      return;
-    }
+    // if (stepIndex > activeStep(activeStep)) {
+    //   return;
+    // }
 
     if (onClick) {
       onClick(stepIndex);

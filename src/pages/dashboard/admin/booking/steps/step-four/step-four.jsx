@@ -167,6 +167,10 @@ function BookingStepFour() {
   const handleBack = () =>
     dispatch(setCurrentStep(bookingInfo?.currentStep - 1));
 
+  const handleNext = () => {
+    const current = bookingInfo?.currentStep;
+    dispatch(setCurrentStep(current + 1));
+  };
   return (
     <Formik
       initialValues={{
@@ -654,6 +658,13 @@ function BookingStepFour() {
               onClick={handleBack}
             >
               Back
+            </Button>
+            <Button
+              variant="white"
+              className="border border-main-color text-end"
+              onClick={handleNext}
+            >
+              Next
             </Button>
 
             <Button type="submit">Save</Button>

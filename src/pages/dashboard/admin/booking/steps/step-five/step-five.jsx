@@ -1,4 +1,4 @@
-import { Formik, Field, Form } from "formik";
+import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
   Button,
@@ -9,6 +9,9 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentStep } from "../../../../../../slices/booking/bookingSlice";
+import { useEffect } from "react";
+import { getAllUsersAsync } from "../../../../../../slices/user/userSlice";
+import Select from "react-select";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -27,48 +30,69 @@ const validationSchema = Yup.object({
 function BookingStepFive() {
   const handleSubmit = () => {};
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state?.users);
 
   const bookingInfo = useSelector((state) => state?.booking);
-  const handleNext = () => {
-    const current = bookingInfo?.currentStep;
-    dispatch(setCurrentStep(current + 1));
-  };
 
   const handleBack = () => {
     const current = bookingInfo?.currentStep;
     dispatch(setCurrentStep(current - 1));
   };
+
+  useEffect(() => {
+    try {
+      dispatch(getAllUsersAsync({ user_type: "crew" }));
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
   return (
     <>
       <Formik
         initialValues={{
-          requests_status: "",
+          crew_id: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ errors, touched, handleChange, values, handleSubmit }) => (
+        {({
+          errors,
+          touched,
+          handleChange,
+          values,
+          handleSubmit,
+          setFieldValue,
+        }) => (
           <Form>
             <Row>
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <FloatingLabel
-                    controlId="floatingTripType"
-                    label="Booking Status"
-                    className="my-2"
-                  >
-                    <BootstrapForm.Control
-                      as="select"
-                      name="trip_type"
-                      value={values.trip_type}
-                    >
-                      <option value="">Select booking status</option>
+                  <label>
+                    <div>
+                      Crew <span className="text-danger">*</span>{" "}
+                    </div>
+                  </label>
+                  <Select
+                    isMulti
+                    // defaultValue={airTo}
+                    options={userInfo?.getAllUsersResponse?.data?.map(
+                      (option) => ({
+                        value: option?.id,
+                        label: `${option.first_name} ${option.last_name}`,
+                      })
+                    )}
+                    className=" form-control"
+                    classNamePrefix="crew_id"
+                    onChange={(selectedOptions) =>
+                      setFieldValue("crew_id", selectedOptions)
+                    }
+                  />
 
-                      <option value="local">Cancel</option>
-                      <option value="international">Stop</option>
-                      <option value="international">Proceed</option>
-                    </BootstrapForm.Control>
-                  </FloatingLabel>
+                  <ErrorMessage
+                    name="crew_id"
+                    component="div"
+                    className="text-danger"
+                  />
                 </BootstrapForm.Group>
               </Col>
             </Row>
@@ -81,13 +105,13 @@ function BookingStepFive() {
               >
                 Back
               </Button>
-              <Button
+              {/* <Button
                 variant="white"
                 className="border border-main-color text-end"
                 onClick={handleNext}
               >
                 Next
-              </Button>
+              </Button> */}
               <Button type="submit">Save</Button>
             </div>
           </Form>

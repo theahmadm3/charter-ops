@@ -71,7 +71,6 @@ const validationSchema = Yup.object().shape({
   }),
 });
 
-
 function BookingStepOne() {
   const [bookings, setBookings] = useState([]);
   const dispatch = useDispatch();
@@ -104,8 +103,6 @@ function BookingStepOne() {
 
   const bookingInfo = useSelector((state) => state?.booking);
 
-  console.log("first", bookingInfo?.addBookingStepOneResponse?.data)
-
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
   };
@@ -134,99 +131,102 @@ function BookingStepOne() {
   }, [dispatch]);
 
   const airFrom = bookingInfo?.addBookingStepOneResponse?.data?.from_location
-  ? {
-      value: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
-      label: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
-    }
-  : null;
+    ? {
+        value: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
+        label: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
+      }
+    : null;
 
-const airTo = bookingInfo?.addBookingStepOneResponse?.data?.to_location
-  ? {
-      value: bookingInfo?.addBookingStepOneResponse?.data?.to_location,
-      label: bookingInfo?.addBookingStepOneResponse?.data?.to_location,
-    }
-  : null;
+  const airTo = bookingInfo?.addBookingStepOneResponse?.data?.to_location
+    ? {
+        value: bookingInfo?.addBookingStepOneResponse?.data?.to_location,
+        label: bookingInfo?.addBookingStepOneResponse?.data?.to_location,
+      }
+    : null;
 
-
-console.log("values ini", bookingInfo?.addBookingStepOneResponse?.data?.passenger_count)
   return (
     <>
       <Formik
-  initialValues={{
-    from_location: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
-    to_location: bookingInfo?.addBookingStepOneResponse?.data?.to_location,
-    flight_date: bookingInfo?.addBookingStepOneResponse?.data?.flight_date,
-    return_date: bookingInfo?.addBookingStepOneResponse?.data?.return_date,
-    client_id: bookingInfo?.addBookingStepOneResponse?.data?.client_id,
-    multi_leg: null,
-    passenger_count: bookingInfo?.addBookingStepOneResponse?.data?.passenger_count,
-  }}
-  validationSchema={validationSchema}
-  onSubmit={(values, { setSubmitting }) => {
-    const { from_location, to_location } = values;
+        initialValues={{
+          from_location:
+            bookingInfo?.addBookingStepOneResponse?.data?.from_location,
+          to_location:
+            bookingInfo?.addBookingStepOneResponse?.data?.to_location,
+          flight_date:
+            bookingInfo?.addBookingStepOneResponse?.data?.flight_date,
+          return_date:
+            bookingInfo?.addBookingStepOneResponse?.data?.return_date,
+          client_id: bookingInfo?.addBookingStepOneResponse?.data?.client_id,
+          multi_leg: null,
+          passenger_count:
+            bookingInfo?.addBookingStepOneResponse?.data?.passenger_count,
+        }}
+        validationSchema={validationSchema}
+        onSubmit={(values, { setSubmitting }) => {
+          const { from_location, to_location } = values;
 
-    // Check each field individually and show a toast if any field is missing
-    if (!to_airport) {
-      toast.error("Please fill out the Flight Date");
-      setSubmitting(false);
-      return;
-    }
+          // Check each field individually and show a toast if any field is missing
+          if (!to_airport) {
+            toast.error("Please fill out the Flight Date");
+            setSubmitting(false);
+            return;
+          }
 
-    if (!from_airport) {
-      toast.error("Please fill out the Return Date");
-      setSubmitting(false);
-      return;
-    }
+          if (!from_airport) {
+            toast.error("Please fill out the Return Date");
+            setSubmitting(false);
+            return;
+          }
 
-    if (!from_location) {
-      toast.error("Please fill out the Departure Airport");
-      setSubmitting(false);
-      return;
-    }
+          if (!from_location) {
+            toast.error("Please fill out the Departure Airport");
+            setSubmitting(false);
+            return;
+          }
 
-    if (!to_location) {
-      toast.error("Please fill out the Destination Airport");
-      setSubmitting(false);
-      return;
-    }
+          if (!to_location) {
+            toast.error("Please fill out the Destination Airport");
+            setSubmitting(false);
+            return;
+          }
 
-    const payload = {
-      ...values,
-      flight_date: to_airport,
-      return_date: from_airport,
-      from_location: from_location?.label, 
-      to_location: to_location?.label, 
-      client_id: Number(values.client_id),
-      multi_leg: isChecked,
-      ...(isChecked &&
-        legs && {
-          legs: legs.map((leg) => ({
-            ...leg,
-            from: leg.from.label, 
-            to: leg.to.label, 
-          })),
-        }),
-    };
+          const payload = {
+            ...values,
+            flight_date: to_airport,
+            return_date: from_airport,
+            from_location: from_location?.label,
+            to_location: to_location?.label,
+            client_id: Number(values.client_id),
+            multi_leg: isChecked,
+            ...(isChecked &&
+              legs && {
+                legs: legs.map((leg) => ({
+                  ...leg,
+                  from: leg.from.label,
+                  to: leg.to.label,
+                })),
+              }),
+          };
 
-    dispatch(addBookingStepOneAsync(payload))
-      .then((response) => {
-        if (response?.payload?.success) {
-          const current = bookingInfo?.currentStep;
-          dispatch(setCurrentStep(current + 1));
-        } else {
-          toast.error("Error please try again");
-        }
-      })
-      .catch((error) => {
-        console.error("Error occurred:", error);
-        toast.error(
-          "An unexpected error occurred. Please try again later."
-        );
-      })
-      .finally(() => {
-        setSubmitting(false); // Set submitting to false when the submission is complete
-      });
-  }}
+          dispatch(addBookingStepOneAsync(payload))
+            .then((response) => {
+              if (response?.payload?.success) {
+                const current = bookingInfo?.currentStep;
+                dispatch(setCurrentStep(current + 1));
+              } else {
+                toast.error("Error please try again");
+              }
+            })
+            .catch((error) => {
+              console.error("Error occurred:", error);
+              toast.error(
+                "An unexpected error occurred. Please try again later."
+              );
+            })
+            .finally(() => {
+              setSubmitting(false); // Set submitting to false when the submission is complete
+            });
+        }}
       >
         {({
           values,
@@ -243,7 +243,10 @@ console.log("values ini", bookingInfo?.addBookingStepOneResponse?.data?.passenge
                 <BootstrapForm.Group>
                   <label>Select Departure Airport</label>
                   <Select
-                    defaultValue={bookingInfo?.addBookingStepOneResponse?.data?.from_location}
+                    defaultValue={
+                      bookingInfo?.addBookingStepOneResponse?.data
+                        ?.from_location
+                    }
                     options={worldAirports?.map((option) => ({
                       value: option.iata,
                       label: `${option.name} (${option.iata})`,
@@ -339,7 +342,10 @@ console.log("values ini", bookingInfo?.addBookingStepOneResponse?.data?.passenge
                     // value={values.client_id}
                     onChange={(client_id) =>
                       setFieldValue("client_id", client_id)
-                    }                   value={bookingInfo?.addBookingStepOneResponse?.data?.client_id}
+                    }
+                    value={
+                      bookingInfo?.addBookingStepOneResponse?.data?.client_id
+                    }
                   >
                     <option value="">Select Client</option>
 
@@ -362,7 +368,10 @@ console.log("values ini", bookingInfo?.addBookingStepOneResponse?.data?.passenge
                   <label>Passenger number</label>
 
                   <BootstrapForm.Control
-                  value={bookingInfo?.addBookingStepOneResponse?.data?.passenger_count}
+                    value={
+                      bookingInfo?.addBookingStepOneResponse?.data
+                        ?.passenger_count
+                    }
                     type="number"
                     placeholder="Passenger Number"
                     name="passenger_count"
@@ -534,14 +543,16 @@ console.log("values ini", bookingInfo?.addBookingStepOneResponse?.data?.passenge
               >
                 Back
               </Button> */}
-{bookingInfo?.addBookingStepOneResponse?.data ? ( <Button
-                variant="white"
-                className="border  border-main-color text-end mx-3"
-                onClick={() => handleNext()}
-              >
-                Next
-              </Button>): null }
-             
+              {bookingInfo?.addBookingStepOneResponse?.data ? (
+                <Button
+                  variant="white"
+                  className="border  border-main-color text-end mx-3"
+                  onClick={() => handleNext()}
+                >
+                  Next
+                </Button>
+              ) : null}
+
               <Button type="submit">Proceed </Button>
             </div>
           </Form>

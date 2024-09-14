@@ -33,12 +33,14 @@ const AddBooking = () => {
       component: <BookingStepFour />,
       label: "Passenger Information",
     },
-    // { component: <BookingStepFive />, label: "Awaiting approval " },
+    { component: <BookingStepFive />, label: "Trip Sheet " },
     // { component: <BookingStepSix />, label: "Payment process" },
   ];
 
-  const handleStepClick = () => {
+  const handleStepClick = (step) => {
     // setCurrentStep(+1);
+    dispatch(setCurrentStep(step));
+
     // const isValid = validateStep(step);
     // if (isValid) {
     //   dispatch(setCurrentStep(stepIndex));
