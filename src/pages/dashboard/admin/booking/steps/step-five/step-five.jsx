@@ -51,6 +51,8 @@ function BookingStepFive() {
       <Formik
         initialValues={{
           crew_id: "",
+          crew_note:"",
+          passenger_note:""
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -74,7 +76,6 @@ function BookingStepFive() {
                   </label>
                   <Select
                     isMulti
-                    // defaultValue={airTo}
                     options={userInfo?.getAllUsersResponse?.data?.map(
                       (option) => ({
                         value: option?.id,
@@ -93,6 +94,58 @@ function BookingStepFive() {
                     component="div"
                     className="text-danger"
                   />
+                </BootstrapForm.Group>
+              </Col>
+
+             
+
+
+            </Row>
+            <Row className="my-3">
+            <Col md={6}>
+                <BootstrapForm.Group className="">
+                  <label>Crew note</label>
+
+                  <BootstrapForm.Control
+                    value={
+                      bookingInfo?.addBookingStepOneResponse?.data
+                        ?.crew_note
+                    }
+                    as="textarea"
+                    placeholder="Crew note"
+                    name="crew_note"
+                    onChange={handleChange}
+                    className="py-3"
+                    isInvalid={
+                      touched.crew_note && !!errors.crew_note
+                    }
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.crew_note}
+                  </BootstrapForm.Control.Feedback>
+                </BootstrapForm.Group>
+              </Col>
+            <Col md={6}>
+                <BootstrapForm.Group className="">
+                  <label>Passenger note</label>
+
+                  <BootstrapForm.Control
+                    value={
+                      bookingInfo?.addBookingStepOneResponse?.data
+                        ?.passenger_note
+                    }
+                    as="textarea"
+                    placeholder="Passenger notes"
+                    name="passenger_note"
+                    onChange={handleChange}
+                    className="py-3"
+                    isInvalid={
+                      touched.passenger_note && !!errors.passenger_note
+                    }
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.passenger_note}
+                  </BootstrapForm.Control.Feedback>
                 </BootstrapForm.Group>
               </Col>
             </Row>

@@ -35,8 +35,12 @@ import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
+
 import Select from "react-select";
 import { toast } from "react-toastify";
+import DatePicker from "react-datepicker";
 
 const validationSchema = Yup.object().shape({
   // trip_type: Yup.string().required("Trip type is required"),
@@ -74,7 +78,7 @@ const validationSchema = Yup.object().shape({
 function BookingStepOne() {
   const [bookings, setBookings] = useState([]);
   const dispatch = useDispatch();
-
+  const [value, onChange] = useState(new Date());
   const [to_airport, onChangeTo] = useState("");
   const [from_airport, onChangeFrom] = useState("");
   const [isChecked, setIsChecked] = useState(false);
@@ -92,6 +96,19 @@ function BookingStepOne() {
   const handleRemoveLeg = (id) => {
     setLegs(legs.filter((leg) => leg.id !== id));
   };
+
+
+  const times = [
+    "12:00 AM", "12:30 AM", "01:00 AM", "01:30 AM", "02:00 AM", "02:30 AM",
+    "03:00 AM", "03:30 AM", "04:00 AM", "04:30 AM", "05:00 AM", "05:30 AM",
+    "06:00 AM", "06:30 AM", "07:00 AM", "07:30 AM", "08:00 AM", "08:30 AM",
+    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+    "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM",
+    "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM",
+    "06:00 PM", "06:30 PM", "07:00 PM", "07:30 PM", "08:00 PM", "08:30 PM",
+    "09:00 PM", "09:30 PM", "10:00 PM", "10:30 PM", "11:00 PM", "11:30 PM"
+  ];
+  
 
   const handleLegChange = (id, e) => {
     const { name, value } = e.target;
@@ -166,11 +183,11 @@ function BookingStepOne() {
           const { from_location, to_location } = values;
 
           // Check each field individually and show a toast if any field is missing
-          if (!to_airport) {
-            toast.error("Please fill out the Flight Date");
-            setSubmitting(false);
-            return;
-          }
+          // if (!to_airport) {
+          //   toast.error("Please fill out the Flight Date");
+          //   setSubmitting(false);
+          //   return;
+          // }
 
           if (!from_airport) {
             toast.error("Please fill out the Return Date");
@@ -294,19 +311,49 @@ function BookingStepOne() {
 
             <Row className="my-4">
               <Col md={6}>
+               <Row>
+                <Col>
                 <BootstrapForm.Group>
-                  <p>Departure Date and Time</p>
-                  <DateTimePicker
+                  <p>Departure Date</p>
+                  <DatePicker className="form-control" onChange={onChange} value={value} />
+                  {/* <DateTimePicker
                     onChange={onChangeTo}
                     value={to_airport}
                     minDate={new Date()}
-                  />
+                  /> */}
                   <ErrorMessage
                     name="flight_date"
                     component="div"
                     className="text-danger"
                   />
                 </BootstrapForm.Group>
+                </Col>
+                <Col>
+                <BootstrapForm.Group>
+                  <p>Departure  Time</p>
+                  <BootstrapForm.Control
+  as="select"
+  className="py-3"
+  name="flight_time"
+  value={bookingInfo?.addBookingStepOneResponse?.data?.flight_time || ""}
+  onChange={(e) => setFieldValue("flight_time", e.target.value)}
+>
+  <option value="">Select Flight time</option>
+  {times.map((time, index) => (
+    <option value={time} key={index}>
+      {time}
+    </option>
+  ))}
+</BootstrapForm.Control>
+
+                  <ErrorMessage
+                    name="flight_date"
+                    component="div"
+                    className="text-danger"
+                  />
+                </BootstrapForm.Group>
+                </Col>
+               </Row>
               </Col>
 
               <Col md={6}>
@@ -327,41 +374,37 @@ function BookingStepOne() {
             </Row>
 
             <Row>
-              <Col md={6}>
-                <BootstrapForm.Group>
-                  <label>
-                    <div>
-                      Client <span className="text-danger">*</span>{" "}
-                    </div>
-                  </label>
+            <Col md={6}>
+  <BootstrapForm.Group>
+    <label>
+      <div>
+        Client <span className="text-danger">*</span>
+      </div>
+    </label>
 
-                  <BootstrapForm.Control
-                    as="select"
-                    className="py-3"
-                    name="client_id"
-                    // value={values.client_id}
-                    onChange={(client_id) =>
-                      setFieldValue("client_id", client_id)
-                    }
-                    value={
-                      bookingInfo?.addBookingStepOneResponse?.data?.client_id
-                    }
-                  >
-                    <option value="">Select Client</option>
+    <BootstrapForm.Control
+      as="select"
+      className="py-3"
+      name="client_id"
+      value={bookingInfo?.addBookingStepOneResponse?.data?.client_id || ""}
+      onChange={(e) => setFieldValue("client_id", e.target.value)}
+    >
+      <option value="">Select Client</option>
+      {clientInfo?.getAllClientsResponse?.data?.map((client) => (
+        <option value={client.id} key={client.id}>
+          {`${client.first_name} ${client.last_name}`}
+        </option>
+      ))}
+    </BootstrapForm.Control>
 
-                    {clientInfo?.getAllClientsResponse?.data?.map((client) => (
-                      <option value={client.id} key={client.id}>
-                        {client.first_name + " " + client.last_name}
-                      </option>
-                    ))}
-                  </BootstrapForm.Control>
-                  <ErrorMessage
-                    name="client_id"
-                    component="div"
-                    className="text-danger"
-                  />
-                </BootstrapForm.Group>
-              </Col>
+    <ErrorMessage
+      name="client_id"
+      component="div"
+      className="text-danger"
+    />
+  </BootstrapForm.Group>
+</Col>
+
 
               <Col md={6}>
                 <BootstrapForm.Group className="">
