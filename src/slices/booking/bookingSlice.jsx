@@ -7,6 +7,7 @@ import {
   AddBookingStep02,
   AddBookingStep03,
   AddBookingStep04,
+  AddBookingStep05,
   BookingPaymentStatus,
   BookingStatus,
   DeactivateBooking,
@@ -170,6 +171,31 @@ export const addBookingStepFourAsync = createAsyncThunk(
   }
 );
 
+export const addBookingStepFiveAsync = createAsyncThunk(
+  "booking/add/step/5",
+  async ({ bookingId, values }, { rejectWithValue }) => {
+    try {
+      const response = await AddBookingStep05(bookingId, values);
+      return response;
+    } catch (error) {
+      const errorResponse = error?.response;
+
+      // Show the general error message
+      const errorMessage = errorResponse?.message || error.message;
+      toast.error(errorMessage);
+
+      // If there are detailed validation errors, show them as well
+      if (errorResponse?.errors) {
+        Object.values(errorResponse.errors).forEach((errorArray) => {
+          errorArray.forEach((errMsg) => toast.error(errMsg));
+        });
+      }
+
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 export const getAvailableAircraftAsync = createAsyncThunk(
   "available/aircraft",
   async ({ bookingId }, { rejectWithValue }) => {
@@ -213,8 +239,6 @@ export const bookingPaymentStatusAsync = createAsyncThunk(
   }
 );
 
-
-
 export const getBookingReceiptAsync = createAsyncThunk(
   "booking/receipt",
   async ({ booking_id }, { rejectWithValue }) => {
@@ -243,7 +267,6 @@ export const getBookingTripSheetAsync = createAsyncThunk(
   }
 );
 
-
 export const getBookingConfirmationSheetAsync = createAsyncThunk(
   "booking/trip/confirmation",
   async ({ booking_id }, { rejectWithValue }) => {
@@ -257,10 +280,6 @@ export const getBookingConfirmationSheetAsync = createAsyncThunk(
     }
   }
 );
-
-
-
-
 
 const bookingSlice = createSlice({
   name: "booking",
@@ -278,12 +297,13 @@ const bookingSlice = createSlice({
     addBookingStepTwoResponse: {},
     addBookingStepThreeResponse: {},
     addBookingStepFourResponse: {},
+    addBookingStepFiveResponse: {},
     getAvailableAircraftResponse: {},
     bookingStatusResponse: {},
     bookingPaymentStatusResponse: {},
-    getBookingReceiptResponse:{},
-    getBookingTripSheetResponse:{},
-    getBookingConfirmationSheetResponse:{},
+    getBookingReceiptResponse: {},
+    getBookingTripSheetResponse: {},
+    getBookingConfirmationSheetResponse: {},
     currentStep: "0",
   },
 
@@ -350,6 +370,15 @@ const bookingSlice = createSlice({
     });
     builder.addCase(addBookingStepFourAsync.rejected, (state, action) => {
       state.addBookingStepFourResponse = action?.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(addBookingStepFiveAsync.fulfilled, (state, action) => {
+      state.addBookingStepFiveResponse = action?.payload;
+      toast.success(action?.payload?.message);
+    });
+    builder.addCase(addBookingStepFiveAsync.rejected, (state, action) => {
+      state.addBookingStepFiveResponse = action?.payload;
       toast.error(action?.payload?.message);
     });
 
@@ -542,20 +571,21 @@ const bookingSlice = createSlice({
       toast.error(action?.payload?.message);
     });
 
+    builder.addCase(
+      getBookingConfirmationSheetAsync.fulfilled,
+      (state, action) => {
+        state.getBookingConfirmationSheetResponse = action.payload;
+        toast.error(action?.payload?.message);
+      }
+    );
 
-    builder.addCase(getBookingConfirmationSheetAsync.fulfilled, (state, action) => {
-      state.getBookingConfirmationSheetResponse = action.payload;
-      toast.error(action?.payload?.message);
-    });
-
-    builder.addCase(getBookingConfirmationSheetAsync.rejected, (state, action) => {
-      state.getBookingConfirmationSheetResponse = action.payload;
-      toast.error(action?.payload?.message);
-    });
-
-
-
-
+    builder.addCase(
+      getBookingConfirmationSheetAsync.rejected,
+      (state, action) => {
+        state.getBookingConfirmationSheetResponse = action.payload;
+        toast.error(action?.payload?.message);
+      }
+    );
   },
 });
 

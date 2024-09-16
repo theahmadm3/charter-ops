@@ -86,6 +86,11 @@ export const AddBookingStep04 = async (bookingId, body) => {
   return response;
 };
 
+export const AddBookingStep05 = async (bookingId, body) => {
+  const response = await PostRequest(`/booking/${bookingId}/trip-sheet`, body);
+  return response;
+};
+
 export const GetAvailableAircraftBookingById = async (bookingId) => {
   const response = await GetRequest(
     `/available-aircraft?booking_id=${bookingId}`
@@ -106,14 +111,10 @@ export const BookingPaymentStatus = async (booking_id, body) => {
   return response;
 };
 
-
 export const GetBookingReceipt = async (booking_id) => {
-  const response = await GetRequest(
-    `/bookings/receipt-preview/${booking_id}`
-  );
+  const response = await GetRequest(`/bookings/receipt-preview/${booking_id}`);
   return response;
 };
-
 
 export const GetBookingTripSheet = async (booking_id) => {
   const response = await GetRequest(
@@ -128,4 +129,3 @@ export const GetBookingTripConfirmation = async (booking_id) => {
   );
   return response;
 };
-

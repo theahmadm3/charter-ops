@@ -85,14 +85,29 @@ function BookingStepOne() {
   const [from_airport, onChangeFrom] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const [legs, setLegs] = useState([
-    { from: "", to: "", departure_date_time: "", arrival_date_time: "" },
+    {
+      from: "",
+      to: "",
+      departure_date_time: "",
+      departure_time: "",
+      arrival_date_time: "",
+      arrival_time: "",
+    },
   ]);
   const configInfo = useSelector((state) => state?.config);
 
   const handleAddLeg = () => {
     setLegs([
       ...legs,
-      { id: Date.now(), from: "", to: "", departure_date: "", return_date: "" },
+      {
+        id: Date.now(),
+        from: "",
+        to: "",
+        departure_date: "",
+        departure_time: "",
+        return_date: "",
+        arrival_time: "",
+      },
     ]);
   };
 
@@ -553,8 +568,8 @@ function BookingStepOne() {
                                 </BootstrapForm.Label>
                                 <BootstrapForm.Control
                                   type="date"
-                                  name={`legs[${index}].departure_date`}
-                                  value={leg.departure_date || ""}
+                                  name={`legs[${index}].departure_date_time`}
+                                  value={leg.departure_date_time || ""}
                                   min={
                                     values?.flight_date
                                       ? new Date(values.flight_date)
@@ -565,7 +580,7 @@ function BookingStepOne() {
                                   onChange={(e) =>
                                     handleLegChange(leg.id, {
                                       target: {
-                                        name: "departure_date",
+                                        name: "departure_date_time",
                                         value: e.target.value,
                                       },
                                     })
@@ -573,7 +588,7 @@ function BookingStepOne() {
                                   className="py-3"
                                 />
                                 <ErrorMessage
-                                  name={`legs[${index}].departure_date`}
+                                  name={`legs[${index}].departure_date_time`}
                                   component="div"
                                   className="text-danger"
                                 />
@@ -627,20 +642,20 @@ function BookingStepOne() {
                                 </BootstrapForm.Label>
                                 <BootstrapForm.Control
                                   type="date"
-                                  name={`legs[${index}].arrival_date`}
-                                  value={leg.arrival_date || ""}
+                                  name={`legs[${index}].arrival_date_time`}
+                                  value={leg.arrival_date_time || ""}
                                   min={
-                                    leg.departure_date &&
-                                    !isNaN(new Date(leg.departure_date))
-                                      ? new Date(leg.departure_date)
+                                    leg.departure_date_time &&
+                                    !isNaN(new Date(leg.departure_date_time))
+                                      ? new Date(leg.departure_date_time)
                                           .toISOString()
                                           .split("T")[0]
-                                      : new Date().toISOString().split("T")[0] // fallback to today's date if departure_date is invalid
+                                      : new Date().toISOString().split("T")[0]
                                   }
                                   onChange={(e) =>
                                     handleLegChange(leg.id, {
                                       target: {
-                                        name: "arrival_date",
+                                        name: "arrival_date_time",
                                         value: e.target.value,
                                       },
                                     })
@@ -649,7 +664,7 @@ function BookingStepOne() {
                                 />
 
                                 <ErrorMessage
-                                  name={`legs[${index}].arrival_date`}
+                                  name={`legs[${index}].arrival_date_time`}
                                   component="div"
                                   className="text-danger"
                                 />

@@ -8,27 +8,24 @@ import {
   FloatingLabel,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentStep } from "../../../../../../slices/booking/bookingSlice";
+import {
+  addBookingStepFiveAsync,
+  setCurrentStep,
+} from "../../../../../../slices/booking/bookingSlice";
 import { useEffect } from "react";
 import { getAllUsersAsync } from "../../../../../../slices/user/userSlice";
 import Select from "react-select";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
-  name: Yup.string().required("Name is required"),
-  dateOfBirth: Yup.date()
-    .required("Date of Birth is required")
-    .max(new Date(), "Date of Birth cannot be in the future"),
-  gender: Yup.string().required("Gender is required"),
-  nationality: Yup.string().required("Nationality is required"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  phoneNumber: Yup.string().required("Phone number is required"),
-  specialRequests: Yup.string(),
+  crew_notes: Yup.string().required("Crew note is required"),
+  passenger_notes: Yup.string().required("Passenger note is required"),
 });
 
 function BookingStepFive() {
-  const handleSubmit = () => {};
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state?.users);
 
@@ -39,6 +36,27 @@ function BookingStepFive() {
     dispatch(setCurrentStep(current - 1));
   };
 
+  const handleSubmit = (values) => {
+    const payload = {
+      ...values,
+      crew_members: values.crew_members.map((crew) => crew.value),
+    };
+    dispatch(
+      addBookingStepFiveAsync({
+        bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
+        values: payload,
+      })
+    )
+      .then((response) => {
+        if (response?.payload?.success) {
+          navigate(-1);
+        }
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+        toast.error("An unexpected error occurred.");
+      });
+  };
   useEffect(() => {
     try {
       dispatch(getAllUsersAsync({ user_type: "crew" }));
@@ -50,9 +68,8 @@ function BookingStepFive() {
     <>
       <Formik
         initialValues={{
-          crew_id: "",
-          crew_note:"",
-          passenger_note:""
+          crew_notes: "",
+          passenger_notes: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -83,9 +100,9 @@ function BookingStepFive() {
                       })
                     )}
                     className=" form-control"
-                    classNamePrefix="crew_id"
+                    classNamePrefix="crew_members"
                     onChange={(selectedOptions) =>
-                      setFieldValue("crew_id", selectedOptions)
+                      setFieldValue("crew_members", selectedOptions)
                     }
                   />
 
@@ -96,55 +113,48 @@ function BookingStepFive() {
                   />
                 </BootstrapForm.Group>
               </Col>
-
-             
-
-
             </Row>
             <Row className="my-3">
-            <Col md={6}>
+              <Col md={6}>
                 <BootstrapForm.Group className="">
                   <label>Crew note</label>
 
                   <BootstrapForm.Control
                     value={
-                      bookingInfo?.addBookingStepOneResponse?.data
-                        ?.crew_note
+                      bookingInfo?.addBookingStepFiveResponse?.data?.crew_notes
                     }
                     as="textarea"
                     placeholder="Crew note"
-                    name="crew_note"
+                    name="crew_notes"
                     onChange={handleChange}
                     className="py-3"
-                    isInvalid={
-                      touched.crew_note && !!errors.crew_note
-                    }
+                    isInvalid={touched.crew_notes && !!errors.crew_notes}
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.crew_note}
+                    {errors.crew_notes}
                   </BootstrapForm.Control.Feedback>
                 </BootstrapForm.Group>
               </Col>
-            <Col md={6}>
+              <Col md={6}>
                 <BootstrapForm.Group className="">
                   <label>Passenger note</label>
 
                   <BootstrapForm.Control
                     value={
-                      bookingInfo?.addBookingStepOneResponse?.data
-                        ?.passenger_note
+                      bookingInfo?.addBookingStepFiveResponse?.data
+                        ?.passenger_notes
                     }
                     as="textarea"
                     placeholder="Passenger notes"
-                    name="passenger_note"
+                    name="passenger_notes"
                     onChange={handleChange}
                     className="py-3"
                     isInvalid={
-                      touched.passenger_note && !!errors.passenger_note
+                      touched.passenger_notes && !!errors.passenger_notes
                     }
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.passenger_note}
+                    {errors.passenger_notes}
                   </BootstrapForm.Control.Feedback>
                 </BootstrapForm.Group>
               </Col>

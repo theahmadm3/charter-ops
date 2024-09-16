@@ -145,7 +145,7 @@ function BookingStepFour() {
     )
       .then((response) => {
         if (response?.payload?.success) {
-          navigate(-1);
+          // navigate(-1);
         } else if (response?.payload) {
           // const errorMessage = response.payload;
           // General error message
@@ -241,7 +241,7 @@ function BookingStepFour() {
               </BootstrapForm.Group>
             </Col>
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingDateOfBirth"
@@ -259,9 +259,9 @@ function BookingStepFour() {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel controlId="floatingGender" label="Gender">
                   <BootstrapForm.Control
@@ -283,9 +283,9 @@ function BookingStepFour() {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingNationality"
@@ -310,7 +310,7 @@ function BookingStepFour() {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
 
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
@@ -346,7 +346,7 @@ function BookingStepFour() {
               </BootstrapForm.Group>
             </Col>
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingSpecialRequests"
@@ -366,11 +366,11 @@ function BookingStepFour() {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
           </Row>
 
           <Row>
-            <Col md={2}>
+            {/* <Col md={2}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingNumAdults"
@@ -428,7 +428,7 @@ function BookingStepFour() {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
 
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
@@ -507,7 +507,7 @@ function BookingStepFour() {
                       </BootstrapForm.Group>
                     </Col>
                   </Row>
-                  <Row>
+                  {/* <Row>
                     <Col md={6}>
                       <BootstrapForm.Group className="mb-3">
                         <FloatingLabel
@@ -549,9 +549,9 @@ function BookingStepFour() {
                         </FloatingLabel>
                       </BootstrapForm.Group>
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Row>
-                    <Col md={6}>
+                    {/* <Col md={6}>
                       <BootstrapForm.Group className="mb-3">
                         <FloatingLabel
                           controlId={`passengerNationality-${passenger.id}`}
@@ -574,7 +574,7 @@ function BookingStepFour() {
                           </BootstrapForm.Control>
                         </FloatingLabel>
                       </BootstrapForm.Group>
-                    </Col>
+                    </Col> */}
                     <Col md={6}>
                       <BootstrapForm.Group className="mb-3">
                         <FloatingLabel
@@ -592,9 +592,6 @@ function BookingStepFour() {
                         </FloatingLabel>
                       </BootstrapForm.Group>
                     </Col>
-                  </Row>
-
-                  <Row>
                     <Col md={6}>
                       <BootstrapForm.Group className="mb-3">
                         <FloatingLabel
@@ -612,8 +609,10 @@ function BookingStepFour() {
                         </FloatingLabel>
                       </BootstrapForm.Group>
                     </Col>
+                  </Row>
 
-                    <Col md={6}>
+                  <Row>
+                    {/* <Col md={6}>
                       <BootstrapForm.Group className="mb-3">
                         <FloatingLabel
                           controlId={`passengerSpecialRequests-${passenger.id}`}
@@ -629,7 +628,7 @@ function BookingStepFour() {
                           />
                         </FloatingLabel>
                       </BootstrapForm.Group>
-                    </Col>
+                    </Col> */}
                   </Row>
 
                   <Button

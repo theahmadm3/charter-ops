@@ -290,10 +290,10 @@ const Booking = () => {
                         const {
                           from_location,
                           to_location,
-                          pax,
+                          flight_time,
                           flight_date,
                           return_date,
-                          trip_type,
+                          return_time,
                           payment_status,
                           aircraft,
                           bookedBy,
@@ -304,9 +304,9 @@ const Booking = () => {
                             <td>{index + 1}</td>
                             {/* <td> {trip_type} </td> */}
                             <td>{from_location}</td>
-                            <td>{flight_date}</td>
+                            <td>{flight_date + " " + flight_time}</td>
                             <td>{to_location}</td>
-                            <td>{return_date}</td>
+                            <td>{return_date + " " + return_time}</td>
                             {/* <td>{pax}</td> */}
                             {/* <td>{aircraft?.name}</td> */}
                             <td>{payment_status}</td>
