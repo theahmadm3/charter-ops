@@ -232,7 +232,7 @@ function BookingStepOne() {
               );
             })
             .finally(() => {
-              setSubmitting(false); // Set submitting to false when the submission is complete
+              setSubmitting(false);
             });
         }}
       >
@@ -543,7 +543,7 @@ function BookingStepOne() {
                         </Col>
                       </Row>
 
-                      <Row>
+                      <Row className="my-3">
                         <Col md={6}>
                           <Row>
                             <Col md={6}>
@@ -556,9 +556,11 @@ function BookingStepOne() {
                                   name={`legs[${index}].departure_date`}
                                   value={leg.departure_date || ""}
                                   min={
-                                    new Date(values.flight_date)
-                                      .toISOString()
-                                      .split("T")[0]
+                                    values?.flight_date
+                                      ? new Date(values.flight_date)
+                                          .toISOString()
+                                          .split("T")[0]
+                                      : new Date().toISOString().split("T")[0] // fallback to today's date
                                   } // restricts past dates
                                   onChange={(e) =>
                                     handleLegChange(leg.id, {
@@ -628,10 +630,12 @@ function BookingStepOne() {
                                   name={`legs[${index}].arrival_date`}
                                   value={leg.arrival_date || ""}
                                   min={
-                                    leg.departure_date ||
-                                    new Date(`legs[${index}].departure_date`)
-                                      .toISOString()
-                                      .split("T")[0]
+                                    leg.departure_date &&
+                                    !isNaN(new Date(leg.departure_date))
+                                      ? new Date(leg.departure_date)
+                                          .toISOString()
+                                          .split("T")[0]
+                                      : new Date().toISOString().split("T")[0] // fallback to today's date if departure_date is invalid
                                   }
                                   onChange={(e) =>
                                     handleLegChange(leg.id, {
@@ -643,6 +647,7 @@ function BookingStepOne() {
                                   }
                                   className="py-3"
                                 />
+
                                 <ErrorMessage
                                   name={`legs[${index}].arrival_date`}
                                   component="div"
