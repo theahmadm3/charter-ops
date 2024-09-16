@@ -5,6 +5,7 @@ import EditBookingStepOne from "../steps/step-one/edit-step-one";
 import EditBookingStepTwo from "../steps/step-two/edit-step-two";
 import EditBookingStepFour from "../steps/step-four/edit-step-four";
 import EditBookingStepThree from "../steps/step-three/edit-step-three";
+import EditBookingStepFive from "../steps/step-five/edit-step-five";
 
 const ManageBookingModal = (props) => {
   return (
@@ -38,6 +39,11 @@ const ManageBookingModal = (props) => {
             <span> Passenger Information </span>
           </div>
           <EditBookingStepFour data={props?.data} />
+
+          <div className="bg-color-1 text-white p-3 mb-4">
+            <span> Trip Sheet Information </span>
+          </div>
+          <EditBookingStepFive data={props?.data} />
         </Modal.Body>
         <Modal.Footer>
           {/* <Button onClick={props.onHide}>Close</Button> */}
