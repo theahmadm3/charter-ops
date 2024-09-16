@@ -120,10 +120,7 @@ function EditBookingStepFive(props) {
                   <label>Crew note</label>
 
                   <BootstrapForm.Control
-                    value={
-                      bookingInfo?.addBookingStepFiveResponse?.data
-                        ?.crew_notes || props?.data[0]?.trip_sheet?.crew_notes
-                    }
+                    value={props?.data[0]?.trip_sheet?.crew_notes}
                     as="textarea"
                     placeholder="Crew note"
                     name="crew_notes"
@@ -141,11 +138,7 @@ function EditBookingStepFive(props) {
                   <label>Passenger note</label>
 
                   <BootstrapForm.Control
-                    value={
-                      props?.data[0]?.trip_sheet?.passenger_notes ||
-                      bookingInfo?.addBookingStepFiveResponse?.data
-                        ?.passenger_notes
-                    }
+                    value={props?.data[0]?.trip_sheet?.passenger_notes}
                     as="textarea"
                     placeholder="Passenger notes"
                     name="passenger_notes"
