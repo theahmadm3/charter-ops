@@ -26,15 +26,15 @@ const validationSchema = Yup.object({
     .required("Total seat capacity is required")
     .positive("Must be a positive number"),
 
-  inflight_services: Yup.array().min(
-    1,
-    "At least one inflight service must be selected"
-  ),
+  // inflight_services: Yup.array().min(
+  //   1,
+  //   "At least one inflight service must be selected"
+  // ),
   image: Yup.string().required("Image is required"),
 
-  crew_capacity: Yup.number()
-    .required("Crew capacity is required")
-    .positive("Must be a positive number"),
+  // crew_capacity: Yup.number()
+  //   .required("Crew capacity is required")
+  //   .positive("Must be a positive number"),
 });
 
 function AddAircraft(props) {

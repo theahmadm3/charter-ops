@@ -147,7 +147,8 @@ const BookingFilter = () => {
                   className="my-2 me-3 py-3 border-0"
                 >
                   <span>
-                    <IoChevronForward />
+                    {/* <IoChevronForward /> */}
+                    Filter
                   </span>
                 </Button>
 
@@ -157,7 +158,8 @@ const BookingFilter = () => {
                   onClick={handleFetch}
                 >
                   <span>
-                    <MdCancel />
+                    {/* <MdCancel /> */}
+                    Clear
                   </span>
                 </Button>
               </Col>

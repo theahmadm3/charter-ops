@@ -86,7 +86,7 @@ const Booking = () => {
   };
 
   const handleAdd = () => {
-    navigate("/admin-add-booking");
+    window.location.href = "/admin-add-booking";
   };
 
   useEffect(() => {
@@ -275,7 +275,7 @@ const Booking = () => {
                     <th>Departure Date/Time</th>
                     <th>Arrival</th>
                     <th>Arrival Date/Time</th>
-                    {/* <th>Number of Pax</th> */}
+                    <th>Client</th>
                     {/* <th>Aircraft Name</th> */}
                     <th>Payment Status</th>
                     {/* <th>Created By</th> */}
@@ -295,8 +295,7 @@ const Booking = () => {
                           return_date,
                           return_time,
                           payment_status,
-                          aircraft,
-                          bookedBy,
+                          client,
                           status,
                         } = booking;
                         return (
@@ -307,7 +306,9 @@ const Booking = () => {
                             <td>{flight_date + " " + flight_time}</td>
                             <td>{to_location}</td>
                             <td>{return_date + " " + return_time}</td>
-                            {/* <td>{pax}</td> */}
+                            <td>
+                              {client?.first_name + " " + client?.last_name}
+                            </td>
                             {/* <td>{aircraft?.name}</td> */}
                             <td>{payment_status}</td>
                             {/* <td> {bookedBy?.first_name} </td> */}
@@ -369,7 +370,9 @@ const Booking = () => {
                                       handleViewReceipt(booking.id)
                                     }
                                   >
-                                    View Receipt
+                                    {status === "pending"
+                                      ? "View Invoice"
+                                      : "View Receipt"}
                                   </Dropdown.Item>
                                   <Dropdown.Item
                                     className="small"
@@ -379,14 +382,16 @@ const Booking = () => {
                                   >
                                     View Trip Sheet
                                   </Dropdown.Item>
-                                  <Dropdown.Item
-                                    className="small"
-                                    onClick={() =>
-                                      handleViewConfirmation(booking.id)
-                                    }
-                                  >
-                                    View Confirmation Sheet
-                                  </Dropdown.Item>
+                                  {status != "pending" && (
+                                    <Dropdown.Item
+                                      className="small"
+                                      onClick={() =>
+                                        handleViewConfirmation(booking.id)
+                                      }
+                                    >
+                                      View Confirmation Sheet
+                                    </Dropdown.Item>
+                                  )}
                                 </Dropdown.Menu>
                               </Dropdown>
                             </td>

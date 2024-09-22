@@ -214,7 +214,7 @@ function BookingStepOne() {
 
           const payload = {
             ...values,
-            service_id: service_id?.value,
+            service_id: service_id?.map((service) => service.value),
             from_location: from_location?.label,
             to_location: to_location?.label,
             client_id: Number(values.client_id),
@@ -231,24 +231,24 @@ function BookingStepOne() {
 
           console.log("payload", payload);
 
-          dispatch(addBookingStepOneAsync(payload))
-            .then((response) => {
-              if (response?.payload?.success) {
-                const current = bookingInfo?.currentStep;
-                dispatch(setCurrentStep(current + 1));
-              } else {
-                toast.error("Error please try again");
-              }
-            })
-            .catch((error) => {
-              console.error("Error occurred:", error);
-              toast.error(
-                "An unexpected error occurred. Please try again later."
-              );
-            })
-            .finally(() => {
-              setSubmitting(false);
-            });
+          // dispatch(addBookingStepOneAsync(payload))
+          //   .then((response) => {
+          //     if (response?.payload?.success) {
+          //       const current = bookingInfo?.currentStep;
+          //       dispatch(setCurrentStep(current + 1));
+          //     } else {
+          //       toast.error("Error please try again");
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.error("Error occurred:", error);
+          //     toast.error(
+          //       "An unexpected error occurred. Please try again later."
+          //     );
+          //   })
+          //   .finally(() => {
+          //     setSubmitting(false);
+          //   });
         }}
       >
         {({
@@ -458,6 +458,7 @@ function BookingStepOne() {
                     </div>
                   </label>
                   <Select
+                    isMulti
                     options={configInfo?.getAllServicesResponse?.data?.map(
                       (option) => ({
                         value: option?.id,
@@ -705,6 +706,38 @@ function BookingStepOne() {
                               </BootstrapForm.Group>
                             </Col>
                           </Row>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md={6}>
+                          <BootstrapForm.Group>
+                            <label>
+                              <div>
+                                Services <span className="text-danger">*</span>{" "}
+                              </div>
+                            </label>
+                            <Select
+                              isMulti
+                              options={configInfo?.getAllServicesResponse?.data?.map(
+                                (option) => ({
+                                  value: option?.id,
+                                  label: `${option.service_name} , ${option.charge_rate}`,
+                                })
+                              )}
+                              className=" form-control"
+                              classNamePrefix="service_id"
+                              onChange={(selectedOptions) =>
+                                setFieldValue("service_id", selectedOptions)
+                              }
+                            />
+
+                            <ErrorMessage
+                              name="service_id"
+                              component="div"
+                              className="text-danger"
+                            />
+                          </BootstrapForm.Group>
                         </Col>
                       </Row>
 

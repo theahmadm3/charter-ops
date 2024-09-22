@@ -49,7 +49,7 @@ function SideBar() {
     {
       to: "/admin-clients",
       icon: <IoIosPeople className="sidebar-icon" />,
-      text: "Passenger Record",
+      text: "Client Record",
     },
     {
       to: "/statistics",

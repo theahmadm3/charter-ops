@@ -89,7 +89,7 @@ function BookingStepThree() {
                 </BootstrapForm.Group>
               </Col>
 
-              <Col md={12}>
+              {/* <Col md={12}>
                 <BootstrapForm.Group className="mb-3">
                   <BootstrapForm.Check
                     type="checkbox"
@@ -106,7 +106,7 @@ function BookingStepThree() {
                     className="text-danger"
                   />
                 </BootstrapForm.Group>
-              </Col>
+              </Col> */}
             </Row>
 
             <div className="d-flex justify-content-end mt-3">

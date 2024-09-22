@@ -79,7 +79,7 @@ function EditBookingStepThree(props) {
                 </BootstrapForm.Group>
               </Col>
 
-              <Col md={12}>
+              {/* <Col md={12}>
                 <BootstrapForm.Group className="mb-3">
                   <BootstrapForm.Check
                     type="checkbox"
@@ -96,7 +96,7 @@ function EditBookingStepThree(props) {
                     className="text-danger"
                   />
                 </BootstrapForm.Group>
-              </Col>
+              </Col> */}
             </Row>
 
             <div className="my-3">

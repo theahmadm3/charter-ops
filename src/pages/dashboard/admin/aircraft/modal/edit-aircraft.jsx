@@ -48,13 +48,13 @@ const validationSchema = Yup.object({
     /^[a-zA-Z0-9]+$/,
     "The engine type field must only contain letters and numbers."
   ),
-  inflight_services: Yup.array().min(
-    1,
-    "At least one inflight service must be selected"
-  ),
-  crew_capacity: Yup.number()
-    .required("Crew capacity is required")
-    .positive("Must be a positive number"),
+  // inflight_services: Yup.array().min(
+  //   1,
+  //   "At least one inflight service must be selected"
+  // ),
+  // crew_capacity: Yup.number()
+  //   .required("Crew capacity is required")
+  //   .positive("Must be a positive number"),
   cruise_speed: Yup.number().positive("Must be a positive number"),
   remarks: Yup.string(),
 });

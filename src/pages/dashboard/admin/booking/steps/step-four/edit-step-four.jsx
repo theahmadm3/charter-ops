@@ -292,7 +292,7 @@ function EditBookingStepFour(props) {
               </BootstrapForm.Group>
             </Col>
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingDateOfBirth"
@@ -310,9 +310,9 @@ function EditBookingStepFour(props) {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel controlId="floatingGender" label="Gender">
                   <BootstrapForm.Control
@@ -334,9 +334,9 @@ function EditBookingStepFour(props) {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingNationality"
@@ -361,7 +361,7 @@ function EditBookingStepFour(props) {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
 
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
@@ -397,7 +397,7 @@ function EditBookingStepFour(props) {
               </BootstrapForm.Group>
             </Col>
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingSpecialRequests"
@@ -417,10 +417,10 @@ function EditBookingStepFour(props) {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
           </Row>
 
-          <Row>
+          {/* <Row>
             <Col md={2}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
@@ -481,6 +481,9 @@ function EditBookingStepFour(props) {
               </BootstrapForm.Group>
             </Col>
 
+          
+          </Row> */}
+          <Row>
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
@@ -558,74 +561,8 @@ function EditBookingStepFour(props) {
                       </BootstrapForm.Group>
                     </Col>
                   </Row>
+
                   <Row>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerDOB-${passenger.id}`}
-                          label="Date of Birth"
-                        >
-                          <BootstrapForm.Control
-                            type="date"
-                            name="date_of_birth"
-                            value={passenger.date_of_birth}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          />
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerGender-${passenger.id}`}
-                          label="Gender"
-                        >
-                          <BootstrapForm.Control
-                            as="select"
-                            name="gender"
-                            value={passenger.gender}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          >
-                            <option value="">Select Gender</option>
-                            {genderOptions.map((option) => (
-                              <option value={option.id} key={option.id}>
-                                {option.name}
-                              </option>
-                            ))}
-                          </BootstrapForm.Control>
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerNationality-${passenger.id}`}
-                          label="Nationality"
-                        >
-                          <BootstrapForm.Control
-                            as="select"
-                            name="nationality"
-                            value={passenger.nationality}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          >
-                            <option value="">Select Nationality</option>
-                            {nationalityOptions.map((option) => (
-                              <option value={option.name} key={option.id}>
-                                {option.name}
-                              </option>
-                            ))}
-                          </BootstrapForm.Control>
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
                     <Col md={6}>
                       <BootstrapForm.Group className="mb-3">
                         <FloatingLabel
@@ -643,9 +580,6 @@ function EditBookingStepFour(props) {
                         </FloatingLabel>
                       </BootstrapForm.Group>
                     </Col>
-                  </Row>
-
-                  <Row>
                     <Col md={6}>
                       <BootstrapForm.Group className="mb-3">
                         <FloatingLabel
@@ -656,24 +590,6 @@ function EditBookingStepFour(props) {
                             type="text"
                             name="phone"
                             value={passenger.phone}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          />
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerSpecialRequests-${passenger.id}`}
-                          label="Special Requests"
-                        >
-                          <BootstrapForm.Control
-                            as="textarea"
-                            name="special_requests"
-                            value={passenger.special_requests}
                             onChange={(e) =>
                               handlePassengerChange(passenger.id, e)
                             }
