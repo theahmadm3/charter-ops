@@ -458,7 +458,6 @@ function BookingStepOne() {
                     </div>
                   </label>
                   <Select
-                    isMulti
                     options={configInfo?.getAllServicesResponse?.data?.map(
                       (option) => ({
                         value: option?.id,
@@ -706,38 +705,6 @@ function BookingStepOne() {
                               </BootstrapForm.Group>
                             </Col>
                           </Row>
-                        </Col>
-                      </Row>
-
-                      <Row>
-                        <Col md={6}>
-                          <BootstrapForm.Group>
-                            <label>
-                              <div>
-                                Services <span className="text-danger">*</span>{" "}
-                              </div>
-                            </label>
-                            <Select
-                              isMulti
-                              options={configInfo?.getAllServicesResponse?.data?.map(
-                                (option) => ({
-                                  value: option?.id,
-                                  label: `${option.service_name} , ${option.charge_rate}`,
-                                })
-                              )}
-                              className=" form-control"
-                              classNamePrefix="service_id"
-                              onChange={(selectedOptions) =>
-                                setFieldValue("service_id", selectedOptions)
-                              }
-                            />
-
-                            <ErrorMessage
-                              name="service_id"
-                              component="div"
-                              className="text-danger"
-                            />
-                          </BootstrapForm.Group>
                         </Col>
                       </Row>
 
