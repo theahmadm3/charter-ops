@@ -1,7 +1,6 @@
 import { Formik, Form, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import { getAllClientAsync } from "../../../../../../slices/client/clientSlice";
-import { getAllAircraftsAsync } from "../../../../../../slices/aircraft/aircraftSlice";
 import {
   getAllAirportsAsync,
   getAllPartnershipsAsync,
@@ -11,11 +10,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
-  airports,
-  internationalAirports,
-  localAirports,
+
   times,
-  worldAirports,
+
 } from "../../../../../../util/data";
 import DatePicker from "react-date-picker";
 import DateTimePicker from "react-datetime-picker";
