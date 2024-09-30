@@ -225,7 +225,7 @@ const SystemConfig = () => {
         onHide={() => setModalEditPartnership(false)}
         data={updatePartnership}
       />
-      <div className="my-3 container">
+      <div className="my-3 container-fluid">
         <h6 className="mb-4">System Configuration</h6>
         <Tabs
           activeKey={activeKey}

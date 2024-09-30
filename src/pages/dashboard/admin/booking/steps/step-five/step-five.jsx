@@ -39,7 +39,9 @@ function BookingStepFive() {
   const handleSubmit = (values) => {
     const payload = {
       ...values,
-      crew_members: values.crew_members.map((crew) => crew.value),
+      crew_members: values.crew_members.map((crew) => ({
+        crew_id: crew.value
+      })),      
     };
     dispatch(
       addBookingStepFiveAsync({
