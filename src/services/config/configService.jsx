@@ -196,3 +196,15 @@ export const DeactivateRole = async (id, body) => {
   );
   return response;
 };
+
+
+// Airport
+export const GetAllAirports = async () => {
+  const response = await GetRequest("/airports");
+  return response;
+};
+
+export const SearchAirports = async (query) => {
+  const response = await GetRequest(`/airports/search?query=${query}`);
+  return response;
+};

@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { getAllClientAsync } from "../../../../../../slices/client/clientSlice";
 import { getAllAircraftsAsync } from "../../../../../../slices/aircraft/aircraftSlice";
 import {
+  getAllAirportsAsync,
   getAllPartnershipsAsync,
   getAllServicesAsync,
+  searchAirportsAsync,
 } from "../../../../../../slices/config/configSlice";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -134,6 +136,13 @@ function BookingStepOne() {
     dispatch(setCurrentStep(current + 1));
   };
 
+  const handleSearchAirport = (value) => {
+    if (value.trim() !== "") {
+      dispatch(searchAirportsAsync({ query: value }));
+    }
+  };
+  
+
   const handleRemove = (index) => {
     setBookings((prevBookings) => prevBookings.filter((_, i) => i !== index));
   };
@@ -147,6 +156,7 @@ function BookingStepOne() {
       dispatch(getAllClientAsync());
       dispatch(getAllPartnershipsAsync());
       dispatch(getAllServicesAsync());
+      dispatch(getAllAirportsAsync());
       dispatch(setCurrentStep(0));
     } catch (error) {
       console.log(error);
@@ -271,12 +281,13 @@ function BookingStepOne() {
                       bookingInfo?.addBookingStepOneResponse?.data
                         ?.from_location
                     }
-                    options={worldAirports?.map((option) => ({
-                      value: option.iata,
-                      label: `${option.name} (${option.iata})`,
+                    options={configInfo?.getAllAirportsResponse?.map((option) => ({
+                      value: option?.name,
+                      label: option?.name,
                     }))}
                     className=" form-control"
                     classNamePrefix="from_location"
+                    onInputChange={(value) => handleSearchAirport(value)}
                     onChange={(selectedOptions) =>
                       setFieldValue("from_location", selectedOptions)
                     }
@@ -295,17 +306,16 @@ function BookingStepOne() {
                   <label>Select Destination Airport</label>
 
                   <Select
-                    defaultValue={airTo}
-                    options={worldAirports?.map((option) => ({
-                      value: option.iata,
-                      label: `${option.name} (${option.iata})`,
-                    }))}
-                    className=" form-control"
-                    classNamePrefix="to_location"
-                    onChange={(selectedOptions) =>
-                      setFieldValue("to_location", selectedOptions)
-                    }
-                  />
+  defaultValue={airTo}
+  options={configInfo?.getAllAirportsResponse?.map((option) => ({
+    value: option?.name,
+    label: option?.name,
+  }))}
+  className="form-control"
+  classNamePrefix="to_location"
+  onInputChange={(value) => handleSearchAirport(value)}
+  onChange={(selectedOptions) => setFieldValue("to_location", selectedOptions)}
+/>
 
                   <ErrorMessage
                     name="to_location"
@@ -507,12 +517,13 @@ function BookingStepOne() {
                             <label>Select Departure Airport</label>
                             <Select
                               value={leg.from}
-                              options={worldAirports?.map((option) => ({
-                                value: option.iata,
-                                label: `${option.name} (${option.iata})`,
+                              options={configInfo?.getAllAirportsResponse?.map((option) => ({
+                                value: option?.name,
+                                label: option?.name,
                               }))}
                               className="form-control"
                               classNamePrefix="from_location"
+                              onInputChange={(value) => handleSearchAirport(value)}
                               onChange={(selectedOptions) =>
                                 handleLegChange(leg.id, {
                                   target: {
@@ -535,11 +546,13 @@ function BookingStepOne() {
                             <label>Select Destination Airport</label>
                             <Select
                               value={leg.to}
-                              options={worldAirports?.map((option) => ({
-                                value: option.iata,
-                                label: `${option.name} (${option.iata})`,
+                              options={configInfo?.getAllAirportsResponse?.map((option) => ({
+                                value: option?.name,
+                                label: option?.name,
                               }))}
                               className="form-control"
+                              onInputChange={(value) => handleSearchAirport(value)}
+
                               classNamePrefix="to_location"
                               onChange={(selectedOptions) =>
                                 handleLegChange(leg.id, {

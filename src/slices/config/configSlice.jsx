@@ -23,6 +23,7 @@ import {
   DeleteService,
   DeleteSupplier,
   GetAdditionalServiceById,
+  GetAllAirports,
   GetAllDepartments,
   GetAllPartnershipTypes,
   GetAllRoles,
@@ -33,6 +34,7 @@ import {
   GetRoleById,
   GetServiceById,
   GetSupplierById,
+  SearchAirports,
   UpdateDepartment,
   UpdatePartnershipType,
   UpdateRole,
@@ -516,6 +518,31 @@ export const deactivateRoleAsync = createAsyncThunk(
   }
 );
 
+// Airports
+export const getAllAirportsAsync = createAsyncThunk("airport/all", async () => {
+  const response = await GetAllAirports();
+  return response;
+});
+
+
+export const searchAirportsAsync = createAsyncThunk(
+  "airport/search",
+  async ({ query }, { rejectWithValue }) => {
+    try {
+      const response = await SearchAirports(query);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
+
+
+
 const configSlice = createSlice({
   name: "config",
   initialState: {
@@ -560,6 +587,10 @@ const configSlice = createSlice({
     updateRoleResponse: {},
     activateRoleResponse: {},
     deactivateRoleResponse: {},
+
+    // Airport
+    getAllAirportsResponse: {},
+    searchAirportsResponse:{}
   },
 
   reducers: {},
@@ -1116,6 +1147,26 @@ const configSlice = createSlice({
     builder.addCase(deactivateRoleAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
+// Airport
+    builder.addCase(getAllAirportsAsync.fulfilled, (state, action) => {
+      state.getAllAirportsResponse = action.payload;
+    });
+
+    builder.addCase(getAllAirportsAsync.rejected, (state, action) => {
+      state.getAllAirportsResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(searchAirportsAsync.fulfilled, (state, action) => {
+      state.getAllAirportsResponse = action.payload;
+    });
+
+    builder.addCase(searchAirportsAsync.rejected, (state, action) => {
+      state.getAllAirportsResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+
+
   },
 });
 

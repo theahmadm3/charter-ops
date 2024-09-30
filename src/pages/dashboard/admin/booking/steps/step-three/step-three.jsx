@@ -25,10 +25,15 @@ const validationSchema = Yup.object({
 function BookingStepThree() {
   const bookingInfo = useSelector((state) => state?.booking);
   const handleSubmit = (values) => {
+
+    const payload  = {
+      ...values,
+      services: values?.services?.map((service) => service.value),    }
+
     dispatch(
       addBookingStepFourAsync({
         bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
-        values,
+        values: payload,
       })
     )
       .then((response) => {
@@ -45,6 +50,7 @@ function BookingStepThree() {
   };
   const configInfo = useSelector((state) => state?.config);
 
+
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -56,6 +62,7 @@ function BookingStepThree() {
     const current = bookingInfo?.currentStep;
     dispatch(setCurrentStep(current - 1));
   };
+
 
   useEffect(() => {
     try {
@@ -74,8 +81,7 @@ function BookingStepThree() {
       <Formik
         initialValues={{
           special_requests: "",
-
-          premium_membership: false,
+          services:"",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -110,16 +116,17 @@ function BookingStepThree() {
                     <div>Additional Services </div>
                   </label>
                   <Select
-                    options={configInfo?.getAdditionalServiceByIdResponse?.data?.map(
+                  isMulti
+                    options={configInfo?.getAdditionalServiceByIdResponse?.map(
                       (option) => ({
                         value: option?.id,
                         label: `${option.service_name} , ${option.charge_rate}`,
                       })
                     )}
                     className=" form-control"
-                    classNamePrefix="service_id"
+                    classNamePrefix="services"
                     onChange={(selectedOptions) =>
-                      setFieldValue("service_id", selectedOptions)
+                      setFieldValue("services", selectedOptions)
                     }
                   />
 
