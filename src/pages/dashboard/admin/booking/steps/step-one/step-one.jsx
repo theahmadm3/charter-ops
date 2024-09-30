@@ -281,10 +281,15 @@ function BookingStepOne() {
                       bookingInfo?.addBookingStepOneResponse?.data
                         ?.from_location
                     }
-                    options={configInfo?.getAllAirportsResponse?.map((option) => ({
-                      value: option?.name,
-                      label: option?.name,
-                    }))}
+                    options={
+                      Array.isArray(configInfo?.getAllAirportsResponse)
+                        ? configInfo.getAllAirportsResponse.map((option) => ({
+                            value: option?.name,
+                            label: option?.name,
+                          }))
+                        : []
+                    }
+                    
                     className=" form-control"
                     classNamePrefix="from_location"
                     onInputChange={(value) => handleSearchAirport(value)}
@@ -307,10 +312,15 @@ function BookingStepOne() {
 
                   <Select
   defaultValue={airTo}
-  options={configInfo?.getAllAirportsResponse?.map((option) => ({
-    value: option?.name,
-    label: option?.name,
-  }))}
+  options={
+    Array.isArray(configInfo?.getAllAirportsResponse)
+      ? configInfo.getAllAirportsResponse.map((option) => ({
+          value: option?.name,
+          label: option?.name,
+        }))
+      : []
+  }
+  
   className="form-control"
   classNamePrefix="to_location"
   onInputChange={(value) => handleSearchAirport(value)}
@@ -517,10 +527,15 @@ function BookingStepOne() {
                             <label>Select Departure Airport</label>
                             <Select
                               value={leg.from}
-                              options={configInfo?.getAllAirportsResponse?.map((option) => ({
-                                value: option?.name,
-                                label: option?.name,
-                              }))}
+                              options={
+                                Array.isArray(configInfo?.getAllAirportsResponse)
+                                  ? configInfo.getAllAirportsResponse.map((option) => ({
+                                      value: option?.name,
+                                      label: option?.name,
+                                    }))
+                                  : []
+                              }
+                              
                               className="form-control"
                               classNamePrefix="from_location"
                               onInputChange={(value) => handleSearchAirport(value)}
@@ -546,10 +561,15 @@ function BookingStepOne() {
                             <label>Select Destination Airport</label>
                             <Select
                               value={leg.to}
-                              options={configInfo?.getAllAirportsResponse?.map((option) => ({
-                                value: option?.name,
-                                label: option?.name,
-                              }))}
+                              options={
+                                Array.isArray(configInfo?.getAllAirportsResponse)
+                                  ? configInfo.getAllAirportsResponse.map((option) => ({
+                                      value: option?.name,
+                                      label: option?.name,
+                                    }))
+                                  : []
+                              }
+                              
                               className="form-control"
                               onInputChange={(value) => handleSearchAirport(value)}
 
@@ -589,8 +609,8 @@ function BookingStepOne() {
                                       ? new Date(values.flight_date)
                                           .toISOString()
                                           .split("T")[0]
-                                      : new Date().toISOString().split("T")[0] // fallback to today's date
-                                  } // restricts past dates
+                                      : new Date().toISOString().split("T")[0] 
+                                  } 
                                   onChange={(e) =>
                                     handleLegChange(leg.id, {
                                       target: {
