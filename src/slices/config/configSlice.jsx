@@ -7,6 +7,7 @@ import {
   ActivateRole,
   ActivateService,
   ActivateSupplier,
+  AddAdditionalService,
   AddDepartment,
   AddPartnershipType,
   AddRole,
@@ -21,6 +22,7 @@ import {
   DeletePartnershipType,
   DeleteService,
   DeleteSupplier,
+  GetAdditionalServiceById,
   GetAllDepartments,
   GetAllPartnershipTypes,
   GetAllRoles,
@@ -52,6 +54,34 @@ export const addServiceAsync = createAsyncThunk(
   async ({ values }, { rejectWithValue }) => {
     try {
       const response = await AddService(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const addAdditionalServiceAsync = createAsyncThunk(
+  "additional/service/add",
+  async ({ values }, { rejectWithValue }) => {
+    try {
+      const response = await AddAdditionalService(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAdditionalServiceByIdAsync = createAsyncThunk(
+  "get/additional/service/by/id",
+  async ({ service_id }, { rejectWithValue }) => {
+    try {
+      const response = await GetAdditionalServiceById(service_id);
 
       return response;
     } catch (error) {
@@ -491,6 +521,8 @@ const configSlice = createSlice({
   initialState: {
     getAllServicesResponse: {},
     addServiceResponse: {},
+    addAdditionalServiceResponse: {},
+    getAdditionalServiceByIdResponse: {},
     getServiceByIdResponse: {},
     updateServiceResponse: {},
     deleteServiceResponse: {},
@@ -555,6 +587,27 @@ const configSlice = createSlice({
     });
     builder.addCase(addServiceAsync.rejected, (state, action) => {
       toast.error(action.payload.message);
+    });
+
+    builder.addCase(addAdditionalServiceAsync.fulfilled, (state, action) => {
+      state.addAdditionalServiceResponse = action.payload;
+      toast.success(action.payload.message);
+    });
+
+    builder.addCase(addAdditionalServiceAsync.rejected, (state, action) => {
+      state.addAdditionalServiceResponse = action.payload;
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(
+      getAdditionalServiceByIdAsync.fulfilled,
+      (state, action) => {
+        state.getAdditionalServiceByIdResponse = action.payload;
+      }
+    );
+
+    builder.addCase(getAdditionalServiceByIdAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
     });
 
     builder.addCase(getServiceByIdAsync.fulfilled, (state, action) => {

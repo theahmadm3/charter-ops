@@ -3,12 +3,13 @@ import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { getAllBookingAsync } from "../../slices/booking/bookingSlice";
 import { Button, Col, FloatingLabel, Form, Row } from "react-bootstrap";
-import { IoChevronForward } from "react-icons/io5";
+import { IoChevronForward, IoSearchCircleSharp } from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import { FaSearch } from "react-icons/fa";
 
 const BookingFilter = () => {
   const dispatch = useDispatch();
@@ -147,8 +148,7 @@ const BookingFilter = () => {
                   className="my-2 me-3 py-3 border-0"
                 >
                   <span>
-                    {/* <IoChevronForward /> */}
-                    Filter
+                    <FaSearch />{" "}
                   </span>
                 </Button>
 
@@ -158,8 +158,7 @@ const BookingFilter = () => {
                   onClick={handleFetch}
                 >
                   <span>
-                    {/* <MdCancel /> */}
-                    Clear
+                    <MdCancel />
                   </span>
                 </Button>
               </Col>

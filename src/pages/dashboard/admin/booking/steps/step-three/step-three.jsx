@@ -12,6 +12,9 @@ import {
   addBookingStepFourAsync,
   setCurrentStep,
 } from "../../../../../../slices/booking/bookingSlice";
+import { useEffect } from "react";
+import { getAdditionalServiceByIdAsync } from "../../../../../../slices/config/configSlice";
+import Select from "react-select";
 
 const validationSchema = Yup.object({
   special_requests: Yup.string().notRequired("Special requests are required"),
@@ -21,7 +24,6 @@ const validationSchema = Yup.object({
 
 function BookingStepThree() {
   const bookingInfo = useSelector((state) => state?.booking);
-
   const handleSubmit = (values) => {
     dispatch(
       addBookingStepFourAsync({
@@ -41,6 +43,8 @@ function BookingStepThree() {
         console.error("Error occurred:", error);
       });
   };
+  const configInfo = useSelector((state) => state?.config);
+
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -53,6 +57,18 @@ function BookingStepThree() {
     dispatch(setCurrentStep(current - 1));
   };
 
+  useEffect(() => {
+    try {
+      dispatch(
+        getAdditionalServiceByIdAsync({
+          service_id: bookingInfo.selectedServiceId,
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
+
   return (
     <>
       <Formik
@@ -64,11 +80,11 @@ function BookingStepThree() {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, handleChange, handleBlur }) => (
+        {({ values, handleChange, handleBlur, setFieldValue }) => (
           <Form>
             <Row>
               <Col md={6}>
-                <BootstrapForm.Group className="mb-3">
+                <BootstrapForm.Group className="mb-3 mt-4">
                   <FloatingLabel
                     controlId="floatingSpecialRequests"
                     label="Special Requests (Optional)"
@@ -86,6 +102,32 @@ function BookingStepThree() {
                       className="text-danger"
                     />
                   </FloatingLabel>
+                </BootstrapForm.Group>
+              </Col>
+              <Col md={6}>
+                <BootstrapForm.Group>
+                  <label>
+                    <div>Additional Services </div>
+                  </label>
+                  <Select
+                    options={configInfo?.getAdditionalServiceByIdResponse?.data?.map(
+                      (option) => ({
+                        value: option?.id,
+                        label: `${option.service_name} , ${option.charge_rate}`,
+                      })
+                    )}
+                    className=" form-control"
+                    classNamePrefix="service_id"
+                    onChange={(selectedOptions) =>
+                      setFieldValue("service_id", selectedOptions)
+                    }
+                  />
+
+                  <ErrorMessage
+                    name="service_id"
+                    component="div"
+                    className="text-danger"
+                  />
                 </BootstrapForm.Group>
               </Col>
 

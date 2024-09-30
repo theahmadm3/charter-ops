@@ -305,11 +305,15 @@ const bookingSlice = createSlice({
     getBookingTripSheetResponse: {},
     getBookingConfirmationSheetResponse: {},
     currentStep: "0",
+    selectedServiceId: "",
   },
 
   reducers: {
     setCurrentStep(state, action) {
       state.currentStep = action.payload;
+    },
+    setSelectedServiceId(state, action) {
+      state.selectedServiceId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -589,6 +593,6 @@ const bookingSlice = createSlice({
   },
 });
 
-export const { setCurrentStep } = bookingSlice.actions;
+export const { setCurrentStep, setSelectedServiceId } = bookingSlice.actions;
 
 export default bookingSlice.reducer;
