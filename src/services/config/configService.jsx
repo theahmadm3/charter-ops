@@ -16,8 +16,20 @@ export const AddService = async (body) => {
   return response;
 };
 
+export const AddAdditionalService = async (body) => {
+  const response = await PostRequest("/additional-services", body);
+  return response;
+};
+
 export const GetServiceById = async (id) => {
   const response = await GetRequest(`/services/${id}`);
+  return response;
+};
+
+export const GetAdditionalServiceById = async (service_id) => {
+  const response = await GetRequest(
+    `/services/${service_id}/additional-services`
+  );
   return response;
 };
 

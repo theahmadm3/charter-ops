@@ -29,11 +29,14 @@ import AddSupplier from "./modal/supplier/add-supplier";
 import EditSupplier from "./modal/supplier/edit-supplier";
 import AddPartnership from "./modal/partnership/add-partnership";
 import EditPartnership from "./modal/partnership/edit-partnership";
+import AddAdditionalService from "./modal/service/add-additional-service";
 
 const SystemConfig = () => {
   const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState("services");
   const [modalAddService, setModalAddService] = useState(false);
+  const [modalAddAdditionalService, setModalAddAdditionlService] =
+    useState(false);
   const [modalEditService, setModalEditService] = useState(false);
   const [modalAddDepartment, setModalAddDepartment] = useState(false);
   const [modalEditDepartment, setModalEditDepartment] = useState(false);
@@ -41,6 +44,7 @@ const SystemConfig = () => {
   const [modalEditSupplier, setModalEditSupplier] = useState(false);
   const [modalAddPartnership, setModalAddPartnership] = useState(false);
   const [modalEditPartnership, setModalEditPartnership] = useState(false);
+  const [serviceId, setServiceId] = useState();
 
   const configInfo = useSelector((state) => state?.config);
   const [updateService, setUpdateService] = useState([]);
@@ -101,21 +105,11 @@ const SystemConfig = () => {
       );
     setUpdateDepartment(updateDepartment);
   };
-  // const handleDeletDepartment = (id) => {
-  //   dispatch(deleteDepartmentAsync({ id }))
-  //     .then((response) => {
-  //       if (response) {
-  //         toast.success("Department deleted successfully");
-  //       } else {
-  //         toast.error("Error: Service deletion failed");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       toast.error("Error: Please try again");
-  //       console.error("Error occurred:", error);
-  //     });
-  // };
 
+  const handleAddAdditionalService = (id) => {
+    setModalAddAdditionlService(true);
+    setServiceId(id);
+  };
   const handleEditSupplier = (id) => {
     setModalEditSupplier(true);
 
@@ -193,6 +187,12 @@ const SystemConfig = () => {
         show={modalAddService}
         onHide={() => setModalAddService(false)}
       />
+      <AddAdditionalService
+        show={modalAddAdditionalService}
+        onHide={() => setModalAddAdditionlService(false)}
+        data={serviceId}
+      />
+
       <EditService
         show={modalEditService}
         onHide={() => setModalEditService(false)}
@@ -298,6 +298,16 @@ const SystemConfig = () => {
                                   >
                                     Manage
                                   </Dropdown.Item>
+
+                                  <Dropdown.Item
+                                    className="small"
+                                    onClick={() =>
+                                      handleAddAdditionalService(service.id)
+                                    }
+                                  >
+                                    Add Additional Service
+                                  </Dropdown.Item>
+
                                   {status ? (
                                     <Dropdown.Item
                                       className="small bg-danger text-white"

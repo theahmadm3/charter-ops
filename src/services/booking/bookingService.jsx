@@ -87,7 +87,7 @@ export const AddBookingStep04 = async (bookingId, body) => {
 };
 
 export const AddBookingStep05 = async (bookingId, body) => {
-  const response = await PostRequest(`/booking/${bookingId}/trip-sheet`, body);
+  const response = await PostRequest(`/bookings/${bookingId}/trip-sheet`, body);
   return response;
 };
 

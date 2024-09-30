@@ -43,7 +43,9 @@ function EditBookingStepFive(props) {
     };
     dispatch(
       addBookingStepFiveAsync({
-        bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
+        bookingId:
+          bookingInfo?.addBookingStepOneResponse?.data?.id ||
+          props?.data[0]?.id,
         values: payload,
       })
     )
