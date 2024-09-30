@@ -117,12 +117,15 @@ function BookingStepThree() {
                   </label>
                   <Select
                   isMulti
-                    options={configInfo?.getAdditionalServiceByIdResponse?.map(
-                      (option) => ({
-                        value: option?.id,
-                        label: `${option.service_name} , ${option.charge_rate}`,
-                      })
-                    )}
+                  options={
+                    Array.isArray(configInfo?.getAdditionalServiceByIdResponse)
+                      ? configInfo.getAdditionalServiceByIdResponse.map((option) => ({
+                          value: option?.id,
+                          label: `${option?.service_name}, ${option?.charge_rate}`,
+                        }))
+                      : []
+                  }
+                  
                     className=" form-control"
                     classNamePrefix="services"
                     onChange={(selectedOptions) =>
