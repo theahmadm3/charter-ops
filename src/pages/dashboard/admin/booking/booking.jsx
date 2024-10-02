@@ -33,6 +33,7 @@ import UpdateStatusModal from "./modals/updated-status";
 import BookingFilter from "../../../../component/filters/booking-filter";
 import { toast } from "react-toastify";
 import ViewBookingFile from "./modals/view-files";
+import moment from "moment";
 
 const Booking = () => {
   const dispatch = useDispatch();
@@ -301,17 +302,22 @@ const Booking = () => {
                         return (
                           <tr key={index}>
                             <td>{index + 1}</td>
-                            {/* <td> {trip_type} </td> */}
                             <td>{from_location}</td>
-                            <td>{flight_date + " " + flight_time}</td>
+                            <td>
+                              {moment(flight_date).format("ll") +
+                                " | " +
+                                moment(flight_time, "HH:mm:ss").format("LT")}
+                            </td>
                             <td>{to_location}</td>
-                            <td>{return_date + " " + return_time}</td>
+                            <td>
+                              {moment(return_date).format("ll") +
+                                " | " +
+                                moment(return_time, "HH:mm:ss").format("LT")}
+                            </td>
                             <td>
                               {client?.first_name + " " + client?.last_name}
                             </td>
-                            {/* <td>{aircraft?.name}</td> */}
                             <td>{payment_status}</td>
-                            {/* <td> {bookedBy?.first_name} </td> */}
                             <td>
                               {" "}
                               {status === "no_show" ? "no show" : status}{" "}

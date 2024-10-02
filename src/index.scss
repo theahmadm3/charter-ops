@@ -441,3 +441,8 @@ th {
 .aircraft-card .card-body {
   padding: 16px;
 }
+
+.custom-scroll-dropdown {
+  max-height: 200px !important;
+  overflow-y: auto;
+}

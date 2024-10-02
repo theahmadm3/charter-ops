@@ -9,11 +9,7 @@ import {
 } from "../../../../../../slices/config/configSlice";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import {
-
-  times,
-
-} from "../../../../../../util/data";
+import { times } from "../../../../../../util/data";
 import DatePicker from "react-date-picker";
 import DateTimePicker from "react-datetime-picker";
 
@@ -43,6 +39,7 @@ import "react-calendar/dist/Calendar.css";
 
 import Select from "react-select";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 const validationSchema = Yup.object().shape({
   // trip_type: Yup.string().required("Trip type is required"),
@@ -84,24 +81,33 @@ function BookingStepOne() {
   const [to_airport, onChangeTo] = useState("");
   const [from_airport, onChangeFrom] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+
+  const clientInfo = useSelector((state) => state?.client);
+  const configInfo = useSelector((state) => state?.config);
+
+  const bookingInfo = useSelector((state) => state?.booking);
   const [legs, setLegs] = useState([
     {
-      from: "",
+      id: uuidv4(),
+      from: bookingInfo?.addBookingStepOneResponse?.data?.from_location
+        ? {
+            value: bookingInfo.addBookingStepOneResponse.data.from_location,
+            label: bookingInfo.addBookingStepOneResponse.data.from_location,
+          }
+        : "",
       to: "",
-      departure_date_time: "",
+      departure_date: "",
       departure_time: "",
-      arrival_date_time: "",
+      return_date: "",
       arrival_time: "",
     },
   ]);
-  const configInfo = useSelector((state) => state?.config);
 
   const handleAddLeg = () => {
-    setLegs([
-      ...legs,
+    setLegs((prevLegs) => [
+      ...prevLegs,
       {
-        id: Date.now(),
-        from: "",
+        from: prevLegs.length > 0 ? prevLegs[prevLegs.length - 1].to : "", // Set 'from' to the previous leg's 'to' value
         to: "",
         departure_date: "",
         departure_time: "",
@@ -110,20 +116,34 @@ function BookingStepOne() {
       },
     ]);
   };
-
   const handleRemoveLeg = (id) => {
     setLegs(legs.filter((leg) => leg.id !== id));
   };
 
-  const handleLegChange = (id, e) => {
-    const { name, value } = e.target;
-    setLegs(
-      legs.map((leg) => (leg.id === id ? { ...leg, [name]: value } : leg))
+  const handleLegChange = (legId, event) => {
+    const { name, value } = event.target;
+
+    setLegs((prevLegs) =>
+      prevLegs.map((leg) =>
+        leg.id === legId
+          ? {
+              ...leg,
+              [name]: value, // value will be an object with `value` and `label`
+            }
+          : leg
+      )
     );
   };
-  const clientInfo = useSelector((state) => state?.client);
 
-  const bookingInfo = useSelector((state) => state?.booking);
+  useEffect(() => {
+    if (legs[0]?.from) {
+      setAirTo((prevAirTo) => ({
+        ...prevAirTo,
+        value: legs[0].from.value,
+        label: legs[0].from.label,
+      }));
+    }
+  }, [legs]);
 
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
@@ -138,7 +158,6 @@ function BookingStepOne() {
       dispatch(searchAirportsAsync({ query: value }));
     }
   };
-  
 
   const handleRemove = (index) => {
     setBookings((prevBookings) => prevBookings.filter((_, i) => i !== index));
@@ -167,12 +186,13 @@ function BookingStepOne() {
       }
     : null;
 
-  const airTo = bookingInfo?.addBookingStepOneResponse?.data?.to_location
-    ? {
-        value: bookingInfo?.addBookingStepOneResponse?.data?.to_location,
-        label: bookingInfo?.addBookingStepOneResponse?.data?.to_location,
-      }
-    : null;
+  const [airTo, setAirTo] = useState(() => {
+    const initialToLocation =
+      bookingInfo?.addBookingStepOneResponse?.data?.to_location;
+    return initialToLocation
+      ? { value: initialToLocation, label: initialToLocation }
+      : null;
+  });
 
   return (
     <>
@@ -286,7 +306,6 @@ function BookingStepOne() {
                           }))
                         : []
                     }
-                    
                     className=" form-control"
                     classNamePrefix="from_location"
                     onInputChange={(value) => handleSearchAirport(value)}
@@ -308,21 +327,23 @@ function BookingStepOne() {
                   <label>Select Destination Airport</label>
 
                   <Select
-  defaultValue={airTo}
-  options={
-    Array.isArray(configInfo?.getAllAirportsResponse)
-      ? configInfo.getAllAirportsResponse.map((option) => ({
-          value: option?.name,
-          label: option?.name,
-        }))
-      : []
-  }
-  
-  className="form-control"
-  classNamePrefix="to_location"
-  onInputChange={(value) => handleSearchAirport(value)}
-  onChange={(selectedOptions) => setFieldValue("to_location", selectedOptions)}
-/>
+                    defaultValue={airTo} // Using airTo as default value
+                    options={
+                      Array.isArray(configInfo?.getAllAirportsResponse)
+                        ? configInfo.getAllAirportsResponse.map((option) => ({
+                            value: option?.name,
+                            label: option?.name,
+                          }))
+                        : []
+                    }
+                    className="form-control"
+                    classNamePrefix="to_location"
+                    onInputChange={(value) => handleSearchAirport(value)}
+                    onChange={(selectedOptions) => {
+                      setAirTo(selectedOptions); // Update airTo on selection
+                      setFieldValue("to_location", selectedOptions); // Assuming you're using Formik
+                    }}
+                  />
 
                   <ErrorMessage
                     name="to_location"
@@ -344,7 +365,7 @@ function BookingStepOne() {
                         placeholder="Select departure date"
                         name="flight_date"
                         value={values.flight_date}
-                        min={new Date().toISOString().split("T")[0]} // ensures today is the minimum date
+                        min={new Date().toISOString().split("T")[0]}
                         onChange={handleChange}
                         className="py-3"
                       />
@@ -360,9 +381,10 @@ function BookingStepOne() {
                       <BootstrapForm.Label>Departure Time</BootstrapForm.Label>
                       <BootstrapForm.Control
                         as="select"
-                        className="py-3"
+                        className="py-3 custom-scroll-dropdown"
                         name="flight_time"
                         value={values.flight_time || ""}
+                        style={{ maxHeight: "200px", overflowY: "auto" }}
                         onChange={(e) =>
                           setFieldValue("flight_time", e.target.value)
                         }
@@ -374,6 +396,7 @@ function BookingStepOne() {
                           </option>
                         ))}
                       </BootstrapForm.Control>
+
                       <ErrorMessage
                         name="flight_time"
                         component="div"
@@ -523,19 +546,24 @@ function BookingStepOne() {
                           <BootstrapForm.Group>
                             <label>Select Departure Airport</label>
                             <Select
-                              value={leg.from}
+                              defaultValue={value.to_location?.label}
                               options={
-                                Array.isArray(configInfo?.getAllAirportsResponse)
-                                  ? configInfo.getAllAirportsResponse.map((option) => ({
-                                      value: option?.name,
-                                      label: option?.name,
-                                    }))
+                                Array.isArray(
+                                  configInfo?.getAllAirportsResponse
+                                )
+                                  ? configInfo.getAllAirportsResponse.map(
+                                      (option) => ({
+                                        value: option?.name,
+                                        label: option?.name,
+                                      })
+                                    )
                                   : []
                               }
-                              
                               className="form-control"
-                              classNamePrefix="from_location"
-                              onInputChange={(value) => handleSearchAirport(value)}
+                              classNamePrefix="from"
+                              onInputChange={(value) =>
+                                handleSearchAirport(value)
+                              }
                               onChange={(selectedOptions) =>
                                 handleLegChange(leg.id, {
                                   target: {
@@ -545,6 +573,7 @@ function BookingStepOne() {
                                 })
                               }
                             />
+
                             <ErrorMessage
                               name={`legs[${index}].from`}
                               component="div"
@@ -559,20 +588,24 @@ function BookingStepOne() {
                             <Select
                               value={leg.to}
                               options={
-                                Array.isArray(configInfo?.getAllAirportsResponse)
-                                  ? configInfo.getAllAirportsResponse.map((option) => ({
-                                      value: option?.name,
-                                      label: option?.name,
-                                    }))
+                                Array.isArray(
+                                  configInfo?.getAllAirportsResponse
+                                )
+                                  ? configInfo.getAllAirportsResponse.map(
+                                      (option) => ({
+                                        value: option?.name,
+                                        label: option?.name,
+                                      })
+                                    )
                                   : []
                               }
-                              
                               className="form-control"
-                              onInputChange={(value) => handleSearchAirport(value)}
-
                               classNamePrefix="to_location"
+                              onInputChange={(value) =>
+                                handleSearchAirport(value)
+                              }
                               onChange={(selectedOptions) =>
-                                handleLegChange(leg.id, {
+                                handleLegChange(legs[0].id, {
                                   target: {
                                     name: "to",
                                     value: selectedOptions,
@@ -606,8 +639,8 @@ function BookingStepOne() {
                                       ? new Date(values.flight_date)
                                           .toISOString()
                                           .split("T")[0]
-                                      : new Date().toISOString().split("T")[0] 
-                                  } 
+                                      : new Date().toISOString().split("T")[0]
+                                  }
                                   onChange={(e) =>
                                     handleLegChange(leg.id, {
                                       target: {
@@ -763,13 +796,6 @@ function BookingStepOne() {
             </div>
 
             <div className="d-flex justify-content-end mt-3">
-              {/* <Button
-                variant="white"
-                className="border  border-main-color text-start"
-                onClick={handleBack}
-              >
-                Back
-              </Button> */}
               {bookingInfo?.addBookingStepOneResponse?.data && (
                 <Button
                   variant="white"
