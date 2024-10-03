@@ -372,7 +372,6 @@ function BookingStepOne() {
                     classNamePrefix="to_location"
                     onInputChange={(value) => handleSearchAirport(value)}
                     onChange={(selectedOption) => {
-                      // Set new value for Formik field and state
                       setFieldValue("to_location", selectedOption.value);
                       setToLocationDefaultValue(selectedOption);
                       setAirTo(selectedOption.value);
