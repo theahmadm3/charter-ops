@@ -569,7 +569,7 @@ function BookingStepOne() {
                 <BootstrapForm.Group>
                   <label>Select Service</label>
                   <Select
-                    defaultValue={savedValues.service_id}
+                    defaultValue={bookingInfo?.addBookingStepOneResponse?.data?.service_id ||savedValues.service_id || bookingInfo?.addBookingStepOneResponse?.data?.service?.id}
                     options={
                       Array.isArray(configInfo?.getAllServicesResponse?.data)
                         ? configInfo?.getAllServicesResponse?.data?.map(
