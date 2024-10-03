@@ -1,5 +1,5 @@
 import { Formik, Form, ErrorMessage } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAllClientAsync } from "../../../../../../slices/client/clientSlice";
 import {
   getAllAirportsAsync,
@@ -137,15 +137,43 @@ function BookingStepOne() {
       return updatedLegs;
     });
   };
-  // useEffect(() => {
-  //   if (legs[0]?.from) {
-  //     setAirTo((prevAirTo) => ({
-  //       ...prevAirTo,
-  //       value: legs[0].from.value,
-  //       label: legs[0].from.label,
-  //     }));
-  //   }
-  // }, [legs]);
+  console.log(
+    "dddddddd",
+    bookingInfo?.addBookingStepOneResponse?.data?.from_location
+  );
+  const initialValues = useMemo(
+    () => ({
+      from_location:
+        bookingInfo?.addBookingStepOneResponse?.data?.from_location,
+      to_location: bookingInfo?.addBookingStepOneResponse?.data?.to_location,
+      flight_date: bookingInfo?.addBookingStepOneResponse?.data?.flight_date,
+      return_date: bookingInfo?.addBookingStepOneResponse?.data?.return_date,
+      client_id: bookingInfo?.addBookingStepOneResponse?.data?.client_id,
+      multi_leg: null,
+      service_id: bookingInfo?.addBookingStepOneResponse?.data?.service_id,
+      flight_time: "",
+      return_time: "",
+    }),
+    [bookingInfo?.addBookingStepOneResponse]
+  );
+
+  const validationSchema = Yup.object().shape({
+    // from_location: Yup.object().required("From location is required."),
+    // to_location: Yup.object().required("To location is required."),
+    // flight_date: Yup.date().required("Departure date is required."),
+    // return_date: Yup.date().required("Return date is required."),
+    // client_id: Yup.string().required("Client is required."),
+    // service_id: Yup.object().required("Service is required."),
+    // flight_time: Yup.string().required("Flight time is required."),
+    // return_time: Yup.string().required("Return time is required."),
+  });
+
+  const [savedValues, setSavedValues] = useState(initialValues);
+
+  useEffect(() => {
+    // Restore values from savedValues when the component mounts
+    setSavedValues(initialValues); // Update this to save the initial values from the response if needed
+  }, [initialValues]);
 
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
@@ -160,6 +188,29 @@ function BookingStepOne() {
       dispatch(searchAirportsAsync({ query: value }));
     }
   };
+  const [toLocationDefaultValue, setToLocationDefaultValue] = useState(null);
+  const [fromLocationDefaultValue, setFromLocationDefaultValue] =
+    useState(null);
+
+  // useEffect for setting initial value for from_location
+  useEffect(() => {
+    if (bookingInfo?.addBookingStepOneResponse?.data?.from_location) {
+      setFromLocationDefaultValue({
+        value: bookingInfo.addBookingStepOneResponse.data.from_location,
+        label: bookingInfo.addBookingStepOneResponse.data.from_location,
+      });
+    }
+  }, [bookingInfo?.addBookingStepOneResponse?.data?.from_location]);
+
+  // useEffect for setting initial value for to_location
+  useEffect(() => {
+    if (bookingInfo?.addBookingStepOneResponse?.data?.to_location) {
+      setToLocationDefaultValue({
+        value: bookingInfo.addBookingStepOneResponse.data.to_location,
+        label: bookingInfo.addBookingStepOneResponse.data.to_location,
+      });
+    }
+  }, [bookingInfo?.addBookingStepOneResponse?.data?.to_location]);
 
   const handleRemove = (index) => {
     setBookings((prevBookings) => prevBookings.filter((_, i) => i !== index));
@@ -217,19 +268,6 @@ function BookingStepOne() {
         onSubmit={(values, { setSubmitting }) => {
           const { from_location, to_location, service_id } = values;
 
-          // Check each field individually and show a toast if any field is missing
-          // if (!to_airport) {
-          //   toast.error("Please fill out the Flight Date");
-          //   setSubmitting(false);
-          //   return;
-          // }
-
-          // if (!from_airport) {
-          //   toast.error("Please fill out the Return Date");
-          //   setSubmitting(false);
-          //   return;
-          // }
-
           dispatch(setSelectedServiceId(service_id?.value));
 
           if (!from_location) {
@@ -247,8 +285,7 @@ function BookingStepOne() {
           const payload = {
             ...values,
             service_id: service_id?.value,
-            from_location: from_location?.label,
-            to_location: to_location?.label,
+
             client_id: Number(values.client_id),
             multi_leg: isChecked,
             ...(isChecked &&
@@ -288,10 +325,7 @@ function BookingStepOne() {
                 <BootstrapForm.Group>
                   <label>Select Departure Airport</label>
                   <Select
-                    defaultValue={
-                      bookingInfo?.addBookingStepOneResponse?.data
-                        ?.from_location
-                    }
+                    value={fromLocationDefaultValue}
                     options={
                       Array.isArray(configInfo?.getAllAirportsResponse)
                         ? configInfo.getAllAirportsResponse.map((option) => ({
@@ -300,14 +334,19 @@ function BookingStepOne() {
                           }))
                         : []
                     }
-                    className=" form-control"
+                    className="form-control"
                     classNamePrefix="from_location"
                     onInputChange={(value) => handleSearchAirport(value)}
-                    onChange={(selectedOptions) =>
-                      setFieldValue("from_location", selectedOptions)
-                    }
+                    onChange={(selectedOption) => {
+                      // Set new value for Formik field and state
+                      setFieldValue("from_location", selectedOption.value);
+                      setFromLocationDefaultValue(selectedOption);
+                      setSavedValues((prev) => ({
+                        ...prev,
+                        from_location: selectedOption.value,
+                      }));
+                    }}
                   />
-
                   <ErrorMessage
                     name="from_location"
                     component="div"
@@ -319,9 +358,8 @@ function BookingStepOne() {
               <Col md={6}>
                 <BootstrapForm.Group>
                   <label>Select Destination Airport</label>
-
                   <Select
-                    defaultValue={airTo} // Using airTo as default value
+                    value={toLocationDefaultValue}
                     options={
                       Array.isArray(configInfo?.getAllAirportsResponse)
                         ? configInfo.getAllAirportsResponse.map((option) => ({
@@ -333,12 +371,17 @@ function BookingStepOne() {
                     className="form-control"
                     classNamePrefix="to_location"
                     onInputChange={(value) => handleSearchAirport(value)}
-                    onChange={(selectedOptions) => {
-                      setAirTo(selectedOptions); // Update airTo on selection
-                      setFieldValue("to_location", selectedOptions); // Assuming you're using Formik
+                    onChange={(selectedOption) => {
+                      // Set new value for Formik field and state
+                      setFieldValue("to_location", selectedOption.value);
+                      setToLocationDefaultValue(selectedOption);
+                      setAirTo(selectedOption.value);
+                      setSavedValues((prev) => ({
+                        ...prev,
+                        to_location: selectedOption.value,
+                      }));
                     }}
                   />
-
                   <ErrorMessage
                     name="to_location"
                     component="div"
@@ -360,7 +403,13 @@ function BookingStepOne() {
                         name="flight_date"
                         value={values.flight_date}
                         min={new Date().toISOString().split("T")[0]}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            flight_date: e.target.value,
+                          }));
+                        }}
                         className="py-3"
                       />
                       <ErrorMessage
@@ -379,9 +428,13 @@ function BookingStepOne() {
                         name="flight_time"
                         value={values.flight_time || ""}
                         style={{ maxHeight: "200px", overflowY: "auto" }}
-                        onChange={(e) =>
-                          setFieldValue("flight_time", e.target.value)
-                        }
+                        onChange={(e) => {
+                          setFieldValue("flight_time", e.target.value);
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            flight_time: e.target.value,
+                          }));
+                        }}
                       >
                         <option value="">Select Flight Time</option>
                         {times.map((time, index) => (
@@ -410,12 +463,22 @@ function BookingStepOne() {
                         type="date"
                         placeholder="Select return date"
                         name="return_date"
-                        value={values.return_date}
+                        value={
+                          values.return_date ||
+                          bookingInfo?.addBookingStepOneResponse?.data
+                            ?.return_date
+                        }
                         min={
                           values.flight_date ||
                           new Date().toISOString().split("T")[0]
                         }
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            return_date: e.target.value,
+                          }));
+                        }}
                         className="py-3"
                       />
                       <ErrorMessage
@@ -433,9 +496,13 @@ function BookingStepOne() {
                         className="py-3"
                         name="return_time"
                         value={values.return_time || ""}
-                        onChange={(e) =>
-                          setFieldValue("return_time", e.target.value)
-                        }
+                        onChange={(e) => {
+                          setFieldValue("return_time", e.target.value);
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            return_time: e.target.value,
+                          }));
+                        }}
                       >
                         <option value="">Select Return Time</option>
                         {times.map((time, index) => (
@@ -466,15 +533,28 @@ function BookingStepOne() {
                     as="select"
                     className="py-3"
                     name="client_id"
-                    value={values.client_id || ""}
-                    onChange={(e) => setFieldValue("client_id", e.target.value)}
+                    value={
+                      values.client_id ||
+                      bookingInfo?.addBookingStepOneResponse?.data?.client_id
+                    }
+                    onChange={(e) => {
+                      setFieldValue("client_id", e.target.value);
+                      setSavedValues((prev) => ({
+                        ...prev,
+                        client_id: e.target.value,
+                      }));
+                    }}
                   >
                     <option value="">Select Client</option>
-                    {clientInfo?.getAllClientsResponse?.data?.map((client) => (
-                      <option value={client.id} key={client.id}>
-                        {`${client.first_name} ${client.last_name}`}
-                      </option>
-                    ))}
+                    {Array.isArray(clientInfo?.getAllClientsResponse?.data)
+                      ? clientInfo?.getAllClientsResponse?.data?.map(
+                          (client, index) => (
+                            <option value={client.id} key={index}>
+                              {client.first_name + " " + client.last_name}
+                            </option>
+                          )
+                        )
+                      : null}
                   </BootstrapForm.Control>
 
                   <ErrorMessage
@@ -487,23 +567,29 @@ function BookingStepOne() {
 
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <label>
-                    <div>
-                      Services <span className="text-danger">*</span>{" "}
-                    </div>
-                  </label>
+                  <label>Select Service</label>
                   <Select
-                    options={configInfo?.getAllServicesResponse?.data?.map(
-                      (option) => ({
-                        value: option?.id,
-                        label: `${option.service_name} , ${option.charge_rate}`,
-                      })
-                    )}
-                    className=" form-control"
-                    classNamePrefix="service_id"
-                    onChange={(selectedOptions) =>
-                      setFieldValue("service_id", selectedOptions)
+                    defaultValue={savedValues.service_id}
+                    options={
+                      Array.isArray(configInfo?.getAllServicesResponse?.data)
+                        ? configInfo?.getAllServicesResponse?.data?.map(
+                            (option) => ({
+                              value: option?.id,
+                              label: option?.service_name,
+                            })
+                          )
+                        : []
                     }
+                    className="form-control"
+                    classNamePrefix="service_id"
+                    onChange={(selectedOptions) => {
+                      setFieldValue("service_id", selectedOptions);
+
+                      setSavedValues((prev) => ({
+                        ...prev,
+                        service_id: selectedOptions,
+                      }));
+                    }}
                   />
 
                   <ErrorMessage
