@@ -3,16 +3,19 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  activateAdditionalServiceAsync,
   activateDepartmentAsync,
   activatePartnershipAsync,
   activateRoleAsync,
   activateServiceAsync,
   activateSupplierAsync,
+  deactivateAdditionalServiceAsync,
   deactivateDepartmentAsync,
   deactivatePartnershipAsync,
   deactivateRoleAsync,
   deactivateServiceAsync,
   deactivateSupplierAsync,
+  getAllAdditionalSServicesAsync,
   getAllDepartmentsAsync,
   getAllPartnershipsAsync,
   getAllRoleAsync,
@@ -30,6 +33,7 @@ import EditSupplier from "./modal/supplier/edit-supplier";
 import AddPartnership from "./modal/partnership/add-partnership";
 import EditPartnership from "./modal/partnership/edit-partnership";
 import AddAdditionalService from "./modal/service/add-additional-service";
+import EditAdditionalService from "./modal/service/edit-additional-service";
 
 const SystemConfig = () => {
   const dispatch = useDispatch();
@@ -44,6 +48,8 @@ const SystemConfig = () => {
   const [modalEditSupplier, setModalEditSupplier] = useState(false);
   const [modalAddPartnership, setModalAddPartnership] = useState(false);
   const [modalEditPartnership, setModalEditPartnership] = useState(false);
+  const [modalEditAdditionalService, setModalEditAdditionalService] =
+    useState(false);
   const [serviceId, setServiceId] = useState();
 
   const configInfo = useSelector((state) => state?.config);
@@ -51,6 +57,7 @@ const SystemConfig = () => {
   const [updateDepartment, setUpdateDepartment] = useState([]);
   const [updateSupplier, setUpdateSupplier] = useState([]);
   const [updatePartnership, setUpdatePartnership] = useState([]);
+  const [updateAdditionalService, setUpdateAdditionalService] = useState([]);
 
   const handleEditService = (id) => {
     setModalEditService(true);
@@ -59,6 +66,23 @@ const SystemConfig = () => {
       (data) => data.id === id
     );
     setUpdateService(updateService);
+  };
+
+  const handleEditAdditionalService = (id) => {
+    setModalEditAdditionalService(true);
+
+    const updateAdditionalService =
+      configInfo?.getAllAdditionalServicesResponse?.filter(
+        (data) => data.id === id
+      );
+    setUpdateAdditionalService(updateAdditionalService);
+  };
+
+  const handleDeactivateAdditionalService = (id) => {
+    dispatch(deactivateAdditionalServiceAsync({ id }));
+  };
+  const handleActivateAdditionalService = (id) => {
+    dispatch(activateAdditionalServiceAsync({ id }));
   };
 
   const handleDeactivateService = (id) => {
@@ -106,10 +130,10 @@ const SystemConfig = () => {
     setUpdateDepartment(updateDepartment);
   };
 
-  const handleAddAdditionalService = (id) => {
-    setModalAddAdditionlService(true);
-    setServiceId(id);
-  };
+  // const handleAddAdditionalService = (id) => {
+  //   setModalAddAdditionlService(true);
+  //   setServiceId(id);
+  // };
   const handleEditSupplier = (id) => {
     setModalEditSupplier(true);
 
@@ -172,6 +196,7 @@ const SystemConfig = () => {
   useEffect(() => {
     try {
       dispatch(getAllServicesAsync());
+      dispatch(getAllAdditionalSServicesAsync());
       dispatch(getAllPartnershipsAsync());
       dispatch(getAllSuppliersAsync());
       dispatch(getAllDepartmentsAsync());
@@ -190,7 +215,11 @@ const SystemConfig = () => {
       <AddAdditionalService
         show={modalAddAdditionalService}
         onHide={() => setModalAddAdditionlService(false)}
-        data={serviceId}
+      />
+      <EditAdditionalService
+        show={modalEditAdditionalService}
+        onHide={() => setModalEditAdditionalService(false)}
+        data={updateAdditionalService}
       />
 
       <EditService
@@ -299,15 +328,6 @@ const SystemConfig = () => {
                                     Manage
                                   </Dropdown.Item>
 
-                                  <Dropdown.Item
-                                    className="small"
-                                    onClick={() =>
-                                      handleAddAdditionalService(service.id)
-                                    }
-                                  >
-                                    Add Additional Service
-                                  </Dropdown.Item>
-
                                   {status ? (
                                     <Dropdown.Item
                                       className="small bg-danger text-white"
@@ -322,6 +342,111 @@ const SystemConfig = () => {
                                       className="small bg-success text-white"
                                       onClick={() =>
                                         handleActivateService(service.id)
+                                      }
+                                    >
+                                      Activate
+                                    </Dropdown.Item>
+                                  )}
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )
+                  ) : (
+                    <tr>
+                      <td colSpan="7">No services available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </div>
+          </Tab>
+          <Tab
+            eventKey="additional-services"
+            title={
+              <span onClick={() => dispatch(getAllAdditionalSServicesAsync())}>
+                Additional Services
+              </span>
+            }
+          >
+            <div>
+              <div className="my-3 text-end">
+                <Button onClick={() => setModalAddAdditionlService(true)}>
+                  Add Additional Service
+                </Button>
+              </div>
+              <Table striped hover responsive>
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Service Name</th>
+                    <th>Rate Type</th>
+                    <th>Charge Rate</th>
+                    <th>Currency</th>
+                    <th>Remark</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {configInfo?.getAllAdditionalServicesResponse?.length > 0 ? (
+                    configInfo.getAllAdditionalServicesResponse?.map(
+                      (service, index) => {
+                        const {
+                          service_name,
+                          rate_type,
+                          charge_rate,
+                          currency,
+                          remarks,
+                          status,
+                        } = service;
+                        return (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{service_name}</td>
+                            <td>{rate_type}</td>
+                            <td>{charge_rate}</td>
+                            <td>{currency}</td>
+                            <td>{remarks}</td>
+                            <td>{status ? "Active" : "Not Active"}</td>
+                            <td>
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="light"
+                                  className="border-0"
+                                >
+                                  <HiDotsHorizontal />
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    className="small"
+                                    onClick={() =>
+                                      handleEditAdditionalService(service.id)
+                                    }
+                                  >
+                                    Manage
+                                  </Dropdown.Item>
+
+                                  {status ? (
+                                    <Dropdown.Item
+                                      className="small bg-danger text-white"
+                                      onClick={() =>
+                                        handleDeactivateAdditionalService(
+                                          service.id
+                                        )
+                                      }
+                                    >
+                                      Deactivate
+                                    </Dropdown.Item>
+                                  ) : (
+                                    <Dropdown.Item
+                                      className="small bg-success text-white"
+                                      onClick={() =>
+                                        handleActivateAdditionalService(
+                                          service.id
+                                        )
                                       }
                                     >
                                       Activate

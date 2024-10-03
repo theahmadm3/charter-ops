@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 import {
+  ActivateAdditionalService,
   ActivateDepartment,
   ActivatePartnershipType,
   ActivateRole,
@@ -13,6 +14,7 @@ import {
   AddRole,
   AddService,
   AddSupplier,
+  DeactivateAdditionalService,
   DeactivateDepartment,
   DeactivatePartnershipType,
   DeactivateRole,
@@ -23,6 +25,7 @@ import {
   DeleteService,
   DeleteSupplier,
   GetAdditionalServiceById,
+  GetAllAdditionalServices,
   GetAllAirports,
   GetAllDepartments,
   GetAllPartnershipTypes,
@@ -35,6 +38,7 @@ import {
   GetServiceById,
   GetSupplierById,
   SearchAirports,
+  UpdateAdditionalService,
   UpdateDepartment,
   UpdatePartnershipType,
   UpdateRole,
@@ -56,34 +60,6 @@ export const addServiceAsync = createAsyncThunk(
   async ({ values }, { rejectWithValue }) => {
     try {
       const response = await AddService(values);
-
-      return response;
-    } catch (error) {
-      toast.error(error?.response?.data.message);
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const addAdditionalServiceAsync = createAsyncThunk(
-  "additional/service/add",
-  async ({ values }, { rejectWithValue }) => {
-    try {
-      const response = await AddAdditionalService(values);
-
-      return response;
-    } catch (error) {
-      toast.error(error?.response?.data.message);
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const getAdditionalServiceByIdAsync = createAsyncThunk(
-  "get/additional/service/by/id",
-  async ({ service_id }, { rejectWithValue }) => {
-    try {
-      const response = await GetAdditionalServiceById(service_id);
 
       return response;
     } catch (error) {
@@ -154,6 +130,86 @@ export const deactivateServiceAsync = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await DeactivateService(id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Additional Service
+
+export const getAllAdditionalSServicesAsync = createAsyncThunk(
+  "additional/services/all",
+  async () => {
+    const response = await GetAllAdditionalServices();
+    return response;
+  }
+);
+
+export const addAdditionalServiceAsync = createAsyncThunk(
+  "additional/service/add",
+  async ({ values }, { rejectWithValue }) => {
+    try {
+      const response = await AddAdditionalService(values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateAdditionalServiceAsync = createAsyncThunk(
+  "additional/service/update",
+  async ({ id, values }, { rejectWithValue }) => {
+    try {
+      const response = await UpdateAdditionalService(id, values);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAdditionalServiceByIdAsync = createAsyncThunk(
+  "get/additional/service/by/id",
+  async ({ service_id }, { rejectWithValue }) => {
+    try {
+      const response = await GetAdditionalServiceById(service_id);
+
+      return response;
+    } catch (error) {
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const activateAdditionalServiceAsync = createAsyncThunk(
+  "additional/service/activate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await ActivateAdditionalService(id);
+      return response;
+    } catch (error) {
+      console.error("API error:", error);
+      toast.error(error?.response?.data.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deactivateAdditionalServiceAsync = createAsyncThunk(
+  "additional/service/deactivate",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeactivateAdditionalService(id);
 
       return response;
     } catch (error) {
@@ -524,7 +580,6 @@ export const getAllAirportsAsync = createAsyncThunk("airport/all", async () => {
   return response;
 });
 
-
 export const searchAirportsAsync = createAsyncThunk(
   "airport/search",
   async ({ query }, { rejectWithValue }) => {
@@ -539,22 +594,26 @@ export const searchAirportsAsync = createAsyncThunk(
   }
 );
 
-
-
-
-
 const configSlice = createSlice({
   name: "config",
   initialState: {
     getAllServicesResponse: {},
     addServiceResponse: {},
-    addAdditionalServiceResponse: {},
-    getAdditionalServiceByIdResponse: {},
     getServiceByIdResponse: {},
     updateServiceResponse: {},
     deleteServiceResponse: {},
     activateServiceResponse: {},
     deactivateServiceResponse: {},
+
+    // Additional Service
+    getAllAdditionalServicesResponse: {},
+    addAdditionalServiceResponse: {},
+    getAdditionalServiceByIdResponse: {},
+    updateAdditionalServiceResponse: {},
+    deleteAdditionalServiceResponse: {},
+    activateAdditionalServiceResponse: {},
+    deactivateAdditionalServiceResponse: {},
+
     // Supplier
     getAllSuppliersResponse: {},
     addSupplierResponse: {},
@@ -590,7 +649,7 @@ const configSlice = createSlice({
 
     // Airport
     getAllAirportsResponse: {},
-    searchAirportsResponse:{}
+    searchAirportsResponse: {},
   },
 
   reducers: {},
@@ -618,27 +677,6 @@ const configSlice = createSlice({
     });
     builder.addCase(addServiceAsync.rejected, (state, action) => {
       toast.error(action.payload.message);
-    });
-
-    builder.addCase(addAdditionalServiceAsync.fulfilled, (state, action) => {
-      state.addAdditionalServiceResponse = action.payload;
-      toast.success(action.payload.message);
-    });
-
-    builder.addCase(addAdditionalServiceAsync.rejected, (state, action) => {
-      state.addAdditionalServiceResponse = action.payload;
-      toast.error(action.payload.message);
-    });
-
-    builder.addCase(
-      getAdditionalServiceByIdAsync.fulfilled,
-      (state, action) => {
-        state.getAdditionalServiceByIdResponse = action.payload;
-      }
-    );
-
-    builder.addCase(getAdditionalServiceByIdAsync.rejected, (state, action) => {
-      toast.error(action?.payload?.message);
     });
 
     builder.addCase(getServiceByIdAsync.fulfilled, (state, action) => {
@@ -745,6 +783,141 @@ const configSlice = createSlice({
     builder.addCase(deactivateServiceAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
+
+    // Additional Service
+
+    builder.addCase(
+      getAllAdditionalSServicesAsync.fulfilled,
+      (state, action) => {
+        state.getAllAdditionalServicesResponse = action.payload;
+      }
+    );
+
+    builder.addCase(addAdditionalServiceAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.addAdditionalServiceResponse = action.payload;
+        state.getAllAdditionalServicesResponse.unshift({
+          id: action.payload?.id,
+          service_name: action.payload?.service_name,
+          rate_type: action.payload?.rate_type,
+          charge_rate: action.payload?.charge_rate,
+          currency: action.payload?.currency,
+          remarks: action.payload?.remarks,
+          status: action.payload?.status,
+        });
+
+        toast.success(action.payload.message);
+      }
+    });
+    builder.addCase(addAdditionalServiceAsync.rejected, (state, action) => {
+      state.addAdditionalServiceResponse = action.payload;
+      toast.error(action.payload.message);
+    });
+
+    builder.addCase(
+      getAdditionalServiceByIdAsync.fulfilled,
+      (state, action) => {
+        state.getAdditionalServiceByIdResponse = action.payload;
+      }
+    );
+
+    builder.addCase(getAdditionalServiceByIdAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(updateAdditionalServiceAsync.fulfilled, (state, action) => {
+      if (action.payload.success) {
+        state.updateAdditionalServiceResponse = action.payload;
+
+        // Filter and replace the existing record with the new record
+        state.getAllAdditionalServicesResponse.data =
+          state.getAllAdditionalServicesResponse.data.map((service) =>
+            service.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  service_name: action.payload.data.service_name,
+                  rate_type: action.payload.data.rate_type,
+                  charge_rate: action.payload.data.charge_rate,
+                  currency: action.payload.data.currency,
+                  remarks: action.payload.data.remarks,
+                  status: action.payload.data.status,
+                }
+              : service
+          );
+
+        toast.success(action.payload.message);
+      }
+    });
+
+    builder.addCase(updateAdditionalServiceAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+
+    builder.addCase(
+      activateAdditionalServiceAsync.fulfilled,
+      (state, action) => {
+        if (action.payload.success) {
+          state.activateAdditionalServiceResponse = action.payload;
+
+          // Filter and replace the existing record with the new record
+          state.getAllAdditionalServicesResponse.data =
+            state.getAllAdditionalServicesResponse.data.map((service) =>
+              service.id === action.payload.data.id
+                ? {
+                    id: action.payload.data.id,
+                    service_name: action.payload.data.service_name,
+                    rate_type: action.payload.data.rate_type,
+                    charge_rate: action.payload.data.charge_rate,
+                    currency: action.payload.data.currency,
+                    remarks: action.payload.data.remarks,
+                    status: action.payload.data.status,
+                  }
+                : service
+            );
+
+          toast.success(action.payload.message);
+        }
+      }
+    );
+
+    builder.addCase(
+      activateAdditionalServiceAsync.rejected,
+      (state, action) => {
+        toast.error(action?.payload?.message);
+      }
+    );
+
+    builder.addCase(
+      deactivateAdditionalServiceAsync.fulfilled,
+      (state, action) => {
+        if (action.payload.success) {
+          state.deactivateAdditionalServiceResponse = action.payload;
+          state.getAllAdditionalServicesResponse.data =
+            state.getAllAdditionalServicesResponse.data.map((service) =>
+              service.id === action.payload.data.id
+                ? {
+                    id: action.payload.data.id,
+                    service_name: action.payload.data.service_name,
+                    rate_type: action.payload.data.rate_type,
+                    charge_rate: action.payload.data.charge_rate,
+                    currency: action.payload.data.currency,
+                    remarks: action.payload.data.remarks,
+                    status: action.payload.data.status,
+                  }
+                : service
+            );
+
+          toast.success(action.payload.message);
+        }
+      }
+    );
+
+    builder.addCase(
+      deactivateAdditionalServiceAsync.rejected,
+      (state, action) => {
+        toast.error(action?.payload?.message);
+      }
+    );
 
     // Supplier
     builder.addCase(getAllSuppliersAsync.fulfilled, (state, action) => {
@@ -1147,7 +1320,7 @@ const configSlice = createSlice({
     builder.addCase(deactivateRoleAsync.rejected, (state, action) => {
       toast.error(action?.payload?.message);
     });
-// Airport
+    // Airport
     builder.addCase(getAllAirportsAsync.fulfilled, (state, action) => {
       state.getAllAirportsResponse = action.payload;
     });
@@ -1165,8 +1338,6 @@ const configSlice = createSlice({
       state.getAllAirportsResponse = action.payload;
       toast.error(action?.payload?.message);
     });
-
-
   },
 });
 

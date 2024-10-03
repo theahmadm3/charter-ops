@@ -16,20 +16,8 @@ export const AddService = async (body) => {
   return response;
 };
 
-export const AddAdditionalService = async (body) => {
-  const response = await PostRequest("/additional-services", body);
-  return response;
-};
-
 export const GetServiceById = async (id) => {
   const response = await GetRequest(`/services/${id}`);
-  return response;
-};
-
-export const GetAdditionalServiceById = async (service_id) => {
-  const response = await GetRequest(
-    `/services/${service_id}/additional-services`
-  );
   return response;
 };
 
@@ -56,6 +44,49 @@ export const ActivateService = async (id) => {
 export const DeactivateService = async (id) => {
   try {
     const response = await PutRequest(`/services/deactivate/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error in DeactivateService:", error);
+    throw error;
+  }
+};
+
+// Additional Service
+export const GetAllAdditionalServices = async () => {
+  const response = await GetRequest("/additional-services");
+  return response;
+};
+
+export const AddAdditionalService = async (body) => {
+  const response = await PostRequest("/additional-services", body);
+  return response;
+};
+
+export const UpdateAdditionalService = async (id, body) => {
+  const response = await PutRequest(`/additional-services/${id}`, body);
+  return response;
+};
+
+export const GetAdditionalServiceById = async (service_id) => {
+  const response = await GetRequest(
+    `/services/${service_id}/additional-services`
+  );
+  return response;
+};
+
+export const ActivateAdditionalService = async (id) => {
+  try {
+    const response = await PutRequest(`/additional-services/${id}/activate`);
+    return response;
+  } catch (error) {
+    console.error("Error in ActivateService:", error);
+    throw error;
+  }
+};
+
+export const DeactivateAdditionalService = async (id) => {
+  try {
+    const response = await PutRequest(`/additional-services/${id}/deactivate`);
     return response;
   } catch (error) {
     console.error("Error in DeactivateService:", error);
@@ -196,7 +227,6 @@ export const DeactivateRole = async (id, body) => {
   );
   return response;
 };
-
 
 // Airport
 export const GetAllAirports = async () => {

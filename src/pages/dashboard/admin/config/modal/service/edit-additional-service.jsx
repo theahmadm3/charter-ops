@@ -2,9 +2,9 @@ import { Modal, Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { addAdditionalServiceAsync } from "../../../../../../slices/config/configSlice";
+import { updateAdditionalServiceAsync } from "../../../../../../slices/config/configSlice";
 
-function AddAdditionalService(props) {
+function EditAdditionalService(props) {
   const dispatch = useDispatch();
   const configInfo = useSelector((state) => state?.config);
 
@@ -19,18 +19,18 @@ function AddAdditionalService(props) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Add New Additional Service
+            Update Additional Service
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Formik
             initialValues={{
-              service_id: "",
-              service_name: "",
-              rate_type: "",
-              charge_rate: "",
-              currency: "",
-              remarks: "",
+              service_id: props?.data[0]?.service_id,
+              service_name: props?.data[0]?.service_name,
+              rate_type: props?.data[0]?.rate_type,
+              charge_rate: props?.data[0]?.charge_rate,
+              currency: props?.data[0]?.currency,
+              remarks: props?.data[0]?.remarks,
             }}
             validationSchema={Yup.object().shape({
               service_name: Yup.string()
@@ -42,7 +42,12 @@ function AddAdditionalService(props) {
               currency: Yup.string().required("Currency is required"),
             })}
             onSubmit={(values) => {
-              dispatch(addAdditionalServiceAsync({ values }))
+              dispatch(
+                updateAdditionalServiceAsync({
+                  id: props?.data[0]?.id,
+                  values,
+                })
+              )
                 .then((response) => {
                   if (response.payload) {
                     props.onHide();
@@ -231,7 +236,7 @@ function AddAdditionalService(props) {
                     className=" my-2 me-3  border-0  "
                     disabled={!dirty}
                   >
-                    <span className=" ">Create</span>
+                    <span className=" ">Update</span>
                   </Button>
                   <Button onClick={props.onHide} variant="danger">
                     Close
@@ -246,4 +251,4 @@ function AddAdditionalService(props) {
     </>
   );
 }
-export default AddAdditionalService;
+export default EditAdditionalService;
