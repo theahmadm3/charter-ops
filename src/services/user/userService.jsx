@@ -53,3 +53,7 @@ export const GetActivityLog = async () => {
   const response = await GetRequest("/dashboard/activity-logs");
   return response;
 };
+export const GetDashboardStats = async () => {
+  const response = await GetRequest("/dashboard/statistics");
+  return response;
+};

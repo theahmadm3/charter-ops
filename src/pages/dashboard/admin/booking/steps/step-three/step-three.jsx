@@ -28,7 +28,12 @@ function BookingStepThree() {
 
     const payload  = {
       ...values,
-      services: values?.services?.map((service) => service.value),    }
+      additional_services: values?.services?.map((service) => ({
+        service_id: service.value
+      }))
+            ,  
+
+      }
 
     dispatch(
       addBookingStepFourAsync({

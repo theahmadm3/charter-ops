@@ -11,6 +11,7 @@ import {
   DeactivateUser,
   ActivateUser,
   GetActivityLog,
+  GetDashboardStats,
 } from "../../services/user/userService";
 
 export const getAllUsersAsync = createAsyncThunk(
@@ -93,6 +94,16 @@ export const getActivityLogAsync = createAsyncThunk(
   }
 );
 
+export const getDashboardStatsAsync = createAsyncThunk(
+  "users/dashboard/stats",
+  async () => {
+    const response = await GetDashboardStats();
+    return response;
+  }
+);
+
+
+
 const userSlice = createSlice({
   name: "users",
   initialState: {
@@ -106,6 +117,7 @@ const userSlice = createSlice({
     deactivateUserResponse: {},
     activateUserResponse: {},
     getActivityLogResponse: {},
+    getDashboardStatsResponse:{},
   },
 
   reducers: {},
@@ -226,6 +238,14 @@ const userSlice = createSlice({
     });
 
     builder.addCase(getActivityLogAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+    builder.addCase(getDashboardStatsAsync.fulfilled, (state, action) => {
+      state.getDashboardStatsResponse = action.payload;
+    });
+
+    builder.addCase(getDashboardStatsAsync.rejected, (state, action) => {
+      state.getDashboardStatsResponse = action.payload;
       toast.error(action?.payload?.message);
     });
   },
