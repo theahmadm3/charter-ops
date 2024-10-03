@@ -21,14 +21,14 @@ const store = configureStore({
 
     loading: (state = initialLoadingState, action) => {
       if (action.type.endsWith("/pending")) {
-        localStorage.setItem("loading", "true");
+        sessionStorage.setItem("loading", "true");
         return true;
       } else if (
         action.type.endsWith("/fulfilled") ||
         action.type.endsWith("/rejected")
       ) {
         // Remove loading state from localStorage
-        localStorage.removeItem("loading");
+        sessionStorage.removeItem("loading");
         return false;
       }
       return state;

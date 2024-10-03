@@ -1,12 +1,6 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {
-  Button,
-  Col,
-  Row,
-  Form as BootstrapForm,
-  FloatingLabel,
-} from "react-bootstrap";
+import { Button, Col, Row, Form as BootstrapForm } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addBookingStepFiveAsync,
@@ -15,12 +9,12 @@ import {
 import { useEffect } from "react";
 import { getAllUsersAsync } from "../../../../../../slices/user/userSlice";
 import Select from "react-select";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
-  crew_notes: Yup.string().required("Crew note is required"),
-  passenger_notes: Yup.string().required("Passenger note is required"),
+  // crew_notes: Yup.string().required("Crew note is required"),
+  // passenger_notes: Yup.string().required("Passenger note is required"),
 });
 
 function BookingStepFive() {
@@ -39,10 +33,13 @@ function BookingStepFive() {
   const handleSubmit = (values) => {
     const payload = {
       ...values,
-      crew_members: values.crew_members.map((crew) => ({
-        crew_id: crew.value
-      })),      
+      crew_members: (values.crew_members || [])
+        .filter((crew) => crew.value)
+        .map((crew) => ({
+          crew_id: crew.value,
+        })),
     };
+
     dispatch(
       addBookingStepFiveAsync({
         bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
@@ -59,6 +56,7 @@ function BookingStepFive() {
         toast.error("An unexpected error occurred.");
       });
   };
+
   useEffect(() => {
     try {
       dispatch(getAllUsersAsync({ user_type: "crew" }));
@@ -83,6 +81,7 @@ function BookingStepFive() {
           values,
           handleSubmit,
           setFieldValue,
+          dirty,
         }) => (
           <Form>
             <Row>
@@ -170,14 +169,17 @@ function BookingStepFive() {
               >
                 Back
               </Button>
-              {/* <Button
+              <Button
+                as={Link}
                 variant="white"
                 className="border border-main-color text-end"
-                onClick={handleNext}
+                to="/admin-booking"
               >
-                Next
-              </Button> */}
-              <Button type="submit">Save</Button>
+                Finish
+              </Button>
+              <Button type="submit" disabled={!dirty}>
+                Save
+              </Button>
             </div>
           </Form>
         )}

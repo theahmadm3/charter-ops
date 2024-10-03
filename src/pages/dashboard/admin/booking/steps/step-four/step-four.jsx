@@ -197,6 +197,7 @@ function BookingStepFour() {
         values,
         handleSubmit,
         setFieldValue,
+        dirty,
       }) => (
         <Form onSubmit={handleSubmit}>
           <Alert variant="warning">
@@ -666,7 +667,9 @@ function BookingStepFour() {
               Next
             </Button>
 
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={!dirty}>
+              Save
+            </Button>
           </div>
         </Form>
       )}

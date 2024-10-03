@@ -6,6 +6,7 @@ import {
   Row,
   Form as BootstrapForm,
   FloatingLabel,
+  Container,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,8 +26,7 @@ const validationSchema = Yup.object({
 function BookingStepThree() {
   const bookingInfo = useSelector((state) => state?.booking);
   const handleSubmit = (values) => {
-
-    const payload  = {
+    const payload = {
       ...values,
       additional_services: values?.services?.map((service) => ({
         service_id: service.value
@@ -55,7 +55,6 @@ function BookingStepThree() {
   };
   const configInfo = useSelector((state) => state?.config);
 
-
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -67,7 +66,6 @@ function BookingStepThree() {
     const current = bookingInfo?.currentStep;
     dispatch(setCurrentStep(current - 1));
   };
-
 
   useEffect(() => {
     try {
@@ -82,11 +80,11 @@ function BookingStepThree() {
   }, [dispatch]);
 
   return (
-    <>
+    <Container>
       <Formik
         initialValues={{
           special_requests: "",
-          services:"",
+          services: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -94,43 +92,25 @@ function BookingStepThree() {
         {({ values, handleChange, handleBlur, setFieldValue }) => (
           <Form>
             <Row>
-              <Col md={6}>
-                <BootstrapForm.Group className="mb-3 mt-4">
-                  <FloatingLabel
-                    controlId="floatingSpecialRequests"
-                    label="Special Requests (Optional)"
-                  >
-                    <BootstrapForm.Control
-                      as="textarea"
-                      name="special_requests"
-                      value={values.special_requests}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <ErrorMessage
-                      name="special_requests"
-                      component="div"
-                      className="text-danger"
-                    />
-                  </FloatingLabel>
-                </BootstrapForm.Group>
-              </Col>
-              <Col md={6}>
+              <Col md={12}>
                 <BootstrapForm.Group>
                   <label>
                     <div>Additional Services </div>
                   </label>
                   <Select
-                  isMulti
-                  options={
-                    Array.isArray(configInfo?.getAdditionalServiceByIdResponse)
-                      ? configInfo.getAdditionalServiceByIdResponse.map((option) => ({
-                          value: option?.id,
-                          label: `${option?.service_name}, ${option?.charge_rate}`,
-                        }))
-                      : []
-                  }
-                  
+                    isMulti
+                    options={
+                      Array.isArray(
+                        configInfo?.getAdditionalServiceByIdResponse
+                      )
+                        ? configInfo.getAdditionalServiceByIdResponse.map(
+                            (option) => ({
+                              value: option?.id,
+                              label: `${option?.service_name}, ${option?.charge_rate}`,
+                            })
+                          )
+                        : []
+                    }
                     className=" form-control"
                     classNamePrefix="services"
                     onChange={(selectedOptions) =>
@@ -140,6 +120,27 @@ function BookingStepThree() {
 
                   <ErrorMessage
                     name="service_id"
+                    component="div"
+                    className="text-danger"
+                  />
+                </BootstrapForm.Group>
+              </Col>
+
+              <Col md={12}>
+                <BootstrapForm.Group className="mb-3 mt-5">
+                  <BootstrapForm.Label>
+                    Special Requests (Optional){" "}
+                  </BootstrapForm.Label>
+
+                  <BootstrapForm.Control
+                    as="textarea"
+                    name="special_requests"
+                    value={values.special_requests}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <ErrorMessage
+                    name="special_requests"
                     component="div"
                     className="text-danger"
                   />
@@ -186,7 +187,7 @@ function BookingStepThree() {
           </Form>
         )}
       </Formik>
-    </>
+    </Container>
   );
 }
 export default BookingStepThree;
