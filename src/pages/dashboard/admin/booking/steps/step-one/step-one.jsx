@@ -99,8 +99,8 @@ function BookingStepOne() {
       ...prevLegs,
       {
         id: uuidv4(),
-        from: null,
-        to: null,
+        from: { value: "", label: "Select Departure" }, // Default to empty value
+        to: { value: "", label: "Select Arrival" }, // Default to empty value
         departure_date_time: null,
         departure_time: "",
         arrival_date_time: null,
@@ -108,6 +108,7 @@ function BookingStepOne() {
       },
     ]);
   };
+
   const handleRemoveLeg = (id) => {
     setLegs((prevLegs) => prevLegs.filter((leg) => leg.id !== id));
   };
@@ -137,10 +138,7 @@ function BookingStepOne() {
       return updatedLegs;
     });
   };
-  console.log(
-    "dddddddd",
-    bookingInfo?.addBookingStepOneResponse?.data?.from_location
-  );
+
   const initialValues = useMemo(
     () => ({
       from_location:
@@ -568,7 +566,12 @@ function BookingStepOne() {
                 <BootstrapForm.Group>
                   <label>Select Service</label>
                   <Select
-                    defaultValue={bookingInfo?.addBookingStepOneResponse?.data?.service_id ||savedValues.service_id || bookingInfo?.addBookingStepOneResponse?.data?.service?.id}
+                    defaultValue={
+                      bookingInfo?.addBookingStepOneResponse?.data
+                        ?.service_id ||
+                      savedValues.service_id ||
+                      bookingInfo?.addBookingStepOneResponse?.data?.service?.id
+                    }
                     options={
                       Array.isArray(configInfo?.getAllServicesResponse?.data)
                         ? configInfo?.getAllServicesResponse?.data?.map(
@@ -631,7 +634,7 @@ function BookingStepOne() {
                                 Select Departure Airport{" "}
                                 <span className="text-danger">*</span>
                               </label>
-                              <Select
+                              {/* <Select
                                 defaultValue={
                                   index > 0
                                     ? legs[index - 1].to
@@ -666,7 +669,73 @@ function BookingStepOne() {
                                   })
                                 }
                                 aria-label="Select Departure Airport"
+                              /> */}
+
+                              <Select
+                                defaultValue={
+                                  index > 0
+                                    ? {
+                                        value:
+                                          legs[index - 1]?.to?.value ||
+                                          legs[index - 1]?.to,
+                                        label:
+                                          legs[index - 1]?.to?.label ||
+                                          legs[index - 1]?.to,
+                                      }
+                                    : {
+                                        value: value?.to_location?.value || "",
+                                        label:
+                                          value?.to_location?.label ||
+                                          "Select Departure",
+                                      }
+                                }
+                                options={
+                                  Array.isArray(
+                                    configInfo?.getAllAirportsResponse
+                                  )
+                                    ? configInfo.getAllAirportsResponse.map(
+                                        (option) => ({
+                                          value: option?.name,
+                                          label: option?.name,
+                                        })
+                                      )
+                                    : []
+                                }
+                                placeholder="Select an Airport"
+                                isClearable
+                                isSearchable
+                                className="form-control"
+                                classNamePrefix="from"
+                                onInputChange={(value) =>
+                                  handleSearchAirport(value)
+                                }
+                                onChange={(selectedOption) => {
+                                  const selectedValue = selectedOption
+                                    ? {
+                                        value: selectedOption.value,
+                                        label: selectedOption.label,
+                                      }
+                                    : legs[index].from; // Keep the current value if nothing changes
+
+                                  // Only update if the user has selected a new option
+                                  setLegs((prevLegs) =>
+                                    prevLegs.map((legItem, legIndex) =>
+                                      legIndex === index
+                                        ? {
+                                            ...legItem,
+                                            from:
+                                              selectedOption ||
+                                              legItem.from === null // check if user changed the value
+                                                ? selectedValue // update the state only if a new selection is made
+                                                : legItem.from ||
+                                                  legs[index - 1]?.to, // default to previous leg's to value
+                                          }
+                                        : legItem
+                                    )
+                                  );
+                                }}
                               />
+
                               <ErrorMessage
                                 name={`legs[${index}].from`}
                                 component="div"
