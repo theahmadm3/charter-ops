@@ -10,6 +10,7 @@ const ViewBooking = (props) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
+        
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             Booking information - {props?.data[0]?.aircraft?.name} |{" "}
