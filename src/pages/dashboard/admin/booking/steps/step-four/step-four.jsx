@@ -122,13 +122,6 @@ function BookingStepFour() {
       last_name: values.last_name || "none",
       email: values.email || "none",
       phone: values.phone || "none",
-      gender: values.gender,
-      nationality: values.nationality || "none",
-      date_of_birth: values.date_of_birth || "none",
-      special_requests: values.special_requests || "none",
-      num_adults: Number(values.num_adults),
-      num_children: Number(values.num_children),
-      num_infants: Number(values.num_infants),
     };
 
     const payload = {
@@ -176,15 +169,8 @@ function BookingStepFour() {
       initialValues={{
         first_name: "",
         last_name: "",
-        date_of_birth: "",
-        gender: "",
-        nationality: "",
         email: "",
         phone: "",
-        special_requests: "",
-        num_adults: 0,
-        num_children: 0,
-        num_infants: 0,
         id_card: "",
       }}
       validationSchema={validationSchema}
