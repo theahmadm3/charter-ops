@@ -13,7 +13,6 @@ import {
   addBookingStepThreeAsync,
   setCurrentStep,
 } from "../../../../../../slices/booking/bookingSlice";
-import { nationalityOptions } from "../../../../../../util/data";
 import { useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -41,25 +40,14 @@ const validationSchema = Yup.object({
   // num_infants: Yup.number().min(0).required("Number of infants is required"),
 });
 
-// Gender options
-const genderOptions = [
-  { id: "male", name: "Male" },
-  { id: "female", name: "Female" },
-  { id: "other", name: "Other" },
-];
-
 function BookingStepFour() {
   const [isChecked, setIsChecked] = useState(false);
   const [passengers, setPassengers] = useState([
     {
       first_name: "",
       last_name: "",
-      date_of_birth: "",
-      gender: "",
-      nationality: "",
       email: "",
       phone: "",
-      special_requests: "",
     },
   ]);
 
@@ -76,9 +64,7 @@ function BookingStepFour() {
       {
         first_name: "",
         last_name: "",
-        date_of_birth: "",
-        gender: "",
-        nationality: "",
+        phone: "",
         email: "",
         phone: "",
         special_requests: "",
@@ -118,10 +104,10 @@ function BookingStepFour() {
 
   const handleSubmit = (values) => {
     const formattedValues = {
-      first_name: values.first_name || "none",
-      last_name: values.last_name || "none",
-      email: values.email || "none",
-      phone: values.phone || "none",
+      first_name: values.first_name || "",
+      last_name: values.last_name || "",
+      email: values.email || "",
+      phone: values.phone || "",
     };
 
     const payload = {
@@ -129,7 +115,6 @@ function BookingStepFour() {
         ? [...passengers, formattedValues]
         : [formattedValues],
     };
-
     dispatch(
       addBookingStepThreeAsync({
         bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
@@ -138,17 +123,8 @@ function BookingStepFour() {
     )
       .then((response) => {
         if (response?.payload?.success) {
-          // navigate(-1);
-        } else if (response?.payload) {
-          // const errorMessage = response.payload;
-          // General error message
-          // toast.error(errorMessage);
-          // Check and display validation errors if present
-          // if (response.payload?.errors) {
-          //   Object.values(response.payload.errors).forEach((errorArray) => {
-          //     errorArray.forEach((errMsg) => toast.error(errMsg));
-          //   });
-          // }
+          const current = bookingInfo?.currentStep;
+          dispatch(setCurrentStep(current + 1));
         }
       })
       .catch((error) => {
