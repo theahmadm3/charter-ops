@@ -95,19 +95,24 @@ function BookingStepOne() {
   ]);
 
   const handleAddLeg = () => {
-    setLegs((prevLegs) => [
-      ...prevLegs,
-      {
-        id: uuidv4(),
-        from: { value: "", label: "Select Departure" }, // Default to empty value
-        to: { value: "", label: "Select Arrival" }, // Default to empty value
-        departure_date_time: null,
-        departure_time: "",
-        arrival_date_time: null,
-        arrival_time: "",
-      },
-    ]);
+    setLegs((prevLegs) => {
+      const lastLegToValue = prevLegs.length > 0 ? prevLegs.slice(-1)[0].to.value : "";
+  
+      return [
+        ...prevLegs,
+        {
+          id: uuidv4(),
+          from: { value: lastLegToValue, label: lastLegToValue || "Select Departure" }, // Default to previous 'to' value
+          to: { value: "", label: "Select Arrival" }, // Default to empty value
+          departure_date_time: null,
+          departure_time: "",
+          arrival_date_time: null,
+          arrival_time: "",
+        },
+      ];
+    });
   };
+  
 
   const handleRemoveLeg = (id) => {
     setLegs((prevLegs) => prevLegs.filter((leg) => leg.id !== id));
@@ -290,8 +295,8 @@ function BookingStepOne() {
               legs && {
                 legs: legs.map(({ id, from, to, ...rest }) => ({
                   ...rest,
-                  from: from ? from.value : null, // Check if from exists
-                  to: to ? to.value : null, // Check if to exists
+                  from: from ? from.value : null, 
+                  to: to ? to.value : null, 
                 })),
               }),
           };
