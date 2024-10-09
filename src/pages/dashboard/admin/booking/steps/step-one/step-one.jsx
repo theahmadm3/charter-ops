@@ -295,8 +295,8 @@ function BookingStepOne() {
               legs && {
                 legs: legs.map(({ id, from, to, ...rest }) => ({
                   ...rest,
-                  from: from ? from.value : null, // Check if from exists
-                  to: to ? to.value : null, // Check if to exists
+                  from: from ? from.value : null, 
+                  to: to ? to.value : null, 
                 })),
               }),
           };
