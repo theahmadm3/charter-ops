@@ -393,7 +393,7 @@ function BookingStepFour() {
               </BootstrapForm.Group>
             </Col> */}
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel
                   controlId="floatingNumInfants"
@@ -411,7 +411,7 @@ function BookingStepFour() {
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
-            </Col>
+            </Col> */}
           </Row>
 
           <Row>

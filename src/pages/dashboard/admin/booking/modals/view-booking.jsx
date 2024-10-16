@@ -124,7 +124,7 @@ const ViewBooking = (props) => {
                   <Card.Body>
                     <Card.Text className="fw-bold">Service</Card.Text>
                     <Card.Text>
-                      {props?.data[0]?.service.service_name || "--"}
+                      {props?.data[0]?.service?.service_name || "--"}
                     </Card.Text>
                   </Card.Body>
                 </Card>

@@ -11,6 +11,7 @@ import { bookingStatusAsync } from "../../../../../slices/booking/bookingSlice";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const UpdateStatusModal = (props) => {
   const dispatch = useDispatch();
@@ -32,15 +33,38 @@ const UpdateStatusModal = (props) => {
           <Formik
             initialValues={{
               status: "",
+              overtime: "",
             }}
             validationSchema={Yup.object().shape({
               status: Yup.string()
-                .required("Status ame is required")
-                .min(1, "The status  must be at least 1"),
+                .required("Status is required")
+                .min(1, "The status must be at least 1"),
             })}
             onSubmit={(values) => {
+              if (
+                values?.status === "completed" &&
+                (values?.overtime === "" ||
+                  values?.overtime < 1 ||
+                  !Number.isInteger(values?.overtime))
+              ) {
+                toast.error(
+                  "Please enter valid overtime (a whole number greater than 0)"
+                );
+                return; // Stop form submission if validation fails
+              }
+
+              // Create the payload
+              const payload = {
+                ...values,
+                overtime: values.overtime || 0, // Default to 0 if empty or not provided
+              };
+
+              // Dispatch the async action with the payload
               dispatch(
-                bookingStatusAsync({ booking_id: props?.data[0]?.id, values })
+                bookingStatusAsync({
+                  booking_id: props?.data[0]?.id,
+                  values: payload,
+                })
               )
                 .then((response) => {
                   if (response.payload.success) {
@@ -48,7 +72,6 @@ const UpdateStatusModal = (props) => {
                   }
                 })
                 .catch((error) => {
-                  // Handle the error case if necessary
                   console.error("Error occurred:", error);
                 });
             }}
@@ -86,6 +109,27 @@ const UpdateStatusModal = (props) => {
                     </Form.Group>
                   </Col>
                 </Row>
+                {values?.status === "completed" && (
+                  <Row>
+                    <Col md={12}>
+                      <Form.Group>
+                        <FloatingLabel
+                          controlId="floatingFullName"
+                          label="Overtime (in minutes)"
+                          className="my-2"
+                        >
+                          <Form.Control
+                            type="number"
+                            placeholder="Overtime"
+                            name="overtime"
+                            value={values.overtime}
+                            onChange={handleChange}
+                          />
+                        </FloatingLabel>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                )}
 
                 <div className="">
                   <Button
