@@ -11,13 +11,15 @@ import {
 import logo from "../../assets/images/flybird-logo.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetPasswordAsync } from "../../slices/auth/authSlice";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const token = useParams();
+
   return (
     <>
       <Container fluid className="login-container">
@@ -40,10 +42,8 @@ const ResetPassword = () => {
                       initialValues={{
                         password: "",
                         confirm_password: "",
-                        token: "",
                       }}
                       validationSchema={Yup.object().shape({
-                        token: Yup.string().required("Token is required"),
                         password: Yup.string()
                           .required("No password provided.")
                           .min(
@@ -58,9 +58,13 @@ const ResetPassword = () => {
                           .required("Please confirm password."),
                       })}
                       onSubmit={async (values) => {
+                        const payload = {
+                          ...values,
+                          token: token.token,
+                        };
                         try {
                           const result = await dispatch(
-                            resetPasswordAsync({ credentials: values })
+                            resetPasswordAsync({ credentials: payload })
                           );
 
                           if (resetPasswordAsync.fulfilled.match(result)) {
@@ -89,7 +93,7 @@ const ResetPassword = () => {
                         handleChange,
                       }) => (
                         <Form onSubmit={handleSubmit}>
-                          <Form.Group className="my-4">
+                          {/* <Form.Group className="my-4">
                             <FloatingLabel
                               controlId="floatingInput"
                               label="Token"
@@ -109,7 +113,7 @@ const ResetPassword = () => {
                                 </small>
                               ) : null}
                             </FloatingLabel>
-                          </Form.Group>
+                          </Form.Group> */}
                           <Form.Group className="my-4">
                             <FloatingLabel
                               controlId="floatingInput"
