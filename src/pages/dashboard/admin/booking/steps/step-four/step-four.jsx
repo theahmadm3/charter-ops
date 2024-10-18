@@ -443,7 +443,7 @@ function BookingStepFour() {
                         >
                           <BootstrapForm.Control
                             type="text"
-                            name="first_name"
+                            name={`passengers[${passenger.id}].first_name`}
                             value={passenger.first_name}
                             onChange={(e) =>
                               handlePassengerChange(passenger.id, e)
@@ -460,7 +460,7 @@ function BookingStepFour() {
                         >
                           <BootstrapForm.Control
                             type="text"
-                            name="last_name"
+                            name={`passengers[${passenger.id}].last_name`}
                             value={passenger.last_name}
                             onChange={(e) =>
                               handlePassengerChange(passenger.id, e)
@@ -470,74 +470,8 @@ function BookingStepFour() {
                       </BootstrapForm.Group>
                     </Col>
                   </Row>
-                  {/* <Row>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerDOB-${passenger.id}`}
-                          label="Date of Birth"
-                        >
-                          <BootstrapForm.Control
-                            type="date"
-                            name="date_of_birth"
-                            value={passenger.date_of_birth}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          />
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerGender-${passenger.id}`}
-                          label="Gender"
-                        >
-                          <BootstrapForm.Control
-                            as="select"
-                            name="gender"
-                            value={passenger.gender}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          >
-                            <option value="">Select Gender</option>
-                            {genderOptions.map((option) => (
-                              <option value={option.id} key={option.id}>
-                                {option.name}
-                              </option>
-                            ))}
-                          </BootstrapForm.Control>
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-                  </Row> */}
+
                   <Row>
-                    {/* <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerNationality-${passenger.id}`}
-                          label="Nationality"
-                        >
-                          <BootstrapForm.Control
-                            as="select"
-                            name="nationality"
-                            value={passenger.nationality}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          >
-                            <option value="">Select Nationality</option>
-                            {nationalityOptions.map((option) => (
-                              <option value={option.name} key={option.id}>
-                                {option.name}
-                              </option>
-                            ))}
-                          </BootstrapForm.Control>
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col> */}
                     <Col md={6}>
                       <BootstrapForm.Group className="mb-3">
                         <FloatingLabel
@@ -546,7 +480,7 @@ function BookingStepFour() {
                         >
                           <BootstrapForm.Control
                             type="email"
-                            name="email"
+                            name={`passengers[${passenger.id}].email`}
                             value={passenger.email}
                             onChange={(e) =>
                               handlePassengerChange(passenger.id, e)
@@ -563,7 +497,7 @@ function BookingStepFour() {
                         >
                           <BootstrapForm.Control
                             type="text"
-                            name="phone"
+                            name={`passengers[${passenger.id}].phone`}
                             value={passenger.phone}
                             onChange={(e) =>
                               handlePassengerChange(passenger.id, e)
@@ -572,26 +506,6 @@ function BookingStepFour() {
                         </FloatingLabel>
                       </BootstrapForm.Group>
                     </Col>
-                  </Row>
-
-                  <Row>
-                    {/* <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerSpecialRequests-${passenger.id}`}
-                          label="Special Requests"
-                        >
-                          <BootstrapForm.Control
-                            as="textarea"
-                            name="special_requests"
-                            value={passenger.special_requests}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          />
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col> */}
                   </Row>
 
                   <Button
