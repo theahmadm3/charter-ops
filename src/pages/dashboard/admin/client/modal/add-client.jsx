@@ -11,6 +11,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { addClientAsync } from "../../../../../slices/client/clientSlice";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("First name is required"),
@@ -33,6 +34,20 @@ const validationSchema = Yup.object().shape({
 
 const handleFileChange = async (event, setFieldValue) => {
   const file = event.currentTarget.files[0];
+
+  if (!file.type.startsWith("image/")) {
+    toast.info("Please upload an image file.");
+    return;
+  }
+
+  const imgInKb = file.size / 1024;
+
+  if (imgInKb > 500) {
+    toast.info("Image size must be 500kb or less");
+
+    return;
+  }
+
   if (file) {
     const base64 = await convertFileToBase64(file);
     setFieldValue("document_id", base64);
