@@ -6,16 +6,18 @@ import {
 } from "../../util/apiMethods";
 
 export const GetAllBookings = async (params) => {
-  // Initialize an empty array to hold query string parts
+  // Initialize an array to hold query string parts
   const queryParams = [];
 
-  // Add parameters to the query string array only if they have a value
+  //  parameters to the query string array only if they have a value
   if (params.payment_status)
     queryParams.push(`payment_status=${params.payment_status}`);
   if (params.status) queryParams.push(`status=${params.status}`);
   if (params.aircraft_reg_no)
     queryParams.push(`aircraft_reg_no=${params.aircraft_reg_no}`);
   if (params.trip_type) queryParams.push(`trip_type=${params.trip_type}`);
+  if (params.page) queryParams.push(`page=${params.page}`);
+  if (params.per_page) queryParams.push(`per_page=${params.per_page}`);
   if (params.aircraft_name)
     queryParams.push(`aircraft_name=${params.aircraft_name}`);
   if (params.flight_date)
