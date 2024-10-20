@@ -75,6 +75,10 @@ function EditBookingStepOne(props) {
       ? new Date(props?.data[0]?.flight_date)
       : new Date()
   );
+  const clientInfo = useSelector((state) => state?.client);
+  const configInfo = useSelector((state) => state?.config);
+  const bookingInfo = useSelector((state) => state?.booking);
+
   const [from_airport, onChangeFrom] = useState(
     props?.data[0]?.return_date
       ? new Date(props?.data[0]?.return_date)
@@ -102,13 +106,13 @@ function EditBookingStepOne(props) {
       legs.map((leg) => (leg.id === id ? { ...leg, [name]: value } : leg))
     );
   };
-  const clientInfo = useSelector((state) => state?.client);
-  const configInfo = useSelector((state) => state?.config);
-  const bookingInfo = useSelector((state) => state?.booking);
 
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
   };
+
+  const [savedValues, setSavedValues] = useState(props?.data[0]);
+
   const handleNext = () => {
     const current = bookingInfo?.currentStep;
     dispatch(setCurrentStep(current + 1));
