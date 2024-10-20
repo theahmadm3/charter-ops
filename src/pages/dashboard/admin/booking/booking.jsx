@@ -36,7 +36,6 @@ import BookingFilter from "../../../../component/filters/booking-filter";
 import { toast } from "react-toastify";
 import ViewBookingFile from "./modals/view-files";
 import moment from "moment";
-import PaginationComponent from "../../../../util/pagination";
 import CustomPagination from "../../../../util/pagination";
 
 const Booking = () => {

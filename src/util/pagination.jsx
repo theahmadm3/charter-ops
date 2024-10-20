@@ -1,5 +1,4 @@
 import Pagination from "react-bootstrap/Pagination";
-import "./CustomPagination.css"; // Import your custom CSS file
 
 const CustomPagination = ({ currentPage, lastPage, links, onPageChange }) => {
   return (
