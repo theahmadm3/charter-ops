@@ -1,4 +1,4 @@
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import {
   Button,
@@ -72,23 +72,6 @@ function BookingStepFour() {
     ]);
   };
 
-  const handleFileChange = async (event, setFieldValue) => {
-    const file = event.currentTarget.files[0];
-    if (file) {
-      const base64 = await convertFileToBase64(file);
-      setFieldValue("id_card", base64);
-    }
-  };
-
-  const convertFileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const handleRemovePassenger = (id) => {
     setPassengers(passengers.filter((passenger) => passenger.id !== id));
   };
@@ -104,17 +87,24 @@ function BookingStepFour() {
 
   const handleSubmit = (values) => {
     const formattedValues = {
-      first_name: values.first_name || "",
-      last_name: values.last_name || "",
-      email: values.email || "",
-      phone: values.phone || "",
+      first_name: values.first_name,
+      last_name: values.last_name,
+      email: values.email,
+      phone: values.phone,
     };
 
     const payload = {
-      passengers: isChecked
-        ? [...passengers, formattedValues]
-        : [formattedValues],
+      passengers: [
+        formattedValues,
+        ...values.passengers.map((passenger) => ({
+          first_name: passenger.first_name,
+          last_name: passenger.last_name,
+          email: passenger.email,
+          phone: passenger.phone,
+        })),
+      ],
     };
+
     dispatch(
       addBookingStepThreeAsync({
         bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
@@ -147,7 +137,7 @@ function BookingStepFour() {
         last_name: "",
         email: "",
         phone: "",
-        id_card: "",
+        passengers: [{ first_name: "", last_name: "", email: "", phone: "" }],
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
@@ -164,11 +154,11 @@ function BookingStepFour() {
         <Form onSubmit={handleSubmit}>
           <Alert variant="warning">
             <p className="mb-0">
-              {" "}
               <ImNotification className="me-4" />
               This form is optional
             </p>
           </Alert>
+
           <Row>
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
@@ -204,77 +194,6 @@ function BookingStepFour() {
               </BootstrapForm.Group>
             </Col>
 
-            {/* <Col md={6}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingDateOfBirth"
-                  label="Date of Birth"
-                >
-                  <BootstrapForm.Control
-                    type="date"
-                    name="date_of_birth"
-                    value={values.date_of_birth}
-                    onChange={handleChange}
-                    isInvalid={touched.date_of_birth && !!errors.date_of_birth}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.date_of_birth}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col> */}
-
-            {/* <Col md={6}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel controlId="floatingGender" label="Gender">
-                  <BootstrapForm.Control
-                    as="select"
-                    name="gender"
-                    value={values.gender}
-                    onChange={handleChange}
-                    isInvalid={touched.gender && !!errors.gender}
-                  >
-                    <option value="">Select Gender</option>
-                    {genderOptions.map((option) => (
-                      <option value={option.id} key={option.id}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </BootstrapForm.Control>
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.gender}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col> */}
-
-            {/* <Col md={6}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingNationality"
-                  label="Nationality"
-                >
-                  <BootstrapForm.Control
-                    as="select"
-                    name="nationality"
-                    value={values.nationality}
-                    onChange={handleChange}
-                    isInvalid={touched.nationality && !!errors.nationality}
-                  >
-                    <option value="">Select Nationality</option>
-                    {nationalityOptions.map((option) => (
-                      <option value={option.name} key={option.id}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </BootstrapForm.Control>
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.nationality}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col> */}
-
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel controlId="floatingEmail" label="Email">
@@ -308,110 +227,6 @@ function BookingStepFour() {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
-
-            {/* <Col md={6}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingSpecialRequests"
-                  label="Special Requests"
-                >
-                  <BootstrapForm.Control
-                    as="textarea"
-                    name="special_requests"
-                    value={values.special_requests}
-                    onChange={handleChange}
-                    isInvalid={
-                      touched.special_requests && !!errors.special_requests
-                    }
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.special_requests}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col> */}
-          </Row>
-
-          <Row>
-            {/* <Col md={2}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingNumAdults"
-                  label="Number of Adults"
-                >
-                  <BootstrapForm.Control
-                    type="number"
-                    name="num_adults"
-                    value={values.num_adults}
-                    onChange={handleChange}
-                    isInvalid={touched.num_adults && !!errors.num_adults}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.num_adults}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col>
-
-            <Col md={2}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingNumChildren"
-                  label="Number of Children"
-                >
-                  <BootstrapForm.Control
-                    type="number"
-                    name="num_children"
-                    value={values.num_children}
-                    onChange={handleChange}
-                    isInvalid={touched.num_children && !!errors.num_children}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.num_children}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col>
-
-            <Col md={2}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingNumInfants"
-                  label="Number of Infants"
-                >
-                  <BootstrapForm.Control
-                    type="number"
-                    name="num_infants"
-                    value={values.num_infants}
-                    onChange={handleChange}
-                    isInvalid={touched.num_infants && !!errors.num_infants}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.num_infants}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col> */}
-
-            {/* <Col md={6}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingNumInfants"
-                  label="Upload ID Card"
-                >
-                  <BootstrapForm.Control
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    name="id_card"
-                    onChange={(e) => handleFileChange(e, setFieldValue)}
-                    isInvalid={touched.id_card && !!errors.id_card}
-                  />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.id_card}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col> */}
           </Row>
 
           <Row>
@@ -427,104 +242,106 @@ function BookingStepFour() {
               </BootstrapForm.Group>
             </Col>
           </Row>
-          {isChecked && (
-            <>
-              {passengers.map((passenger) => (
-                <div
-                  key={passenger.id}
-                  className="passenger-form mt-3 border p-3"
-                >
-                  <Row>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerFirstName-${passenger.id}`}
-                          label="First Name"
-                        >
-                          <BootstrapForm.Control
-                            type="text"
-                            name={`passengers[${passenger.id}].first_name`}
-                            value={passenger.first_name}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          />
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerLastName-${passenger.id}`}
-                          label="Last Name"
-                        >
-                          <BootstrapForm.Control
-                            type="text"
-                            name={`passengers[${passenger.id}].last_name`}
-                            value={passenger.last_name}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          />
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-                  </Row>
 
-                  <Row>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerEmail-${passenger.id}`}
-                          label="Email"
-                        >
-                          <BootstrapForm.Control
-                            type="email"
-                            name={`passengers[${passenger.id}].email`}
-                            value={passenger.email}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          />
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-                    <Col md={6}>
-                      <BootstrapForm.Group className="mb-3">
-                        <FloatingLabel
-                          controlId={`passengerPhone-${passenger.id}`}
-                          label="Phone Number"
-                        >
-                          <BootstrapForm.Control
-                            type="text"
-                            name={`passengers[${passenger.id}].phone`}
-                            value={passenger.phone}
-                            onChange={(e) =>
-                              handlePassengerChange(passenger.id, e)
-                            }
-                          />
-                        </FloatingLabel>
-                      </BootstrapForm.Group>
-                    </Col>
-                  </Row>
+          {isChecked && (
+            <FieldArray
+              name="passengers"
+              render={(arrayHelpers) => (
+                <>
+                  {values.passengers.map((passenger, index) => (
+                    <div key={index} className="passenger-form mt-3 border p-3">
+                      <Row>
+                        <Col md={6}>
+                          <BootstrapForm.Group className="mb-3">
+                            <FloatingLabel
+                              controlId={`passengerFirstName-${index}`}
+                              label="First Name"
+                            >
+                              <BootstrapForm.Control
+                                type="text"
+                                name={`passengers[${index}].first_name`}
+                                value={passenger.first_name}
+                                onChange={handleChange}
+                              />
+                            </FloatingLabel>
+                          </BootstrapForm.Group>
+                        </Col>
+                        <Col md={6}>
+                          <BootstrapForm.Group className="mb-3">
+                            <FloatingLabel
+                              controlId={`passengerLastName-${index}`}
+                              label="Last Name"
+                            >
+                              <BootstrapForm.Control
+                                type="text"
+                                name={`passengers[${index}].last_name`}
+                                value={passenger.last_name}
+                                onChange={handleChange}
+                              />
+                            </FloatingLabel>
+                          </BootstrapForm.Group>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md={6}>
+                          <BootstrapForm.Group className="mb-3">
+                            <FloatingLabel
+                              controlId={`passengerEmail-${index}`}
+                              label="Email"
+                            >
+                              <BootstrapForm.Control
+                                type="email"
+                                name={`passengers[${index}].email`}
+                                value={passenger.email}
+                                onChange={handleChange}
+                              />
+                            </FloatingLabel>
+                          </BootstrapForm.Group>
+                        </Col>
+                        <Col md={6}>
+                          <BootstrapForm.Group className="mb-3">
+                            <FloatingLabel
+                              controlId={`passengerPhone-${index}`}
+                              label="Phone Number"
+                            >
+                              <BootstrapForm.Control
+                                type="text"
+                                name={`passengers[${index}].phone`}
+                                value={passenger.phone}
+                                onChange={handleChange}
+                              />
+                            </FloatingLabel>
+                          </BootstrapForm.Group>
+                        </Col>
+                      </Row>
+
+                      <Button
+                        variant="danger"
+                        onClick={() => arrayHelpers.remove(index)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </div>
+                  ))}
 
                   <Button
-                    variant="danger"
-                    onClick={() => handleRemovePassenger(passenger.id)}
+                    variant="success"
+                    onClick={() =>
+                      arrayHelpers.push({
+                        first_name: "",
+                        last_name: "",
+                        email: "",
+                        phone: "",
+                      })
+                    }
+                    className="mt-3"
                   >
-                    <FaTrash />
+                    <FaPlus /> Add Passenger
                   </Button>
-                </div>
-              ))}
-
-              <Button
-                variant="success"
-                onClick={handleAddPassenger}
-                className="mt-3"
-              >
-                <FaPlus /> Add Passenger
-              </Button>
-            </>
+                </>
+              )}
+            />
           )}
 
           <div className="d-flex justify-content-end mt-3">
