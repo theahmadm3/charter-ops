@@ -8,6 +8,7 @@ import {
   airports,
   internationalAirports,
   localAirports,
+  times,
   worldAirports,
 } from "../../../../../../util/data";
 import DateTimePicker from "react-datetime-picker";
@@ -102,7 +103,7 @@ function EditBookingStepOne(props) {
     );
   };
   const clientInfo = useSelector((state) => state?.client);
-
+  const configInfo = useSelector((state) => state?.config);
   const bookingInfo = useSelector((state) => state?.booking);
 
   const handleCheckboxChange = (e) => {
@@ -117,6 +118,30 @@ function EditBookingStepOne(props) {
     setBookings((prevBookings) => prevBookings.filter((_, i) => i !== index));
   };
   const step = useSelector((state) => state.booking?.currentStep);
+
+  const [toLocationDefaultValue, setToLocationDefaultValue] = useState(null);
+  const [fromLocationDefaultValue, setFromLocationDefaultValue] =
+    useState(null);
+
+  // useEffect for setting initial value for from_location
+  useEffect(() => {
+    if (bookingInfo?.addBookingStepOneResponse?.data?.from_location) {
+      setFromLocationDefaultValue({
+        value: bookingInfo.addBookingStepOneResponse.data.from_location,
+        label: bookingInfo.addBookingStepOneResponse.data.from_location,
+      });
+    }
+  }, [bookingInfo?.addBookingStepOneResponse?.data?.from_location]);
+
+  // useEffect for setting initial value for to_location
+  useEffect(() => {
+    if (bookingInfo?.addBookingStepOneResponse?.data?.to_location) {
+      setToLocationDefaultValue({
+        value: bookingInfo.addBookingStepOneResponse.data.to_location,
+        label: bookingInfo.addBookingStepOneResponse.data.to_location,
+      });
+    }
+  }, [bookingInfo?.addBookingStepOneResponse?.data?.to_location]);
 
   const handleFormClear = (resetForm) => {
     resetForm();
@@ -149,48 +174,51 @@ function EditBookingStepOne(props) {
     <>
       <Formik
         initialValues={{
-          from_location: props?.data[0]?.from_location,
-          to_location: props?.data[0]?.to_location,
-          flight_date: props?.data[0]?.flight_date,
-          return_date: props?.data[0]?.return_date,
-          client_id: props?.data[0]?.client?.id,
+          from_location:
+            bookingInfo?.addBookingStepOneResponse?.data?.from_location,
+          to_location:
+            bookingInfo?.addBookingStepOneResponse?.data?.to_location,
+          flight_date:
+            bookingInfo?.addBookingStepOneResponse?.data?.flight_date,
+          return_date:
+            bookingInfo?.addBookingStepOneResponse?.data?.return_date,
+          client_id: bookingInfo?.addBookingStepOneResponse?.data?.client_id,
           multi_leg: null,
-          passenger_count: props?.data[0]?.passenger_count,
+
+          service_id: bookingInfo?.addBookingStepOneResponse?.data?.service_id,
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          const { from_location, to_location } = values;
+        onSubmit={(values, { setSubmitting }) => {
+          const { from_location, to_location, service_id } = values;
 
-          // Check each field individually and show a toast if any field is missing
-          if (!to_airport) {
-            toast.error("Please fill out the Flight Date");
-            return;
-          }
-
-          if (!from_airport) {
-            toast.error("Please fill out the Return Date");
-            return;
-          }
+          dispatch(setSelectedServiceId(service_id?.value));
 
           if (!from_location) {
-            toast.error("Please fill out the From Location");
+            toast.error("Please fill out the Departure Airport");
+            setSubmitting(false);
             return;
           }
 
           if (!to_location) {
-            toast.error("Please fill out the To Location");
+            toast.error("Please fill out the Destination Airport");
+            setSubmitting(false);
             return;
           }
 
           const payload = {
             ...values,
-            flight_date: to_airport,
-            return_date: from_airport,
-            from_location: from_location.label || airFrom?.label,
-            to_location: to_location.label || airTo?.label,
+            service_id: service_id?.value,
+
             client_id: Number(values.client_id),
             multi_leg: isChecked,
-            ...(isChecked && legs && { legs }),
+            ...(isChecked &&
+              legs && {
+                legs: legs.map(({ id, from, to, ...rest }) => ({
+                  ...rest,
+                  from: from ? from.value : null,
+                  to: to ? to.value : null,
+                })),
+              }),
           };
 
           dispatch(addBookingStepOneAsync(payload))
@@ -207,36 +235,41 @@ function EditBookingStepOne(props) {
               toast.error(
                 "An unexpected error occurred. Please try again later."
               );
+            })
+            .finally(() => {
+              setSubmitting(false);
             });
         }}
       >
-        {({
-          values,
-          setFieldValue,
-          handleChange,
-          handleSubmit,
-          errors,
-          touched,
-        }) => (
+        {({ values, setFieldValue, handleChange, handleSubmit }) => (
           <Form onSubmit={handleSubmit}>
             <Row className="mt-5">
               <Col md={6}>
                 <BootstrapForm.Group>
                   <label>Select Departure Airport</label>
-
                   <Select
-                    defaultValue={airFrom}
-                    options={worldAirports?.map((option) => ({
-                      value: option.iata,
-                      label: `${option.name} (${option.iata})`,
-                    }))}
-                    className=" form-control"
-                    classNamePrefix="from_location"
-                    onChange={(selectedOptions) =>
-                      setFieldValue("from_location", selectedOptions)
+                    value={fromLocationDefaultValue}
+                    options={
+                      Array.isArray(configInfo?.getAllAirportsResponse)
+                        ? configInfo.getAllAirportsResponse.map((option) => ({
+                            value: option?.name,
+                            label: option?.name,
+                          }))
+                        : []
                     }
+                    className="form-control"
+                    classNamePrefix="from_location"
+                    onInputChange={(value) => handleSearchAirport(value)}
+                    onChange={(selectedOption) => {
+                      // Set new value for Formik field and state
+                      setFieldValue("from_location", selectedOption.value);
+                      setFromLocationDefaultValue(selectedOption);
+                      setSavedValues((prev) => ({
+                        ...prev,
+                        from_location: selectedOption.value,
+                      }));
+                    }}
                   />
-
                   <ErrorMessage
                     name="from_location"
                     component="div"
@@ -248,21 +281,29 @@ function EditBookingStepOne(props) {
               <Col md={6}>
                 <BootstrapForm.Group>
                   <label>Select Destination Airport</label>
-
                   <Select
-                    defaultValue={airTo}
-                    // value={values.to_location}
-                    options={worldAirports?.map((option) => ({
-                      value: option.iata,
-                      label: `${option.name} (${option.iata})`,
-                    }))}
-                    className=" form-control"
-                    classNamePrefix="to_location"
-                    onChange={(selectedOptions) =>
-                      setFieldValue("to_location", selectedOptions)
+                    value={toLocationDefaultValue}
+                    options={
+                      Array.isArray(configInfo?.getAllAirportsResponse)
+                        ? configInfo.getAllAirportsResponse.map((option) => ({
+                            value: option?.name,
+                            label: option?.name,
+                          }))
+                        : []
                     }
+                    className="form-control"
+                    classNamePrefix="to_location"
+                    onInputChange={(value) => handleSearchAirport(value)}
+                    onChange={(selectedOption) => {
+                      setFieldValue("to_location", selectedOption.value);
+                      setToLocationDefaultValue(selectedOption);
+                      setAirTo(selectedOption.value);
+                      setSavedValues((prev) => ({
+                        ...prev,
+                        to_location: selectedOption.value,
+                      }));
+                    }}
                   />
-
                   <ErrorMessage
                     name="to_location"
                     component="div"
@@ -271,62 +312,173 @@ function EditBookingStepOne(props) {
                 </BootstrapForm.Group>
               </Col>
             </Row>
+
             <Row className="my-4">
               <Col md={6}>
-                <BootstrapForm.Group>
-                  <p>Departure Date and Time</p>
-                  <DateTimePicker
-                    onChange={onChangeTo}
-                    value={to_airport}
-                    minDate={new Date()}
-                  />
-                  <ErrorMessage
-                    name="flight_date"
-                    component="div"
-                    className="text-danger"
-                  />
-                </BootstrapForm.Group>
+                <Row>
+                  <Col>
+                    <BootstrapForm.Group>
+                      <BootstrapForm.Label>Departure Date</BootstrapForm.Label>
+                      <BootstrapForm.Control
+                        type="date"
+                        placeholder="Select departure date"
+                        name="flight_date"
+                        value={values.flight_date}
+                        min={new Date().toISOString().split("T")[0]}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            flight_date: e.target.value,
+                          }));
+                        }}
+                        className="py-3"
+                      />
+                      <ErrorMessage
+                        name="flight_date"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </BootstrapForm.Group>
+                  </Col>
+                  <Col>
+                    <BootstrapForm.Group>
+                      <BootstrapForm.Label>Departure Time</BootstrapForm.Label>
+                      <BootstrapForm.Control
+                        as="select"
+                        className="py-3 custom-scroll-dropdown"
+                        name="flight_time"
+                        value={values.flight_time || ""}
+                        style={{ maxHeight: "200px", overflowY: "auto" }}
+                        onChange={(e) => {
+                          setFieldValue("flight_time", e.target.value);
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            flight_time: e.target.value,
+                          }));
+                        }}
+                      >
+                        <option value="">Select Flight Time</option>
+                        {times.map((time, index) => (
+                          <option value={time} key={index}>
+                            {time}
+                          </option>
+                        ))}
+                      </BootstrapForm.Control>
+
+                      <ErrorMessage
+                        name="flight_time"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </BootstrapForm.Group>
+                  </Col>
+                </Row>
               </Col>
 
               <Col md={6}>
-                <BootstrapForm.Group>
-                  <p>Return Date and Time</p>
-                  <DateTimePicker
-                    onChange={onChangeFrom}
-                    value={from_airport}
-                    minDate={to_airport || new Date()}
-                  />
-                  <ErrorMessage
-                    name="return_date"
-                    component="div"
-                    className="text-danger"
-                  />
-                </BootstrapForm.Group>
+                <Row>
+                  <Col>
+                    <BootstrapForm.Group>
+                      <BootstrapForm.Label>Return Date</BootstrapForm.Label>
+                      <BootstrapForm.Control
+                        type="date"
+                        placeholder="Select return date"
+                        name="return_date"
+                        value={
+                          values.return_date ||
+                          bookingInfo?.addBookingStepOneResponse?.data
+                            ?.return_date
+                        }
+                        min={
+                          values.flight_date ||
+                          new Date().toISOString().split("T")[0]
+                        }
+                        onChange={(e) => {
+                          handleChange(e);
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            return_date: e.target.value,
+                          }));
+                        }}
+                        className="py-3"
+                      />
+                      <ErrorMessage
+                        name="return_date"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </BootstrapForm.Group>
+                  </Col>
+                  <Col>
+                    <BootstrapForm.Group>
+                      <BootstrapForm.Label>Return Time</BootstrapForm.Label>
+                      <BootstrapForm.Control
+                        as="select"
+                        className="py-3"
+                        name="return_time"
+                        value={values.return_time || ""}
+                        onChange={(e) => {
+                          setFieldValue("return_time", e.target.value);
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            return_time: e.target.value,
+                          }));
+                        }}
+                      >
+                        <option value="">Select Return Time</option>
+                        {times.map((time, index) => (
+                          <option value={time} key={index}>
+                            {time}
+                          </option>
+                        ))}
+                      </BootstrapForm.Control>
+                      <ErrorMessage
+                        name="return_time"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </BootstrapForm.Group>
+                  </Col>
+                </Row>
               </Col>
             </Row>
 
             <Row>
               <Col md={6}>
                 <BootstrapForm.Group>
-                  <label>
-                    <div>
-                      Client <span className="text-danger">*</span>{" "}
-                    </div>
-                  </label>
+                  <BootstrapForm.Label>
+                    Client <span className="text-danger">*</span>
+                  </BootstrapForm.Label>
+
                   <BootstrapForm.Control
                     as="select"
+                    className="py-3"
                     name="client_id"
-                    value={values.client_id}
-                    onChange={handleChange}
+                    value={
+                      values.client_id ||
+                      bookingInfo?.addBookingStepOneResponse?.data?.client_id
+                    }
+                    onChange={(e) => {
+                      setFieldValue("client_id", e.target.value);
+                      setSavedValues((prev) => ({
+                        ...prev,
+                        client_id: e.target.value,
+                      }));
+                    }}
                   >
                     <option value="">Select Client</option>
-
-                    {clientInfo?.getAllClientsResponse?.data?.map((client) => (
-                      <option value={client.id} key={client.id}>
-                        {client.first_name + " " + client.last_name}
-                      </option>
-                    ))}
+                    {Array.isArray(clientInfo?.getAllClientsResponse?.data)
+                      ? clientInfo?.getAllClientsResponse?.data?.map(
+                          (client, index) => (
+                            <option value={client.id} key={index}>
+                              {client.first_name + " " + client.last_name}
+                            </option>
+                          )
+                        )
+                      : null}
                   </BootstrapForm.Control>
+
                   <ErrorMessage
                     name="client_id"
                     component="div"
@@ -336,22 +488,42 @@ function EditBookingStepOne(props) {
               </Col>
 
               <Col md={6}>
-                <BootstrapForm.Group className="">
-                  <label>Passenger number</label>
-
-                  <BootstrapForm.Control
-                    value={values?.passenger_count}
-                    type="number"
-                    placeholder="Passenger Number"
-                    name="passenger_count"
-                    onChange={handleChange}
-                    isInvalid={
-                      touched.passenger_count && !!errors.passenger_count
+                <BootstrapForm.Group>
+                  <label>Select Service</label>
+                  <Select
+                    defaultValue={
+                      bookingInfo?.addBookingStepOneResponse?.data
+                        ?.service_id ||
+                      savedValues.service_id ||
+                      bookingInfo?.addBookingStepOneResponse?.data?.service?.id
                     }
+                    options={
+                      Array.isArray(configInfo?.getAllServicesResponse?.data)
+                        ? configInfo?.getAllServicesResponse?.data?.map(
+                            (option) => ({
+                              value: option?.id,
+                              label: option?.service_name,
+                            })
+                          )
+                        : []
+                    }
+                    className="form-control"
+                    classNamePrefix="service_id"
+                    onChange={(selectedOptions) => {
+                      setFieldValue("service_id", selectedOptions);
+
+                      setSavedValues((prev) => ({
+                        ...prev,
+                        service_id: selectedOptions,
+                      }));
+                    }}
                   />
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.passenger_count}
-                  </BootstrapForm.Control.Feedback>
+
+                  <ErrorMessage
+                    name="service_id"
+                    component="div"
+                    className="text-danger"
+                  />
                 </BootstrapForm.Group>
               </Col>
             </Row>
@@ -375,154 +547,357 @@ function EditBookingStepOne(props) {
                 <div>
                   <h5 className="my-3">Legs</h5>
                   {legs.map((leg, index) => (
-                    <div key={leg.id} className="mb-4">
-                      <Row>
-                        <Col md={6}>
-                          <BootstrapForm.Group>
-                            <FloatingLabel
-                              controlId={`floatingFrom-${leg.id}`}
-                              label="From"
-                              className="my-2"
-                            >
-                              <BootstrapForm.Control
-                                as="select"
-                                name="from"
-                                value={leg.from}
-                                onChange={(e) => handleLegChange(leg.id, e)}
-                              >
-                                <option value="">Select airport</option>
-                                {values.trip_type === "local" &&
-                                  localAirports.map((airport) => (
-                                    <option
-                                      value={airport.name}
-                                      key={airport.name}
-                                    >
-                                      {airport.name}
-                                    </option>
-                                  ))}
-                                {values.trip_type === "international" &&
-                                  internationalAirports.map((airport) => (
-                                    <option
-                                      value={airport.name}
-                                      key={airport.id}
-                                    >
-                                      {airport.name}
-                                    </option>
-                                  ))}
-                              </BootstrapForm.Control>
-                            </FloatingLabel>
-                            <ErrorMessage
-                              name={`legs[${index}].from`}
-                              component="div"
-                              className="text-danger"
-                            />
-                          </BootstrapForm.Group>
-                        </Col>
+                    <Card key={leg.id} className="mb-4 border shadow-sm">
+                      <Card.Header className="bg-primary text-white">
+                        Leg {index + 1}
+                      </Card.Header>
+                      <Card.Body>
+                        <Row>
+                          <Col md={6}>
+                            <BootstrapForm.Group>
+                              <label>
+                                Select Departure Airport{" "}
+                                <span className="text-danger">*</span>
+                              </label>
+                              {/* <Select
+                                defaultValue={
+                                  index > 0
+                                    ? legs[index - 1].to
+                                    : value.to_location?.label
+                                } // Use previous leg's destination as default value for next leg's departure
+                                options={
+                                  Array.isArray(
+                                    configInfo?.getAllAirportsResponse
+                                  )
+                                    ? configInfo.getAllAirportsResponse.map(
+                                        (option) => ({
+                                          value: option?.name,
+                                          label: option?.name,
+                                        })
+                                      )
+                                    : []
+                                }
+                                placeholder="Select an Airport"
+                                isClearable
+                                isSearchable
+                                className="form-control"
+                                classNamePrefix="from"
+                                onInputChange={(value) =>
+                                  handleSearchAirport(value)
+                                }
+                                onChange={(selectedOptions) =>
+                                  handleLegChange(leg.id, {
+                                    target: {
+                                      name: "from",
+                                      value: selectedOptions,
+                                    },
+                                  })
+                                }
+                                aria-label="Select Departure Airport"
+                              /> */}
 
-                        <Col md={6}>
-                          <BootstrapForm.Group>
-                            <FloatingLabel
-                              controlId={`floatingTo-${leg.id}`}
-                              label="To"
-                              className="my-2"
-                            >
-                              <BootstrapForm.Control
-                                as="select"
-                                name="to"
+                              <Select
+                                defaultValue={
+                                  index > 0
+                                    ? {
+                                        value:
+                                          legs[index - 1]?.to?.value ||
+                                          legs[index - 1]?.to,
+                                        label:
+                                          legs[index - 1]?.to?.label ||
+                                          legs[index - 1]?.to,
+                                      }
+                                    : {
+                                        value: value?.to_location?.value || "",
+                                        label:
+                                          value?.to_location?.label ||
+                                          "Select Departure",
+                                      }
+                                }
+                                options={
+                                  Array.isArray(
+                                    configInfo?.getAllAirportsResponse
+                                  )
+                                    ? configInfo.getAllAirportsResponse.map(
+                                        (option) => ({
+                                          value: option?.name,
+                                          label: option?.name,
+                                        })
+                                      )
+                                    : []
+                                }
+                                placeholder="Select an Airport"
+                                isClearable
+                                isSearchable
+                                className="form-control"
+                                classNamePrefix="from"
+                                onInputChange={(value) =>
+                                  handleSearchAirport(value)
+                                }
+                                onChange={(selectedOption) => {
+                                  const selectedValue = selectedOption
+                                    ? {
+                                        value: selectedOption.value,
+                                        label: selectedOption.label,
+                                      }
+                                    : legs[index].from; // Keep the current value if nothing changes
+
+                                  // Only update if the user has selected a new option
+                                  setLegs((prevLegs) =>
+                                    prevLegs.map((legItem, legIndex) =>
+                                      legIndex === index
+                                        ? {
+                                            ...legItem,
+                                            from:
+                                              selectedOption ||
+                                              legItem.from === null // check if user changed the value
+                                                ? selectedValue // update the state only if a new selection is made
+                                                : legItem.from ||
+                                                  legs[index - 1]?.to, // default to previous leg's to value
+                                          }
+                                        : legItem
+                                    )
+                                  );
+                                }}
+                              />
+
+                              <ErrorMessage
+                                name={`legs[${index}].from`}
+                                component="div"
+                                className="text-danger"
+                              />
+                            </BootstrapForm.Group>
+                          </Col>
+
+                          <Col md={6}>
+                            <BootstrapForm.Group>
+                              <label>
+                                Select Destination Airport{" "}
+                                <span className="text-danger">*</span>
+                              </label>
+                              <Select
                                 value={leg.to}
-                                onChange={(e) => handleLegChange(leg.id, e)}
-                              >
-                                <option value="">Select airport</option>
-                                {values.trip_type === "local" &&
-                                  localAirports
-                                    .filter(
-                                      (airport) => airport.name !== leg.from
-                                    )
-                                    .map((airport) => (
-                                      <option
-                                        value={airport.name}
-                                        key={airport.name}
-                                      >
-                                        {airport.name}
+                                options={
+                                  Array.isArray(
+                                    configInfo?.getAllAirportsResponse
+                                  )
+                                    ? configInfo.getAllAirportsResponse.map(
+                                        (option) => ({
+                                          value: option?.name,
+                                          label: option?.name,
+                                        })
+                                      )
+                                    : []
+                                }
+                                placeholder="Select an Airport"
+                                isClearable
+                                isSearchable
+                                className="form-control"
+                                classNamePrefix="to_location"
+                                onInputChange={(value) =>
+                                  handleSearchAirport(value)
+                                }
+                                onChange={(selectedOptions) =>
+                                  handleLegChange(leg.id, {
+                                    target: {
+                                      name: "to",
+                                      value: selectedOptions,
+                                    },
+                                  })
+                                }
+                                aria-label="Select Destination Airport"
+                              />
+                              <ErrorMessage
+                                name={`legs[${index}].to`}
+                                component="div"
+                                className="text-danger"
+                              />
+                            </BootstrapForm.Group>
+                          </Col>
+                        </Row>
+
+                        <Row className="my-3">
+                          <Col md={6}>
+                            <Row>
+                              <Col md={6}>
+                                <BootstrapForm.Group>
+                                  <BootstrapForm.Label>
+                                    Departure Date{" "}
+                                    <span className="text-danger">*</span>
+                                  </BootstrapForm.Label>
+                                  <BootstrapForm.Control
+                                    type="date"
+                                    name={`legs[${index}].departure_date_time`}
+                                    value={
+                                      leg.departure_date_time &&
+                                      !isNaN(new Date(leg.departure_date_time))
+                                        ? new Date(leg.departure_date_time)
+                                            .toISOString()
+                                            .split("T")[0]
+                                        : ""
+                                    }
+                                    min={
+                                      index > 0 &&
+                                      legs[index - 1].arrival_date_time
+                                        ? new Date(
+                                            legs[index - 1].arrival_date_time
+                                          )
+                                            .toISOString()
+                                            .split("T")[0]
+                                        : new Date().toISOString().split("T")[0]
+                                    }
+                                    onChange={(e) =>
+                                      handleLegChange(leg.id, {
+                                        target: {
+                                          name: "departure_date_time",
+                                          value: e.target.value,
+                                        },
+                                      })
+                                    }
+                                    placeholder="Select departure date"
+                                    className="py-3"
+                                  />
+                                  <ErrorMessage
+                                    name={`legs[${index}].departure_date_time`}
+                                    component="div"
+                                    className="text-danger"
+                                  />
+                                </BootstrapForm.Group>
+                              </Col>
+
+                              <Col md={6}>
+                                <BootstrapForm.Group>
+                                  <BootstrapForm.Label>
+                                    Departure Time{" "}
+                                    <span className="text-danger">*</span>
+                                  </BootstrapForm.Label>
+                                  <BootstrapForm.Control
+                                    as="select"
+                                    name={`legs[${index}].departure_time`}
+                                    value={leg.departure_time || ""}
+                                    onChange={(e) =>
+                                      handleLegChange(leg.id, {
+                                        target: {
+                                          name: "departure_time",
+                                          value: e.target.value,
+                                        },
+                                      })
+                                    }
+                                    className="py-3"
+                                  >
+                                    <option value="">
+                                      Select Departure Time
+                                    </option>
+                                    {times.map((time, idx) => (
+                                      <option value={time} key={idx}>
+                                        {time}
                                       </option>
                                     ))}
-                                {values.trip_type === "international" &&
-                                  internationalAirports
-                                    .filter(
-                                      (airport) => airport.name !== leg.from
-                                    )
-                                    .map((airport) => (
-                                      <option
-                                        value={airport.name}
-                                        key={airport.name}
-                                      >
-                                        {airport.name}
+                                  </BootstrapForm.Control>
+                                  <ErrorMessage
+                                    name={`legs[${index}].departure_time`}
+                                    component="div"
+                                    className="text-danger"
+                                  />
+                                </BootstrapForm.Group>
+                              </Col>
+                            </Row>
+                          </Col>
+
+                          <Col md={6}>
+                            <Row>
+                              <Col md={6}>
+                                <BootstrapForm.Group>
+                                  <BootstrapForm.Label>
+                                    Return Date{" "}
+                                    <span className="text-danger">*</span>
+                                  </BootstrapForm.Label>
+                                  <BootstrapForm.Control
+                                    type="date"
+                                    name={`legs[${index}].arrival_date_time`}
+                                    value={
+                                      leg.arrival_date_time &&
+                                      !isNaN(new Date(leg.arrival_date_time))
+                                        ? new Date(leg.arrival_date_time)
+                                            .toISOString()
+                                            .split("T")[0]
+                                        : ""
+                                    }
+                                    min={
+                                      leg.departure_date_time &&
+                                      !isNaN(new Date(leg.departure_date_time))
+                                        ? new Date(leg.departure_date_time)
+                                            .toISOString()
+                                            .split("T")[0]
+                                        : new Date().toISOString().split("T")[0]
+                                    }
+                                    onChange={(e) =>
+                                      handleLegChange(leg.id, {
+                                        target: {
+                                          name: "arrival_date_time",
+                                          value: e.target.value,
+                                        },
+                                      })
+                                    }
+                                    placeholder="Select return date"
+                                    className="py-3"
+                                  />
+                                  <ErrorMessage
+                                    name={`legs[${index}].arrival_date_time`}
+                                    component="div"
+                                    className="text-danger"
+                                  />
+                                </BootstrapForm.Group>
+                              </Col>
+
+                              <Col md={6}>
+                                <BootstrapForm.Group>
+                                  <BootstrapForm.Label>
+                                    Return Time{" "}
+                                    <span className="text-danger">*</span>
+                                  </BootstrapForm.Label>
+                                  <BootstrapForm.Control
+                                    as="select"
+                                    name={`legs[${index}].arrival_time`}
+                                    value={leg.arrival_time || ""}
+                                    onChange={(e) =>
+                                      handleLegChange(leg.id, {
+                                        target: {
+                                          name: "arrival_time",
+                                          value: e.target.value,
+                                        },
+                                      })
+                                    }
+                                    className="py-3"
+                                  >
+                                    <option value="">Select Return Time</option>
+                                    {times.map((time, idx) => (
+                                      <option value={time} key={idx}>
+                                        {time}
                                       </option>
                                     ))}
-                              </BootstrapForm.Control>
-                            </FloatingLabel>
-                            <ErrorMessage
-                              name={`legs[${index}].to`}
-                              component="div"
-                              className="text-danger"
-                            />
-                          </BootstrapForm.Group>
-                        </Col>
+                                  </BootstrapForm.Control>
+                                  <ErrorMessage
+                                    name={`legs[${index}].arrival_time`}
+                                    component="div"
+                                    className="text-danger"
+                                  />
+                                </BootstrapForm.Group>
+                              </Col>
+                            </Row>
+                          </Col>
+                        </Row>
 
-                        <Col md={6}>
-                          <BootstrapForm.Group>
-                            <p>Departure Date and Time</p>
-                            <DateTimePicker
-                              onChange={(date) =>
-                                handleLegChange(leg.id, {
-                                  target: {
-                                    name: "departure_date_time",
-                                    value: date,
-                                  },
-                                })
-                              }
-                              value={leg.departure_date_time}
-                            />
-                            <ErrorMessage
-                              name={`legs[${index}].departure_date_time`}
-                              component="div"
-                              className="text-danger"
-                            />
-                          </BootstrapForm.Group>
-                        </Col>
-
-                        <Col md={6}>
-                          <BootstrapForm.Group>
-                            <p>Return Date and Time</p>
-                            <DateTimePicker
-                              onChange={(date) =>
-                                handleLegChange(leg.id, {
-                                  target: {
-                                    name: "arrival_date_time",
-                                    value: date,
-                                  },
-                                })
-                              }
-                              value={leg.arrival_date_time}
-                            />
-                            <ErrorMessage
-                              name={`legs[${index}].arrival_date_time`}
-                              component="div"
-                              className="text-danger"
-                            />
-                          </BootstrapForm.Group>
-                        </Col>
-                      </Row>
-
-                      <Button
-                        variant="danger"
-                        className="my-3"
-                        size="sm"
-                        onClick={() => handleRemoveLeg(leg.id)}
-                      >
-                        <FaTrash /> Remove
-                      </Button>
-                    </div>
+                        <Button
+                          variant="danger"
+                          className="my-3"
+                          size="sm"
+                          onClick={() => handleRemoveLeg(leg.id)}
+                        >
+                          <FaTrash /> Remove
+                        </Button>
+                      </Card.Body>
+                    </Card>
                   ))}
 
                   <Button
@@ -537,8 +912,8 @@ function EditBookingStepOne(props) {
               )}
             </div>
 
-            <div className="my-3">
-              <Button type="submit">Update Booking Information</Button>
+            <div className="d-flex my-3">
+              <Button type="submit">Update Booking Information </Button>
             </div>
           </Form>
         )}
