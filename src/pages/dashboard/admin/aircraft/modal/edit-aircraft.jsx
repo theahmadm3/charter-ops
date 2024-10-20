@@ -14,49 +14,19 @@ import { updateAircraftAsync } from "../../../../../slices/aircraft/aircraftSlic
 
 const validationSchema = Yup.object({
   owned_by: Yup.string().required("Aircraft ownership is required"),
-  model: Yup.string()
-    .required("Aircraft model is required")
+  aircraft_type: Yup.string()
+    .required("Aircraft type is required")
     .matches(
-      /^[a-zA-Z0-9]+$/,
-      "The model field must only contain letters and numbers."
+      /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/,
+      "The model field must only contain letters, numbers, and special characters."
     ),
-  manufacturer: Yup.string().matches(
-    /^[a-zA-Z0-9]+$/,
-    "The manufacturer field must only contain letters and numbers."
-  ),
+  location: Yup.string().required("Location is required"),
+  reg_no: Yup.string().required("Registration number is required"),
   total_seat_capacity: Yup.number()
     .required("Total seat capacity is required")
     .positive("Must be a positive number"),
-  class_configuration: Yup.object({
-    economy: Yup.number().required("Economy class configuration is required"),
-    extra_legroom: Yup.number().required(
-      "Extra legroom configuration is required"
-    ),
-    business: Yup.number().required("Business class configuration is required"),
-    first_class: Yup.number().required("First class configuration is required"),
-  }),
-  luggage_capacity: Yup.number()
-    .required("Luggage capacity is required")
-    .positive("Must be a positive number"),
-  max_flight_range: Yup.number()
-    .required("Maximum flight range is required")
-    .positive("Must be a positive number"),
-  fuel_capacity: Yup.number()
-    .required("Fuel capacity is required")
-    .positive("Must be a positive number"),
-  engine_type: Yup.string().matches(
-    /^[a-zA-Z0-9]+$/,
-    "The engine type field must only contain letters and numbers."
-  ),
-  // inflight_services: Yup.array().min(
-  //   1,
-  //   "At least one inflight service must be selected"
-  // ),
-  // crew_capacity: Yup.number()
-  //   .required("Crew capacity is required")
-  //   .positive("Must be a positive number"),
-  cruise_speed: Yup.number().positive("Must be a positive number"),
-  remarks: Yup.string(),
+
+  image: Yup.string().required("Image is required"),
 });
 
 function EditAircraft(props) {

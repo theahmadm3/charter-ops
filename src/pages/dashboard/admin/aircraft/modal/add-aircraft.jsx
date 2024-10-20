@@ -17,8 +17,8 @@ const validationSchema = Yup.object({
   aircraft_type: Yup.string()
     .required("Aircraft type is required")
     .matches(
-      /^[a-zA-Z0-9]+$/,
-      "The model field must only contain letters and numbers."
+      /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/,
+      "The model field must only contain letters, numbers, and special characters."
     ),
   location: Yup.string().required("Location is required"),
   reg_no: Yup.string().required("Registration number is required"),
@@ -26,15 +26,7 @@ const validationSchema = Yup.object({
     .required("Total seat capacity is required")
     .positive("Must be a positive number"),
 
-  // inflight_services: Yup.array().min(
-  //   1,
-  //   "At least one inflight service must be selected"
-  // ),
   image: Yup.string().required("Image is required"),
-
-  // crew_capacity: Yup.number()
-  //   .required("Crew capacity is required")
-  //   .positive("Must be a positive number"),
 });
 
 function AddAircraft(props) {
