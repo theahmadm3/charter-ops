@@ -197,7 +197,7 @@ const ViewBooking = (props) => {
               <Card className="bg-light border-0   ">
                 <Card.Body>
                   <Card.Text className="fw-bold">Legs</Card.Text>
-                  <Table>
+                  <Table responsive striped hover>
                     <thead>
                       <tr>
                         <th></th>
@@ -278,11 +278,45 @@ const ViewBooking = (props) => {
                             <td>{index + 1}</td>
                             <td>{crew.first_name + " " + crew?.last_name}</td>
                             <td> {crew?.email} </td>
-                            <td>{crew?.gender}</td>
-                            <td>{crew.phone}</td>
+                            <td>{crew?.gender || "--"}</td>
+                            <td>{crew.phone || "--"}</td>
                           </tr>
                         )
                       )
+                    ) : (
+                      <tr>
+                        <td colSpan="7" className="text-center">
+                          No record found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </Table>
+
+                <hr />
+                <Card.Text className="fw-bold">Passengers</Card.Text>
+
+                <Table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Gender</th>
+                      <th>Phone</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {props?.data[0]?.passengers?.length > 0 ? (
+                      props?.data[0]?.passengers?.map((crew, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{crew.first_name + " " + crew?.last_name}</td>
+                          <td> {crew?.email} </td>
+                          <td>{crew?.gender || "--"}</td>
+                          <td>{crew.phone || "--"}</td>
+                        </tr>
+                      ))
                     ) : (
                       <tr>
                         <td colSpan="7" className="text-center">
