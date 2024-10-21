@@ -510,6 +510,7 @@ const bookingSlice = createSlice({
               ? {
                   id: action.payload.data.id,
                   from_location: action.payload.data.from_location,
+                  client: action.payload.data.client,
                   to_location: action.payload.data.to_location,
                   pax: action.payload.data.pax,
                   status: action.payload.data.status,
