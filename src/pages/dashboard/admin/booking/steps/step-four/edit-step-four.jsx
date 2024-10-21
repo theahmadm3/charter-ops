@@ -1,4 +1,4 @@
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import {
   Button,
@@ -117,30 +117,23 @@ function EditBookingStepFour(props) {
   };
 
   const handleSubmit = (values) => {
-    // Remove keys with falsy values from formattedValues
-    const formattedValues = Object.entries({
-      first_name: values.first_name || "",
-      last_name: values.last_name || "",
-      email: values.email || "",
-      phone: values.phone || "",
-      gender: values.gender,
-      nationality: values.nationality || "",
-      date_of_birth: values.date_of_birth || "",
-      special_requests: values.special_requests || "",
-      num_adults: Number(values.num_adults),
-      num_children: Number(values.num_children),
-      num_infants: Number(values.num_infants),
-    }).reduce((acc, [key, value]) => {
-      if (value) {
-        acc[key] = value; // Only keep key if value is not falsy
-      }
-      return acc;
-    }, {});
+    const formattedValues = {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      email: values.email,
+      phone: values.phone,
+    };
 
     const payload = {
-      passengers: isChecked
-        ? [...passengers, formattedValues]
-        : [formattedValues],
+      passengers: [
+        formattedValues,
+        ...values.passengers.map((passenger) => ({
+          first_name: passenger.first_name,
+          last_name: passenger.last_name,
+          email: passenger.email,
+          phone: passenger.phone,
+        })),
+      ],
     };
 
     dispatch(
@@ -151,17 +144,8 @@ function EditBookingStepFour(props) {
     )
       .then((response) => {
         if (response?.payload?.success) {
-          // navigate(-1);
-        } else if (response?.payload) {
-          // const errorMessage = response.payload;
-          // General error message
-          // toast.error(errorMessage);
-          // Check and display validation errors if present
-          // if (response.payload?.errors) {
-          //   Object.values(response.payload.errors).forEach((errorArray) => {
-          //     errorArray.forEach((errMsg) => toast.error(errMsg));
-          //   });
-          // }
+          const current = bookingInfo?.currentStep;
+          dispatch(setCurrentStep(current + 1));
         }
       })
       .catch((error) => {
@@ -169,57 +153,6 @@ function EditBookingStepFour(props) {
         toast.error("An unexpected error occurred.");
       });
   };
-
-  // const handleSubmit = (values) => {
-  //   const formattedValues = {
-  //     first_name: values.first_name || "",
-  //     last_name: values.last_name || "",
-  //     email: values.email || "",
-  //     phone: values.phone || "",
-  //     gender: values.gender,
-  //     nationality: values.nationality || "",
-  //     date_of_birth: values.date_of_birth || "",
-  //     special_requests: values.special_requests || "",
-  //     num_adults: Number(values.num_adults),
-  //     num_children: Number(values.num_children),
-  //     num_infants: Number(values.num_infants),
-  //   };
-
-  //   const payload = {
-  //     passengers: isChecked
-  //       ? [...passengers, formattedValues]
-  //       : [formattedValues],
-  //   };
-
-  //   dispatch(
-  //     addBookingStepThreeAsync({
-  //       bookingId: props?.data[0]?.id,
-  //       values: payload,
-  //     })
-  //   )
-  //     .then((response) => {
-  //       if (response?.payload?.success) {
-  //         // navigate(-1);
-  //       } else if (response?.payload) {
-  //         // const errorMessage = response.payload;
-  //         // General error message
-  //         // toast.error(errorMessage);
-  //         // Check and display validation errors if present
-  //         // if (response.payload?.errors) {
-  //         //   Object.values(response.payload.errors).forEach((errorArray) => {
-  //         //     errorArray.forEach((errMsg) => toast.error(errMsg));
-  //         //   });
-  //         // }
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error occurred:", error);
-  //       toast.error("An unexpected error occurred.");
-  //     });
-  // };
-
-  const handleBack = () =>
-    dispatch(setCurrentStep(bookingInfo?.currentStep - 1));
 
   return (
     <Formik
