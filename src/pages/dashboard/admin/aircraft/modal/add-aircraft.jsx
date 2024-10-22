@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { addAircraftAsync } from "../../../../../slices/aircraft/aircraftSlice";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
   owned_by: Yup.string().required("Aircraft ownership is required"),
@@ -37,6 +38,19 @@ function AddAircraft(props) {
 
   const handleFileChange = async (event, setFieldValue) => {
     const file = event.currentTarget.files[0];
+
+    if (!file.type.startsWith("image/")) {
+      toast.info("Please upload an image file.");
+      return;
+    }
+
+    const imgInKb = file.size / 1024;
+
+    if (imgInKb > 500) {
+      toast.info("Image size must be 500kb or less");
+
+      return;
+    }
     if (file) {
       const base64 = await convertFileToBase64(file);
       setFieldValue("image", base64);
