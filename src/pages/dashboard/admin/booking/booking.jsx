@@ -448,7 +448,7 @@ const Booking = () => {
                   <thead>
                     <tr>
                       <th>S/N</th>
-                      <th>Model</th>
+                      <th>Registration No</th>
                       <th>Owned By</th>
                       <th>Pax</th>
                       <th>In Flight Services</th>
@@ -461,7 +461,7 @@ const Booking = () => {
                       airCraftInfo?.getAllAircraftResponse?.data.map(
                         (aircraft, index) => {
                           const {
-                            model,
+                            reg_no,
                             owned_by,
                             inflight_services,
                             pax_capacity,
@@ -470,7 +470,7 @@ const Booking = () => {
                           return (
                             <tr key={index}>
                               <td>{index + 1}</td>
-                              <td>{model}</td>
+                              <td>{reg_no}</td>
                               <td>{owned_by}</td>
                               <td>{pax_capacity}</td>
                               <td>
