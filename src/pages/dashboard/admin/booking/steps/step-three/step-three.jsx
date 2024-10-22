@@ -63,7 +63,10 @@ function BookingStepThree() {
   };
 
   const configInfo = useSelector((state) => state?.config);
-
+  console.log(
+    "additional service",
+    configInfo?.getAdditionalServiceByIdResponse
+  );
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -109,9 +112,9 @@ function BookingStepThree() {
                     isMulti
                     options={
                       Array.isArray(
-                        configInfo?.getAdditionalServiceByIdResponse
+                        configInfo?.getAdditionalServiceByIdResponse?.data
                       )
-                        ? configInfo.getAdditionalServiceByIdResponse.map(
+                        ? configInfo.getAdditionalServiceByIdResponse?.data?.map(
                             (option) => ({
                               value: option?.id,
                               label: `${option?.service_name}, ${option?.charge_rate}`,
