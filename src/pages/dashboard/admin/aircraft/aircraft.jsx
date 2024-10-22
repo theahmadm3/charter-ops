@@ -72,7 +72,6 @@ const Aircraft = () => {
                 <th>Model</th>
                 <th>Owned By</th>
                 <th>Pax</th>
-                <th>Luggage Capacity</th>
                 <th>Flight Range </th>
                 <th> Fuel Capacity</th>
                 <th>In Flight Services</th>
@@ -99,7 +98,6 @@ const Aircraft = () => {
                         <td>{model}</td>
                         <td>{owned_by}</td>
                         <td>{pax_capacity}</td>
-                        <td>{luggage_capacity}</td>
                         <td>{max_flight_range}</td>
                         <td>{fuel_capacity}</td>
                         <td>
