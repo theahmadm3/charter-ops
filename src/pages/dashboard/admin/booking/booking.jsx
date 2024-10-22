@@ -79,6 +79,7 @@ const Booking = () => {
   useEffect(() => {
     try {
       dispatch(getAllBookingAsync({}));
+      dispatch(getAllAircraftsAsync());
     } catch (error) {
       console.log(error);
     }
@@ -450,11 +451,9 @@ const Booking = () => {
                       <th>Model</th>
                       <th>Owned By</th>
                       <th>Pax</th>
-                      <th>Luggage Capacity</th>
-                      <th>Flight Range </th>
-                      <th> Fuel Capacity</th>
                       <th>In Flight Services</th>
                       <th>Status</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -464,11 +463,8 @@ const Booking = () => {
                           const {
                             model,
                             owned_by,
-                            pax_capacity,
-                            luggage_capacity,
-                            max_flight_range,
-                            fuel_capacity,
                             inflight_services,
+                            pax_capacity,
                             status,
                           } = aircraft;
                           return (
@@ -477,9 +473,6 @@ const Booking = () => {
                               <td>{model}</td>
                               <td>{owned_by}</td>
                               <td>{pax_capacity}</td>
-                              <td>{luggage_capacity}</td>
-                              <td>{max_flight_range}</td>
-                              <td>{fuel_capacity}</td>
                               <td>
                                 {inflight_services &&
                                 inflight_services.length > 0 ? (
