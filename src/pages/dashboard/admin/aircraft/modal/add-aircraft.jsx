@@ -27,7 +27,7 @@ const validationSchema = Yup.object({
     .required("Total seat capacity is required")
     .positive("Must be a positive number"),
 
-  image: Yup.string().required("Image is required"),
+  // image: Yup.string().required("Image is required"),
 });
 
 function AddAircraft(props) {
@@ -277,9 +277,7 @@ function AddAircraft(props) {
               <Row>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <label>
-                      Inflight Services <span className="text-danger"> *</span>
-                    </label>
+                    <label>Inflight Services</label>
                     <div>
                       {["Meals", "Wi-fi"].map((service) => (
                         <BootstrapForm.Check
@@ -314,11 +312,7 @@ function AddAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingIdFileUpload"
-                      label={
-                        <div>
-                          Image Upload <span className="text-danger">*</span>
-                        </div>
-                      }
+                      label={<div>Image Upload</div>}
                     >
                       <BootstrapForm.Control
                         type="file"
