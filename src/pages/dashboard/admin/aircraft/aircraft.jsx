@@ -72,8 +72,6 @@ const Aircraft = () => {
                 <th>Model</th>
                 <th>Owned By</th>
                 <th>Pax</th>
-                <th>Flight Range </th>
-                <th> Fuel Capacity</th>
                 <th>In Flight Services</th>
                 <th>Status</th>
               </tr>
@@ -86,9 +84,6 @@ const Aircraft = () => {
                       model,
                       owned_by,
                       pax_capacity,
-                      luggage_capacity,
-                      max_flight_range,
-                      fuel_capacity,
                       inflight_services,
                       status,
                     } = aircraft;
@@ -98,8 +93,6 @@ const Aircraft = () => {
                         <td>{model}</td>
                         <td>{owned_by}</td>
                         <td>{pax_capacity}</td>
-                        <td>{max_flight_range}</td>
-                        <td>{fuel_capacity}</td>
                         <td>
                           {inflight_services && inflight_services.length > 0 ? (
                             inflight_services.map((service, idx) => (
