@@ -18,6 +18,7 @@ import {
   Button,
   Row,
   Col,
+  Card,
 } from "react-bootstrap";
 
 import "react-datetime-picker/dist/DateTimePicker.css";
@@ -129,23 +130,23 @@ function EditBookingStepOne(props) {
 
   // useEffect for setting initial value for from_location
   useEffect(() => {
-    if (bookingInfo?.addBookingStepOneResponse?.data?.from_location) {
+    if (props.data[0]?.from_location) {
       setFromLocationDefaultValue({
-        value: bookingInfo.addBookingStepOneResponse.data.from_location,
-        label: bookingInfo.addBookingStepOneResponse.data.from_location,
+        value: props.data[0]?.from_location,
+        label: props.data[0]?.from_location,
       });
     }
-  }, [bookingInfo?.addBookingStepOneResponse?.data?.from_location]);
+  }, [props.data[0]?.from_location]);
 
   // useEffect for setting initial value for to_location
   useEffect(() => {
-    if (bookingInfo?.addBookingStepOneResponse?.data?.to_location) {
+    if (props.data[0]?.to_location) {
       setToLocationDefaultValue({
-        value: bookingInfo.addBookingStepOneResponse.data.to_location,
-        label: bookingInfo.addBookingStepOneResponse.data.to_location,
+        value: props.data[0]?.to_location,
+        label: props.data[0]?.to_location,
       });
     }
-  }, [bookingInfo?.addBookingStepOneResponse?.data?.to_location]);
+  }, [props.data[0]?.to_location]);
 
   const handleFormClear = (resetForm) => {
     resetForm();
@@ -174,22 +175,18 @@ function EditBookingStepOne(props) {
         label: props.data[0].to_location,
       }
     : null;
+
   return (
     <>
       <Formik
         initialValues={{
-          from_location:
-            bookingInfo?.addBookingStepOneResponse?.data?.from_location,
-          to_location:
-            bookingInfo?.addBookingStepOneResponse?.data?.to_location,
-          flight_date:
-            bookingInfo?.addBookingStepOneResponse?.data?.flight_date,
-          return_date:
-            bookingInfo?.addBookingStepOneResponse?.data?.return_date,
-          client_id: bookingInfo?.addBookingStepOneResponse?.data?.client_id,
+          from_location: props.data[0].from_location,
+          to_location: props.data[0].to_location,
+          flight_date: props.data[0].flight_date,
+          return_date: props.data[0].return_date,
+          client_id: props.data[0]?.client_id,
           multi_leg: null,
-
-          service_id: bookingInfo?.addBookingStepOneResponse?.data?.service_id,
+          service_id: props.data[0]?.service_id,
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
@@ -547,10 +544,10 @@ function EditBookingStepOne(props) {
                 </Col>
               </Row>
 
-              {isChecked && (
+              {props.data[0]?.legs && (
                 <div>
                   <h5 className="my-3">Legs</h5>
-                  {legs.map((leg, index) => (
+                  {props.data[0]?.legs.map((leg, index) => (
                     <Card key={leg.id} className="mb-4 border shadow-sm">
                       <Card.Header className="bg-primary text-white">
                         Leg {index + 1}
@@ -563,61 +560,11 @@ function EditBookingStepOne(props) {
                                 Select Departure Airport{" "}
                                 <span className="text-danger">*</span>
                               </label>
-                              {/* <Select
-                                defaultValue={
-                                  index > 0
-                                    ? legs[index - 1].to
-                                    : value.to_location?.label
-                                } // Use previous leg's destination as default value for next leg's departure
-                                options={
-                                  Array.isArray(
-                                    configInfo?.getAllAirportsResponse
-                                  )
-                                    ? configInfo.getAllAirportsResponse.map(
-                                        (option) => ({
-                                          value: option?.name,
-                                          label: option?.name,
-                                        })
-                                      )
-                                    : []
-                                }
-                                placeholder="Select an Airport"
-                                isClearable
-                                isSearchable
-                                className="form-control"
-                                classNamePrefix="from"
-                                onInputChange={(value) =>
-                                  handleSearchAirport(value)
-                                }
-                                onChange={(selectedOptions) =>
-                                  handleLegChange(leg.id, {
-                                    target: {
-                                      name: "from",
-                                      value: selectedOptions,
-                                    },
-                                  })
-                                }
-                                aria-label="Select Departure Airport"
-                              /> */}
-
                               <Select
-                                defaultValue={
-                                  index > 0
-                                    ? {
-                                        value:
-                                          legs[index - 1]?.to?.value ||
-                                          legs[index - 1]?.to,
-                                        label:
-                                          legs[index - 1]?.to?.label ||
-                                          legs[index - 1]?.to,
-                                      }
-                                    : {
-                                        value: value?.to_location?.value || "",
-                                        label:
-                                          value?.to_location?.label ||
-                                          "Select Departure",
-                                      }
-                                }
+                                defaultValue={{
+                                  value: leg.from,
+                                  label: leg.from,
+                                }}
                                 options={
                                   Array.isArray(
                                     configInfo?.getAllAirportsResponse
@@ -644,27 +591,22 @@ function EditBookingStepOne(props) {
                                         value: selectedOption.value,
                                         label: selectedOption.label,
                                       }
-                                    : legs[index].from; // Keep the current value if nothing changes
+                                    : leg.from;
 
-                                  // Only update if the user has selected a new option
                                   setLegs((prevLegs) =>
                                     prevLegs.map((legItem, legIndex) =>
                                       legIndex === index
                                         ? {
                                             ...legItem,
-                                            from:
-                                              selectedOption ||
-                                              legItem.from === null // check if user changed the value
-                                                ? selectedValue // update the state only if a new selection is made
-                                                : legItem.from ||
-                                                  legs[index - 1]?.to, // default to previous leg's to value
+                                            from: selectedOption
+                                              ? selectedValue
+                                              : legItem.from,
                                           }
                                         : legItem
                                     )
                                   );
                                 }}
                               />
-
                               <ErrorMessage
                                 name={`legs[${index}].from`}
                                 component="div"
@@ -680,7 +622,10 @@ function EditBookingStepOne(props) {
                                 <span className="text-danger">*</span>
                               </label>
                               <Select
-                                value={leg.to}
+                                value={{
+                                  value: leg.to,
+                                  label: leg.to,
+                                }}
                                 options={
                                   Array.isArray(
                                     configInfo?.getAllAirportsResponse
@@ -733,18 +678,21 @@ function EditBookingStepOne(props) {
                                     type="date"
                                     name={`legs[${index}].departure_date_time`}
                                     value={
-                                      leg.departure_date_time &&
-                                      !isNaN(new Date(leg.departure_date_time))
-                                        ? new Date(leg.departure_date_time)
+                                      leg.departure_date &&
+                                      !isNaN(new Date(leg.departure_date))
+                                        ? new Date(leg.departure_date)
                                             .toISOString()
                                             .split("T")[0]
                                         : ""
                                     }
                                     min={
                                       index > 0 &&
-                                      legs[index - 1].arrival_date_time
+                                      props.data[0]?.legs[index - 1]
+                                        .arrival_date
                                         ? new Date(
-                                            legs[index - 1].arrival_date_time
+                                            props.data[0]?.legs[
+                                              index - 1
+                                            ].arrival_date
                                           )
                                             .toISOString()
                                             .split("T")[0]
@@ -753,7 +701,7 @@ function EditBookingStepOne(props) {
                                     onChange={(e) =>
                                       handleLegChange(leg.id, {
                                         target: {
-                                          name: "departure_date_time",
+                                          name: "departure_date",
                                           value: e.target.value,
                                         },
                                       })
@@ -762,7 +710,7 @@ function EditBookingStepOne(props) {
                                     className="py-3"
                                   />
                                   <ErrorMessage
-                                    name={`legs[${index}].departure_date_time`}
+                                    name={`legs[${index}].departure_date`}
                                     component="div"
                                     className="text-danger"
                                   />
@@ -813,24 +761,24 @@ function EditBookingStepOne(props) {
                               <Col md={6}>
                                 <BootstrapForm.Group>
                                   <BootstrapForm.Label>
-                                    Return Date{" "}
+                                    Arrival Date{" "}
                                     <span className="text-danger">*</span>
                                   </BootstrapForm.Label>
                                   <BootstrapForm.Control
                                     type="date"
                                     name={`legs[${index}].arrival_date_time`}
                                     value={
-                                      leg.arrival_date_time &&
-                                      !isNaN(new Date(leg.arrival_date_time))
-                                        ? new Date(leg.arrival_date_time)
+                                      leg.arrival_date &&
+                                      !isNaN(new Date(leg.arrival_date))
+                                        ? new Date(leg.arrival_date)
                                             .toISOString()
                                             .split("T")[0]
                                         : ""
                                     }
                                     min={
-                                      leg.departure_date_time &&
-                                      !isNaN(new Date(leg.departure_date_time))
-                                        ? new Date(leg.departure_date_time)
+                                      leg.departure_date &&
+                                      !isNaN(new Date(leg.departure_date))
+                                        ? new Date(leg.departure_date)
                                             .toISOString()
                                             .split("T")[0]
                                         : new Date().toISOString().split("T")[0]
@@ -838,16 +786,16 @@ function EditBookingStepOne(props) {
                                     onChange={(e) =>
                                       handleLegChange(leg.id, {
                                         target: {
-                                          name: "arrival_date_time",
+                                          name: "arrival_date",
                                           value: e.target.value,
                                         },
                                       })
                                     }
-                                    placeholder="Select return date"
+                                    placeholder="Select arrival date"
                                     className="py-3"
                                   />
                                   <ErrorMessage
-                                    name={`legs[${index}].arrival_date_time`}
+                                    name={`legs[${index}].arrival_date`}
                                     component="div"
                                     className="text-danger"
                                   />
@@ -857,7 +805,7 @@ function EditBookingStepOne(props) {
                               <Col md={6}>
                                 <BootstrapForm.Group>
                                   <BootstrapForm.Label>
-                                    Return Time{" "}
+                                    Arrival Time{" "}
                                     <span className="text-danger">*</span>
                                   </BootstrapForm.Label>
                                   <BootstrapForm.Control
@@ -874,7 +822,9 @@ function EditBookingStepOne(props) {
                                     }
                                     className="py-3"
                                   >
-                                    <option value="">Select Return Time</option>
+                                    <option value="">
+                                      Select Arrival Time
+                                    </option>
                                     {times.map((time, idx) => (
                                       <option value={time} key={idx}>
                                         {time}
