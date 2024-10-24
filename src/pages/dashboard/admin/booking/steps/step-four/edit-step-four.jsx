@@ -49,7 +49,9 @@ const genderOptions = [
 ];
 
 function EditBookingStepFour(props) {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(
+    props?.data[0]?.passengers ? true : false
+  );
   const [passengers, setPassengers] = useState([
     {
       first_name: "",
@@ -157,11 +159,13 @@ function EditBookingStepFour(props) {
   return (
     <Formik
       initialValues={{
-        first_name: props?.data[0]?.passengers[0]?.first_name,
-        last_name: props?.data[0]?.passengers[0]?.last_name,
-        email: props?.data[0]?.passengers[0]?.email,
-        phone: props?.data[0]?.passengers[0]?.phone,
-        id: props?.data[0]?.id,
+        passengers: props?.data[0]?.passengers.map((passenger) => ({
+          first_name: passenger.first_name || "",
+          last_name: passenger.last_name || "",
+          email: passenger.email || "",
+          phone: passenger.phone || "",
+          passengers: props?.data[0]?.passengers || [],
+        })),
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
@@ -189,13 +193,16 @@ function EditBookingStepFour(props) {
                 <FloatingLabel controlId="floatingFirstName" label="First Name">
                   <BootstrapForm.Control
                     type="text"
-                    name="first_name"
-                    value={values.first_name}
+                    name="passengers[0].first_name"
+                    value={values.passengers[0]?.first_name}
                     onChange={handleChange}
-                    isInvalid={touched.first_name && !!errors.first_name}
+                    isInvalid={
+                      touched.passengers?.[0]?.first_name &&
+                      !!errors.passengers?.[0]?.first_name
+                    }
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.first_name}
+                    {errors.passengers?.[0]?.first_name}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
@@ -206,13 +213,16 @@ function EditBookingStepFour(props) {
                 <FloatingLabel controlId="floatingLastName" label="Last Name">
                   <BootstrapForm.Control
                     type="text"
-                    name="last_name"
-                    value={values.last_name}
+                    name="passengers[0].last_name"
+                    value={values.passengers[0]?.last_name}
                     onChange={handleChange}
-                    isInvalid={touched.last_name && !!errors.last_name}
+                    isInvalid={
+                      touched.passengers?.[0]?.last_name &&
+                      !!errors.passengers?.[0]?.last_name
+                    }
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.last_name}
+                    {errors.passengers?.[0]?.last_name}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
@@ -223,13 +233,16 @@ function EditBookingStepFour(props) {
                 <FloatingLabel controlId="floatingEmail" label="Email">
                   <BootstrapForm.Control
                     type="email"
-                    name="email"
-                    value={values.email}
+                    name="passengers[0].email"
+                    value={values.passengers[0]?.email}
                     onChange={handleChange}
-                    isInvalid={touched.email && !!errors.email}
+                    isInvalid={
+                      touched.passengers?.[0]?.email &&
+                      !!errors.passengers?.[0]?.email
+                    }
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.email}
+                    {errors.passengers?.[0]?.email}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>
@@ -240,13 +253,16 @@ function EditBookingStepFour(props) {
                 <FloatingLabel controlId="floatingPhone" label="Phone Number">
                   <BootstrapForm.Control
                     type="text"
-                    name="phone"
-                    value={values.phone}
+                    name="passengers[0].phone"
+                    value={values.passengers[0]?.phone}
                     onChange={handleChange}
-                    isInvalid={touched.phone && !!errors.phone}
+                    isInvalid={
+                      touched.passengers?.[0]?.phone &&
+                      !!errors.passengers?.[0]?.phone
+                    }
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.phone}
+                    {errors.passengers?.[0]?.phone}
                   </BootstrapForm.Control.Feedback>
                 </FloatingLabel>
               </BootstrapForm.Group>

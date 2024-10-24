@@ -42,7 +42,6 @@ function BookingStepTwo() {
     const aircraftId = event.target.value;
     const selected = aircraftOptions.find((a) => a.id === Number(aircraftId));
     setSelectedAircraft(selected);
-    console.log("Selected Aircraft:", aircraftId);
   };
 
   useEffect(() => {

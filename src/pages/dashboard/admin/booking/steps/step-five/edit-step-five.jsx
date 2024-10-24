@@ -12,22 +12,17 @@ import {
   addBookingStepFiveAsync,
   setCurrentStep,
 } from "../../../../../../slices/booking/bookingSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAllUsersAsync } from "../../../../../../slices/user/userSlice";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const validationSchema = Yup.object({
-  crew_notes: Yup.string().required("Crew note is required"),
-  passenger_notes: Yup.string().required("Passenger note is required"),
-});
-
 function EditBookingStepFive(props) {
   const navigate = useNavigate();
-  console.log("ddddd", props);
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state?.users);
+  const [defaultCrewMembers, setDefaultCrewMembers] = useState([]);
 
   const bookingInfo = useSelector((state) => state?.booking);
 
@@ -36,16 +31,33 @@ function EditBookingStepFive(props) {
     dispatch(setCurrentStep(current - 1));
   };
 
+  // Initial values for the form
+  const initialValues = {
+    crew_members: [],
+    crew_notes: props?.data[0]?.trip_sheet?.crew_notes || "",
+    passenger_notes: props?.data[0]?.trip_sheet?.passenger_notes || "",
+  };
+
+  // Validation schema
+  const validationSchema = Yup.object().shape({
+    crew_members: Yup.array().required("At least one crew member is required"),
+    crew_notes: Yup.string().required("Crew note is required"),
+    passenger_notes: Yup.string().required("Passenger note is required"),
+  });
+
   const handleSubmit = (values) => {
     const payload = {
       ...values,
-      crew_members: values.crew_members.map((crew) => crew.value),
+
+      crew_members: (values.crew_members || [])
+        .filter((crew) => crew.value)
+        .map((crew) => ({
+          crew_id: crew.value,
+        })),
     };
     dispatch(
       addBookingStepFiveAsync({
-        bookingId:
-          bookingInfo?.addBookingStepOneResponse?.data?.id ||
-          props?.data[0]?.id,
+        bookingId: props?.data[0]?.id,
         values: payload,
       })
     )
@@ -66,24 +78,28 @@ function EditBookingStepFive(props) {
       console.log(error);
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    // Update the state when crew members data changes
+    if (props?.data[0]?.trip_sheet?.crew_members) {
+      const mappedCrewMembers = props.data[0].trip_sheet.crew_members.map(
+        (member) => ({
+          value: member?.id,
+          label: `${member?.first_name} ${member?.last_name}`,
+        })
+      );
+      setDefaultCrewMembers(mappedCrewMembers);
+    }
+  }, [props?.data[0]?.trip_sheet?.crew_members]);
+
   return (
     <>
       <Formik
-        initialValues={{
-          crew_notes: props?.data[0]?.crew_notes,
-          passenger_notes: props?.data[0]?.passenger_notes,
-        }}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({
-          errors,
-          touched,
-          handleChange,
-          values,
-          handleSubmit,
-          setFieldValue,
-        }) => (
+        {({ errors, touched, setFieldValue, handleChange }) => (
           <Form>
             <Row>
               <Col md={6}>
@@ -97,19 +113,20 @@ function EditBookingStepFive(props) {
                     isMulti
                     options={userInfo?.getAllUsersResponse?.data?.map(
                       (option) => ({
-                        value: option?.id,
+                        value: option.id,
                         label: `${option.first_name} ${option.last_name}`,
                       })
                     )}
-                    className=" form-control"
+                    className="form-control"
                     classNamePrefix="crew_members"
-                    onChange={(selectedOptions) =>
-                      setFieldValue("crew_members", selectedOptions)
-                    }
+                    onChange={(selectedOptions) => {
+                      setFieldValue("crew_members", selectedOptions);
+                      setDefaultCrewMembers(selectedOptions);
+                    }}
+                    value={defaultCrewMembers}
                   />
-
                   <ErrorMessage
-                    name="crew_id"
+                    name="crew_members"
                     component="div"
                     className="text-danger"
                   />
@@ -118,11 +135,9 @@ function EditBookingStepFive(props) {
             </Row>
             <Row className="my-3">
               <Col md={6}>
-                <BootstrapForm.Group className="">
+                <BootstrapForm.Group>
                   <label>Crew note</label>
-
                   <BootstrapForm.Control
-                    value={props?.data[0]?.trip_sheet?.crew_notes}
                     as="textarea"
                     placeholder="Crew note"
                     name="crew_notes"
@@ -136,11 +151,9 @@ function EditBookingStepFive(props) {
                 </BootstrapForm.Group>
               </Col>
               <Col md={6}>
-                <BootstrapForm.Group className="">
+                <BootstrapForm.Group>
                   <label>Passenger note</label>
-
                   <BootstrapForm.Control
-                    value={props?.data[0]?.trip_sheet?.passenger_notes}
                     as="textarea"
                     placeholder="Passenger notes"
                     name="passenger_notes"
@@ -158,20 +171,6 @@ function EditBookingStepFive(props) {
             </Row>
 
             <div className="mt-3">
-              {/* <Button
-                variant="white"
-                className="border border-main-color text-start"
-                onClick={handleBack}
-              >
-                Back
-              </Button> */}
-              {/* <Button
-                variant="white"
-                className="border border-main-color text-end"
-                onClick={handleNext}
-              >
-                Next
-              </Button> */}
               <Button type="submit">Update Trip Sheet</Button>
             </div>
           </Form>
