@@ -25,8 +25,6 @@ const validationSchema = Yup.object({
   total_seat_capacity: Yup.number()
     .required("Total seat capacity is required")
     .positive("Must be a positive number"),
-
-  image: Yup.string().required("Image is required"),
 });
 
 function EditAircraft(props) {
@@ -178,12 +176,7 @@ function EditAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingTotalSeatCapacity"
-                      label={
-                        <div>
-                          Total Seat Capacity{" "}
-                          <span className="text-danger">*</span>
-                        </div>
-                      }
+                      label={<div>Total Seat Capacity </div>}
                     >
                       <BootstrapForm.Control
                         type="number"
@@ -260,9 +253,7 @@ function EditAircraft(props) {
               <Row>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <label>
-                      Inflight Services <span className="text-danger"> *</span>
-                    </label>
+                    <label>Inflight Services</label>
                     <div>
                       {["Meals", "Wi-fi"].map((service) => (
                         <BootstrapForm.Check
@@ -297,11 +288,7 @@ function EditAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingIdFileUpload"
-                      label={
-                        <div>
-                          Image Upload <span className="text-danger">*</span>
-                        </div>
-                      }
+                      label={<div>Image Upload</div>}
                     >
                       <BootstrapForm.Control
                         type="file"
@@ -318,7 +305,7 @@ function EditAircraft(props) {
                 </Col>
               </Row>
 
-              <Button type="submit">Save</Button>
+              <Button type="submit">Update</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>
                 Close
               </Button>

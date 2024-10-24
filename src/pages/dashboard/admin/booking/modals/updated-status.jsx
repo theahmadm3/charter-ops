@@ -33,7 +33,7 @@ const UpdateStatusModal = (props) => {
           <Formik
             initialValues={{
               status: "",
-              overtime: "",
+              overtime: 0,
             }}
             validationSchema={Yup.object().shape({
               status: Yup.string()
@@ -43,20 +43,16 @@ const UpdateStatusModal = (props) => {
             onSubmit={(values) => {
               if (
                 values?.status === "completed" &&
-                (values?.overtime === "" ||
-                  values?.overtime < 1 ||
-                  !Number.isInteger(values?.overtime))
+                (values?.overtime === "" || !Number.isInteger(values?.overtime))
               ) {
-                toast.error(
-                  "Please enter valid overtime (a whole number greater than 0)"
-                );
+                toast.error("Please enter valid overtime ");
                 return; // Stop form submission if validation fails
               }
 
               // Create the payload
               const payload = {
                 ...values,
-                overtime: values.overtime || 0, // Default to 0 if empty or not provided
+                overtime: values.overtime || 0,
               };
 
               // Dispatch the async action with the payload
@@ -122,7 +118,7 @@ const UpdateStatusModal = (props) => {
                             type="number"
                             placeholder="Overtime"
                             name="overtime"
-                            value={values.overtime}
+                            value={values.overtime || 0}
                             onChange={handleChange}
                           />
                         </FloatingLabel>

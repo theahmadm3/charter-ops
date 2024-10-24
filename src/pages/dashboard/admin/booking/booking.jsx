@@ -449,8 +449,11 @@ const Booking = () => {
                     <tr>
                       <th>S/N</th>
                       <th>Registration No</th>
+                      <th>Aircraft Type</th>
                       <th>Owned By</th>
                       <th>Pax</th>
+                      <th>Total Seat</th>
+                      <th>Crew</th>
                       <th>In Flight Services</th>
                       <th>Status</th>
                       <th></th>
@@ -463,16 +466,22 @@ const Booking = () => {
                           const {
                             reg_no,
                             owned_by,
+                            aircraft_type,
                             inflight_services,
                             pax_capacity,
+                            total_seat_capacity,
+                            crew_capacity,
                             status,
                           } = aircraft;
                           return (
                             <tr key={index}>
                               <td>{index + 1}</td>
                               <td>{reg_no}</td>
+                              <td>{aircraft_type}</td>
                               <td>{owned_by}</td>
                               <td>{pax_capacity}</td>
+                              <td>{total_seat_capacity}</td>
+                              <td>{crew_capacity}</td>
                               <td>
                                 {inflight_services &&
                                 inflight_services.length > 0 ? (

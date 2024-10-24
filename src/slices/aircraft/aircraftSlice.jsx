@@ -113,14 +113,14 @@ const aircraftSlice = createSlice({
         state.addAircraftResponse = action?.payload;
         state.getAllAircraftResponse?.data?.unshift({
           id: action.payload?.data?.id,
-          name: action.payload?.data?.name,
           owned_by: action.payload?.data?.owned_by,
+          reg_no: action.payload?.data?.reg_no,
+          aircraft_type: action.payload?.data?.aircraft_type,
+          inflight_services: action.payload?.data?.inflight_services,
           pax_capacity: action.payload?.data?.pax_capacity,
-          manufacturer: action.payload?.data?.manufacturer,
-          luggage_capacity: action.payload?.data?.luggage_capacity,
-          cruise_speed: action.payload?.data?.cruise_speed,
+          total_seat_capacity: action.payload?.data?.total_seat_capacity,
+          crew_capacity: action.payload?.data?.crew_capacity,
           status: action.payload?.data?.status,
-          remarks: action.payload?.data?.remarks,
         });
 
         toast.success(action?.payload?.message);
@@ -142,14 +142,15 @@ const aircraftSlice = createSlice({
             aircraft.id === action.payload.data.id
               ? {
                   id: action.payload?.data?.id,
-                  name: action.payload?.data?.name,
                   owned_by: action.payload?.data?.owned_by,
+                  reg_no: action.payload?.data?.reg_no,
+                  aircraft_type: action.payload?.data?.aircraft_type,
+                  inflight_services: action.payload?.data?.inflight_services,
                   pax_capacity: action.payload?.data?.pax_capacity,
-                  manufacturer: action.payload?.data?.manufacturer,
-                  luggage_capacity: action.payload?.data?.luggage_capacity,
-                  cruise_speed: action.payload?.data?.cruise_speed,
+                  total_seat_capacity:
+                    action.payload?.data?.total_seat_capacity,
+                  crew_capacity: action.payload?.data?.crew_capacity,
                   status: action.payload?.data?.status,
-                  remarks: action.payload?.data?.remarks,
                 }
               : aircraft
           );
