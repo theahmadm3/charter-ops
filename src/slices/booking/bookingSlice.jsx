@@ -232,7 +232,7 @@ export const bookingPaymentStatusAsync = createAsyncThunk(
       const response = await BookingPaymentStatus(booking_id, values);
       return response;
     } catch (error) {
-      const errorMessage = error.message || error?.response?.data?.error;
+      const errorMessage = error?.response?.data?.error || error.error;
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
