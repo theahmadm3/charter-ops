@@ -386,82 +386,72 @@ const SystemConfig = () => {
                     <th>Charge Rate</th>
                     <th>Currency</th>
                     <th>Remark</th>
+                    <th>Main Service</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {configInfo?.getAllAdditionalServicesResponse?.length > 0 ? (
-                    configInfo.getAllAdditionalServicesResponse?.map(
-                      (service, index) => {
-                        const {
-                          service_name,
-                          rate_type,
-                          charge_rate,
-                          currency,
-                          remarks,
-                          status,
-                        } = service;
-                        return (
-                          <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{service_name}</td>
-                            <td>{rate_type}</td>
-                            <td>{charge_rate}</td>
-                            <td>{currency}</td>
-                            <td>{remarks}</td>
-                            <td>{status ? "Active" : "Not Active"}</td>
-                            <td>
-                              <Dropdown>
-                                <Dropdown.Toggle
-                                  variant="light"
-                                  className="border-0"
+                    configInfo.getAllAdditionalServicesResponse.map(
+                      (service, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{service?.service_name}</td>
+                          <td>{service?.rate_type}</td>
+                          <td>{service?.charge_rate}</td>
+                          <td>{service?.currency}</td>
+                          <td>{service?.remarks}</td>
+                          <td>{service?.service?.service_name}</td>
+                          <td>{service?.status ? "Active" : "Not Active"}</td>
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="light"
+                                className="border-0"
+                              >
+                                <HiDotsHorizontal />
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  className="small"
+                                  onClick={() =>
+                                    handleEditAdditionalService(service.id)
+                                  }
                                 >
-                                  <HiDotsHorizontal />
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu>
+                                  Manage
+                                </Dropdown.Item>
+                                {service?.status ? (
                                   <Dropdown.Item
-                                    className="small"
+                                    className="small bg-danger text-white"
                                     onClick={() =>
-                                      handleEditAdditionalService(service.id)
+                                      handleDeactivateAdditionalService(
+                                        service.id
+                                      )
                                     }
                                   >
-                                    Manage
+                                    Deactivate
                                   </Dropdown.Item>
-
-                                  {status ? (
-                                    <Dropdown.Item
-                                      className="small bg-danger text-white"
-                                      onClick={() =>
-                                        handleDeactivateAdditionalService(
-                                          service.id
-                                        )
-                                      }
-                                    >
-                                      Deactivate
-                                    </Dropdown.Item>
-                                  ) : (
-                                    <Dropdown.Item
-                                      className="small bg-success text-white"
-                                      onClick={() =>
-                                        handleActivateAdditionalService(
-                                          service.id
-                                        )
-                                      }
-                                    >
-                                      Activate
-                                    </Dropdown.Item>
-                                  )}
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </td>
-                          </tr>
-                        );
-                      }
+                                ) : (
+                                  <Dropdown.Item
+                                    className="small bg-success text-white"
+                                    onClick={() =>
+                                      handleActivateAdditionalService(
+                                        service.id
+                                      )
+                                    }
+                                  >
+                                    Activate
+                                  </Dropdown.Item>
+                                )}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </td>
+                        </tr>
+                      )
                     )
                   ) : (
                     <tr>
-                      <td colSpan="7">No services available</td>
+                      <td colSpan="9">No services available</td>
                     </tr>
                   )}
                 </tbody>

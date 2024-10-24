@@ -114,6 +114,7 @@ function EditClient(props) {
                         <option value="">Select Title</option>
                         <option value="Dr">Dr</option>
                         <option value="Mrs">Mrs</option>
+                        <option value="Miss">Miss</option>
                         <option value="Mr">Mr</option>
                         <option value="Alhaji">Alhaji</option>
                         <option value="Hajiya">Hajiya</option>

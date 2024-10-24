@@ -11,14 +11,15 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { addAircraftAsync } from "../../../../../slices/aircraft/aircraftSlice";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
   owned_by: Yup.string().required("Aircraft ownership is required"),
   aircraft_type: Yup.string()
     .required("Aircraft type is required")
     .matches(
-      /^[a-zA-Z0-9]+$/,
-      "The model field must only contain letters and numbers."
+      /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/,
+      "The model field must only contain letters, numbers, and special characters."
     ),
   location: Yup.string().required("Location is required"),
   reg_no: Yup.string().required("Registration number is required"),
@@ -26,15 +27,7 @@ const validationSchema = Yup.object({
     .required("Total seat capacity is required")
     .positive("Must be a positive number"),
 
-  // inflight_services: Yup.array().min(
-  //   1,
-  //   "At least one inflight service must be selected"
-  // ),
-  image: Yup.string().required("Image is required"),
-
-  // crew_capacity: Yup.number()
-  //   .required("Crew capacity is required")
-  //   .positive("Must be a positive number"),
+  // image: Yup.string().required("Image is required"),
 });
 
 function AddAircraft(props) {
@@ -45,6 +38,19 @@ function AddAircraft(props) {
 
   const handleFileChange = async (event, setFieldValue) => {
     const file = event.currentTarget.files[0];
+
+    if (!file.type.startsWith("image/")) {
+      toast.info("Please upload an image file.");
+      return;
+    }
+
+    const imgInKb = file.size / 1024;
+
+    if (imgInKb > 500) {
+      toast.info("Image size must be 500kb or less");
+
+      return;
+    }
     if (file) {
       const base64 = await convertFileToBase64(file);
       setFieldValue("image", base64);
@@ -271,9 +277,7 @@ function AddAircraft(props) {
               <Row>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <label>
-                      Inflight Services <span className="text-danger"> *</span>
-                    </label>
+                    <label>Inflight Services</label>
                     <div>
                       {["Meals", "Wi-fi"].map((service) => (
                         <BootstrapForm.Check
@@ -308,11 +312,7 @@ function AddAircraft(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingIdFileUpload"
-                      label={
-                        <div>
-                          Image Upload <span className="text-danger">*</span>
-                        </div>
-                      }
+                      label={<div>Image Upload</div>}
                     >
                       <BootstrapForm.Control
                         type="file"
