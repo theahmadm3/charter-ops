@@ -32,6 +32,7 @@ import "react-clock/dist/Clock.css";
 import {
   addBookingStepOneAsync,
   setCurrentStep,
+  setSelectedServiceId,
 } from "../../../../../../slices/booking/bookingSlice";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import "react-datetime-picker/dist/DateTimePicker.css";
@@ -39,6 +40,7 @@ import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 import Select from "react-select";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 const validationSchema = Yup.object().shape({
   // trip_type: Yup.string().required("Trip type is required"),
@@ -90,20 +92,51 @@ function EditBookingStepOne(props) {
       ? new Date(props?.data[0]?.return_date)
       : new Date()
   );
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(
+    props.data[0]?.legs ? true : false
+  );
   const [legs, setLegs] = useState([
-    { from: "", to: "", departure_date_time: "", arrival_date_time: "" },
+    {
+      id: uuidv4(),
+      from: props?.data[0]?.from_location
+        ? {
+            value: props?.data[0]?.from_location,
+            label: props?.data[0]?.from_location,
+          }
+        : "",
+      to: "",
+      departure_date: "",
+      departure_time: "",
+      return_date: "",
+      arrival_time: "",
+    },
   ]);
 
   const handleAddLeg = () => {
-    setLegs([
-      ...legs,
-      { id: Date.now(), from: "", to: "", departure_date: "", return_date: "" },
-    ]);
+    setLegs((prevLegs) => {
+      const lastLegToValue =
+        prevLegs.length > 0 ? prevLegs.slice(-1)[0].to.value : "";
+
+      return [
+        ...prevLegs,
+        {
+          id: uuidv4(),
+          from: {
+            value: lastLegToValue,
+            label: lastLegToValue || "Select Departure",
+          },
+          to: { value: "", label: "Select Arrival" },
+          departure_date_time: null,
+          departure_time: "",
+          arrival_date_time: null,
+          arrival_time: "",
+        },
+      ];
+    });
   };
 
   const handleRemoveLeg = (id) => {
-    setLegs(legs.filter((leg) => leg.id !== id));
+    setLegs((prevLegs) => prevLegs.filter((leg) => leg.id !== id));
   };
 
   const handleLegChange = (id, e) => {
@@ -136,10 +169,10 @@ function EditBookingStepOne(props) {
   };
 
   const [toLocationDefaultValue, setToLocationDefaultValue] = useState(null);
+  const [toServiceDefaultValue, setToServiceDefaultValue] = useState(null);
   const [fromLocationDefaultValue, setFromLocationDefaultValue] =
     useState(null);
 
-  // useEffect for setting initial value for from_location
   useEffect(() => {
     if (props.data[0]?.from_location) {
       setFromLocationDefaultValue({
@@ -159,9 +192,15 @@ function EditBookingStepOne(props) {
     }
   }, [props.data[0]?.to_location]);
 
-  const handleFormClear = (resetForm) => {
-    resetForm();
-  };
+  useEffect(() => {
+    if (props.data[0]?.service) {
+      setToServiceDefaultValue({
+        value: props.data[0]?.service?.service_name,
+        label: props.data[0]?.service?.service_name,
+      });
+    }
+  }, [props.data[0]?.service]);
+
   useEffect(() => {
     try {
       dispatch(getAllClientAsync());
@@ -174,20 +213,6 @@ function EditBookingStepOne(props) {
     }
   }, [dispatch]);
 
-  const airFrom = props?.data[0]?.from_location
-    ? {
-        value: props.data[0].from_location,
-        label: props.data[0].from_location,
-      }
-    : null;
-
-  const airTo = props?.data[0]?.to_location
-    ? {
-        value: props.data[0].to_location,
-        label: props.data[0].to_location,
-      }
-    : null;
-
   return (
     <>
       <Formik
@@ -198,7 +223,7 @@ function EditBookingStepOne(props) {
           return_date: props.data[0].return_date,
           client_id: props.data[0]?.client?.id,
           multi_leg: null,
-          service_id: props.data[0]?.service_id,
+          service_id: props.data[0]?.service?.id,
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
@@ -220,16 +245,15 @@ function EditBookingStepOne(props) {
 
           const payload = {
             ...values,
-            service_id: service_id?.value,
-
-            client_id: Number(values.client_id),
+            service_id: service_id?.value, // Extract service_id value
+            client_id: Number(values.client_id), // Convert client_id to a number
             multi_leg: isChecked,
             ...(isChecked &&
               legs && {
                 legs: legs.map(({ id, from, to, ...rest }) => ({
                   ...rest,
-                  from: from ? from.value : null,
-                  to: to ? to.value : null,
+                  from: from ? from.value : null, // Ensure only the value of 'from' is sent
+                  to: to ? to.value : null, // Ensure only the value of 'to' is sent
                 })),
               }),
           };
@@ -238,7 +262,7 @@ function EditBookingStepOne(props) {
             .then((response) => {
               if (response?.payload?.success) {
                 const current = bookingInfo?.currentStep;
-                dispatch(setCurrentStep(current + 1));
+                dispatch(setCurrentStep(current + 1)); // Progress to next step
               } else {
                 toast.error("Error please try again");
               }
@@ -497,7 +521,7 @@ function EditBookingStepOne(props) {
                 <BootstrapForm.Group>
                   <label>Select Service</label>
                   <Select
-                    defaultValue={props.data[0]?.service?.id}
+                    defaultValue={toServiceDefaultValue}
                     options={
                       Array.isArray(configInfo?.getAllServicesResponse?.data)
                         ? configInfo?.getAllServicesResponse?.data?.map(
