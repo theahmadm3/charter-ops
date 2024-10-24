@@ -139,6 +139,7 @@ function EditBookingStepFive(props) {
                   <label>Crew note</label>
                   <BootstrapForm.Control
                     as="textarea"
+                    value={props?.data[0]?.trip_sheet?.crew_notes}
                     placeholder="Crew note"
                     name="crew_notes"
                     onChange={handleChange}
@@ -155,6 +156,7 @@ function EditBookingStepFive(props) {
                   <label>Passenger note</label>
                   <BootstrapForm.Control
                     as="textarea"
+                    value={props?.data[0]?.trip_sheet?.passenger_notes}
                     placeholder="Passenger notes"
                     name="passenger_notes"
                     onChange={handleChange}
