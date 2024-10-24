@@ -3,6 +3,8 @@ import {
   Col,
   Container,
   Dropdown,
+  Form,
+  Pagination,
   Row,
   Tab,
   Table,
@@ -34,6 +36,7 @@ import BookingFilter from "../../../../component/filters/booking-filter";
 import { toast } from "react-toastify";
 import ViewBookingFile from "./modals/view-files";
 import moment from "moment";
+import CustomPagination from "../../../../util/pagination";
 
 const Booking = () => {
   const dispatch = useDispatch();
@@ -51,6 +54,9 @@ const Booking = () => {
   const [updateBooking, setUpdateBooking] = useState([]);
   const [manageBooking, setManageBooking] = useState(false);
   const [updateBookingStatus, setUpdateBookingStatus] = useState(false);
+  const [currentPage, setCurrentPage] = useState(
+    bookingInfo?.getAllBookingResponse?.meta?.current_page[0]
+  );
 
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
@@ -73,6 +79,7 @@ const Booking = () => {
   useEffect(() => {
     try {
       dispatch(getAllBookingAsync({}));
+      dispatch(getAllAircraftsAsync());
     } catch (error) {
       console.log(error);
     }
@@ -142,8 +149,7 @@ const Booking = () => {
         setViewBookingFileModal(true);
         const pdfData = baseUrl + `bookings/receipt-preview/${id}`;
 
-        // const pdfData = response.payload; // Assuming the payload is the PDF binary data
-        setBookingFile(pdfData); // Update the state with the PDF data
+        setBookingFile(pdfData);
 
         toast.success("Booking receipt fetched successfully!");
       } else {
@@ -202,6 +208,15 @@ const Booking = () => {
       console.error("Error fetching the confirmation sheet:", error);
       toast.error("An error occurred while fetching the confirmation sheet.");
     }
+  };
+
+  useEffect(() => {
+    dispatch(getAllBookingAsync({ page: currentPage }));
+  }, [currentPage, dispatch]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    dispatch(getAllBookingAsync({ page: newPage }));
   };
 
   return (
@@ -271,15 +286,12 @@ const Booking = () => {
                 <thead>
                   <tr>
                     <th>S/N</th>
-                    {/* <th>Trip Type</th> */}
                     <th>Departure</th>
                     <th>Departure Date/Time</th>
                     <th>Arrival</th>
                     <th>Arrival Date/Time</th>
                     <th>Client</th>
-                    {/* <th>Aircraft Name</th> */}
                     <th>Payment Status</th>
-                    {/* <th>Created By</th> */}
                     <th>Status</th>
                     <th></th>
                   </tr>
@@ -318,10 +330,7 @@ const Booking = () => {
                               {client?.first_name + " " + client?.last_name}
                             </td>
                             <td>{payment_status}</td>
-                            <td>
-                              {" "}
-                              {status === "no_show" ? "no show" : status}{" "}
-                            </td>
+                            <td>{status === "no_show" ? "no show" : status}</td>
                             <td>
                               <Dropdown>
                                 <Dropdown.Toggle
@@ -330,7 +339,6 @@ const Booking = () => {
                                 >
                                   <HiDotsHorizontal />
                                 </Dropdown.Toggle>
-
                                 <Dropdown.Menu>
                                   <Dropdown.Item
                                     className="small"
@@ -340,7 +348,6 @@ const Booking = () => {
                                   >
                                     View
                                   </Dropdown.Item>
-
                                   <Dropdown.Item
                                     className="small"
                                     onClick={() =>
@@ -349,8 +356,7 @@ const Booking = () => {
                                   >
                                     Manage
                                   </Dropdown.Item>
-
-                                  {payment_status === "pending" ? (
+                                  {payment_status === "pending" && (
                                     <Dropdown.Item
                                       className="small"
                                       onClick={() =>
@@ -359,8 +365,7 @@ const Booking = () => {
                                     >
                                       Paid
                                     </Dropdown.Item>
-                                  ) : null}
-
+                                  )}
                                   <Dropdown.Item
                                     className="small"
                                     onClick={() =>
@@ -369,7 +374,6 @@ const Booking = () => {
                                   >
                                     Update Status
                                   </Dropdown.Item>
-
                                   <Dropdown.Item
                                     className="small"
                                     onClick={() =>
@@ -412,6 +416,15 @@ const Booking = () => {
                   )}
                 </tbody>
               </Table>
+
+              <CustomPagination
+                currentPage={currentPage}
+                lastPage={
+                  bookingInfo?.getAllBookingResponse?.meta?.last_page[0] || 1
+                }
+                onPageChange={handlePageChange}
+                links={bookingInfo?.getAllBookingResponse?.meta?.links || []}
+              />
             </Tab>
 
             <Tab
@@ -435,14 +448,12 @@ const Booking = () => {
                   <thead>
                     <tr>
                       <th>S/N</th>
-                      <th>Model</th>
+                      <th>Registration No</th>
                       <th>Owned By</th>
                       <th>Pax</th>
-                      <th>Luggage Capacity</th>
-                      <th>Flight Range </th>
-                      <th> Fuel Capacity</th>
                       <th>In Flight Services</th>
                       <th>Status</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -450,24 +461,18 @@ const Booking = () => {
                       airCraftInfo?.getAllAircraftResponse?.data.map(
                         (aircraft, index) => {
                           const {
-                            model,
+                            reg_no,
                             owned_by,
-                            pax_capacity,
-                            luggage_capacity,
-                            max_flight_range,
-                            fuel_capacity,
                             inflight_services,
+                            pax_capacity,
                             status,
                           } = aircraft;
                           return (
                             <tr key={index}>
                               <td>{index + 1}</td>
-                              <td>{model}</td>
+                              <td>{reg_no}</td>
                               <td>{owned_by}</td>
                               <td>{pax_capacity}</td>
-                              <td>{luggage_capacity}</td>
-                              <td>{max_flight_range}</td>
-                              <td>{fuel_capacity}</td>
                               <td>
                                 {inflight_services &&
                                 inflight_services.length > 0 ? (

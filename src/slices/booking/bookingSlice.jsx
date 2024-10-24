@@ -232,7 +232,7 @@ export const bookingPaymentStatusAsync = createAsyncThunk(
       const response = await BookingPaymentStatus(booking_id, values);
       return response;
     } catch (error) {
-      const errorMessage = error.message || error?.response?.data?.error;
+      const errorMessage = error?.response?.data?.error || error.error;
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
@@ -510,6 +510,7 @@ const bookingSlice = createSlice({
               ? {
                   id: action.payload.data.id,
                   from_location: action.payload.data.from_location,
+                  client: action.payload.data.client,
                   to_location: action.payload.data.to_location,
                   pax: action.payload.data.pax,
                   status: action.payload.data.status,

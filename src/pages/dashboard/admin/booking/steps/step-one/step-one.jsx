@@ -96,13 +96,17 @@ function BookingStepOne() {
 
   const handleAddLeg = () => {
     setLegs((prevLegs) => {
-      const lastLegToValue = prevLegs.length > 0 ? prevLegs.slice(-1)[0].to.value : "";
-  
+      const lastLegToValue =
+        prevLegs.length > 0 ? prevLegs.slice(-1)[0].to.value : "";
+
       return [
         ...prevLegs,
         {
           id: uuidv4(),
-          from: { value: lastLegToValue, label: lastLegToValue || "Select Departure" }, // Default to previous 'to' value
+          from: {
+            value: lastLegToValue,
+            label: lastLegToValue || "Select Departure",
+          }, // Default to previous 'to' value
           to: { value: "", label: "Select Arrival" }, // Default to empty value
           departure_date_time: null,
           departure_time: "",
@@ -112,7 +116,6 @@ function BookingStepOne() {
       ];
     });
   };
-  
 
   const handleRemoveLeg = (id) => {
     setLegs((prevLegs) => prevLegs.filter((leg) => leg.id !== id));
@@ -295,8 +298,8 @@ function BookingStepOne() {
               legs && {
                 legs: legs.map(({ id, from, to, ...rest }) => ({
                   ...rest,
-                  from: from ? from.value : null, 
-                  to: to ? to.value : null, 
+                  from: from ? from.value : null,
+                  to: to ? to.value : null,
                 })),
               }),
           };
@@ -639,43 +642,6 @@ function BookingStepOne() {
                                 Select Departure Airport{" "}
                                 <span className="text-danger">*</span>
                               </label>
-                              {/* <Select
-                                defaultValue={
-                                  index > 0
-                                    ? legs[index - 1].to
-                                    : value.to_location?.label
-                                } // Use previous leg's destination as default value for next leg's departure
-                                options={
-                                  Array.isArray(
-                                    configInfo?.getAllAirportsResponse
-                                  )
-                                    ? configInfo.getAllAirportsResponse.map(
-                                        (option) => ({
-                                          value: option?.name,
-                                          label: option?.name,
-                                        })
-                                      )
-                                    : []
-                                }
-                                placeholder="Select an Airport"
-                                isClearable
-                                isSearchable
-                                className="form-control"
-                                classNamePrefix="from"
-                                onInputChange={(value) =>
-                                  handleSearchAirport(value)
-                                }
-                                onChange={(selectedOptions) =>
-                                  handleLegChange(leg.id, {
-                                    target: {
-                                      name: "from",
-                                      value: selectedOptions,
-                                    },
-                                  })
-                                }
-                                aria-label="Select Departure Airport"
-                              /> */}
-
                               <Select
                                 defaultValue={
                                   index > 0

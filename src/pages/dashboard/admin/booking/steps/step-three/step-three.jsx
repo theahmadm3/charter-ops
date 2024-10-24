@@ -26,19 +26,27 @@ const validationSchema = Yup.object({
 function BookingStepThree() {
   const bookingInfo = useSelector((state) => state?.booking);
   const handleSubmit = (values) => {
-    const payload = {
-      ...values,
-      additional_services: values?.services?.map((service) => ({
-        service_id: service.value
-      }))
-            ,  
-
+    //  filtered payload that excludes empty/null/undefined values
+    const filteredPayload = Object.keys(values).reduce((acc, key) => {
+      const value = values[key];
+      if (value !== null && value !== undefined && value !== "") {
+        acc[key] = value;
       }
+      return acc;
+    }, {});
 
+    // Process additional services
+    filteredPayload.additional_services = Array.isArray(values.services)
+      ? values.services.map((service) => ({
+          service_id: service.value,
+        }))
+      : [];
+
+    // Dispatch the async action with the filtered payload
     dispatch(
       addBookingStepFourAsync({
         bookingId: bookingInfo?.addBookingStepOneResponse?.data?.id,
-        values: payload,
+        values: filteredPayload,
       })
     )
       .then((response) => {
@@ -53,8 +61,12 @@ function BookingStepThree() {
         console.error("Error occurred:", error);
       });
   };
-  const configInfo = useSelector((state) => state?.config);
 
+  const configInfo = useSelector((state) => state?.config);
+  console.log(
+    "additional service",
+    configInfo?.getAdditionalServiceByIdResponse
+  );
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -84,7 +96,6 @@ function BookingStepThree() {
       <Formik
         initialValues={{
           special_requests: "",
-          services: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -101,9 +112,9 @@ function BookingStepThree() {
                     isMulti
                     options={
                       Array.isArray(
-                        configInfo?.getAdditionalServiceByIdResponse
+                        configInfo?.getAdditionalServiceByIdResponse?.data
                       )
-                        ? configInfo.getAdditionalServiceByIdResponse.map(
+                        ? configInfo.getAdditionalServiceByIdResponse?.data?.map(
                             (option) => ({
                               value: option?.id,
                               label: `${option?.service_name}, ${option?.charge_rate}`,
