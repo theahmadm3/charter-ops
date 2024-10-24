@@ -13,6 +13,8 @@ import {
   setCurrentStep,
 } from "../../../../../../slices/booking/bookingSlice";
 import Select from "react-select";
+import { getAdditionalServiceByIdAsync } from "../../../../../../slices/config/configSlice";
+import { useEffect } from "react";
 
 const validationSchema = Yup.object({
   special_requests: Yup.string().notRequired("Special requests are required"),
@@ -43,6 +45,18 @@ function EditBookingStepThree(props) {
       });
   };
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    try {
+      dispatch(
+        getAdditionalServiceByIdAsync({
+          service_id: props.data[0]?.service?.id,
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
 
   return (
     <>

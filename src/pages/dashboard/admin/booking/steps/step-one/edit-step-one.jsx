@@ -1,7 +1,12 @@
 import { Formik, Form, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import { getAllClientAsync } from "../../../../../../slices/client/clientSlice";
-import { getAllPartnershipsAsync } from "../../../../../../slices/config/configSlice";
+import {
+  getAllAirportsAsync,
+  getAllPartnershipsAsync,
+  getAllServicesAsync,
+  searchAirportsAsync,
+} from "../../../../../../slices/config/configSlice";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
@@ -124,6 +129,12 @@ function EditBookingStepOne(props) {
   };
   const step = useSelector((state) => state.booking?.currentStep);
 
+  const handleSearchAirport = (value) => {
+    if (value.trim() !== "") {
+      dispatch(searchAirportsAsync({ query: value }));
+    }
+  };
+
   const [toLocationDefaultValue, setToLocationDefaultValue] = useState(null);
   const [fromLocationDefaultValue, setFromLocationDefaultValue] =
     useState(null);
@@ -155,8 +166,9 @@ function EditBookingStepOne(props) {
     try {
       dispatch(getAllClientAsync());
       dispatch(getAllPartnershipsAsync());
-      // dispatch(getAllServicesAsync());
+      dispatch(getAllAirportsAsync());
       dispatch(setCurrentStep(0));
+      dispatch(getAllServicesAsync());
     } catch (error) {
       console.log(error);
     }
@@ -184,7 +196,7 @@ function EditBookingStepOne(props) {
           to_location: props.data[0].to_location,
           flight_date: props.data[0].flight_date,
           return_date: props.data[0].return_date,
-          client_id: props.data[0]?.client_id,
+          client_id: props.data[0]?.client?.id,
           multi_leg: null,
           service_id: props.data[0]?.service_id,
         }}
@@ -386,11 +398,7 @@ function EditBookingStepOne(props) {
                         type="date"
                         placeholder="Select return date"
                         name="return_date"
-                        value={
-                          values.return_date ||
-                          bookingInfo?.addBookingStepOneResponse?.data
-                            ?.return_date
-                        }
+                        value={values.return_date || props.data[0]?.return_date}
                         min={
                           values.flight_date ||
                           new Date().toISOString().split("T")[0]
@@ -418,7 +426,7 @@ function EditBookingStepOne(props) {
                         as="select"
                         className="py-3"
                         name="return_time"
-                        value={values.return_time || ""}
+                        value={values.return_time || props.data[0]?.return_time}
                         onChange={(e) => {
                           setFieldValue("return_time", e.target.value);
                           setSavedValues((prev) => ({
@@ -456,10 +464,7 @@ function EditBookingStepOne(props) {
                     as="select"
                     className="py-3"
                     name="client_id"
-                    value={
-                      values.client_id ||
-                      bookingInfo?.addBookingStepOneResponse?.data?.client_id
-                    }
+                    value={values.client || props.data[0]?.client?.id}
                     onChange={(e) => {
                       setFieldValue("client_id", e.target.value);
                       setSavedValues((prev) => ({
@@ -492,12 +497,7 @@ function EditBookingStepOne(props) {
                 <BootstrapForm.Group>
                   <label>Select Service</label>
                   <Select
-                    defaultValue={
-                      bookingInfo?.addBookingStepOneResponse?.data
-                        ?.service_id ||
-                      savedValues.service_id ||
-                      bookingInfo?.addBookingStepOneResponse?.data?.service?.id
-                    }
+                    defaultValue={props.data[0]?.service?.id}
                     options={
                       Array.isArray(configInfo?.getAllServicesResponse?.data)
                         ? configInfo?.getAllServicesResponse?.data?.map(
