@@ -9,7 +9,7 @@ $bg-main-blue: #0079c8;
   scroll-behavior: smooth;
   letter-spacing: normal;
   box-sizing: border-box;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 p {
@@ -64,61 +64,39 @@ td {
   overflow: hidden;
 }
 
-.loader {
-  position: relative;
-  width: 164px;
-  height: 164px;
-}
-.loader::before,
-.loader::after {
-  content: "";
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  background-color: #fff;
-  left: 50%;
-  top: 50%;
-  animation: rotate 1s ease-in infinite;
-}
-.loader::after {
-  width: 20px;
-  height: 20px;
-  background-color: #ff3d00;
-  animation: rotate 1s ease-in infinite, moveY 1s ease-in infinite;
+.svg-calLoader {
+  width: 230px;
+  height: 230px;
+  transform-origin: 115px 115px; /* Center of the SVG */
+  animation: 2.4s linear infinite loader-spin;
 }
 
-@keyframes moveY {
-  0%,
-  100% {
-    top: 10%;
-  }
-  45%,
-  55% {
-    top: 59%;
-  }
-  60% {
-    top: 40%;
+.cal-loader__plane {
+  fill: #ff3d00; /* Replace with your highlight color */
+}
+
+.cal-loader__path {
+  stroke: #fff; /* Replace with your stroke color */
+  stroke-width: 2; /* Adjust as needed */
+  fill: none;
+  animation: 2.4s ease-in-out infinite loader-path;
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
-@keyframes rotate {
+
+@keyframes loader-path {
   0% {
-    transform: translate(-50%, -100%) rotate(0deg) scale(1, 1);
+    stroke-dasharray: 0, 580, 0, 0, 0, 0, 0, 0, 0;
   }
-  25% {
-    transform: translate(-50%, 0%) rotate(180deg) scale(1, 1);
-  }
-  45%,
-  55% {
-    transform: translate(-50%, 100%) rotate(180deg) scale(3, 0.5);
-  }
-  60% {
-    transform: translate(-50%, 100%) rotate(180deg) scale(1, 1);
-  }
-  75% {
-    transform: translate(-50%, 0%) rotate(270deg) scale(1, 1);
+  50% {
+    stroke-dasharray: 0, 450, 10, 30, 10, 30, 10, 30, 10;
   }
   100% {
-    transform: translate(-50%, -100%) rotate(360deg) scale(1, 1);
+    stroke-dasharray: 0, 580, 0, 0, 0, 0, 0, 0, 0;
   }
 }
 
@@ -274,8 +252,22 @@ td {
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
   // border-radius: 50px;
-  // border-bottom: 5px solid $bg-blue-light !important;
-  margin-bottom: 0.5rem;
+  border-bottom: 5px solid $bg-blue-light !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  // margin-bottom: 0.5rem;
+  background: transparent !important;
+  // border: none !important;
+}
+
+.nav-tabs .nav-link:focus,
+.nav-tabs .nav-link:hover {
+  border-color: none !important;
+}
+
+.nav-tabs .nav-link {
+  color: #06232c;
 }
 
 td,
@@ -308,4 +300,149 @@ th {
 
 .active-btn {
   background-color: $bg-blue-light !important;
+}
+
+.table {
+  --bs-table-active-bg: #e9ecef;
+  --bs-table-hover-color: black;
+  --bs-table-hover-bg: #e9ecef;
+  --bs-table-striped-color: black;
+  --bs-table-striped-bg: #e9ecef;
+}
+
+// stepper
+
+.stepper-container {
+  display: table;
+  list-style: none;
+  position: relative;
+  width: 100%;
+  background: #f7f7f8;
+  border-radius: 5px;
+  padding-top: 10px;
+  padding-right: 0;
+  padding-bottom: 10px;
+  padding-left: 0;
+}
+
+.stepper-item {
+  display: table-cell;
+  text-align: center;
+  width: 1%;
+  position: relative;
+}
+
+.stepper-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.stepper-link:before {
+  border-top: 4px solid #c8c7cc;
+  content: "";
+  display: block;
+  font-size: 0;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  top: 21px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: 1;
+}
+
+.stepper-number {
+  background-color: #ffffff;
+  border: 5px solid #c8c7cc;
+  border-radius: 100%;
+  color: #546474;
+  display: inline-block;
+  font-size: 15px;
+  height: 40px;
+  line-height: 30px;
+  position: relative;
+  text-align: center;
+  width: 40px;
+  z-index: 2;
+}
+
+.stepper-link.selected .stepper-desc,
+.stepper-link.done .stepper-desc {
+  color: #2b3d53;
+}
+
+.stepper-desc {
+  color: #8e8e93;
+  display: block;
+  font-size: 14px;
+  margin-top: 4px;
+  max-width: 100%;
+  text-align: center;
+  word-wrap: break-word;
+  z-index: 104;
+}
+
+.stepper-active:before {
+  border-top: 4px solid #a5c0f4;
+}
+
+.stepper-active-number {
+  background-color: #ffffff;
+  border: 5px solid #a5c0f4;
+  border-radius: 100%;
+  color: #546474;
+  display: inline-block;
+  font-size: 15px;
+  height: 40px;
+  line-height: 30px;
+  position: relative;
+  text-align: center;
+  width: 40px;
+  z-index: 2;
+}
+
+.activity-log-card {
+  height: 25rem !important;
+  overflow: auto;
+}
+
+.aircraft-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  cursor: pointer;
+  // padding: 16px;
+  margin-bottom: 16px;
+}
+
+.aircraft-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  background-color: #f0f8ff; /* Light blue background on hover */
+}
+
+.aircraft-card.selected {
+  border-color: #007bff; /* Blue border for selected card */
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5); /* Blue shadow for selected card */
+  background-color: #e0f7ff; /* Light blue background for selected card */
+}
+
+.aircraft-card h3 {
+  margin-top: 0;
+  color: #007bff; /* Blue text color for headings */
+}
+
+.aircraft-card p {
+  margin: 4px 0;
+}
+
+.aircraft-card .card-body {
+  padding: 16px;
+}
+
+.custom-scroll-dropdown {
+  max-height: 200px !important;
+  overflow-y: auto;
 }

@@ -10,6 +10,8 @@ import {
   GetAuthUser,
   DeactivateUser,
   ActivateUser,
+  GetActivityLog,
+  GetDashboardStats,
 } from "../../services/user/userService";
 
 export const getAllUsersAsync = createAsyncThunk(
@@ -20,10 +22,27 @@ export const getAllUsersAsync = createAsyncThunk(
   }
 );
 
-export const addUserAsync = createAsyncThunk("users/add", async (values) => {
-  const response = await AddUser(values);
-  return response;
-});
+export const addUserAsync = createAsyncThunk(
+  "users/add",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await AddUser(values);
+      return response;
+    } catch (error) {
+      const errors = error?.response?.data?.error;
+      if (errors) {
+        for (const [field, messages] of Object.entries(errors)) {
+          messages.forEach((message) => {
+            toast.error(`${field}: ${message}`);
+          });
+        }
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+      return rejectWithValue(error);
+    }
+  }
+);
 
 export const getUserByIdAsync = createAsyncThunk("users/by/id", async () => {
   const response = await GetUserById();
@@ -67,6 +86,24 @@ export const getAuthUserAsync = createAsyncThunk("users/auth", async () => {
   return response;
 });
 
+export const getActivityLogAsync = createAsyncThunk(
+  "users/activity/log",
+  async () => {
+    const response = await GetActivityLog();
+    return response;
+  }
+);
+
+export const getDashboardStatsAsync = createAsyncThunk(
+  "users/dashboard/stats",
+  async () => {
+    const response = await GetDashboardStats();
+    return response;
+  }
+);
+
+
+
 const userSlice = createSlice({
   name: "users",
   initialState: {
@@ -79,6 +116,8 @@ const userSlice = createSlice({
     getAuthUserResponse: {},
     deactivateUserResponse: {},
     activateUserResponse: {},
+    getActivityLogResponse: {},
+    getDashboardStatsResponse:{},
   },
 
   reducers: {},
@@ -104,7 +143,7 @@ const userSlice = createSlice({
     });
     builder.addCase(addUserAsync.rejected, (state, action) => {
       state.addUserResponse = action.payload;
-      toast.error(action?.payload?.message);
+      // toast.error(action?.payload?.message);
     });
 
     builder.addCase(updateUserAsync.fulfilled, (state, action) => {
@@ -192,6 +231,21 @@ const userSlice = createSlice({
 
     builder.addCase(activateUserAsync.rejected, (state, action) => {
       state.activateUserResponse = action.payload;
+      toast.error(action?.payload?.message);
+    });
+    builder.addCase(getActivityLogAsync.fulfilled, (state, action) => {
+      state.getActivityLogResponse = action.payload;
+    });
+
+    builder.addCase(getActivityLogAsync.rejected, (state, action) => {
+      toast.error(action?.payload?.message);
+    });
+    builder.addCase(getDashboardStatsAsync.fulfilled, (state, action) => {
+      state.getDashboardStatsResponse = action.payload;
+    });
+
+    builder.addCase(getDashboardStatsAsync.rejected, (state, action) => {
+      state.getDashboardStatsResponse = action.payload;
       toast.error(action?.payload?.message);
     });
   },

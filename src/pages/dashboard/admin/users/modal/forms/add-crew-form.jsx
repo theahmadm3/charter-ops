@@ -21,7 +21,7 @@ const CrewForm = ({ props }) => {
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
-    role_id: Yup.string().required("Role is required"),
+    phone_number: Yup.string().required("Phone number is required"),
   });
 
   return (
@@ -31,8 +31,8 @@ const CrewForm = ({ props }) => {
         last_name: "",
         email: "",
         designation: "",
-        role_id: "",
         user_type: "crew",
+        phone_number: "",
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
@@ -96,6 +96,30 @@ const CrewForm = ({ props }) => {
               </BootstrapForm.Group>
             </Col>
           </Row>
+
+          <Row>
+            <Col md={12}>
+              <BootstrapForm.Group>
+                <FloatingLabel
+                  controlId="floatingFullName"
+                  label="Enter phone number"
+                  className="my-2"
+                >
+                  <BootstrapForm.Control
+                    type="tel"
+                    placeholder="phone number"
+                    name="phone_number"
+                    value={values.phone_number}
+                    onChange={handleChange}
+                  />
+                  {errors.phone_number && touched.phone_number ? (
+                    <small className="text-danger">{errors.phone_number}</small>
+                  ) : null}
+                </FloatingLabel>
+              </BootstrapForm.Group>
+            </Col>
+          </Row>
+
           <Row>
             <Col md={12}>
               <BootstrapForm.Group>
@@ -110,6 +134,7 @@ const CrewForm = ({ props }) => {
                     name="email"
                     value={values.email}
                     onChange={handleChange}
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                   />
                   {errors.email && touched.email ? (
                     <small className="text-danger">{errors.email}</small>
@@ -118,7 +143,7 @@ const CrewForm = ({ props }) => {
               </BootstrapForm.Group>
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col md={12}>
               <BootstrapForm.Group>
                 <FloatingLabel
@@ -146,7 +171,7 @@ const CrewForm = ({ props }) => {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
-          </Row>
+          </Row> */}
           <Row>
             <Col md={12}>
               <BootstrapForm.Group>
@@ -164,10 +189,11 @@ const CrewForm = ({ props }) => {
                   >
                     <option value="">Select Designation</option>
                     <option value="Captain">Captain</option>
-                    <option value="Pilot">Pilot</option>
-                    <option value="Commander">Commander</option>
-                    <option value="Mrs">Mrs</option>
-                    <option value="Mr">Mr</option>
+                    <option value="Senior first officer">
+                      Senior first officer
+                    </option>
+                    <option value="First Officer">First officer</option>
+                    <option value="Cabin executive">Cabin executive</option>
                   </BootstrapForm.Control>
                 </FloatingLabel>
               </BootstrapForm.Group>

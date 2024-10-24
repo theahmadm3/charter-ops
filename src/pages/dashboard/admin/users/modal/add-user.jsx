@@ -2,11 +2,17 @@ import { Modal, Button, ButtonGroup } from "react-bootstrap";
 import CrewForm from "./forms/add-crew-form";
 import StaffForm from "./forms/add-staff-form";
 import PartnerForm from "./forms/add-partner-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function AddUser(props) {
-  const [activeForm, setActiveForm] = useState("crew");
+  const [activeForm, setActiveForm] = useState(props?.user_type);
+  useEffect(() => {
+    setActiveForm(props?.user_type);
+  }, [props?.user_type]);
 
+  const handleChange = (event) => {
+    setActiveForm(event.target.value);
+  };
   return (
     <Modal
       {...props}
@@ -20,29 +26,19 @@ function AddUser(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <ButtonGroup className="mb-2">
-          <Button
-            variant="light"
-            className={activeForm === "crew" ? "active-btn" : ""}
-            onClick={() => setActiveForm("crew")}
+        <div className="form-group mb-2">
+          <label htmlFor="formSelect">Select Form Type</label>
+          <select
+            id="formSelect"
+            className="form-control"
+            value={activeForm}
+            onChange={handleChange}
           >
-            Crew
-          </Button>
-          <Button
-            className={activeForm === "staff" ? "active-btn" : ""}
-            variant="light"
-            onClick={() => setActiveForm("staff")}
-          >
-            Staff
-          </Button>
-          <Button
-            className={activeForm === "partner" ? "active-btn" : ""}
-            variant="light"
-            onClick={() => setActiveForm("partner")}
-          >
-            Partner
-          </Button>
-        </ButtonGroup>
+            <option value="staff">Staff</option>
+            <option value="partner">Partner</option>
+            <option value="crew">Crew</option>
+          </select>
+        </div>
 
         {activeForm === "crew" && <CrewForm props={props} />}
         {activeForm === "staff" && <StaffForm props={props} />}

@@ -1,0 +1,183 @@
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import {
+  Button,
+  Col,
+  Row,
+  Form as BootstrapForm,
+  FloatingLabel,
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addBookingStepFiveAsync,
+  setCurrentStep,
+} from "../../../../../../slices/booking/bookingSlice";
+import { useEffect } from "react";
+import { getAllUsersAsync } from "../../../../../../slices/user/userSlice";
+import Select from "react-select";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+const validationSchema = Yup.object({
+  crew_notes: Yup.string().required("Crew note is required"),
+  passenger_notes: Yup.string().required("Passenger note is required"),
+});
+
+function EditBookingStepFive(props) {
+  const navigate = useNavigate();
+  console.log("ddddd", props);
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state?.users);
+
+  const bookingInfo = useSelector((state) => state?.booking);
+
+  const handleBack = () => {
+    const current = bookingInfo?.currentStep;
+    dispatch(setCurrentStep(current - 1));
+  };
+
+  const handleSubmit = (values) => {
+    const payload = {
+      ...values,
+      crew_members: values.crew_members.map((crew) => crew.value),
+    };
+    dispatch(
+      addBookingStepFiveAsync({
+        bookingId:
+          bookingInfo?.addBookingStepOneResponse?.data?.id ||
+          props?.data[0]?.id,
+        values: payload,
+      })
+    )
+      .then((response) => {
+        if (response?.payload?.success) {
+          navigate(-1);
+        }
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+        toast.error("An unexpected error occurred.");
+      });
+  };
+  useEffect(() => {
+    try {
+      dispatch(getAllUsersAsync({ user_type: "crew" }));
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
+  return (
+    <>
+      <Formik
+        initialValues={{
+          crew_notes: props?.data[0]?.crew_notes,
+          passenger_notes: props?.data[0]?.passenger_notes,
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({
+          errors,
+          touched,
+          handleChange,
+          values,
+          handleSubmit,
+          setFieldValue,
+        }) => (
+          <Form>
+            <Row>
+              <Col md={6}>
+                <BootstrapForm.Group>
+                  <label>
+                    <div>
+                      Crew <span className="text-danger">*</span>{" "}
+                    </div>
+                  </label>
+                  <Select
+                    isMulti
+                    options={userInfo?.getAllUsersResponse?.data?.map(
+                      (option) => ({
+                        value: option?.id,
+                        label: `${option.first_name} ${option.last_name}`,
+                      })
+                    )}
+                    className=" form-control"
+                    classNamePrefix="crew_members"
+                    onChange={(selectedOptions) =>
+                      setFieldValue("crew_members", selectedOptions)
+                    }
+                  />
+
+                  <ErrorMessage
+                    name="crew_id"
+                    component="div"
+                    className="text-danger"
+                  />
+                </BootstrapForm.Group>
+              </Col>
+            </Row>
+            <Row className="my-3">
+              <Col md={6}>
+                <BootstrapForm.Group className="">
+                  <label>Crew note</label>
+
+                  <BootstrapForm.Control
+                    value={props?.data[0]?.trip_sheet?.crew_notes}
+                    as="textarea"
+                    placeholder="Crew note"
+                    name="crew_notes"
+                    onChange={handleChange}
+                    className="py-3"
+                    isInvalid={touched.crew_notes && !!errors.crew_notes}
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.crew_notes}
+                  </BootstrapForm.Control.Feedback>
+                </BootstrapForm.Group>
+              </Col>
+              <Col md={6}>
+                <BootstrapForm.Group className="">
+                  <label>Passenger note</label>
+
+                  <BootstrapForm.Control
+                    value={props?.data[0]?.trip_sheet?.passenger_notes}
+                    as="textarea"
+                    placeholder="Passenger notes"
+                    name="passenger_notes"
+                    onChange={handleChange}
+                    className="py-3"
+                    isInvalid={
+                      touched.passenger_notes && !!errors.passenger_notes
+                    }
+                  />
+                  <BootstrapForm.Control.Feedback type="invalid">
+                    {errors.passenger_notes}
+                  </BootstrapForm.Control.Feedback>
+                </BootstrapForm.Group>
+              </Col>
+            </Row>
+
+            <div className="mt-3">
+              {/* <Button
+                variant="white"
+                className="border border-main-color text-start"
+                onClick={handleBack}
+              >
+                Back
+              </Button> */}
+              {/* <Button
+                variant="white"
+                className="border border-main-color text-end"
+                onClick={handleNext}
+              >
+                Next
+              </Button> */}
+              <Button type="submit">Update Trip Sheet</Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </>
+  );
+}
+export default EditBookingStepFive;

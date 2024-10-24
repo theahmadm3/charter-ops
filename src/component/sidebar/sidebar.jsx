@@ -1,13 +1,19 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiFuelTank, GiHamburgerMenu } from "react-icons/gi";
 import { HiUsers } from "react-icons/hi";
-import { MdOutlineReceipt } from "react-icons/md";
+import {
+  MdLocalAirport,
+  MdOutlineBarChart,
+  MdOutlineReceipt,
+} from "react-icons/md";
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaCog, FaUser } from "react-icons/fa";
-import { TbCurrencyNaira } from "react-icons/tb";
+import { PiAirplaneInFlightFill } from "react-icons/pi";
 import logo from "../../assets/images/flybird-logo.png";
 import { Image } from "react-bootstrap";
+import { IoIosPeople } from "react-icons/io";
+
 function SideBar() {
   const [showMenu, setShowMenu] = useState(false);
   const location = useLocation();
@@ -19,41 +25,42 @@ function SideBar() {
       text: "Dashboard",
     },
     {
-      to: "/admin-users",
-      icon: <FaUser className="sidebar-icon" />,
-      text: "Users",
+      to: "/admin-booking",
+      icon: <PiAirplaneInFlightFill className="sidebar-icon" />,
+      text: "Flight/Aircraft Management",
     },
+
+    // {
+    //   to: "/admin-aircraft",
+    //   icon: <MdLocalAirport className="sidebar-icon" />,
+    //   text: "Aircraft Management",
+    // },
     {
       to: "/transaction",
       icon: <MdOutlineReceipt className="sidebar-icon" />,
       text: "Transaction & Payment",
     },
+
     {
-      to: "/booking",
-      icon: <TbCurrencyNaira className="sidebar-icon" />,
-      text: "Booking Management",
-    },
-    {
-      to: "/flight",
-      icon: <HiUsers className="sidebar-icon" />,
-      text: "Flight/Aircraft Management",
-    },
-    {
-      to: "/fuel",
-      icon: <HiUsers className="sidebar-icon" />,
+      to: "/admin-fuel",
+      icon: <GiFuelTank className="sidebar-icon" />,
       text: "Fuel Management",
     },
     {
       to: "/admin-clients",
-      icon: <HiUsers className="sidebar-icon" />,
-      text: "Client management",
+      icon: <IoIosPeople className="sidebar-icon" />,
+      text: "Client Record",
     },
     {
       to: "/statistics",
-      icon: <HiUsers className="sidebar-icon" />,
+      icon: <MdOutlineBarChart className="sidebar-icon" />,
       text: "Statistics & Reporting",
     },
-
+    {
+      to: "/admin-users",
+      icon: <FaUser className="sidebar-icon" />,
+      text: "Users",
+    },
     {
       to: "/admin-config",
       icon: <FaCog className="sidebar-icon" />,

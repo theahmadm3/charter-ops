@@ -48,3 +48,12 @@ export const GetAuthUser = async () => {
   const response = await GetRequest("/users/get-authenticated-user");
   return response;
 };
+
+export const GetActivityLog = async () => {
+  const response = await GetRequest("/dashboard/activity-logs");
+  return response;
+};
+export const GetDashboardStats = async () => {
+  const response = await GetRequest("/dashboard/statistics");
+  return response;
+};

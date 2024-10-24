@@ -51,6 +51,49 @@ export const DeactivateService = async (id) => {
   }
 };
 
+// Additional Service
+export const GetAllAdditionalServices = async () => {
+  const response = await GetRequest("/additional-services");
+  return response;
+};
+
+export const AddAdditionalService = async (body) => {
+  const response = await PostRequest("/additional-services", body);
+  return response;
+};
+
+export const UpdateAdditionalService = async (id, body) => {
+  const response = await PutRequest(`/additional-services/${id}`, body);
+  return response;
+};
+
+export const GetAdditionalServiceById = async (service_id) => {
+  const response = await GetRequest(
+    `/services/${service_id}/additional-services`
+  );
+  return response;
+};
+
+export const ActivateAdditionalService = async (id) => {
+  try {
+    const response = await PutRequest(`/additional-services/${id}/activate`);
+    return response;
+  } catch (error) {
+    console.error("Error in ActivateService:", error);
+    throw error;
+  }
+};
+
+export const DeactivateAdditionalService = async (id) => {
+  try {
+    const response = await PutRequest(`/additional-services/${id}/deactivate`);
+    return response;
+  } catch (error) {
+    console.error("Error in DeactivateService:", error);
+    throw error;
+  }
+};
+
 // Supplier
 export const GetAllSuppliers = async () => {
   const response = await GetRequest("/suppliers");
@@ -182,5 +225,16 @@ export const DeactivateRole = async (id, body) => {
     `/config/roles/deactivate-role/${id}`,
     body
   );
+  return response;
+};
+
+// Airport
+export const GetAllAirports = async () => {
+  const response = await GetRequest("/airports");
+  return response;
+};
+
+export const SearchAirports = async (query) => {
+  const response = await GetRequest(`/airports/search?query=${query}`);
   return response;
 };

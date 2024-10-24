@@ -9,10 +9,7 @@ import {
   Button,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addUserAsync,
-  updateUserAsync,
-} from "../../../../../../slices/user/userSlice";
+import { updateUserAsync } from "../../../../../../slices/user/userSlice";
 
 const EditPartnerForm = ({ onHide, data }) => {
   const dispatch = useDispatch();
@@ -115,6 +112,7 @@ const EditPartnerForm = ({ onHide, data }) => {
                     name="email"
                     value={values.email}
                     onChange={handleChange}
+                    disabled
                   />
                   {errors.email && touched.email ? (
                     <small className="text-danger">{errors.email}</small>

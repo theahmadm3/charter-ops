@@ -12,13 +12,15 @@ import {
 import logo from "../../assets/images/flybird-logo.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginAsync } from "../../slices/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -62,11 +64,16 @@ const Login = () => {
                           );
 
                           if (loginAsync.fulfilled.match(result)) {
+                            if (result?.payload?.data?.user?.first_login) {
+                              window.location.href = "/first-time-login";
+                            } else {
+                              // navigate("/admin-dashboard");
+                              window.location.href = "/admin-dashboard";
+                            }
                             // Check if the login was successful
-                            window.location.href = "/admin-dashboard";
                           } else {
                             // Handle the case where login was not successful
-                            console.error("Login failed:", result.error);
+                            console.error("Login failed:", result);
                           }
                         } catch (error) {
                           console.error(

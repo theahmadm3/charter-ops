@@ -3,14 +3,21 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { useDispatch, useSelector } from "react-redux";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import { getAllClientAsync } from "../../../../slices/client/clientSlice";
+import {
+  activateClientAsync,
+  deactivateClientAsync,
+  getAllClientAsync,
+} from "../../../../slices/client/clientSlice";
 import AddClient from "./modal/add-client";
 import { getAllRoleAsync } from "../../../../slices/config/configSlice";
+import EditClient from "./modal/edit-client";
 
 const Clients = () => {
   const clientInfo = useSelector((state) => state?.client);
   const dispatch = useDispatch();
   const [modalAddClient, setModalAddClient] = useState(false);
+  const [modalEditClient, setModalEditClient] = useState(false);
+  const [updateClient, setUpdateClient] = useState([]);
 
   useEffect(() => {
     try {
@@ -20,21 +27,44 @@ const Clients = () => {
       console.log(error);
     }
   }, [dispatch]);
+
+  const handleEditClient = (id) => {
+    setModalEditClient(true);
+
+    const updateClient = clientInfo?.getAllClientsResponse?.data?.filter(
+      (data) => data.id === id
+    );
+    setUpdateClient(updateClient);
+  };
+
+  const handleDeactivateClient = (id) => {
+    dispatch(deactivateClientAsync({ id }));
+  };
+  const handleActivateClient = (id) => {
+    dispatch(activateClientAsync({ id }));
+  };
   return (
     <AdminLayout>
-      <Container>
+      <Container fluid>
         <AddClient
           show={modalAddClient}
           onHide={() => setModalAddClient(false)}
         />
+        <EditClient
+          show={modalEditClient}
+          onHide={() => setModalEditClient(false)}
+          data={updateClient}
+        />
 
         <div>
+          <h6 className="mb-4">List of Clients</h6>
+
           <div className="my-3 text-end">
             <Button onClick={() => setModalAddClient(true)} className="shadow">
               Add Client
             </Button>
           </div>
-          <Table striped bordered hover responsive>
+          <Table striped hover responsive>
             <thead>
               <tr>
                 <th>S/N</th>
@@ -67,27 +97,27 @@ const Clients = () => {
                           <Dropdown.Menu>
                             <Dropdown.Item
                               className="small"
-                              //   onClick={() => handleEditUser(user.id)}
+                              onClick={() => handleEditClient(client.id)}
                             >
                               Manage
                             </Dropdown.Item>
-                            {/* {status ? (
-                                  <Dropdown.Item
-                                    className="small bg-danger text-white"
-                                    onClick={() =>
-                                      handleDeactivateUser(user.id)
-                                    }
-                                  >
-                                    Deactivate
-                                  </Dropdown.Item>
-                                ) : (
-                                  <Dropdown.Item
-                                    className="small bg-success text-white"
-                                    onClick={() => handleActivateUser(user.id)}
-                                  >
-                                    Activate
-                                  </Dropdown.Item>
-                                )} */}
+                            {status ? (
+                              <Dropdown.Item
+                                className="small bg-danger text-white"
+                                onClick={() =>
+                                  handleDeactivateClient(client.id)
+                                }
+                              >
+                                Deactivate
+                              </Dropdown.Item>
+                            ) : (
+                              <Dropdown.Item
+                                className="small bg-success text-white"
+                                onClick={() => handleActivateClient(client.id)}
+                              >
+                                Activate
+                              </Dropdown.Item>
+                            )}
                             {/* <Dropdown.Item
                                   className="small bg-danger text-white"
                                   onClick={() => handleDeleteUser(user.id)}

@@ -27,6 +27,7 @@ const Users = () => {
   const [modalAddUser, setModalAddUser] = useState(false);
   const [modalEditUser, setModalEditUser] = useState(false);
   const [updateUser, setUpdateUser] = useState([]);
+  const [userType, setUserType] = useState();
 
   const userInfo = useSelector((state) => state?.users);
 
@@ -84,9 +85,17 @@ const Users = () => {
     }
   }, [dispatch]);
 
+  const handleAddUser = (user_type) => {
+    setModalAddUser(true);
+    setUserType(user_type);
+  };
   return (
     <AdminLayout>
-      <AddUser show={modalAddUser} onHide={() => setModalAddUser(false)} />
+      <AddUser
+        show={modalAddUser}
+        onHide={() => setModalAddUser(false)}
+        user_type={userType}
+      />
       <EditUser
         show={modalEditUser}
         onHide={() => setModalEditUser(false)}
@@ -94,7 +103,7 @@ const Users = () => {
       />
 
       <div className="my-3 container">
-        <h6 className="mb-4">Users</h6>
+        <h6 className="mb-4">List of Users</h6>
         <Tabs
           activeKey={activeKey}
           onSelect={handleSelect}
@@ -116,13 +125,13 @@ const Users = () => {
             <div>
               <div className="my-3 text-end">
                 <Button
-                  onClick={() => setModalAddUser(true)}
+                  onClick={() => handleAddUser("staff")}
                   className="shadow"
                 >
                   Add User
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -214,11 +223,11 @@ const Users = () => {
           >
             <div>
               <div className="my-3 text-end">
-                <Button onClick={() => setModalAddUser(true)}>
+                <Button onClick={() => handleAddUser("partner")}>
                   Add Partner
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -311,31 +320,36 @@ const Users = () => {
           >
             <div>
               <div className="my-3 text-end">
-                <Button onClick={() => setModalAddUser(true)}>Add Crew</Button>
+                <Button onClick={() => handleAddUser("crew")}>Add Crew</Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
+                    <th>Designation</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {userInfo?.getAllUsersResponse?.data?.length > 0 ? (
                     userInfo?.getAllUsersResponse?.data.map((user, index) => {
-                      const { first_name, last_name, email, phone, status } =
-                        user;
+                      const {
+                        first_name,
+                        last_name,
+                        email,
+                        designation,
+                        status,
+                      } = user;
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{first_name}</td>
                           <td>{last_name}</td>
                           <td>{email}</td>
-                          <td>{phone}</td>
+                          <td>{designation}</td>
                           <td>{status ? "Active" : "Not Active"}</td>
                           <td>
                             <Dropdown>

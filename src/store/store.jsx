@@ -3,29 +3,37 @@ import authSlice from "../slices/auth/authSlice";
 import configSlice from "../slices/config/configSlice";
 import userSlice from "../slices/user/userSlice";
 import clientSlice from "../slices/client/clientSlice";
+import aircraftSlice from "../slices/aircraft/aircraftSlice";
+import bookingSlice from "../slices/booking/bookingSlice";
+import fuelSlice from "../slices/fuel/fuelSlice";
 
 const initialLoadingState = localStorage.getItem("loading") === "true";
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     auth: authSlice,
     users: userSlice,
     config: configSlice,
     client: clientSlice,
+    aircraft: aircraftSlice,
+    booking: bookingSlice,
+    fuel: fuelSlice,
 
     loading: (state = initialLoadingState, action) => {
       if (action.type.endsWith("/pending")) {
-        localStorage.setItem("loading", "true");
+        sessionStorage.setItem("loading", "true");
         return true;
       } else if (
         action.type.endsWith("/fulfilled") ||
         action.type.endsWith("/rejected")
       ) {
         // Remove loading state from localStorage
-        localStorage.removeItem("loading");
+        sessionStorage.removeItem("loading");
         return false;
       }
       return state;
     },
   },
 });
+
+export default store;

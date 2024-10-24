@@ -3,16 +3,19 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  activateAdditionalServiceAsync,
   activateDepartmentAsync,
   activatePartnershipAsync,
   activateRoleAsync,
   activateServiceAsync,
   activateSupplierAsync,
+  deactivateAdditionalServiceAsync,
   deactivateDepartmentAsync,
   deactivatePartnershipAsync,
   deactivateRoleAsync,
   deactivateServiceAsync,
   deactivateSupplierAsync,
+  getAllAdditionalSServicesAsync,
   getAllDepartmentsAsync,
   getAllPartnershipsAsync,
   getAllRoleAsync,
@@ -29,11 +32,15 @@ import AddSupplier from "./modal/supplier/add-supplier";
 import EditSupplier from "./modal/supplier/edit-supplier";
 import AddPartnership from "./modal/partnership/add-partnership";
 import EditPartnership from "./modal/partnership/edit-partnership";
+import AddAdditionalService from "./modal/service/add-additional-service";
+import EditAdditionalService from "./modal/service/edit-additional-service";
 
 const SystemConfig = () => {
   const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState("services");
   const [modalAddService, setModalAddService] = useState(false);
+  const [modalAddAdditionalService, setModalAddAdditionlService] =
+    useState(false);
   const [modalEditService, setModalEditService] = useState(false);
   const [modalAddDepartment, setModalAddDepartment] = useState(false);
   const [modalEditDepartment, setModalEditDepartment] = useState(false);
@@ -41,12 +48,16 @@ const SystemConfig = () => {
   const [modalEditSupplier, setModalEditSupplier] = useState(false);
   const [modalAddPartnership, setModalAddPartnership] = useState(false);
   const [modalEditPartnership, setModalEditPartnership] = useState(false);
+  const [modalEditAdditionalService, setModalEditAdditionalService] =
+    useState(false);
+  const [serviceId, setServiceId] = useState();
 
   const configInfo = useSelector((state) => state?.config);
   const [updateService, setUpdateService] = useState([]);
   const [updateDepartment, setUpdateDepartment] = useState([]);
   const [updateSupplier, setUpdateSupplier] = useState([]);
   const [updatePartnership, setUpdatePartnership] = useState([]);
+  const [updateAdditionalService, setUpdateAdditionalService] = useState([]);
 
   const handleEditService = (id) => {
     setModalEditService(true);
@@ -55,6 +66,23 @@ const SystemConfig = () => {
       (data) => data.id === id
     );
     setUpdateService(updateService);
+  };
+
+  const handleEditAdditionalService = (id) => {
+    setModalEditAdditionalService(true);
+
+    const updateAdditionalService =
+      configInfo?.getAllAdditionalServicesResponse?.filter(
+        (data) => data.id === id
+      );
+    setUpdateAdditionalService(updateAdditionalService);
+  };
+
+  const handleDeactivateAdditionalService = (id) => {
+    dispatch(deactivateAdditionalServiceAsync({ id }));
+  };
+  const handleActivateAdditionalService = (id) => {
+    dispatch(activateAdditionalServiceAsync({ id }));
   };
 
   const handleDeactivateService = (id) => {
@@ -101,21 +129,11 @@ const SystemConfig = () => {
       );
     setUpdateDepartment(updateDepartment);
   };
-  // const handleDeletDepartment = (id) => {
-  //   dispatch(deleteDepartmentAsync({ id }))
-  //     .then((response) => {
-  //       if (response) {
-  //         toast.success("Department deleted successfully");
-  //       } else {
-  //         toast.error("Error: Service deletion failed");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       toast.error("Error: Please try again");
-  //       console.error("Error occurred:", error);
-  //     });
-  // };
 
+  // const handleAddAdditionalService = (id) => {
+  //   setModalAddAdditionlService(true);
+  //   setServiceId(id);
+  // };
   const handleEditSupplier = (id) => {
     setModalEditSupplier(true);
 
@@ -178,6 +196,7 @@ const SystemConfig = () => {
   useEffect(() => {
     try {
       dispatch(getAllServicesAsync());
+      dispatch(getAllAdditionalSServicesAsync());
       dispatch(getAllPartnershipsAsync());
       dispatch(getAllSuppliersAsync());
       dispatch(getAllDepartmentsAsync());
@@ -193,6 +212,16 @@ const SystemConfig = () => {
         show={modalAddService}
         onHide={() => setModalAddService(false)}
       />
+      <AddAdditionalService
+        show={modalAddAdditionalService}
+        onHide={() => setModalAddAdditionlService(false)}
+      />
+      <EditAdditionalService
+        show={modalEditAdditionalService}
+        onHide={() => setModalEditAdditionalService(false)}
+        data={updateAdditionalService}
+      />
+
       <EditService
         show={modalEditService}
         onHide={() => setModalEditService(false)}
@@ -225,7 +254,7 @@ const SystemConfig = () => {
         onHide={() => setModalEditPartnership(false)}
         data={updatePartnership}
       />
-      <div className="my-3 container">
+      <div className="my-3 container-fluid">
         <h6 className="mb-4">System Configuration</h6>
         <Tabs
           activeKey={activeKey}
@@ -247,7 +276,7 @@ const SystemConfig = () => {
                   Add Service
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -298,6 +327,7 @@ const SystemConfig = () => {
                                   >
                                     Manage
                                   </Dropdown.Item>
+
                                   {status ? (
                                     <Dropdown.Item
                                       className="small bg-danger text-white"
@@ -334,6 +364,111 @@ const SystemConfig = () => {
             </div>
           </Tab>
           <Tab
+            eventKey="additional-services"
+            title={
+              <span onClick={() => dispatch(getAllAdditionalSServicesAsync())}>
+                Additional Services
+              </span>
+            }
+          >
+            <div>
+              <div className="my-3 text-end">
+                <Button onClick={() => setModalAddAdditionlService(true)}>
+                  Add Additional Service
+                </Button>
+              </div>
+              <Table striped hover responsive>
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Service Name</th>
+                    <th>Rate Type</th>
+                    <th>Charge Rate</th>
+                    <th>Currency</th>
+                    <th>Remark</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {configInfo?.getAllAdditionalServicesResponse?.length > 0 ? (
+                    configInfo.getAllAdditionalServicesResponse?.map(
+                      (service, index) => {
+                        const {
+                          service_name,
+                          rate_type,
+                          charge_rate,
+                          currency,
+                          remarks,
+                          status,
+                        } = service;
+                        return (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{service_name}</td>
+                            <td>{rate_type}</td>
+                            <td>{charge_rate}</td>
+                            <td>{currency}</td>
+                            <td>{remarks}</td>
+                            <td>{status ? "Active" : "Not Active"}</td>
+                            <td>
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="light"
+                                  className="border-0"
+                                >
+                                  <HiDotsHorizontal />
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    className="small"
+                                    onClick={() =>
+                                      handleEditAdditionalService(service.id)
+                                    }
+                                  >
+                                    Manage
+                                  </Dropdown.Item>
+
+                                  {status ? (
+                                    <Dropdown.Item
+                                      className="small bg-danger text-white"
+                                      onClick={() =>
+                                        handleDeactivateAdditionalService(
+                                          service.id
+                                        )
+                                      }
+                                    >
+                                      Deactivate
+                                    </Dropdown.Item>
+                                  ) : (
+                                    <Dropdown.Item
+                                      className="small bg-success text-white"
+                                      onClick={() =>
+                                        handleActivateAdditionalService(
+                                          service.id
+                                        )
+                                      }
+                                    >
+                                      Activate
+                                    </Dropdown.Item>
+                                  )}
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )
+                  ) : (
+                    <tr>
+                      <td colSpan="7">No services available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </div>
+          </Tab>
+          <Tab
             eventKey="departments"
             title={
               <span onClick={() => dispatch(getAllDepartmentsAsync())}>
@@ -347,7 +482,7 @@ const SystemConfig = () => {
                   Add Department
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -445,7 +580,7 @@ const SystemConfig = () => {
                   Add Supplier
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -544,7 +679,7 @@ const SystemConfig = () => {
                   Add Partnership
                 </Button>
               </div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -640,7 +775,7 @@ const SystemConfig = () => {
             }
           >
             <div>
-              <Table striped bordered hover responsive>
+              <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>

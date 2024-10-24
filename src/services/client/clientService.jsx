@@ -21,7 +21,7 @@ export const GetClientById = async (id) => {
 };
 
 export const UpdateClient = async (id, body) => {
-  const response = await PutRequest(`/clients/update-client/${id}`, body);
+  const response = await PutRequest(`/clients/${id}`, body);
   return response;
 };
 

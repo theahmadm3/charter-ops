@@ -1,16 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-
-import {
-  GetAllUsers,
-  GetUserById,
-  AddUser,
-  UpdateUser,
-  DeleteUser,
-  GetAuthUser,
-  DeactivateUser,
-  ActivateUser,
-} from "../../services/user/userService";
 import {
   ActivateClient,
   AddClient,
@@ -26,10 +15,20 @@ export const getAllClientAsync = createAsyncThunk("client/all", async () => {
   return response;
 });
 
-export const addClientAsync = createAsyncThunk("client/add", async (values) => {
-  const response = await AddClient(values);
-  return response;
-});
+export const addClientAsync = createAsyncThunk(
+  "client/add",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await AddClient(values);
+
+      return response;
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
 
 export const getClientByIdAsync = createAsyncThunk("client/by/id", async () => {
   const response = await GetClientById();
@@ -38,9 +37,15 @@ export const getClientByIdAsync = createAsyncThunk("client/by/id", async () => {
 
 export const updateClientAsync = createAsyncThunk(
   "client/update",
-  async ({ id, values }) => {
-    const response = await UpdateClient(id, values);
-    return response;
+  async ({ id, values }, { rejectWithValue }) => {
+    try {
+      const response = await UpdateClient(id, values);
+      return response;
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(errorMessage.error);
+      return rejectWithValue(errorMessage);
+    }
   }
 );
 
@@ -74,6 +79,7 @@ const clientSlice = createSlice({
     getAllClientsResponse: {},
     getClientByIdResponse: {},
     updateClientResponse: {},
+    updateClientErrorResponse: {},
     deleteClientResponse: {},
     updateClientResponseFail: [],
     addClientResponse: {},
@@ -108,7 +114,30 @@ const clientSlice = createSlice({
     });
 
     builder.addCase(updateClientAsync.fulfilled, (state, action) => {
-      state.updateClientResponse = action.payload;
+      if (action.payload) {
+        state.updateClientResponse = action.payload;
+
+        // Filter and replace the existing record with the new record
+        state.getAllClientsResponse.data = state.getAllClientsResponse.data.map(
+          (client) =>
+            client.id === action.payload.data.id
+              ? {
+                  id: action.payload.data.id,
+                  first_name: action.payload.data.first_name,
+                  last_name: action.payload.data.last_name,
+                  email: action.payload.data.email,
+                  status: action.payload.data.status,
+                  phone: action.payload.data.phone,
+                }
+              : client
+        );
+
+        toast.success(action.payload.message);
+      }
+    });
+
+    builder.addCase(updateClientAsync.rejected, (state, action) => {
+      state.updateClientErrorResponse = action.payload;
       toast.success(action.payload.message);
     });
 

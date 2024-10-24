@@ -24,6 +24,7 @@ const EditCrewForm = ({ onHide, data }) => {
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
+    phone_number: Yup.string().required("Phone number is required"),
   });
 
   return (
@@ -33,8 +34,8 @@ const EditCrewForm = ({ onHide, data }) => {
         last_name: data?.data[0].last_name,
         email: data?.data[0].email,
         designation: data?.data[0].department_id,
-        role_id: data?.data[0].role_id,
         user_type: "crew",
+        phone_number: data?.data[0].phone_number,
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
@@ -98,6 +99,29 @@ const EditCrewForm = ({ onHide, data }) => {
               </BootstrapForm.Group>
             </Col>
           </Row>
+
+          <Row>
+            <Col md={12}>
+              <BootstrapForm.Group>
+                <FloatingLabel
+                  controlId="floatingFullName"
+                  label="Enter phone number"
+                  className="my-2"
+                >
+                  <BootstrapForm.Control
+                    type="tel"
+                    placeholder="phone number"
+                    name="phone_number"
+                    value={values.phone_number}
+                    onChange={handleChange}
+                  />
+                  {errors.phone_number && touched.phone_number ? (
+                    <small className="text-danger">{errors.phone_number}</small>
+                  ) : null}
+                </FloatingLabel>
+              </BootstrapForm.Group>
+            </Col>
+          </Row>
           <Row>
             <Col md={12}>
               <BootstrapForm.Group>
@@ -112,6 +136,7 @@ const EditCrewForm = ({ onHide, data }) => {
                     name="email"
                     value={values.email}
                     onChange={handleChange}
+                    disabled
                   />
                   {errors.email && touched.email ? (
                     <small className="text-danger">{errors.email}</small>
@@ -120,7 +145,8 @@ const EditCrewForm = ({ onHide, data }) => {
               </BootstrapForm.Group>
             </Col>
           </Row>
-          <Row>
+
+          {/* <Row>
             <Col md={12}>
               <BootstrapForm.Group>
                 <FloatingLabel
@@ -148,7 +174,7 @@ const EditCrewForm = ({ onHide, data }) => {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
-          </Row>
+          </Row> */}
           <Row>
             <Col md={12}>
               <BootstrapForm.Group>
@@ -166,10 +192,11 @@ const EditCrewForm = ({ onHide, data }) => {
                   >
                     <option value="">Select Designation</option>
                     <option value="Captain">Captain</option>
-                    <option value="Pilot">Pilot</option>
-                    <option value="Commander">Commander</option>
-                    <option value="Mrs">Mrs</option>
-                    <option value="Mr">Mr</option>
+                    <option value="Senior first officer">
+                      Senior first officer
+                    </option>
+                    <option value="First Officer">First officer</option>
+                    <option value="Cabin executive">Cabin executive</option>
                   </BootstrapForm.Control>
                 </FloatingLabel>
               </BootstrapForm.Group>
