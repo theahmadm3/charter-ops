@@ -102,7 +102,7 @@ const Users = () => {
         data={updateUser}
       />
 
-      <div className="my-3 container">
+      <div className="my-3 container-fluid">
         <h6 className="mb-4">List of Users</h6>
         <Tabs
           activeKey={activeKey}

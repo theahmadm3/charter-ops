@@ -8,7 +8,6 @@ function EditAdditionalService(props) {
   const dispatch = useDispatch();
   const configInfo = useSelector((state) => state?.config);
 
-  console.log("props", props);
   return (
     <>
       <Modal
@@ -29,7 +28,6 @@ function EditAdditionalService(props) {
               service_name: props?.data[0]?.service_name,
               rate_type: props?.data[0]?.rate_type,
               charge_rate: props?.data[0]?.charge_rate,
-              currency: props?.data[0]?.currency,
               remarks: props?.data[0]?.remarks,
             }}
             validationSchema={Yup.object().shape({
@@ -39,7 +37,6 @@ function EditAdditionalService(props) {
               rate_type: Yup.string().required("Rate type is required"),
               service_id: Yup.string().required("Service is required"),
               charge_rate: Yup.string().required("Charge rate is required"),
-              currency: Yup.string().required("Currency is required"),
             })}
             onSubmit={(values) => {
               dispatch(
@@ -106,8 +103,7 @@ function EditAdditionalService(props) {
                       </FloatingLabel>
                     </Form.Group>
                   </Col>
-                </Row>
-                <Row>
+
                   <Col md={6}>
                     <Form.Group>
                       <FloatingLabel
@@ -130,7 +126,8 @@ function EditAdditionalService(props) {
                       </FloatingLabel>
                     </Form.Group>
                   </Col>
-
+                </Row>
+                <Row>
                   <Col md={6}>
                     <Form.Group>
                       <FloatingLabel
@@ -156,9 +153,7 @@ function EditAdditionalService(props) {
                       </FloatingLabel>
                     </Form.Group>
                   </Col>
-                </Row>
 
-                <Row>
                   <Col md={6}>
                     <Form.Group>
                       <FloatingLabel
@@ -176,32 +171,6 @@ function EditAdditionalService(props) {
                         {errors.charge_rate && touched.charge_rate ? (
                           <small className="text-danger">
                             {errors.charge_rate}
-                          </small>
-                        ) : null}
-                      </FloatingLabel>
-                    </Form.Group>
-                  </Col>
-
-                  <Col md={6}>
-                    <Form.Group>
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label="Currency"
-                        className="my-2"
-                      >
-                        <Form.Select
-                          aria-label="Floating label select example"
-                          name="currency"
-                          value={values.currency}
-                          onChange={handleChange}
-                        >
-                          <option value="">Select Currency</option>
-                          <option value="Naira">Naira</option>
-                          <option value="Dollar">Dollar</option>
-                        </Form.Select>
-                        {errors.currency && touched.currency ? (
-                          <small className="text-danger">
-                            {errors.currency}
                           </small>
                         ) : null}
                       </FloatingLabel>

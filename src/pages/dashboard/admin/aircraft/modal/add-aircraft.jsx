@@ -18,9 +18,10 @@ const validationSchema = Yup.object({
   aircraft_type: Yup.string()
     .required("Aircraft type is required")
     .matches(
-      /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/,
-      "The model field must only contain letters, numbers, and special characters."
+      /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._ -]+$/,
+      "The model field must only contain letters, numbers, special characters, and spaces."
     ),
+
   location: Yup.string().required("Location is required"),
   reg_no: Yup.string().required("Registration number is required"),
   total_seat_capacity: Yup.number()
@@ -132,7 +133,7 @@ function AddAircraft(props) {
                         isInvalid={touched.owned_by && !!errors.owned_by}
                       >
                         <option value="">Choose one</option>
-                        <option value="company owned">Company Owned</option>
+                        <option value="Company owned">Company Owned</option>
                         <option value="Partnership">Partnership</option>
                         <option value="Management only">Management Only</option>
                       </BootstrapForm.Control>

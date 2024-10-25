@@ -1,6 +1,7 @@
 import {
   DeleteRequest,
   GetRequest,
+  PatchRequest,
   PostRequest,
   PutRequest,
 } from "../../util/apiMethods";
@@ -76,7 +77,7 @@ export const GetAdditionalServiceById = async (service_id) => {
 
 export const ActivateAdditionalService = async (id) => {
   try {
-    const response = await PutRequest(`/additional-services/${id}/activate`);
+    const response = await PatchRequest(`/additional-services/${id}/activate`);
     return response;
   } catch (error) {
     console.error("Error in ActivateService:", error);
@@ -86,7 +87,9 @@ export const ActivateAdditionalService = async (id) => {
 
 export const DeactivateAdditionalService = async (id) => {
   try {
-    const response = await PutRequest(`/additional-services/${id}/deactivate`);
+    const response = await PatchRequest(
+      `/additional-services/${id}/deactivate`
+    );
     return response;
   } catch (error) {
     console.error("Error in DeactivateService:", error);

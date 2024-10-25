@@ -51,7 +51,7 @@ const EditPartnerForm = ({ onHide, data }) => {
           });
       }}
     >
-      {({ errors, touched, handleSubmit, values, handleChange }) => (
+      {({ errors, touched, handleSubmit, values, handleChange, dirty }) => (
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col md={12}>
@@ -184,7 +184,9 @@ const EditPartnerForm = ({ onHide, data }) => {
             </Col>
           </Row>
           <div className="d-flex justify-content-end mt-3">
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={!dirty}>
+              Save
+            </Button>
           </div>
         </Form>
       )}
