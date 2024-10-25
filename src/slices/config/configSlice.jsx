@@ -171,7 +171,9 @@ export const updateAdditionalServiceAsync = createAsyncThunk(
 
       return response;
     } catch (error) {
-      toast.error(error?.response?.message);
+      console.log("addd res", error?.response?.data?.message);
+      const errorMessage = error?.response?.data?.message || error.message;
+      toast.error(errorMessage.error);
       return rejectWithValue(error.message);
     }
   }
@@ -856,13 +858,13 @@ const configSlice = createSlice({
     builder.addCase(
       activateAdditionalServiceAsync.fulfilled,
       (state, action) => {
-        if (action.payload.success) {
+        if (action.payload) {
           state.activateAdditionalServiceResponse = action.payload;
 
           // Filter and replace the existing record with the new record
-          state.getAllAdditionalServicesResponse.data =
-            state.getAllAdditionalServicesResponse.data.map((service) =>
-              service.id === action.payload.data.id
+          state.getAllAdditionalServicesResponse =
+            state.getAllAdditionalServicesResponse.map((service) =>
+              service.id === action.payload
                 ? {
                     id: action.payload.data.id,
                     service_name: action.payload.data.service_name,
@@ -890,11 +892,11 @@ const configSlice = createSlice({
     builder.addCase(
       deactivateAdditionalServiceAsync.fulfilled,
       (state, action) => {
-        if (action.payload.success) {
+        if (action.payload) {
           state.deactivateAdditionalServiceResponse = action.payload;
-          state.getAllAdditionalServicesResponse.data =
-            state.getAllAdditionalServicesResponse.data.map((service) =>
-              service.id === action.payload.data.id
+          state.getAllAdditionalServicesResponse =
+            state.getAllAdditionalServicesResponse.map((service) =>
+              service.id === action.payload
                 ? {
                     id: action.payload.data.id,
                     service_name: action.payload.data.service_name,
@@ -906,7 +908,6 @@ const configSlice = createSlice({
                   }
                 : service
             );
-
           toast.success(action.payload.message);
         }
       }
