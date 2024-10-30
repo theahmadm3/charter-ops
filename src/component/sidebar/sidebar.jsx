@@ -13,6 +13,7 @@ import { PiAirplaneInFlightFill } from "react-icons/pi";
 import logo from "../../assets/images/flybird-logo.png";
 import { Image } from "react-bootstrap";
 import { IoIosPeople } from "react-icons/io";
+import { FaEnvelopeOpenText } from "react-icons/fa";
 
 function SideBar() {
   const [showMenu, setShowMenu] = useState(false);
@@ -55,6 +56,11 @@ function SideBar() {
       to: "/statistics",
       icon: <MdOutlineBarChart className="sidebar-icon" />,
       text: "Statistics & Reporting",
+    },
+    {
+      to: "/contact-requests",
+      icon: <FaEnvelopeOpenText className="sidebar-icon" />,
+      text: "Contact Request",
     },
     {
       to: "/admin-users",
