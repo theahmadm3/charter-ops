@@ -83,6 +83,7 @@ function EditBookingStepOne(props) {
       ? new Date(props?.data[0]?.flight_date)
       : new Date()
   );
+
   const clientInfo = useSelector((state) => state?.client);
   const configInfo = useSelector((state) => state?.config);
   const bookingInfo = useSelector((state) => state?.booking);
@@ -95,45 +96,45 @@ function EditBookingStepOne(props) {
   const [isChecked, setIsChecked] = useState(
     props.data[0]?.legs ? true : false
   );
-  const [legs, setLegs] = useState([
-    {
-      id: uuidv4(),
-      from: props?.data[0]?.from_location
-        ? {
-            value: props?.data[0]?.from_location,
-            label: props?.data[0]?.from_location,
-          }
-        : "",
-      to: "",
-      departure_date: "",
-      departure_time: "",
-      return_date: "",
-      arrival_time: "",
-    },
-  ]);
+  // const [legs, setLegs] = useState([
+  //   {
+  //     id: uuidv4(),
+  //     from: props?.data[0]?.from_location
+  //       ? {
+  //           value: props?.data[0]?.from_location,
+  //           label: props?.data[0]?.from_location,
+  //         }
+  //       : "",
+  //     to: "",
+  //     departure_date: "",
+  //     departure_time: "",
+  //     return_date: "",
+  //     arrival_time: "",
+  //   },
+  // ]);
+
+  const [legs, setLegs] = useState([...props.data[0]?.legs]);
 
   const handleAddLeg = () => {
     setLegs((prevLegs) => {
-      const lastLegToValue =
-        prevLegs.length > 0 ? prevLegs.slice(-1)[0].to.value : "";
+      const lastLegToValue = prevLegs.length > 0 ? prevLegs.slice(-1)[0] : {};
 
+      console.log("prevLegs.slice(-1)[0]", prevLegs.slice(-1)[0]);
       return [
         ...prevLegs,
         {
-          id: uuidv4(),
-          from: {
-            value: lastLegToValue,
-            label: lastLegToValue || "Select Departure",
-          }, // Default to previous 'to' value
-          to: { value: "", label: "Select Arrival" }, // Default to empty value
-          departure_date_time: null,
+          from: lastLegToValue?.to, // Default to previous 'to' value
+          to: "", // Default to empty value
+          departure_date: null,
           departure_time: "",
-          arrival_date_time: null,
+          // arrival_time: null,
           arrival_time: "",
         },
       ];
     });
   };
+
+  console.log("legs has been updated successfully", legs);
 
   const handleRemoveLeg = (id) => {
     setLegs((prevLegs) => prevLegs.filter((leg) => leg.id !== id));
@@ -250,38 +251,32 @@ function EditBookingStepOne(props) {
             service_id: service_id?.value, // Extract service_id value
             client_id: Number(values.client_id), // Convert client_id to a number
             multi_leg: isChecked,
-            ...(isChecked &&
-              legs && {
-                legs: legs.map(({ id, from, to, ...rest }) => ({
-                  ...rest,
-                  from: from ? from.value : null, // Ensure only the value of 'from' is sent
-                  to: to ? to.value : null, // Ensure only the value of 'to' is sent
-                })),
-              }),
+            legs: isChecked && legs,
           };
 
           console.log("valuessss", values);
           console.log("payload", payload);
           console.log("legs", legs);
+          // console.log("legs-----at submit", props?.data);
 
-          // dispatch(addBookingStepOneAsync(payload))
-          //   .then((response) => {
-          //     if (response?.payload?.success) {
-          //       const current = bookingInfo?.currentStep;
-          //       dispatch(setCurrentStep(current + 1)); // Progress to next step
-          //     } else {
-          //       toast.error("Error please try again");
-          //     }
-          //   })
-          //   .catch((error) => {
-          //     console.error("Error occurred:", error);
-          //     toast.error(
-          //       "An unexpected error occurred. Please try again later."
-          //     );
-          //   })
-          //   .finally(() => {
-          //     setSubmitting(false);
-          //   });
+          dispatch(addBookingStepOneAsync(payload))
+            .then((response) => {
+              if (response?.payload?.success) {
+                // const current = bookingInfo?.currentStep;
+                // dispatch(setCurrentStep(current + 1));
+              } else {
+                toast.error("Error please try again");
+              }
+            })
+            .catch((error) => {
+              console.error("Error occurred:", error);
+              toast.error(
+                "An unexpected error occurred. Please try again later."
+              );
+            })
+            .finally(() => {
+              setSubmitting(false);
+            });
         }}
       >
         {({ values, setFieldValue, handleChange, handleSubmit }) => (
@@ -574,10 +569,10 @@ function EditBookingStepOne(props) {
                 </Col>
               </Row>
 
-              {props.data[0]?.legs && (
+              {legs && (
                 <div>
                   <h5 className="my-3">Legs</h5>
-                  {props.data[0]?.legs.map((leg, index) => (
+                  {legs.map((leg, index) => (
                     <Card key={leg.id} className="mb-4 border shadow-sm">
                       <Card.Header className="bg-primary text-white">
                         Leg {index + 1}
@@ -616,13 +611,7 @@ function EditBookingStepOne(props) {
                                   handleSearchAirport(value)
                                 }
                                 onChange={(selectedOption) => {
-                                  const selectedValue = selectedOption
-                                    ? {
-                                        value: selectedOption.value,
-                                        label: selectedOption.label,
-                                      }
-                                    : leg.from;
-
+                                  const selectedValue = selectedOption?.value;
                                   setLegs((prevLegs) =>
                                     prevLegs.map((legItem, legIndex) =>
                                       legIndex === index
@@ -676,14 +665,30 @@ function EditBookingStepOne(props) {
                                 onInputChange={(value) =>
                                   handleSearchAirport(value)
                                 }
-                                onChange={(selectedOptions) =>
-                                  handleLegChange(leg.id, {
-                                    target: {
-                                      name: "to",
-                                      value: selectedOptions,
-                                    },
-                                  })
-                                }
+                                // onChange={(selectedOptions) =>
+                                //   handleLegChange(leg.id, {
+                                //     target: {
+                                //       name: "to",
+                                //       value: selectedOptions,
+                                //     },
+                                //   })
+                                // }
+
+                                onChange={(selectedOption) => {
+                                  const selectedValue = selectedOption?.value;
+                                  setLegs((prevLegs) =>
+                                    prevLegs.map((legItem, legIndex) =>
+                                      legIndex === index
+                                        ? {
+                                            ...legItem,
+                                            to: selectedOption
+                                              ? selectedValue
+                                              : legItem.to,
+                                          }
+                                        : legItem
+                                    )
+                                  );
+                                }}
                                 aria-label="Select Destination Airport"
                               />
                               <ErrorMessage
@@ -715,19 +720,13 @@ function EditBookingStepOne(props) {
                                             .split("T")[0]
                                         : ""
                                     }
-                                    min={
-                                      index > 0 &&
-                                      props.data[0]?.legs[index - 1]
-                                        .arrival_date
-                                        ? new Date(
-                                            props.data[0]?.legs[
-                                              index - 1
-                                            ].arrival_date
-                                          )
-                                            .toISOString()
-                                            .split("T")[0]
-                                        : new Date().toISOString().split("T")[0]
-                                    }
+                                    // min={
+                                    //   index > 0 && legs[index - 1].arrival_date
+                                    //     ? new Date(legs[index - 1].arrival_date)
+                                    //         .toISOString()
+                                    //         .split("T")[0]
+                                    //     : new Date().toISOString().split("T")[0]
+                                    // }
                                     onChange={(e) =>
                                       handleLegChange(leg.id, {
                                         target: {
