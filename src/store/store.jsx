@@ -6,6 +6,7 @@ import clientSlice from "../slices/client/clientSlice";
 import aircraftSlice from "../slices/aircraft/aircraftSlice";
 import bookingSlice from "../slices/booking/bookingSlice";
 import fuelSlice from "../slices/fuel/fuelSlice";
+import contactSlice from "../slices/contact/contactSlice";
 
 const initialLoadingState = localStorage.getItem("loading") === "true";
 
@@ -18,6 +19,7 @@ const store = configureStore({
     aircraft: aircraftSlice,
     booking: bookingSlice,
     fuel: fuelSlice,
+    contacts: contactSlice,
 
     loading: (state = initialLoadingState, action) => {
       if (action.type.endsWith("/pending")) {
