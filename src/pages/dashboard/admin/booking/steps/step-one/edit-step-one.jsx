@@ -134,8 +134,6 @@ function EditBookingStepOne(props) {
     });
   };
 
-  console.log("legs has been updated successfully", legs);
-
   const handleRemoveLeg = (id) => {
     setLegs((prevLegs) => prevLegs.filter((leg) => leg.id !== id));
   };
@@ -254,11 +252,6 @@ function EditBookingStepOne(props) {
             multi_leg: isChecked,
             legs: isChecked && legs,
           };
-
-          console.log("valuessss", values);
-          console.log("payload", payload);
-          console.log("legs", legs);
-          // console.log("legs-----at submit", props?.data);
 
           dispatch(addBookingStepOneAsync(payload))
             .then((response) => {
@@ -666,15 +659,6 @@ function EditBookingStepOne(props) {
                                 onInputChange={(value) =>
                                   handleSearchAirport(value)
                                 }
-                                // onChange={(selectedOptions) =>
-                                //   handleLegChange(leg.id, {
-                                //     target: {
-                                //       name: "to",
-                                //       value: selectedOptions,
-                                //     },
-                                //   })
-                                // }
-
                                 onChange={(selectedOption) => {
                                   const selectedValue = selectedOption?.value;
                                   setLegs((prevLegs) =>
@@ -721,13 +705,6 @@ function EditBookingStepOne(props) {
                                             .split("T")[0]
                                         : ""
                                     }
-                                    // min={
-                                    //   index > 0 && legs[index - 1].arrival_date
-                                    //     ? new Date(legs[index - 1].arrival_date)
-                                    //         .toISOString()
-                                    //         .split("T")[0]
-                                    //     : new Date().toISOString().split("T")[0]
-                                    // }
                                     onChange={(e) =>
                                       handleLegChange(leg.id, {
                                         target: {
