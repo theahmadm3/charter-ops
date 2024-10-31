@@ -357,11 +357,11 @@ function BookingStepFour() {
               className="border border-main-color text-end"
               onClick={handleNext}
             >
-              Next
+              Proceed
             </Button>
 
             <Button type="submit" disabled={!dirty}>
-              Save
+              Save & Proceed
             </Button>
           </div>
         </Form>

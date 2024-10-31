@@ -153,14 +153,15 @@ function BookingStepTwo() {
                     onClick={() => handleCardClick(aircraft.id)}
                   >
                     <Card.Body>
-                      <h3>{aircraft.name}</h3>
+                      <h3>{aircraft.model}</h3>
                       <Row>
-                        <Col md={4}>
+                        <Col md={6}>
                           <Card.Text>
                             <strong>ID:</strong> {aircraft.id}
                           </Card.Text>
                           <Card.Text>
-                            <strong>Aircraft Type:</strong> {aircraft.model}
+                            <strong>Aircraft Type:</strong>{" "}
+                            {aircraft.aircraft_type}
                           </Card.Text>
                         </Col>
 
@@ -168,6 +169,11 @@ function BookingStepTwo() {
                           <Card.Text>
                             <strong>Crew Capacity:</strong>{" "}
                             {aircraft.crew_capacity}
+                          </Card.Text>
+
+                          <Card.Text>
+                            <strong>Seat Capacity:</strong>{" "}
+                            {aircraft.total_seat_capacity}
                           </Card.Text>
                         </Col>
                       </Row>
@@ -214,9 +220,9 @@ function BookingStepTwo() {
               className="border border-main-color text-end"
               onClick={handleNext}
             >
-              Next
+              Proceed
             </Button>
-            <Button type="submit">Proceed</Button>
+            <Button type="submit">Save & proceed</Button>
           </div>
         </Form>
       )}

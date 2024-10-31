@@ -21,8 +21,8 @@ import Booking from "./pages/dashboard/admin/booking/booking";
 import AddBooking from "./pages/dashboard/admin/booking/add-booking.jsx";
 import Fuels from "./pages/dashboard/admin/fuel/fuel.jsx";
 import FirstTimeLogin from "./pages/auth/first-time-login.jsx";
-import ContactRequests from "./pages/dashboard/admin/contact-requests.jsx";
 import { ProtectedRoute } from "./util/privateRoutes.jsx";
+import ContactRequests from "./pages/dashboard/admin/contact-request/contact-requests.jsx";
 
 const router = createBrowserRouter([
   {

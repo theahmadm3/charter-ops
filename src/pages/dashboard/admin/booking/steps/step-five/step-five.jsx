@@ -47,7 +47,7 @@ function BookingStepFive() {
       })
     )
       .then((response) => {
-        if (response?.payload?.success) {
+        if (response?.payload) {
           navigate(-1);
         }
       })
@@ -178,7 +178,7 @@ function BookingStepFive() {
                 Finish
               </Button>
               <Button type="submit" disabled={!dirty}>
-                Save
+                Save & Finish
               </Button>
             </div>
           </Form>

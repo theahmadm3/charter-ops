@@ -191,9 +191,9 @@ function BookingStepThree() {
                 className="border border-main-color text-end"
                 onClick={handleNext}
               >
-                Next
+                Proceed
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit">Save & Proceed</Button>
             </div>
           </Form>
         )}
