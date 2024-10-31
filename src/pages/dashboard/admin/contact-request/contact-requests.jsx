@@ -1,12 +1,12 @@
 import { Button, Container, Dropdown, Table, Form } from "react-bootstrap";
-import AdminLayout from "../../../component/layout/admin-layout";
+import AdminLayout from "../../../../component/layout/admin-layout";
 import { useDispatch, useSelector } from "react-redux";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import {
-  updateContactResquestStatusAsync,  
+  updateContactResquestStatusAsync,
   getAllContactsAsync,
-} from "../../../slices/contact/contactSlice";
+} from "../../../../slices/contact/contactSlice";
 
 const ContactRequests = () => {
   const contactInfo = useSelector((state) => state?.contacts);
@@ -21,7 +21,7 @@ const ContactRequests = () => {
   }, [dispatch]);
 
   // Check that getAllContactResponse is an array before filtering
-  const filteredContacts = Array.isArray(contactInfo.getAllContactResponse) 
+  const filteredContacts = Array.isArray(contactInfo.getAllContactResponse)
     ? contactInfo.getAllContactResponse.filter((contact) =>
         contact.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
@@ -29,17 +29,20 @@ const ContactRequests = () => {
 
   const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentContacts = filteredContacts.slice(startIndex, startIndex + itemsPerPage);
+  const currentContacts = filteredContacts.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const handleContactRequestStatus = (id, status) => {
-    let newStatus = '';
-  
-    if (status === 'pending') {
-      newStatus = 'processed';
-    } else if (status === 'processed') {
-      newStatus = 'closed';
+    let newStatus = "";
+
+    if (status === "pending") {
+      newStatus = "processed";
+    } else if (status === "processed") {
+      newStatus = "closed";
     }
-  
+
     dispatch(updateContactResquestStatusAsync({ id, status: newStatus }));
   };
 
@@ -91,7 +94,7 @@ const ContactRequests = () => {
                     <td>{contact.service_type}</td>
                     <td>{contact.message}</td>
                     <td>
-                    <span
+                      <span
                         style={{
                           color: contact.status === "pending" ? "red" : "blue",
                         }}
@@ -100,32 +103,38 @@ const ContactRequests = () => {
                       </span>
                     </td>
                     <td>
-                      {contact.status != "closed"?
-                      <Dropdown>
-                        <Dropdown.Toggle
-                          variant="light"
-                          className="border-0"
-                          id="dropdown-basic"
-                          size="sm"
-                        >
-                          <HiDotsHorizontal />
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            className="small"
-                            onClick={() => handleContactRequestStatus(contact.id, contact.status)}
+                      {contact.status != "closed" ? (
+                        <Dropdown>
+                          <Dropdown.Toggle
+                            variant="light"
+                            className="border-0"
+                            id="dropdown-basic"
+                            size="sm"
                           >
-                            {contact.status === "pending"
-                              ? "Mark as Processed"
-                              : contact.status === "processed"
-                              ? "Mark as Closed"
-                              : ""}
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                      :''
-                      }
+                            <HiDotsHorizontal />
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              className="small"
+                              onClick={() =>
+                                handleContactRequestStatus(
+                                  contact.id,
+                                  contact.status
+                                )
+                              }
+                            >
+                              {contact.status === "pending"
+                                ? "Mark as Processed"
+                                : contact.status === "processed"
+                                ? "Mark as Closed"
+                                : ""}
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      ) : (
+                        ""
+                      )}
                     </td>
                   </tr>
                 ))
