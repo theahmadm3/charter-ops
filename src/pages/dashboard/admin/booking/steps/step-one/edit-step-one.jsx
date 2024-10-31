@@ -248,6 +248,7 @@ function EditBookingStepOne(props) {
 
           const payload = {
             ...values,
+            booking_id: props.data[0].id,
             service_id: service_id?.value, // Extract service_id value
             client_id: Number(values.client_id), // Convert client_id to a number
             multi_leg: isChecked,
