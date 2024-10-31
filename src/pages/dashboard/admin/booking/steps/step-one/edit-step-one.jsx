@@ -124,8 +124,8 @@ function EditBookingStepOne(props) {
           from: {
             value: lastLegToValue,
             label: lastLegToValue || "Select Departure",
-          },
-          to: { value: "", label: "Select Arrival" },
+          }, // Default to previous 'to' value
+          to: { value: "", label: "Select Arrival" }, // Default to empty value
           departure_date_time: null,
           departure_time: "",
           arrival_date_time: null,
@@ -139,10 +139,12 @@ function EditBookingStepOne(props) {
     setLegs((prevLegs) => prevLegs.filter((leg) => leg.id !== id));
   };
 
-  const handleLegChange = (id, e) => {
-    const { name, value } = e.target;
-    setLegs(
-      legs.map((leg) => (leg.id === id ? { ...leg, [name]: value } : leg))
+  const handleLegChange = (legId, event) => {
+    const { name, value } = event.target;
+    setLegs((prevLegs) =>
+      prevLegs.map((leg) =>
+        leg.id === legId ? { ...leg, [name]: value } : leg
+      )
     );
   };
 
@@ -258,24 +260,28 @@ function EditBookingStepOne(props) {
               }),
           };
 
-          dispatch(addBookingStepOneAsync(payload))
-            .then((response) => {
-              if (response?.payload?.success) {
-                const current = bookingInfo?.currentStep;
-                dispatch(setCurrentStep(current + 1)); // Progress to next step
-              } else {
-                toast.error("Error please try again");
-              }
-            })
-            .catch((error) => {
-              console.error("Error occurred:", error);
-              toast.error(
-                "An unexpected error occurred. Please try again later."
-              );
-            })
-            .finally(() => {
-              setSubmitting(false);
-            });
+          console.log("valuessss", values);
+          console.log("payload", payload);
+          console.log("legs", legs);
+
+          // dispatch(addBookingStepOneAsync(payload))
+          //   .then((response) => {
+          //     if (response?.payload?.success) {
+          //       const current = bookingInfo?.currentStep;
+          //       dispatch(setCurrentStep(current + 1)); // Progress to next step
+          //     } else {
+          //       toast.error("Error please try again");
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.error("Error occurred:", error);
+          //     toast.error(
+          //       "An unexpected error occurred. Please try again later."
+          //     );
+          //   })
+          //   .finally(() => {
+          //     setSubmitting(false);
+          //   });
         }}
       >
         {({ values, setFieldValue, handleChange, handleSubmit }) => (
