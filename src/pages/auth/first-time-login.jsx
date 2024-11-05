@@ -17,6 +17,7 @@ import {
   firstTimeLoginAsync,
   resetPasswordAsync,
 } from "../../slices/auth/authSlice";
+import { toast } from "react-toastify";
 
 const FirstTimeLogin = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const FirstTimeLogin = () => {
                             navigate("/");
                           } else {
                             // Handle the case where login was not successful
-                            console.error("Process failed:", result.error);
+                            toast.error("Process failed:", result.error);
                           }
                         } catch (error) {
                           console.error(
@@ -115,7 +116,7 @@ const FirstTimeLogin = () => {
                                 name="email"
                                 value={values.email}
                                 onChange={handleChange}
-                                className="p-3 password-input"
+                                // className="p-3 password-input"
                                 type="email"
                               />
                               {/* {errors.token && touched.token ? (
@@ -136,7 +137,7 @@ const FirstTimeLogin = () => {
                                 name="password"
                                 value={values.password}
                                 onChange={handleChange}
-                                className="p-3 password-input"
+                                // className="p-3 password-input"
                                 type="password"
                               />
                               {errors.password && touched.password ? (
@@ -158,7 +159,7 @@ const FirstTimeLogin = () => {
                                 name="confirm_password"
                                 value={values.confirm_password}
                                 onChange={handleChange}
-                                className="p-3 password-input"
+                                // className="p-3 password-input"
                                 type="password"
                               />
                               {errors.confirm_password &&

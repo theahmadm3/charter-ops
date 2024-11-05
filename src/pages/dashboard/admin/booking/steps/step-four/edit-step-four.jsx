@@ -19,6 +19,7 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ImNotification } from "react-icons/im";
 import { toast } from "react-toastify";
+import { id } from "date-fns/locale";
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -120,6 +121,7 @@ function EditBookingStepFour(props) {
 
   const handleSubmit = (values) => {
     const formattedValues = {
+      id: values.id,
       first_name: values.first_name,
       last_name: values.last_name,
       email: values.email,
@@ -130,6 +132,7 @@ function EditBookingStepFour(props) {
       passengers: [
         formattedValues,
         ...values.passengers.map((passenger) => ({
+          id: passenger.id,
           first_name: passenger.first_name,
           last_name: passenger.last_name,
           email: passenger.email,
@@ -138,28 +141,32 @@ function EditBookingStepFour(props) {
       ],
     };
 
-    dispatch(
-      addBookingStepThreeAsync({
-        bookingId: props?.data[0]?.id,
-        values: payload,
-      })
-    )
-      .then((response) => {
-        if (response?.payload?.success) {
-          const current = bookingInfo?.currentStep;
-          dispatch(setCurrentStep(current + 1));
-        }
-      })
-      .catch((error) => {
-        console.error("Error occurred:", error);
-        toast.error("An unexpected error occurred.");
-      });
+    console.log("passengers", payload);
+    console.log("passenger id", props?.data[0]?.passengers);
+
+    // dispatch(
+    //   addBookingStepThreeAsync({
+    //     bookingId: props?.data[0]?.id,
+    //     values: payload,
+    //   })
+    // )
+    //   .then((response) => {
+    //     if (response?.payload?.success) {
+    //       const current = bookingInfo?.currentStep;
+    //       dispatch(setCurrentStep(current + 1));
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error occurred:", error);
+    //     toast.error("An unexpected error occurred.");
+    //   });
   };
 
   return (
     <Formik
       initialValues={{
         passengers: props?.data[0]?.passengers.map((passenger) => ({
+          id: passenger.id,
           first_name: passenger.first_name || "",
           last_name: passenger.last_name || "",
           email: passenger.email || "",
@@ -289,7 +296,10 @@ function EditBookingStepFour(props) {
               render={(arrayHelpers) => (
                 <>
                   {values.passengers.map((passenger, index) => (
-                    <div key={index} className="passenger-form mt-3 border p-3">
+                    <div
+                      key={passenger?.id}
+                      className="passenger-form mt-3 border p-3"
+                    >
                       <Row>
                         <Col md={6}>
                           <BootstrapForm.Group className="mb-3">
