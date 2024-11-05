@@ -12,11 +12,8 @@ import logo from "../../assets/images/flybird-logo.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  firstTimeLoginAsync,
-  resetPasswordAsync,
-} from "../../slices/auth/authSlice";
+import { useDispatch } from "react-redux";
+import { firstTimeLoginAsync } from "../../slices/auth/authSlice";
 import { toast } from "react-toastify";
 
 const FirstTimeLogin = () => {
@@ -32,8 +29,6 @@ const FirstTimeLogin = () => {
       console.error("Error parsing 'user' from localStorage:", error);
     }
   }
-  console.log("email", loginUser?.email);
-
   return (
     <>
       <Container fluid className="login-container">
@@ -43,10 +38,10 @@ const FirstTimeLogin = () => {
             md={4}
             className="d-flex align-items-center justify-content-center"
           >
-            <div className="mt-5 ">
+            <div className="">
               <Card className="shadow border-0 login-form-conatainer p-5">
                 <Card.Body>
-                  <div className="text-center my-4">
+                  <div className="text-center">
                     <Image src={logo} width={140} />
                     <h5 className="mt-4">Welcome</h5>
                     <p>Please fill the form below to proceed</p>
