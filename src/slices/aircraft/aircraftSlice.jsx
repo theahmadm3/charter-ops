@@ -65,9 +65,16 @@ export const updateAircraftAsync = createAsyncThunk(
 
 export const deleteAircraftAsync = createAsyncThunk(
   "aircraft/delete",
-  async ({ id }) => {
-    const response = await DeleteAircraft(id);
-    return response;
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await DeleteAircraft(id);
+
+      return response;
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error.error;
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
   }
 );
 
@@ -128,7 +135,6 @@ const aircraftSlice = createSlice({
     });
     builder.addCase(addAircraftAsync.rejected, (state, action) => {
       state.addAircraftError = action.payload;
-      console.log("acction from slice", action);
       toast.error(action?.payload?.message);
     });
 
@@ -175,8 +181,12 @@ const aircraftSlice = createSlice({
     });
 
     builder.addCase(deleteAircraftAsync.fulfilled, (state, action) => {
+      // Filter out the deleted aircraft from getAllAircraftResponse.data
+      window.location.reload();
+
+      // Update deleteAircraftResponse and show a success message
       state.deleteAircraftResponse = action.payload;
-      toast.success(action?.payload?.message);
+      toast.success(action.payload.message);
     });
 
     builder.addCase(deleteAircraftAsync.rejected, (state, action) => {
@@ -193,14 +203,15 @@ const aircraftSlice = createSlice({
             aircraft.id === action.payload.data.id
               ? {
                   id: action.payload?.data?.id,
-                  name: action.payload?.data?.name,
                   owned_by: action.payload?.data?.owned_by,
+                  reg_no: action.payload?.data?.reg_no,
+                  aircraft_type: action.payload?.data?.aircraft_type,
+                  inflight_services: action.payload?.data?.inflight_services,
                   pax_capacity: action.payload?.data?.pax_capacity,
-                  manufacturer: action.payload?.data?.manufacturer,
-                  luggage_capacity: action.payload?.data?.luggage_capacity,
-                  cruise_speed: action.payload?.data?.cruise_speed,
+                  total_seat_capacity:
+                    action.payload?.data?.total_seat_capacity,
+                  crew_capacity: action.payload?.data?.crew_capacity,
                   status: action.payload?.data?.status,
-                  remarks: action.payload?.data?.remarks,
                 }
               : aircraft
           );
@@ -224,14 +235,15 @@ const aircraftSlice = createSlice({
             aircraft.id === action.payload.data.id
               ? {
                   id: action.payload?.data?.id,
-                  name: action.payload?.data?.name,
                   owned_by: action.payload?.data?.owned_by,
+                  reg_no: action.payload?.data?.reg_no,
+                  aircraft_type: action.payload?.data?.aircraft_type,
+                  inflight_services: action.payload?.data?.inflight_services,
                   pax_capacity: action.payload?.data?.pax_capacity,
-                  manufacturer: action.payload?.data?.manufacturer,
-                  luggage_capacity: action.payload?.data?.luggage_capacity,
-                  cruise_speed: action.payload?.data?.cruise_speed,
+                  total_seat_capacity:
+                    action.payload?.data?.total_seat_capacity,
+                  crew_capacity: action.payload?.data?.crew_capacity,
                   status: action.payload?.data?.status,
-                  remarks: action.payload?.data?.remarks,
                 }
               : aircraft
           );

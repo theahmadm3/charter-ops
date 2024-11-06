@@ -26,6 +26,7 @@ import ViewBooking from "./modals/view-booking";
 import {
   activateAircraftAsync,
   deactivateAircraftAsync,
+  deleteAircraftAsync,
   getAllAircraftsAsync,
 } from "../../../../slices/aircraft/aircraftSlice";
 import AddAircraft from "../aircraft/modal/add-aircraft";
@@ -72,6 +73,11 @@ const Booking = () => {
   const handleDeactivateAircraft = (id) => {
     dispatch(deactivateAircraftAsync({ id }));
   };
+
+  const handleDeleteAircraft = (id) => {
+    dispatch(deleteAircraftAsync({ id }));
+  };
+
   const handleActivateAircraft = (id) => {
     dispatch(activateAircraftAsync({ id }));
   };
@@ -514,6 +520,14 @@ const Booking = () => {
                                       }
                                     >
                                       Manage
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      className="small"
+                                      onClick={() =>
+                                        handleDeleteAircraft(aircraft.id)
+                                      }
+                                    >
+                                      Delete
                                     </Dropdown.Item>
                                     {status ? (
                                       <Dropdown.Item
