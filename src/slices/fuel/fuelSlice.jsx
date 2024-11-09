@@ -9,6 +9,7 @@ import {
   GetAllFuel,
   GetFuelById,
   UpdateFuel,
+  UpdateFuelPayment,
 } from "../../services/fuel/fuelService";
 
 export const getAllFuelAsync = createAsyncThunk("fuel/all", async () => {
@@ -44,7 +45,24 @@ export const updateFuelAsync = createAsyncThunk(
       return response;
     } catch (error) {
       const errorMessage = error?.response?.data?.error || error.message;
-      toast.error(errorMessage.error);
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const updateFuelPaymentAsync = createAsyncThunk(
+  "fuel/update/payment",
+  async ({ id, values }, { rejectWithValue }) => {
+    try {
+      const response = await UpdateFuelPayment(id, values);
+      return response;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error.message ||
+        "Failed: please try again";
+      toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
   }
@@ -80,6 +98,7 @@ const fuelSlice = createSlice({
     getAllFuelResponse: {},
     getFuelByIdResponse: {},
     updateFuelResponse: {},
+    updateFuelPaymentResponse: {},
     updateFuelErrorResponse: {},
     deleteFuelResponse: {},
     updateFuelResponseFail: [],
@@ -99,15 +118,17 @@ const fuelSlice = createSlice({
         state.addFuelResponse = action?.payload;
         state.getAllFuelResponse?.data?.unshift({
           id: action.payload?.data?.id,
-          first_name: action.payload?.data?.first_name,
-          last_name: action.payload?.data?.last_name,
-          email: action.payload?.data?.email,
-          status: action.payload?.data?.status,
-          phone: action.payload?.data?.phone,
+          vendor_name: action.payload?.data?.vendor_name,
+          fuel_quantity: action.payload?.data?.fuel_quantity,
+          fuel_cost: action.payload?.data?.fuel_cost,
+          payment_status: action.payload?.data?.payment_status,
+          location: action.payload?.data?.location,
         });
 
         toast.success(action?.payload?.message);
       }
+
+      window.location.reload();
     });
     builder.addCase(addFuelAsync.rejected, (state, action) => {
       state.addFuelResponse = action.payload;
@@ -118,27 +139,27 @@ const fuelSlice = createSlice({
       if (action.payload) {
         state.updateFuelResponse = action.payload;
 
-        // Filter and replace the existing record with the new record
-        state.getAllFuelResponse.data = state.getAllFuelResponse.data.map(
-          (fuel) =>
-            fuel.id === action.payload.data.id
-              ? {
-                  id: action.payload.data.id,
-                  first_name: action.payload.data.first_name,
-                  last_name: action.payload.data.last_name,
-                  email: action.payload.data.email,
-                  status: action.payload.data.status,
-                  phone: action.payload.data.phone,
-                }
-              : fuel
-        );
-
         toast.success(action.payload.message);
+        window.location.reload();
       }
     });
 
     builder.addCase(updateFuelAsync.rejected, (state, action) => {
       state.updateFuelResponse = action.payload;
+      toast.success(action.payload.message);
+    });
+
+    builder.addCase(updateFuelPaymentAsync.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.updateFuelPaymentResponse = action.payload;
+
+        toast.success(action.payload.message);
+        window.location.reload();
+      }
+    });
+
+    builder.addCase(updateFuelPaymentAsync.rejected, (state, action) => {
+      state.updateFuelPaymentResponse = action.payload;
       toast.success(action.payload.message);
     });
 

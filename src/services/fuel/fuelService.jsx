@@ -25,6 +25,11 @@ export const UpdateFuel = async (id, body) => {
   return response;
 };
 
+export const UpdateFuelPayment = async (id, body) => {
+  const response = await PutRequest(`/fuels/${id}/payment-status`, body);
+  return response;
+};
+
 export const DeleteFuel = async (id) => {
   const response = await DeleteRequest(`/fuels/${id}`);
   return response;

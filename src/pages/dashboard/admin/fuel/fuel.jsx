@@ -3,22 +3,26 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { useDispatch, useSelector } from "react-redux";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import AddClient from "./modal/add-client";
 import {
-  activateFuelAsync,
-  deactivateFuelAsync,
   getAllFuelAsync,
+  updateFuelPaymentAsync,
 } from "../../../../slices/fuel/fuelSlice";
+import AddFuel from "./modal/add-fuel";
+import { getAllAircraftsAsync } from "../../../../slices/aircraft/aircraftSlice";
+import moment from "moment";
+import EditFuel from "./modal/edit-fuel";
 
 const Fuels = () => {
   const fuelInfo = useSelector((state) => state?.fuel);
   const dispatch = useDispatch();
   const [modalAddFuel, setModalAddFuel] = useState(false);
+  const [modalEditFuel, setModalEditFuel] = useState(false);
   const [updateFuel, setUpdateFuel] = useState([]);
 
   useEffect(() => {
     try {
       dispatch(getAllFuelAsync());
+      dispatch(getAllAircraftsAsync());
     } catch (error) {
       console.log(error);
     }
@@ -33,31 +37,39 @@ const Fuels = () => {
     setUpdateFuel(updateFuel);
   };
 
-  const handleDeactivateFuel = (id) => {
-    dispatch(deactivateFuelAsync({ id }));
+  // const handleDeactivateFuel = (id) => {
+  //   dispatch(deactivateFuelAsync({ id }));
+  // };
+  // const handleActivateFuel = (id) => {
+  //   dispatch(activateFuelAsync({ id }));
+  // };
+
+  const handleUpdateFuelPayment = (id) => {
+    dispatch(
+      updateFuelPaymentAsync({
+        id,
+        values: {
+          payment_status: "paid",
+        },
+      })
+    );
   };
-  const handleActivateFuel = (id) => {
-    dispatch(activateFuelAsync({ id }));
-  };
+
   return (
     <AdminLayout>
-      <Container>
-        <AddClient show={modalAddFuel} onHide={() => setModalAddFuel(false)} />
-        {/* <EditClient
-          show={modalEditClient}
-          onHide={() => setModalEditClient(false)}
-          data={updateClient}
-        /> */}
+      <Container fluid>
+        <AddFuel show={modalAddFuel} onHide={() => setModalAddFuel(false)} />
+        <EditFuel
+          show={modalEditFuel}
+          onHide={() => setModalEditFuel(false)}
+          data={updateFuel}
+        />
 
         <div>
           <h6 className="mb-4"> Fuel Management</h6>
 
           <div className="my-3 text-end">
-            <Button
-              // onClick={() => setModalAddClient(true)}
-
-              className="shadow"
-            >
+            <Button onClick={() => setModalAddFuel(true)} className="shadow">
               Add Fuel
             </Button>
           </div>
@@ -65,23 +77,38 @@ const Fuels = () => {
             <thead>
               <tr>
                 <th>S/N</th>
-                <th> Name</th>
-                <th>Description </th>
+                <th>Aircraft</th>
+                <th>Vendor Name</th>
+                <th>Fuel Quantity</th>
+                <th>Fuel Cost</th>
+                <th>Location</th>
                 <th>Date</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {fuelInfo?.getAllFuelResponse?.data?.length > 0 ? (
                 fuelInfo?.getAllFuelResponse?.data.map((fuel, index) => {
-                  const { first_name, last_name, status } = fuel;
+                  const {
+                    vendor_name,
+                    fuel_quantity,
+                    fuel_cost,
+                    location,
+                    payment_status,
+                    aircraft,
+                    id,
+                  } = fuel;
                   return (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{first_name}</td>
-                      <td>{last_name}</td>
-
-                      <td>{status ? "Active" : "Not Active"}</td>
+                      <td>{aircraft?.name}</td>
+                      <td>{vendor_name}</td>
+                      <td>{fuel_quantity}</td>
+                      <td>{fuel_cost}</td>
+                      <td>{location}</td>
+                      <td>{moment(fuel.created_at).format("ll")}</td>
+                      <td>{payment_status}</td>
                       <td>
                         <Dropdown>
                           <Dropdown.Toggle variant="light" className="border-0">
@@ -91,31 +118,18 @@ const Fuels = () => {
                           <Dropdown.Menu>
                             <Dropdown.Item
                               className="small"
-                              onClick={() => handleEditFuel(fuel.id)}
+                              onClick={() => handleEditFuel(id)}
                             >
                               Manage
                             </Dropdown.Item>
-                            {status ? (
+                            {payment_status === "unpaid" && (
                               <Dropdown.Item
                                 className="small bg-danger text-white"
-                                onClick={() => handleDeactivateFuel(fuel.id)}
+                                onClick={() => handleUpdateFuelPayment(id)}
                               >
-                                Deactivate
-                              </Dropdown.Item>
-                            ) : (
-                              <Dropdown.Item
-                                className="small bg-success text-white"
-                                onClick={() => handleActivateFuel(fuel.id)}
-                              >
-                                Activate
+                                Mark as Paid
                               </Dropdown.Item>
                             )}
-                            {/* <Dropdown.Item
-                                  className="small bg-danger text-white"
-                                  onClick={() => handleDeleteUser(user.id)}
-                                >
-                                  Delete
-                                </Dropdown.Item> */}
                           </Dropdown.Menu>
                         </Dropdown>
                       </td>
@@ -124,7 +138,7 @@ const Fuels = () => {
                 })
               ) : (
                 <tr className="text-center">
-                  <td colSpan="7">No fuel available</td>
+                  <td colSpan="8">No fuel records available</td>
                 </tr>
               )}
             </tbody>
