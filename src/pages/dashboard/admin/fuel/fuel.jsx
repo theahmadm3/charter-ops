@@ -102,7 +102,9 @@ const Fuels = () => {
                   return (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{aircraft?.name}</td>
+                      <td>
+                        {aircraft?.aircraft_type + " " + aircraft?.reg_no}
+                      </td>
                       <td>{vendor_name}</td>
                       <td>{fuel_quantity}</td>
                       <td>{fuel_cost}</td>

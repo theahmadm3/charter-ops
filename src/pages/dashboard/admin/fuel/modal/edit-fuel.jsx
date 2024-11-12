@@ -92,10 +92,21 @@ function EditFuel(props) {
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
+            // Filter out empty values
+            const filteredValues = Object.entries(values).reduce(
+              (acc, [key, value]) => {
+                if (value !== "" && value !== null && value !== undefined) {
+                  acc[key] = value;
+                }
+                return acc;
+              },
+              {}
+            );
+
             dispatch(
               updateFuelAsync({
                 id: props.data?.[0]?.id,
-                values: values,
+                values: filteredValues,
               })
             )
               .then((response) => {
@@ -137,7 +148,7 @@ function EditFuel(props) {
                         ? airCraftInfo?.getAllAircraftResponse?.data.map(
                             (aircraft, index) => (
                               <option value={aircraft.id} key={index}>
-                                {aircraft.name}
+                                {aircraft.reg_no}
                               </option>
                             )
                           )

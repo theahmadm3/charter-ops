@@ -126,7 +126,7 @@ function AddFuel(props) {
                         ? airCraftInfo?.getAllAircraftResponse?.data.map(
                             (aircraft, index) => (
                               <option value={aircraft.id} key={index}>
-                                {aircraft.name}
+                                {aircraft.reg_no}
                               </option>
                             )
                           )
