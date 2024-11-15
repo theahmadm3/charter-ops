@@ -31,11 +31,11 @@ function SideBar() {
       text: "Flight/Aircraft Management",
     },
 
-    // {
-    //   to: "/admin-aircraft",
-    //   icon: <MdLocalAirport className="sidebar-icon" />,
-    //   text: "Aircraft Management",
-    // },
+    {
+      to: "/admin-maintenance",
+      icon: <MdLocalAirport className="sidebar-icon" />,
+      text: "Aircraft Maintenance",
+    },
     {
       to: "/transaction",
       icon: <MdOutlineReceipt className="sidebar-icon" />,
