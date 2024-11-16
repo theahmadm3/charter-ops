@@ -2,26 +2,28 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 import {
-  ActivateFuel,
-  AddFuel,
-  DeactivateFuel,
-  DeleteFuel,
-  GetAllFuel,
-  GetFuelById,
-  UpdateFuel,
-  UpdateFuelPayment,
-} from "../../services/fuel/fuelService";
+  ActivateMaintenance,
+  AddMaintenance,
+  DeactivateMaintenance,
+  DeleteMaintenance,
+  GetAllMaintenance,
+  GetMaintenanceById,
+  UpdateMaintenance,
+} from "../../services/maintenance/maintenanceService";
 
-export const getAllMaintenanceAsync = createAsyncThunk("fuel/all", async () => {
-  const response = await GetAllFuel();
-  return response;
-});
+export const getAllMaintenanceAsync = createAsyncThunk(
+  "maintenance/all",
+  async () => {
+    const response = await GetAllMaintenance();
+    return response;
+  }
+);
 
 export const addMaintenanceAsync = createAsyncThunk(
-  "fuel/add",
+  "maintenance/add",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await AddFuel(values);
+      const response = await AddMaintenance(values);
 
       return response;
     } catch (error) {
@@ -32,16 +34,19 @@ export const addMaintenanceAsync = createAsyncThunk(
   }
 );
 
-export const getFuelByIdAsync = createAsyncThunk("fuel/by/id", async () => {
-  const response = await GetFuelById();
-  return response;
-});
+export const getMaintenanceByIdAsync = createAsyncThunk(
+  "maintenance/by/id",
+  async () => {
+    const response = await GetMaintenanceById();
+    return response;
+  }
+);
 
 export const updateMaintenanceAsync = createAsyncThunk(
-  "fuel/update",
+  "maintenance/update",
   async ({ id, values }, { rejectWithValue }) => {
     try {
-      const response = await UpdateFuel(id, values);
+      const response = await UpdateMaintenance(id, values);
       return response;
     } catch (error) {
       const errorMessage = error?.response?.data?.error || error.message;
@@ -52,25 +57,25 @@ export const updateMaintenanceAsync = createAsyncThunk(
 );
 
 export const deleteMaintenanceAsync = createAsyncThunk(
-  "fuel/delete",
+  "maintenance/delete",
   async ({ id }) => {
-    const response = await DeleteFuel(id);
+    const response = await DeleteMaintenance(id);
     return response;
   }
 );
 
 export const deactivateMaintenanceAsync = createAsyncThunk(
-  "fuel/deactivate",
+  "maintenance/deactivate",
   async ({ id }) => {
-    const response = await DeactivateFuel(id);
+    const response = await DeactivateMaintenance(id);
     return response;
   }
 );
 
 export const activateMaintenanceAsync = createAsyncThunk(
-  "fuel/activate",
+  "maintenance/activate",
   async ({ id }) => {
-    const response = await ActivateFuel(id);
+    const response = await ActivateMaintenance(id);
     return response;
   }
 );
@@ -91,14 +96,14 @@ const maintenanceSlice = createSlice({
 
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllFuelAsync.fulfilled, (state, action) => {
-      state.getAllFuelResponse = action.payload;
+    builder.addCase(getAllMaintenanceAsync.fulfilled, (state, action) => {
+      state.getAllMaintenanceResponse = action.payload;
     });
 
-    builder.addCase(addFuelAsync.fulfilled, (state, action) => {
+    builder.addCase(addMaintenanceAsync.fulfilled, (state, action) => {
       if (action.payload) {
-        state.addFuelResponse = action?.payload;
-        state.getAllFuelResponse?.data?.unshift({
+        state.addMaintenanceResponse = action?.payload;
+        state.getAllMaintenanceResponse?.data?.unshift({
           id: action.payload?.data?.id,
           vendor_name: action.payload?.data?.vendor_name,
           fuel_quantity: action.payload?.data?.fuel_quantity,
@@ -112,65 +117,51 @@ const maintenanceSlice = createSlice({
 
       window.location.reload();
     });
-    builder.addCase(addFuelAsync.rejected, (state, action) => {
-      state.addFuelResponse = action.payload;
+    builder.addCase(addMaintenanceAsync.rejected, (state, action) => {
+      state.addMaintenanceResponse = action.payload;
       toast.error(action?.payload?.message);
     });
 
-    builder.addCase(updateFuelAsync.fulfilled, (state, action) => {
+    builder.addCase(updateMaintenanceAsync.fulfilled, (state, action) => {
       if (action.payload) {
-        state.updateFuelResponse = action.payload;
+        state.updateMaintenanceResponse = action.payload;
 
         toast.success(action.payload.message);
         window.location.reload();
       }
     });
 
-    builder.addCase(updateFuelAsync.rejected, (state, action) => {
-      state.updateFuelResponse = action.payload;
+    builder.addCase(updateMaintenanceAsync.rejected, (state, action) => {
+      state.updateMaintenanceResponse = action.payload;
       toast.success(action.payload.message);
     });
 
-    builder.addCase(updateFuelPaymentAsync.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.updateFuelPaymentResponse = action.payload;
-
-        toast.success(action.payload.message);
-        window.location.reload();
-      }
-    });
-
-    builder.addCase(updateFuelPaymentAsync.rejected, (state, action) => {
-      state.updateFuelPaymentResponse = action.payload;
-      toast.success(action.payload.message);
-    });
-
-    builder.addCase(getFuelByIdAsync.fulfilled, (state, action) => {
-      state.getFuelByIdResponse = action.payload;
+    builder.addCase(getMaintenanceByIdAsync.fulfilled, (state, action) => {
+      state.getMaintenanceByIdResponse = action.payload;
       toast.success(action?.payload?.message);
     });
 
-    builder.addCase(getFuelByIdAsync.rejected, (state, action) => {
-      state.getFuelByIdResponse = action.payload;
+    builder.addCase(getMaintenanceByIdAsync.rejected, (state, action) => {
+      state.getMaintenanceByIdResponse = action.payload;
       toast.error(action?.payload?.message);
     });
 
-    builder.addCase(deleteFuelAsync.fulfilled, (state, action) => {
-      state.deleteFuelResponse = action.payload;
+    builder.addCase(deleteMaintenanceAsync.fulfilled, (state, action) => {
+      state.deleteMaintenanceResponse = action.payload;
       toast.success(action?.payload?.message);
     });
 
-    builder.addCase(deleteFuelAsync.rejected, (state, action) => {
-      state.deleteFuelResponse = action.payload;
+    builder.addCase(deleteMaintenanceAsync.rejected, (state, action) => {
+      state.deleteMaintenanceResponse = action.payload;
       toast.error(action?.payload?.message);
     });
-    builder.addCase(deactivateFuelAsync.fulfilled, (state, action) => {
+    builder.addCase(deactivateMaintenanceAsync.fulfilled, (state, action) => {
       if (action.payload) {
-        state.deactivateFuelResponse = action.payload;
+        state.deactivateMaintenanceResponse = action.payload;
 
         // Filter and replace the existing record with the new record
-        state.getAllFuelResponse.data = state.getAllFuelResponse.data.map(
-          (fuel) =>
+        state.getAllMaintenanceResponse.data =
+          state.getAllMaintenanceResponse.data.map((fuel) =>
             fuel.id === action.payload.data.id
               ? {
                   id: action.payload.data.id,
@@ -181,24 +172,24 @@ const maintenanceSlice = createSlice({
                   phone: action.payload.data.phone,
                 }
               : fuel
-        );
+          );
 
         toast.success(action.payload.message);
       }
     });
 
-    builder.addCase(deactivateFuelAsync.rejected, (state, action) => {
-      state.deactivateFuelResponse = action.payload;
+    builder.addCase(deactivateMaintenanceAsync.rejected, (state, action) => {
+      state.deactivateMaintenanceResponse = action.payload;
       toast.error(action?.payload?.message);
     });
 
-    builder.addCase(activateFuelAsync.fulfilled, (state, action) => {
+    builder.addCase(activateMaintenanceAsync.fulfilled, (state, action) => {
       if (action.payload) {
-        state.activateFuelResponse = action.payload;
+        state.activateMaintenanceResponse = action.payload;
 
         // Filter and replace the existing record with the new record
-        state.getAllFuelResponse.data = state.getAllFuelResponse.data.map(
-          (fuel) =>
+        state.getAllMaintenanceResponse.data =
+          state.getAllMaintenanceResponse.data.map((fuel) =>
             fuel.id === action.payload.data.id
               ? {
                   id: action.payload.data.id,
@@ -209,17 +200,17 @@ const maintenanceSlice = createSlice({
                   phone: action.payload.data.phone,
                 }
               : fuel
-        );
+          );
 
         toast.success(action.payload.message);
       }
     });
 
-    builder.addCase(activateFuelAsync.rejected, (state, action) => {
-      state.activateFuelResponse = action.payload;
+    builder.addCase(activateMaintenanceAsync.rejected, (state, action) => {
+      state.activateMaintenanceResponse = action.payload;
       toast.error(action?.payload?.message);
     });
   },
 });
 
-export default fuelSlice.reducer;
+export default maintenanceSlice.reducer;

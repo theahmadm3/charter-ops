@@ -11,6 +11,7 @@ import AddFuel from "./modal/add-maintenance";
 import { getAllAircraftsAsync } from "../../../../slices/aircraft/aircraftSlice";
 import moment from "moment";
 import AddMaintenance from "./modal/add-maintenance";
+import { getAllAircraftMaintenanceOrgAsync } from "../../../../slices/amo/amoSlice";
 
 const Maintenance = () => {
   const fuelInfo = useSelector((state) => state?.fuel);
@@ -22,6 +23,7 @@ const Maintenance = () => {
     try {
       dispatch(getAllFuelAsync());
       dispatch(getAllAircraftsAsync());
+      dispatch(getAllAircraftMaintenanceOrgAsync());
     } catch (error) {
       console.log(error);
     }

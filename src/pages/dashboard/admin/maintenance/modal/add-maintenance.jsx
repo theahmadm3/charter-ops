@@ -37,6 +37,7 @@ const validationSchema = Yup.object().shape({
 function AddMaintenance(props) {
   const dispatch = useDispatch();
   const airCraftInfo = useSelector((state) => state?.aircraft);
+  const amoInfo = useSelector((state) => state?.amo);
 
   const handleFileChange = async (event, setFieldValue) => {
     const file = event.currentTarget.files[0];
@@ -115,7 +116,7 @@ function AddMaintenance(props) {
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <BootstrapForm.Label>
-                      Aircraft ID <span className="text-danger">*</span>
+                      Aircraft <span className="text-danger">*</span>
                     </BootstrapForm.Label>
                     <BootstrapForm.Control
                       as="select"
@@ -174,15 +175,27 @@ function AddMaintenance(props) {
                 </Col>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel controlId="floatingAmoId" label="AMO ID">
+                    <FloatingLabel controlId="floatingAMO" label="AMO">
                       <BootstrapForm.Control
-                        type="number"
-                        placeholder="AMO ID"
+                        as="select"
                         name="amo_id"
                         value={values.amo_id}
                         onChange={handleChange}
                         isInvalid={touched.amo_id && !!errors.amo_id}
-                      />
+                      >
+                        <option value="">Select AMO</option>
+                        {Array.isArray(
+                          amoInfo?.getAllAircraftMaintenanceOrgResponse?.data
+                        )
+                          ? amoInfo?.getAllAircraftMaintenanceOrgResponse?.data.map(
+                              (amo, index) => (
+                                <option value={amo.id} key={index}>
+                                  {amo.name}
+                                </option>
+                              )
+                            )
+                          : null}
+                      </BootstrapForm.Control>
                       <BootstrapForm.Control.Feedback type="invalid">
                         {errors.amo_id}
                       </BootstrapForm.Control.Feedback>

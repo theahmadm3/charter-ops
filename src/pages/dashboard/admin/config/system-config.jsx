@@ -34,6 +34,9 @@ import AddPartnership from "./modal/partnership/add-partnership";
 import EditPartnership from "./modal/partnership/edit-partnership";
 import AddAdditionalService from "./modal/service/add-additional-service";
 import EditAdditionalService from "./modal/service/edit-additional-service";
+import AddAmo from "./modal/amo/add-amo";
+import { getAllAircraftMaintenanceOrgAsync } from "../../../../slices/amo/amoSlice";
+import EditAmo from "./modal/amo/edit-amo";
 
 const SystemConfig = () => {
   const dispatch = useDispatch();
@@ -53,11 +56,15 @@ const SystemConfig = () => {
   const [serviceId, setServiceId] = useState();
 
   const configInfo = useSelector((state) => state?.config);
+  const amoInfo = useSelector((state) => state?.amo);
   const [updateService, setUpdateService] = useState([]);
   const [updateDepartment, setUpdateDepartment] = useState([]);
   const [updateSupplier, setUpdateSupplier] = useState([]);
   const [updatePartnership, setUpdatePartnership] = useState([]);
   const [updateAdditionalService, setUpdateAdditionalService] = useState([]);
+  const [modalAddAmo, setModalAddAmo] = useState(false);
+  const [modalUpdateAmo, setModalUpdateAmo] = useState(false);
+  const [updateAmo, setUpdateAmo] = useState([]);
 
   const handleEditService = (id) => {
     setModalEditService(true);
@@ -142,6 +149,17 @@ const SystemConfig = () => {
     );
     setUpdateSupplier(updateSupplier);
   };
+
+  const handleEditAmo = (id) => {
+    setModalUpdateAmo(true);
+
+    const updateAmo =
+      amoInfo?.getAllAircraftMaintenanceOrgResponse?.data?.filter(
+        (data) => data.id === id
+      );
+    setUpdateAmo(updateAmo);
+  };
+
   // const handleDeleteSupplier = (id) => {
   //   dispatch(deleteSupplierAsync({ id }))
   //     .then((response) => {
@@ -201,6 +219,7 @@ const SystemConfig = () => {
       dispatch(getAllSuppliersAsync());
       dispatch(getAllDepartmentsAsync());
       dispatch(getAllRoleAsync());
+      dispatch(getAllAircraftMaintenanceOrgAsync());
     } catch (error) {
       console.log(error);
     }
@@ -253,6 +272,12 @@ const SystemConfig = () => {
         show={modalEditPartnership}
         onHide={() => setModalEditPartnership(false)}
         data={updatePartnership}
+      />
+      <AddAmo show={modalAddAmo} onHide={() => setModalAddAmo(false)} />
+      <EditAmo
+        show={modalUpdateAmo}
+        onHide={() => setModalUpdateAmo(false)}
+        data={updateAmo}
       />
       <div className="my-3 container-fluid">
         <h6 className="mb-4">System Configuration</h6>
@@ -836,6 +861,96 @@ const SystemConfig = () => {
                   ) : (
                     <tr>
                       <td colSpan="7">No partnerships available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </div>
+          </Tab>
+          <Tab
+            eventKey="amo"
+            title={
+              <span onClick={() => dispatch(getAllAdditionalSServicesAsync())}>
+                AMO
+              </span>
+            }
+          >
+            <div>
+              <div className="my-3 text-end">
+                <Button onClick={() => setModalAddAmo(true)}>Add AMO</Button>
+              </div>
+              <Table striped hover responsive>
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th> Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Date</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {amoInfo?.getAllAircraftMaintenanceOrgResponse?.data?.length >
+                  0 ? (
+                    amoInfo.getAllAircraftMaintenanceOrgResponse?.data?.map(
+                      (service, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{service?.name}</td>
+                          <td>{service?.contact_email}</td>
+                          <td>{service?.contact_phone}</td>
+                          <td>{service?.address}</td>
+                          <td>{moment(service?.created_at).format("ll")}</td>
+
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="light"
+                                className="border-0"
+                              >
+                                <HiDotsHorizontal />
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  className="small"
+                                  onClick={() => handleEditAmo(service.id)}
+                                >
+                                  Manage
+                                </Dropdown.Item>
+                                {/* {service?.status ? (
+                                  <Dropdown.Item
+                                    className="small bg-danger text-white"
+                                    onClick={() =>
+                                      handleDeactivateAdditionalService(
+                                        service.id
+                                      )
+                                    }
+                                  >
+                                    Deactivate
+                                  </Dropdown.Item>
+                                ) : (
+                                  <Dropdown.Item
+                                    className="small bg-success text-white"
+                                    onClick={() =>
+                                      handleActivateAdditionalService(
+                                        service.id
+                                      )
+                                    }
+                                  >
+                                    Activate
+                                  </Dropdown.Item>
+                                )} */}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </td>
+                        </tr>
+                      )
+                    )
+                  ) : (
+                    <tr>
+                      <td colSpan="9">No services available</td>
                     </tr>
                   )}
                 </tbody>
