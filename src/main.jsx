@@ -23,6 +23,7 @@ import Fuels from "./pages/dashboard/admin/fuel/fuel.jsx";
 import FirstTimeLogin from "./pages/auth/first-time-login.jsx";
 import { ProtectedRoute } from "./util/privateRoutes.jsx";
 import ContactRequests from "./pages/dashboard/admin/contact-request/contact-requests.jsx";
+import Maintenance from "./pages/dashboard/admin/maintenance/maintenance";
 
 const router = createBrowserRouter([
   {
@@ -117,6 +118,16 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Fuels />{" "}
+      </ProtectedRoute>
+    ),
+
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin-maintenance",
+    element: (
+      <ProtectedRoute>
+        <Maintenance />{" "}
       </ProtectedRoute>
     ),
 
