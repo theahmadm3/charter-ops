@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addFuelAsync } from "../../../../../slices/fuel/fuelSlice";
+import { addMaintenanceAsync } from "../../../../../slices/maintenance/maintenanceSlice";
 
 const validationSchema = Yup.object().shape({
   aircraft_id: Yup.number().required("Aircraft ID is required"),
@@ -23,15 +24,17 @@ const validationSchema = Yup.object().shape({
     .typeError("Amount paid must be a number")
     .min(0, "Amount paid must be at least 0")
     .required("Amount paid is required"),
-  receipt_upload: Yup.mixed()
-    .required("Receipt upload is required")
-    .test(
-      "fileType",
-      "Unsupported file format",
-      (value) =>
-        value &&
-        ["image/jpeg", "image/png", "application/pdf"].includes(value.type)
-    ),
+  // receipt_upload: Yup.mixed()
+  //   .required("Receipt upload is required")
+  //   .test(
+  //     "fileType",
+  //     "Unsupported file format",
+  //     (value) =>
+  //       value &&
+  //       ["image/jpeg", "image/png", "image/jpg", "application/pdf"].includes(
+  //         value.type
+  //       )
+  //   ),
 });
 
 function AddMaintenance(props) {
@@ -92,7 +95,12 @@ function AddMaintenance(props) {
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            dispatch(addFuelAsync(values))
+            const formattedValues = {
+              ...values,
+              amo_id: Number(values.amo_id),
+            };
+
+            dispatch(addMaintenanceAsync(formattedValues))
               .then((response) => {
                 if (response?.payload?.success) {
                   props.onHide();

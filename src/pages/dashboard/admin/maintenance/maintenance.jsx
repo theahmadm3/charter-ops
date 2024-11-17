@@ -3,25 +3,22 @@ import AdminLayout from "../../../../component/layout/admin-layout";
 import { useDispatch, useSelector } from "react-redux";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import {
-  getAllFuelAsync,
-  updateFuelPaymentAsync,
-} from "../../../../slices/fuel/fuelSlice";
-import AddFuel from "./modal/add-maintenance";
+import { updateFuelPaymentAsync } from "../../../../slices/fuel/fuelSlice";
 import { getAllAircraftsAsync } from "../../../../slices/aircraft/aircraftSlice";
 import moment from "moment";
 import AddMaintenance from "./modal/add-maintenance";
 import { getAllAircraftMaintenanceOrgAsync } from "../../../../slices/amo/amoSlice";
+import { getAllMaintenanceAsync } from "../../../../slices/maintenance/maintenanceSlice";
 
 const Maintenance = () => {
-  const fuelInfo = useSelector((state) => state?.fuel);
+  const maintenanceInfo = useSelector((state) => state?.maintenance);
   const dispatch = useDispatch();
   const [modalAddMaintenance, setModalAddMaintenance] = useState(false);
   const [updateFuel, setUpdateFuel] = useState([]);
 
   useEffect(() => {
     try {
-      dispatch(getAllFuelAsync());
+      dispatch(getAllMaintenanceAsync());
       dispatch(getAllAircraftsAsync());
       dispatch(getAllAircraftMaintenanceOrgAsync());
     } catch (error) {
@@ -32,7 +29,7 @@ const Maintenance = () => {
   const handleEditFuel = (id) => {
     setModalEditFuel(true);
 
-    const updateFuel = fuelInfo?.getAllFuelResponse?.data?.filter(
+    const updateFuel = maintenanceInfo?.getAllMaintenanceResponse?.data?.filter(
       (data) => data.id === id
     );
     setUpdateFuel(updateFuel);
@@ -95,56 +92,61 @@ const Maintenance = () => {
               </tr>
             </thead>
             <tbody>
-              {fuelInfo?.getAllFuelResponse?.data?.length > 0 ? (
-                fuelInfo?.getAllFuelResponse?.data.map((fuel, index) => {
-                  const {
-                    vendor_name,
-                    fuel_quantity,
-                    fuel_cost,
-                    location,
-                    payment_status,
-                    aircraft,
-                    id,
-                  } = fuel;
-                  return (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>
-                        {aircraft?.aircraft_type + " " + aircraft?.reg_no}
-                      </td>
-                      <td>{vendor_name}</td>
-                      <td>{fuel_quantity}</td>
-                      <td>{fuel_cost}</td>
-                      <td>{location}</td>
-                      <td>{moment(fuel.created_at).format("ll")}</td>
-                      <td>{payment_status}</td>
-                      <td>
-                        <Dropdown>
-                          <Dropdown.Toggle variant="light" className="border-0">
-                            <HiDotsHorizontal />
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            <Dropdown.Item
-                              className="small"
-                              onClick={() => handleEditFuel(id)}
+              {maintenanceInfo?.getAllMaintenanceResponse?.data?.length > 0 ? (
+                maintenanceInfo?.getAllMaintenanceResponse?.data.map(
+                  (fuel, index) => {
+                    const {
+                      vendor_name,
+                      fuel_quantity,
+                      fuel_cost,
+                      location,
+                      payment_status,
+                      aircraft,
+                      id,
+                    } = fuel;
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>
+                          {aircraft?.aircraft_type + " " + aircraft?.reg_no}
+                        </td>
+                        <td>{vendor_name}</td>
+                        <td>{fuel_quantity}</td>
+                        <td>{fuel_cost}</td>
+                        <td>{location}</td>
+                        <td>{moment(fuel.created_at).format("ll")}</td>
+                        <td>{payment_status}</td>
+                        <td>
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="light"
+                              className="border-0"
                             >
-                              Manage
-                            </Dropdown.Item>
-                            {payment_status === "unpaid" && (
+                              <HiDotsHorizontal />
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
                               <Dropdown.Item
-                                className="small bg-danger text-white"
-                                onClick={() => handleUpdateFuelPayment(id)}
+                                className="small"
+                                onClick={() => handleEditFuel(id)}
                               >
-                                Mark as Paid
+                                Manage
                               </Dropdown.Item>
-                            )}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </td>
-                    </tr>
-                  );
-                })
+                              {payment_status === "unpaid" && (
+                                <Dropdown.Item
+                                  className="small bg-danger text-white"
+                                  onClick={() => handleUpdateFuelPayment(id)}
+                                >
+                                  Mark as Paid
+                                </Dropdown.Item>
+                              )}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
+                      </tr>
+                    );
+                  }
+                )
               ) : (
                 <tr className="text-center">
                   <td colSpan="9">No maintenance records available</td>
