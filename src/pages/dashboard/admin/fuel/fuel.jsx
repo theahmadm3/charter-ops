@@ -11,6 +11,7 @@ import AddFuel from "./modal/add-fuel";
 import { getAllAircraftsAsync } from "../../../../slices/aircraft/aircraftSlice";
 import moment from "moment";
 import EditFuel from "./modal/edit-fuel";
+import { getAllSuppliersAsync } from "../../../../slices/config/configSlice";
 
 const Fuels = () => {
   const fuelInfo = useSelector((state) => state?.fuel);
@@ -23,6 +24,7 @@ const Fuels = () => {
     try {
       dispatch(getAllFuelAsync());
       dispatch(getAllAircraftsAsync());
+      dispatch(getAllSuppliersAsync());
     } catch (error) {
       console.log(error);
     }
@@ -78,7 +80,7 @@ const Fuels = () => {
               <tr>
                 <th>S/N</th>
                 <th>Aircraft</th>
-                <th>Vendor Name</th>
+                <th>Fuel Supplier</th>
                 <th>Fuel Quantity</th>
                 <th>Fuel Cost</th>
                 <th>Location</th>
@@ -140,7 +142,7 @@ const Fuels = () => {
                 })
               ) : (
                 <tr className="text-center">
-                  <td colSpan="8">No fuel records available</td>
+                  <td colSpan="9">No fuel records available</td>
                 </tr>
               )}
             </tbody>

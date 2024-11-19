@@ -22,12 +22,26 @@ export const addFuelAsync = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await AddFuel(values);
-
       return response;
     } catch (error) {
-      const errorMessage = error?.response?.data?.error || error.message;
-      toast.error(errorMessage);
-      return rejectWithValue(errorMessage);
+      console.log("error", error);
+
+      // Get the error messages array
+      const errorMessages = error?.response?.data?.error || error.message;
+
+      // Check if errorMessages is an object with arrays of messages
+      if (typeof errorMessages === "object") {
+        Object.values(errorMessages).forEach((messages) => {
+          messages.forEach((msg) => {
+            toast.error(msg);
+          });
+        });
+      } else {
+        // Toast a single message if errorMessages is not an object
+        toast.error(errorMessages);
+      }
+
+      return rejectWithValue(errorMessages);
     }
   }
 );

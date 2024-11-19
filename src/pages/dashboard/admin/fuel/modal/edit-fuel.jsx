@@ -10,14 +10,11 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  addFuelAsync,
-  updateFuelAsync,
-} from "../../../../../slices/fuel/fuelSlice";
+import { updateFuelAsync } from "../../../../../slices/fuel/fuelSlice";
 
 const validationSchema = Yup.object().shape({
   aircraft_id: Yup.number().required("Aircraft ID is required"),
-  vendor_name: Yup.string().required("Vendor name is required"),
+  vendor_id: Yup.string().required("Vendor name is required"),
   fuel_quantity: Yup.number()
     .typeError("Fuel quantity must be a number")
     .min(1, "Fuel quantity must be greater than 0")
@@ -28,13 +25,14 @@ const validationSchema = Yup.object().shape({
     .required("Fuel cost is required"),
   payment_status: Yup.string().required("Payment status is required"),
   location: Yup.string().required("Location is required"),
-  remarks: Yup.string(),
+  // remarks: Yup.string(),
   // receipt_upload: Yup.mixed().required("Receipt upload is required"),
 });
 
 function EditFuel(props) {
   const dispatch = useDispatch();
   const airCraftInfo = useSelector((state) => state?.aircraft);
+  const configInfo = useSelector((state) => state?.config);
 
   const handleFileChange = async (event, setFieldValue) => {
     const file = event.currentTarget.files[0];
@@ -82,7 +80,7 @@ function EditFuel(props) {
         <Formik
           initialValues={{
             aircraft_id: props?.data?.[0]?.aircraft_id,
-            vendor_name: props?.data?.[0]?.vendor_name,
+            vendor_id: props?.data?.[0]?.vendor_id,
             fuel_quantity: props?.data?.[0]?.fuel_quantity,
             fuel_cost: props?.data?.[0]?.fuel_cost,
             payment_status: props?.data?.[0]?.payment_status,
@@ -167,20 +165,34 @@ function EditFuel(props) {
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
-                      controlId="floatingVendorName"
-                      label="Vendor Name"
+                      controlId="floatingPaymentStatus"
+                      label="Fuel Supplier"
                     >
                       <BootstrapForm.Control
-                        type="text"
-                        placeholder="Vendor Name"
-                        name="vendor_name"
-                        value={values.vendor_name}
+                        as="select"
+                        name="vendor_id"
+                        value={values.vendor_id}
                         onChange={handleChange}
-                        isInvalid={touched.vendor_name && !!errors.vendor_name}
+                        isInvalid={touched.vendor_id && !!errors.vendor_id}
+                      >
+                        <option value="">Select Supplier</option>
+                        {Array.isArray(
+                          configInfo?.getAllSuppliersResponse?.data
+                        )
+                          ? configInfo?.getAllSuppliersResponse?.data.map(
+                              (supplier, index) => (
+                                <option value={supplier.id} key={index}>
+                                  {supplier.name}
+                                </option>
+                              )
+                            )
+                          : null}
+                      </BootstrapForm.Control>
+                      <ErrorMessage
+                        name="vendor_id"
+                        component="div"
+                        className="text-danger"
                       />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.vendor_name}
-                      </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
                 </Col>

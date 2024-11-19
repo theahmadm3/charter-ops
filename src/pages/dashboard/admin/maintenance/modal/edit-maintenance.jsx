@@ -10,29 +10,39 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { addFuelAsync } from "../../../../../slices/fuel/fuelSlice";
+import {
+  addMaintenanceAsync,
+  updateMaintenanceAsync,
+} from "../../../../../slices/maintenance/maintenanceSlice";
 
 const validationSchema = Yup.object().shape({
-  aircraft_id: Yup.number().required("Aircraft is required"),
-  vendor_id: Yup.string().required("Fuel  suppler is required"),
-  fuel_quantity: Yup.number()
-    .typeError("Fuel quantity must be a number")
-    .min(1, "Fuel quantity must be greater than 0")
-    .required("Fuel quantity is required"),
-  fuel_cost: Yup.number()
-    .typeError("Fuel cost must be a number")
-    .min(0, "Fuel cost must be at least 0")
-    .required("Fuel cost is required"),
-  payment_status: Yup.string().required("Payment status is required"),
-  location: Yup.string().required("Location is required"),
-  // remarks: Yup.string(),
-  // receipt_upload: Yup.mixed().required("Receipt upload is required"),
+  aircraft_id: Yup.number().required("Aircraft ID is required"),
+  type_of_maintenance: Yup.string().required("Type of maintenance is required"),
+  amo_id: Yup.number()
+    .typeError("AMO ID must be a number")
+    .required("AMO ID is required"),
+  // invoice_received: Yup.string().required("Invoice status is required"),
+  amount_paid: Yup.number()
+    .typeError("Amount paid must be a number")
+    .min(0, "Amount paid must be at least 0")
+    .required("Amount paid is required"),
+  // receipt_upload: Yup.mixed()
+  //   .required("Receipt upload is required")
+  //   .test(
+  //     "fileType",
+  //     "Unsupported file format",
+  //     (value) =>
+  //       value &&
+  //       ["image/jpeg", "image/png", "image/jpg", "application/pdf"].includes(
+  //         value.type
+  //       )
+  //   ),
 });
 
-function AddFuel(props) {
+function EditMaintenance(props) {
   const dispatch = useDispatch();
   const airCraftInfo = useSelector((state) => state?.aircraft);
-  const configInfo = useSelector((state) => state?.config);
+  const amoInfo = useSelector((state) => state?.amo);
 
   const handleFileChange = async (event, setFieldValue) => {
     const file = event.currentTarget.files[0];
@@ -72,23 +82,32 @@ function AddFuel(props) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Add Fuel</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Edit Maintenance
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
           initialValues={{
-            aircraft_id: "",
-            vendor_id: "",
-            fuel_quantity: "",
-            fuel_cost: "",
-            payment_status: "",
-            location: "",
-            remarks: "",
-            receipt_upload: "",
+            aircraft_id: props?.data?.[0]?.aircraft_id,
+            type_of_maintenance: props?.data?.[0]?.type_of_maintenance,
+            amo_id: props?.data?.[0]?.amo_id,
+            // invoice_received: "",
+            amount_paid: props?.data?.[0]?.amount_paid,
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            dispatch(addFuelAsync(values))
+            const formattedValues = {
+              ...values,
+              amo_id: Number(values.amo_id),
+            };
+
+            dispatch(
+              updateMaintenanceAsync({
+                id: props.data?.[0]?.id,
+                values: formattedValues,
+              })
+            )
               .then((response) => {
                 if (response?.payload?.success) {
                   props.onHide();
@@ -146,54 +165,54 @@ function AddFuel(props) {
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
-                      controlId="floatingPaymentStatus"
-                      label="Fuel Supplier"
+                      controlId="floatingTypeOfMaintenance"
+                      label="Type of Maintenance"
                     >
                       <BootstrapForm.Control
                         as="select"
-                        name="vendor_id"
-                        value={values.vendor_id}
+                        name="type_of_maintenance"
+                        value={values.type_of_maintenance}
                         onChange={handleChange}
-                        isInvalid={touched.vendor_id && !!errors.vendor_id}
+                        isInvalid={
+                          touched.type_of_maintenance &&
+                          !!errors.type_of_maintenance
+                        }
                       >
-                        <option value="">Select Supplier</option>
+                        <option value="">Select Maintenance Type</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="unscheduled">Unscheduled</option>
+                      </BootstrapForm.Control>
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.type_of_maintenance}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col>
+                <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel controlId="floatingAMO" label="AMO">
+                      <BootstrapForm.Control
+                        as="select"
+                        name="amo_id"
+                        value={values.amo_id}
+                        onChange={handleChange}
+                        isInvalid={touched.amo_id && !!errors.amo_id}
+                      >
+                        <option value="">Select AMO</option>
                         {Array.isArray(
-                          configInfo?.getAllSuppliersResponse?.data
+                          amoInfo?.getAllAircraftMaintenanceOrgResponse?.data
                         )
-                          ? configInfo?.getAllSuppliersResponse?.data.map(
-                              (supplier, index) => (
-                                <option value={supplier.id} key={index}>
-                                  {supplier.name}
+                          ? amoInfo?.getAllAircraftMaintenanceOrgResponse?.data.map(
+                              (amo, index) => (
+                                <option value={amo.id} key={index}>
+                                  {amo.name}
                                 </option>
                               )
                             )
                           : null}
                       </BootstrapForm.Control>
-                      <ErrorMessage
-                        name="vendor_id"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-                <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel
-                      controlId="floatingFuelQuantity"
-                      label="Fuel Quantity"
-                    >
-                      <BootstrapForm.Control
-                        type="number"
-                        placeholder="Fuel Quantity"
-                        name="fuel_quantity"
-                        onChange={handleChange}
-                        isInvalid={
-                          touched.fuel_quantity && !!errors.fuel_quantity
-                        }
-                      />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.fuel_quantity}
+                        {errors.amo_id}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
@@ -201,91 +220,52 @@ function AddFuel(props) {
               </Row>
 
               <Row>
-                <Col md={6}>
+                {/* <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
-                      controlId="floatingFuelCost"
-                      label="Fuel Cost"
-                    >
-                      <BootstrapForm.Control
-                        type="number"
-                        placeholder="Fuel Cost"
-                        name="fuel_cost"
-                        onChange={handleChange}
-                        isInvalid={touched.fuel_cost && !!errors.fuel_cost}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.fuel_cost}
-                      </BootstrapForm.Control.Feedback>
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-                <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel
-                      controlId="floatingPaymentStatus"
-                      label="Payment Status"
+                      controlId="floatingInvoiceReceived"
+                      label="Invoice Received"
                     >
                       <BootstrapForm.Control
                         as="select"
-                        name="payment_status"
+                        name="invoice_received"
+                        value={values.invoice_received}
                         onChange={handleChange}
                         isInvalid={
-                          touched.payment_status && !!errors.payment_status
+                          touched.invoice_received && !!errors.invoice_received
                         }
                       >
-                        <option value="">Select Payment Status</option>
-                        <option value="paid">Paid</option>
-                        <option value="not_paid">Not Paid</option>
+                        <option value="">Select Invoice Status</option>
+                        <option value="received">Received</option>
+                        <option value="not_received">Not Received</option>
                       </BootstrapForm.Control>
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.payment_status}
+                        {errors.invoice_received}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
-                </Col>
-              </Row>
-
-              <Row>
+                </Col> */}
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
-                      controlId="floatingLocation"
-                      label="Location"
+                      controlId="floatingAmountPaid"
+                      label="Amount Paid"
                     >
                       <BootstrapForm.Control
-                        type="text"
-                        placeholder="Location"
-                        name="location"
+                        type="number"
+                        placeholder="Amount Paid"
+                        name="amount_paid"
+                        value={values.amount_paid}
                         onChange={handleChange}
-                        isInvalid={touched.location && !!errors.location}
+                        isInvalid={touched.amount_paid && !!errors.amount_paid}
                       />
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.location}
+                        {errors.amount_paid}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
                 </Col>
                 <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel controlId="floatingRemarks" label="Remarks">
-                      <BootstrapForm.Control
-                        as="textarea"
-                        placeholder="Remarks"
-                        name="remarks"
-                        onChange={handleChange}
-                        isInvalid={touched.remarks && !!errors.remarks}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.remarks}
-                      </BootstrapForm.Control.Feedback>
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={12}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingReceiptUpload"
@@ -308,7 +288,7 @@ function AddFuel(props) {
                 </Col>
               </Row>
 
-              <Button type="submit">Save</Button>
+              <Button type="submit">Update</Button>
               <Button variant="danger" className="ms-4" onClick={props.onHide}>
                 Close
               </Button>
@@ -321,4 +301,4 @@ function AddFuel(props) {
   );
 }
 
-export default AddFuel;
+export default EditMaintenance;

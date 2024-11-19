@@ -9,12 +9,14 @@ import moment from "moment";
 import AddMaintenance from "./modal/add-maintenance";
 import { getAllAircraftMaintenanceOrgAsync } from "../../../../slices/amo/amoSlice";
 import { getAllMaintenanceAsync } from "../../../../slices/maintenance/maintenanceSlice";
+import EditMaintenance from "./modal/edit-maintenance";
 
 const Maintenance = () => {
   const maintenanceInfo = useSelector((state) => state?.maintenance);
   const dispatch = useDispatch();
   const [modalAddMaintenance, setModalAddMaintenance] = useState(false);
-  const [updateFuel, setUpdateFuel] = useState([]);
+  const [modalEditMaintenance, setModalEditMaintenance] = useState(false);
+  const [updateMaintenance, setUpdateMaintenance] = useState([]);
 
   useEffect(() => {
     try {
@@ -26,13 +28,13 @@ const Maintenance = () => {
     }
   }, [dispatch]);
 
-  const handleEditFuel = (id) => {
-    setModalEditFuel(true);
+  const handleEditMaintenance = (id) => {
+    setModalEditMaintenance(true);
 
     const updateFuel = maintenanceInfo?.getAllMaintenanceResponse?.data?.filter(
       (data) => data.id === id
     );
-    setUpdateFuel(updateFuel);
+    setUpdateMaintenance(updateFuel);
   };
 
   // const handleDeactivateFuel = (id) => {
@@ -42,17 +44,6 @@ const Maintenance = () => {
   //   dispatch(activateFuelAsync({ id }));
   // };
 
-  const handleUpdateFuelPayment = (id) => {
-    dispatch(
-      updateFuelPaymentAsync({
-        id,
-        values: {
-          payment_status: "paid",
-        },
-      })
-    );
-  };
-
   return (
     <AdminLayout>
       <Container fluid>
@@ -60,11 +51,11 @@ const Maintenance = () => {
           show={modalAddMaintenance}
           onHide={() => setModalAddMaintenance(false)}
         />
-        {/* <EditFuel
-          show={modalEditFuel}
-          onHide={() => setModalEditFuel(false)}
-          data={updateFuel}
-        /> */}
+        <EditMaintenance
+          show={modalEditMaintenance}
+          onHide={() => setModalEditMaintenance(false)}
+          data={updateMaintenance}
+        />
 
         <div>
           <h6 className="mb-4"> Aircraft Maintenance</h6>
@@ -84,7 +75,6 @@ const Maintenance = () => {
                 <th>Aircraft</th>
                 <th>Type of Mtce</th>
                 <th>AMO</th>
-                <th>Invoice</th>
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Status</th>
@@ -95,27 +85,17 @@ const Maintenance = () => {
               {maintenanceInfo?.getAllMaintenanceResponse?.data?.length > 0 ? (
                 maintenanceInfo?.getAllMaintenanceResponse?.data.map(
                   (fuel, index) => {
-                    const {
-                      vendor_name,
-                      fuel_quantity,
-                      fuel_cost,
-                      location,
-                      payment_status,
-                      aircraft,
-                      id,
-                    } = fuel;
+                    const { fuel_quantity, location, amo, aircraft, id } = fuel;
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>
-                          {aircraft?.aircraft_type + " " + aircraft?.reg_no}
-                        </td>
-                        <td>{vendor_name}</td>
+                        <td>{aircraft}</td>
                         <td>{fuel_quantity}</td>
-                        <td>{fuel_cost}</td>
+                        <td>{amo.name}</td>
                         <td>{location}</td>
-                        <td>{moment(fuel.created_at).format("ll")}</td>
-                        <td>{payment_status}</td>
+
+                        <td>{moment(fuel.captured_date).format("ll")}</td>
+                        <td>{location}</td>
                         <td>
                           <Dropdown>
                             <Dropdown.Toggle
@@ -128,18 +108,18 @@ const Maintenance = () => {
                             <Dropdown.Menu>
                               <Dropdown.Item
                                 className="small"
-                                onClick={() => handleEditFuel(id)}
+                                onClick={() => handleEditMaintenance(id)}
                               >
                                 Manage
                               </Dropdown.Item>
-                              {payment_status === "unpaid" && (
+                              {/* {payment_status === "unpaid" && (
                                 <Dropdown.Item
                                   className="small bg-danger text-white"
                                   onClick={() => handleUpdateFuelPayment(id)}
                                 >
                                   Mark as Paid
                                 </Dropdown.Item>
-                              )}
+                              )} */}
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>

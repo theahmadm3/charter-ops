@@ -10,7 +10,6 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { addFuelAsync } from "../../../../../slices/fuel/fuelSlice";
 import { addMaintenanceAsync } from "../../../../../slices/maintenance/maintenanceSlice";
 
 const validationSchema = Yup.object().shape({
@@ -19,7 +18,7 @@ const validationSchema = Yup.object().shape({
   amo_id: Yup.number()
     .typeError("AMO ID must be a number")
     .required("AMO ID is required"),
-  invoice_received: Yup.string().required("Invoice status is required"),
+  // invoice_received: Yup.string().required("Invoice status is required"),
   amount_paid: Yup.number()
     .typeError("Amount paid must be a number")
     .min(0, "Amount paid must be at least 0")
@@ -90,7 +89,7 @@ function AddMaintenance(props) {
             aircraft_id: "",
             type_of_maintenance: "",
             amo_id: "",
-            invoice_received: "",
+            // invoice_received: "",
             amount_paid: "",
           }}
           validationSchema={validationSchema}
@@ -213,7 +212,7 @@ function AddMaintenance(props) {
               </Row>
 
               <Row>
-                <Col md={6}>
+                {/* <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingInvoiceReceived"
@@ -237,7 +236,7 @@ function AddMaintenance(props) {
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
-                </Col>
+                </Col> */}
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
@@ -258,10 +257,7 @@ function AddMaintenance(props) {
                     </FloatingLabel>
                   </BootstrapForm.Group>
                 </Col>
-              </Row>
-
-              <Row>
-                <Col md={12}>
+                <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingReceiptUpload"
