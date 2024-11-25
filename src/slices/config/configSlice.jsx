@@ -799,13 +799,13 @@ const configSlice = createSlice({
       if (action.payload) {
         state.addAdditionalServiceResponse = action.payload;
         state.getAllAdditionalServicesResponse.unshift({
-          id: action.payload?.id,
-          service_name: action.payload?.service_name,
-          rate_type: action.payload?.rate_type,
-          charge_rate: action.payload?.charge_rate,
-          currency: action.payload?.currency,
-          remarks: action.payload?.remarks,
-          status: action.payload?.status,
+          id: action.payload?.data?.id,
+          service_name: action.payload?.data?.service_name,
+          rate_type: action.payload?.data?.rate_type,
+          charge_rate: action.payload?.data?.charge_rate,
+          currency: action.payload?.data?.currency,
+          remarks: action.payload?.data?.remarks,
+          status: action.payload?.data?.status,
         });
 
         toast.success(action.payload.message);
@@ -836,13 +836,13 @@ const configSlice = createSlice({
           state.getAllAdditionalServicesResponse.data.map((service) =>
             service.id === action.payload.data.id
               ? {
-                  id: action.payload.data.id,
-                  service_name: action.payload.data.service_name,
-                  rate_type: action.payload.data.rate_type,
-                  charge_rate: action.payload.data.charge_rate,
-                  currency: action.payload.data.currency,
-                  remarks: action.payload.data.remarks,
-                  status: action.payload.data.status,
+                  id: action.payload?.data?.id,
+                  service_name: action.payload?.data?.service_name,
+                  rate_type: action.payload?.data?.rate_type,
+                  charge_rate: action.payload?.data?.charge_rate,
+                  currency: action.payload?.data?.currency,
+                  remarks: action.payload?.data?.remarks,
+                  status: action.payload?.data?.status,
                 }
               : service
           );

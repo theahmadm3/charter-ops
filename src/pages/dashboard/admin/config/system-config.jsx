@@ -426,7 +426,7 @@ const SystemConfig = () => {
                           <td>{service?.charge_rate}</td>
                           <td>{service?.currency}</td>
                           <td>{service?.remarks}</td>
-                          <td>{service?.service?.service_name}</td>
+                          <td>{service?.service_name}</td>
                           <td>{service?.status ? "Active" : "Not Active"}</td>
                           <td>
                             <Dropdown>

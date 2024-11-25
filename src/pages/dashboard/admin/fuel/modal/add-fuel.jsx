@@ -88,7 +88,15 @@ function AddFuel(props) {
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            dispatch(addFuelAsync(values))
+            // Ensure aircraft_id and vendor_id are numbers
+            const formattedValues = {
+              ...values,
+              aircraft_id: Number(values.aircraft_id),
+              vendor_id: Number(values.vendor_id),
+            };
+
+            // Dispatch the formatted values
+            dispatch(addFuelAsync(formattedValues))
               .then((response) => {
                 if (response?.payload?.success) {
                   props.onHide();
