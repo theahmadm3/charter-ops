@@ -141,9 +141,6 @@ function EditBookingStepFour(props) {
       ],
     };
 
-    console.log("passengers", payload);
-    console.log("passenger id", props?.data[0]?.passengers);
-
     // dispatch(
     //   addBookingStepThreeAsync({
     //     bookingId: props?.data[0]?.id,

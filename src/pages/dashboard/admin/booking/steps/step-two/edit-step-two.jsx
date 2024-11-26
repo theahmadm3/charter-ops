@@ -151,14 +151,15 @@ function EditBookingStepTwo(props) {
                     onClick={() => handleCardClick(aircraft.id)}
                   >
                     <Card.Body>
-                      <h3>{aircraft.name}</h3>
+                      <h3>{aircraft.aircraft_type || aircraft?.reg_no}</h3>
                       <Row>
                         <Col md={4}>
                           <Card.Text>
                             <strong>ID:</strong> {aircraft.id}
                           </Card.Text>
                           <Card.Text>
-                            <strong>Aircraft Type:</strong> {aircraft.model}
+                            <strong>Aircraft Type:</strong>{" "}
+                            {aircraft.aircraft_type}
                           </Card.Text>
                         </Col>
 

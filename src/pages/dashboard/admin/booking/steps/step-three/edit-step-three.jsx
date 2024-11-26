@@ -26,10 +26,16 @@ function EditBookingStepThree(props) {
   const bookingInfo = useSelector((state) => state?.booking);
   const configInfo = useSelector((state) => state?.config);
   const handleSubmit = (values) => {
+    const formattedValues = {
+      ...values,
+      service_id: values.services.map((service) => service.value),
+    };
+    delete formattedValues.services; // Remove the original 'services' field
+
     dispatch(
       addBookingStepFourAsync({
         bookingId: props?.data[0]?.id,
-        values,
+        values: formattedValues,
       })
     )
       .then((response) => {
@@ -62,14 +68,18 @@ function EditBookingStepThree(props) {
     <>
       <Formik
         initialValues={{
-          special_requests: props?.data[0]?.special_requests,
-
-          premium_membership: false,
+          special_requests: props?.data[0]?.special_requests || "", // Preload special requests
+          premium_membership: props?.data[0]?.premium_membership || false, // Default to false if not set
+          services:
+            props?.data[0]?.additionalServices?.map((service) => ({
+              value: service.id,
+              label: `${service.service_name}, ${service.charge_rate}`,
+            })) || [], // Preload additional services
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, handleChange, handleBlur }) => (
+        {({ values, handleChange, handleBlur, setFieldValue }) => (
           <Form>
             <Row>
               <Col md={12}>
@@ -79,19 +89,20 @@ function EditBookingStepThree(props) {
                   </label>
                   <Select
                     isMulti
+                    value={values.services}
                     options={
                       Array.isArray(
-                        configInfo?.getAdditionalServiceByIdResponse
+                        configInfo?.getAdditionalServiceByIdResponse?.data
                       )
-                        ? configInfo.getAdditionalServiceByIdResponse.map(
+                        ? configInfo.getAdditionalServiceByIdResponse.data.map(
                             (option) => ({
-                              value: option?.id,
-                              label: `${option?.service_name}, ${option?.charge_rate}`,
+                              value: option.id,
+                              label: `${option.service_name}, ${option.charge_rate}`,
                             })
                           )
                         : []
                     }
-                    className=" form-control"
+                    className="form-control"
                     classNamePrefix="services"
                     onChange={(selectedOptions) =>
                       setFieldValue("services", selectedOptions)
