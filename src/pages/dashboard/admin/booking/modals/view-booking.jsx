@@ -12,7 +12,7 @@ const ViewBooking = (props) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Booking information - {props?.data[0]?.aircraft?.name} |{" "}
+            Booking information - {props?.data[0]?.aircraft?.aircraft_type} |{" "}
             {props?.data[0]?.trip_type}
           </Modal.Title>
         </Modal.Header>

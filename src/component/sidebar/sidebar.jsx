@@ -37,7 +37,7 @@ function SideBar() {
       text: "Aircraft Maintenance",
     },
     {
-      to: "/transaction",
+      to: "/admin-transaction",
       icon: <MdOutlineReceipt className="sidebar-icon" />,
       text: "Transaction & Payment",
     },
