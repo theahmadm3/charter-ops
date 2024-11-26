@@ -15,6 +15,9 @@ const ManageBookingModal = (props) => {
         size="xl"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        onHide={() => {
+          window.location.reload(); // Refresh the page
+        }}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
