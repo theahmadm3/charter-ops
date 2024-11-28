@@ -144,7 +144,7 @@ const Transaction = () => {
 
       <Container fluid>
         <div>
-          <h6 className="mb-4"> Book Transaction</h6>
+          <h6 className="mb-4"> Booking Transaction</h6>
 
           <Table striped hover responsive>
             <thead>
@@ -152,7 +152,7 @@ const Transaction = () => {
                 <th>S/N</th>
                 <th>Route</th>
                 <th> Date/Time</th>
-                <th>Duration</th>
+                <th>Flight Duration</th>
                 <th>Booked By</th>
                 <th>Client</th>
                 <th>Aircraft</th>
@@ -231,15 +231,15 @@ const Transaction = () => {
                                 className="small"
                                 onClick={() => handleViewBooking(booking.id)}
                               >
-                                View
+                                View More
                               </Dropdown.Item>
 
-                              <Dropdown.Item
+                              {/* <Dropdown.Item
                                 className="small"
                                 onClick={() => handleBookingStatus(booking.id)}
                               >
                                 Update Status
-                              </Dropdown.Item>
+                              </Dropdown.Item> */}
                               <Dropdown.Item
                                 className="small"
                                 onClick={() => handleViewReceipt(booking.id)}
@@ -248,13 +248,13 @@ const Transaction = () => {
                                   ? "View Invoice"
                                   : "View Receipt"}
                               </Dropdown.Item>
-                              <Dropdown.Item
+                              {/* <Dropdown.Item
                                 className="small"
                                 onClick={() => handleViewTripSheet(booking.id)}
                               >
                                 View Trip Sheet
-                              </Dropdown.Item>
-                              {status != "pending" && (
+                              </Dropdown.Item> */}
+                              {/* {status != "pending" && (
                                 <Dropdown.Item
                                   className="small"
                                   onClick={() =>
@@ -263,7 +263,7 @@ const Transaction = () => {
                                 >
                                   View Confirmation Sheet
                                 </Dropdown.Item>
-                              )}
+                              )} */}
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>

@@ -77,25 +77,30 @@ const Maintenance = () => {
                 <th>AMO</th>
                 <th>Amount</th>
                 <th>Date</th>
-                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {maintenanceInfo?.getAllMaintenanceResponse?.data?.length > 0 ? (
-                maintenanceInfo?.getAllMaintenanceResponse?.data.map(
+              {Array.isArray(
+                maintenanceInfo?.getAllMaintenanceResponse?.data
+              ) &&
+              maintenanceInfo?.getAllMaintenanceResponse?.data.length > 0 ? (
+                maintenanceInfo.getAllMaintenanceResponse.data.map(
                   (fuel, index) => {
-                    const { fuel_quantity, location, amo, aircraft, id } = fuel;
+                    const { maintenance_type, amount_paid, amo, aircraft, id } =
+                      fuel;
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>{aircraft}</td>
-                        <td>{fuel_quantity}</td>
-                        <td>{amo.name}</td>
-                        <td>{location}</td>
-
+                        <td>
+                          {" "}
+                          {aircraft?.reg_no + " " + aircraft?.aircraft_type}
+                        </td>
+                        <td>{maintenance_type}</td>
+                        <td>{amo?.name}</td>
+                        <td>{amount_paid}</td>
                         <td>{moment(fuel.captured_date).format("ll")}</td>
-                        <td>{location}</td>
+                        {/* <td>{location}</td> */}
                         <td>
                           <Dropdown>
                             <Dropdown.Toggle
@@ -112,14 +117,6 @@ const Maintenance = () => {
                               >
                                 Manage
                               </Dropdown.Item>
-                              {/* {payment_status === "unpaid" && (
-                                <Dropdown.Item
-                                  className="small bg-danger text-white"
-                                  onClick={() => handleUpdateFuelPayment(id)}
-                                >
-                                  Mark as Paid
-                                </Dropdown.Item>
-                              )} */}
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>
