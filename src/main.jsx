@@ -25,6 +25,7 @@ import { ProtectedRoute } from "./util/privateRoutes.jsx";
 import ContactRequests from "./pages/dashboard/admin/contact-request/contact-requests.jsx";
 import Maintenance from "./pages/dashboard/admin/maintenance/maintenance";
 import Transaction from "./pages/dashboard/admin/transaction/transaction";
+import Reports from "./pages/dashboard/admin/reports/reports.jsx";
 
 const router = createBrowserRouter([
   {
@@ -149,6 +150,17 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Transaction />{" "}
+      </ProtectedRoute>
+    ),
+
+    errorElement: <ErrorPage />,
+  },
+
+  {
+    path: "/admin-report",
+    element: (
+      <ProtectedRoute>
+        <Reports />{" "}
       </ProtectedRoute>
     ),
 
