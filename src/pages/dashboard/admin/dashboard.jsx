@@ -42,7 +42,7 @@ const AdminDashboard = () => {
   );
   const data = Object.values(
     activityLog?.getDashboardStatsResponse?.data?.bookings_by_month || {}
-  ).map((monthData) => monthData.count);
+  ).map((monthData) => monthData.total_amount);
 
   const chartData = {
     labels,
@@ -50,7 +50,7 @@ const AdminDashboard = () => {
       {
         label: "Bookings Count",
         data,
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        backgroundColor: "#8ED7FD",
       },
     ],
   };

@@ -152,7 +152,6 @@ const Transaction = () => {
                 <th>S/N</th>
                 <th>Route</th>
                 <th> Date/Time</th>
-                <th>Flight Duration</th>
                 <th>Booked By</th>
                 <th>Client</th>
                 <th>Aircraft</th>
@@ -194,21 +193,6 @@ const Transaction = () => {
                           ).format("LT")}`}
                         </td>
 
-                        <td>
-                          {moment
-                            .duration(
-                              moment(
-                                return_date + " " + return_time,
-                                "YYYY-MM-DD HH:mm:ss"
-                              ).diff(
-                                moment(
-                                  flight_date + " " + flight_time,
-                                  "YYYY-MM-DD HH:mm:ss"
-                                )
-                              )
-                            )
-                            .humanize()}
-                        </td>
                         <td>
                           {bookedBy?.first_name + " " + bookedBy?.last_name}
                         </td>
