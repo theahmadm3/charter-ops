@@ -53,7 +53,7 @@ function SideBar() {
       text: "Client Record",
     },
     {
-      to: "/statistics",
+      to: "/admin-report",
       icon: <MdOutlineBarChart className="sidebar-icon" />,
       text: "Statistics & Reporting",
     },
