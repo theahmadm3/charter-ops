@@ -111,7 +111,7 @@ const Fuels = () => {
                       <td>{fuel_quantity}</td>
                       <td>{fuel_cost}</td>
                       <td>{location}</td>
-                      <td>{moment(fuel.created_at).format("ll")}</td>
+                      <td>{moment(fuel.created_at).format("lll")}</td>
                       <td>{payment_status}</td>
                       <td>
                         <Dropdown>

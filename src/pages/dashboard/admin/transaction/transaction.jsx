@@ -151,12 +151,13 @@ const Transaction = () => {
               <tr>
                 <th>S/N</th>
                 <th>Route</th>
-                <th> Date/Time</th>
+                <th>Date & Time</th>
                 <th>Booked By</th>
                 <th>Client</th>
                 <th>Aircraft</th>
-                <th>Payment Status</th>
                 <th>Status</th>
+                <th>Amount</th>
+                <th>Payment Status</th>
                 <th></th>
               </tr>
             </thead>
@@ -176,6 +177,7 @@ const Transaction = () => {
                       status,
                       bookedBy,
                       aircraft,
+                      total_amount,
                     } = booking;
                     return (
                       <tr key={index}>
@@ -192,7 +194,6 @@ const Transaction = () => {
                             "HH:mm:ss"
                           ).format("LT")}`}
                         </td>
-
                         <td>
                           {bookedBy?.first_name + " " + bookedBy?.last_name}
                         </td>
@@ -200,8 +201,24 @@ const Transaction = () => {
                         <td>
                           {aircraft?.reg_no + " " + aircraft?.aircraft_type}
                         </td>
-                        <td>{payment_status}</td>
                         <td>{status === "no_show" ? "no show" : status}</td>
+                        <td>
+                          {total_amount
+                            ? new Intl.NumberFormat("en-US", {
+                                style: "currency",
+                                currency: "USD",
+                              }).format(total_amount)
+                            : "--"}
+                        </td>
+                        <td
+                          className={
+                            payment_status === "paid"
+                              ? "text-success"
+                              : "text-warning"
+                          }
+                        >
+                          {payment_status}
+                        </td>
                         <td>
                           <Dropdown>
                             <Dropdown.Toggle
@@ -217,13 +234,6 @@ const Transaction = () => {
                               >
                                 View More
                               </Dropdown.Item>
-
-                              {/* <Dropdown.Item
-                                className="small"
-                                onClick={() => handleBookingStatus(booking.id)}
-                              >
-                                Update Status
-                              </Dropdown.Item> */}
                               <Dropdown.Item
                                 className="small"
                                 onClick={() => handleViewReceipt(booking.id)}
@@ -232,22 +242,6 @@ const Transaction = () => {
                                   ? "View Invoice"
                                   : "View Receipt"}
                               </Dropdown.Item>
-                              {/* <Dropdown.Item
-                                className="small"
-                                onClick={() => handleViewTripSheet(booking.id)}
-                              >
-                                View Trip Sheet
-                              </Dropdown.Item> */}
-                              {/* {status != "pending" && (
-                                <Dropdown.Item
-                                  className="small"
-                                  onClick={() =>
-                                    handleViewConfirmation(booking.id)
-                                  }
-                                >
-                                  View Confirmation Sheet
-                                </Dropdown.Item>
-                              )} */}
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>

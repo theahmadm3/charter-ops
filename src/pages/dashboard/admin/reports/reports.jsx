@@ -28,7 +28,8 @@ const Reports = () => {
           <Col md={4}>
             <StatsCard title="Revenue Generated" value="$4,000,000" />
             <StatsCard title="Fuel" value="$700,000" />
-            <StatsCard title="Fuel Used" value="$800,000" />
+            <StatsCard title="Maintenance Amount" value="$800,000" />
+            <StatsCard title="Outstanding Bookings" value="$800,000" />
           </Col>
           <Col md={4}>
             <StatsCard title="Clients" value="50,000" />

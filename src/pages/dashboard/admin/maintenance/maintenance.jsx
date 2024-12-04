@@ -98,7 +98,13 @@ const Maintenance = () => {
                         </td>
                         <td>{maintenance_type}</td>
                         <td>{amo?.name}</td>
-                        <td>{amount_paid}</td>
+                        <td>
+                          {new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                          }).format(Number(amount_paid.replace(/,/g, "")))}
+                        </td>
+
                         <td>{moment(fuel.captured_date).format("ll")}</td>
                         {/* <td>{location}</td> */}
                         <td>
