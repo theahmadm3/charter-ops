@@ -1,7 +1,10 @@
 import { Card, Col, Container, Row } from "react-bootstrap";
 import AdminLayout from "../../../../component/layout/admin-layout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaPlaneUp } from "react-icons/fa6";
+import { useEffect } from "react";
+import { getAllReportingAsync } from "../../../../slices/reporting/reportingSlice";
+import FormatCurrency from "../../../../util/formatCurrency";
 
 const StatsCard = ({ title, value, icon }) => {
   return (
@@ -18,34 +21,92 @@ const StatsCard = ({ title, value, icon }) => {
 };
 
 const Reports = () => {
-  const activityLog = useSelector((state) => state?.users);
+  const dispatch = useDispatch();
 
+  const reporting = useSelector((state) => state?.reporting);
+  console.log("reporting", reporting);
+
+  useEffect(() => {
+    try {
+      dispatch(getAllReportingAsync({}));
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
   return (
     <AdminLayout>
       <Container fluid>
         {/* Top Section */}
         <Row className="mb-4">
           <Col md={4}>
-            <StatsCard title="Revenue Generated" value="$4,000,000" />
-            <StatsCard title="Fuel" value="$700,000" />
-            <StatsCard title="Maintenance Amount" value="$800,000" />
-            <StatsCard title="Outstanding Bookings" value="$800,000" />
+            <StatsCard
+              title="Total amount of outstanding payments"
+              value={
+                reporting?.getAllReportingResponse?.data
+                  ?.outstanding_payments ? (
+                  <FormatCurrency
+                    value={
+                      reporting.getAllReportingResponse.data
+                        .outstanding_payments
+                    }
+                    currency="USD"
+                  />
+                ) : (
+                  ".."
+                )
+              }
+            />
+            <StatsCard
+              title="Total amount of fuel collected"
+              value={
+                reporting?.getAllReportingResponse?.data?.fuel_collected ? (
+                  <FormatCurrency
+                    value={
+                      reporting.getAllReportingResponse.data.fuel_collected
+                    }
+                    currency="USD"
+                  />
+                ) : (
+                  ".."
+                )
+              }
+            />
+            {/* <StatsCard
+              title="Total amount for maintenance added"
+              value="$800,000"
+            /> */}
+            {/* <StatsCard
+              title="Outstanding Bookings"
+              value={reporting?.getAllReportingResponse?.data?.ddd}
+            /> */}
           </Col>
           <Col md={4}>
-            <StatsCard title="Clients" value="50,000" />
-            <StatsCard title="Active Users" value="2,000" />
-            <StatsCard title="Inactive Users" value="2,000" />
+            <StatsCard
+              title="Count of clients ( active)"
+              value={reporting?.getAllReportingResponse?.data?.active_clients}
+            />
+            <StatsCard
+              title="Count of planes ( active)"
+              value={reporting?.getAllReportingResponse?.data?.active_planes}
+            />
+            {/* <StatsCard title="Count of system users" value="2,000" /> */}
           </Col>
           <Col md={4}>
-            <StatsCard title="Planes" value="50" />
-            <StatsCard title="Active Planes" value="30" />
-            <StatsCard title="Inactive Planes" value="20" />
+            <StatsCard
+              title="Count of crew members"
+              value={reporting?.getAllReportingResponse?.data?.crew_members}
+            />
+            <StatsCard
+              title="Count of total passengers from all flights completed"
+              value={reporting?.getAllReportingResponse?.data?.total_passengers}
+            />
+            {/* <StatsCard title="Inactive Planes" value="20" /> */}
           </Col>
         </Row>
 
         {/* Bottom Section */}
         <Row>
-          <Col xs={3} md={3}>
+          {/* <Col xs={3} md={3}>
             <Card>
               <Card.Body>
                 <Row>
@@ -53,11 +114,11 @@ const Reports = () => {
                     <div className="my-3">
                       <h4>
                         {
-                          activityLog?.getDashboardStatsResponse?.data
+                          reporting?.getDashboardStatsResponse?.data
                             ?.total_aircrafts
                         }
                       </h4>
-                      <h4>Aircraft</h4>
+                      <h4>Total amount for maintenance added</h4>
                     </div>
                   </Col>
                   <Col>
@@ -68,42 +129,55 @@ const Reports = () => {
                 </Row>
               </Card.Body>
             </Card>
-          </Col>
-          <Col md={9}>
+          </Col> */}
+          <Col md={12}>
             <Card className="bg-color-1">
               <Card.Body>
                 <Row>
                   <Col md={4}>
                     <div className="p-3">
                       <h4>
-                        {
-                          activityLog?.getDashboardStatsResponse?.data
-                            ?.approved_bookings
-                        }
+                        {reporting?.getAllReportingResponse?.data
+                          ?.maintenance_cost !== null ? (
+                          <FormatCurrency
+                            value={
+                              reporting?.getAllReportingResponse?.data
+                                ?.maintenance_cost
+                            }
+                            currency="USD"
+                          />
+                        ) : (
+                          ".."
+                        )}
                       </h4>
-                      <h6>Approved Bookings</h6>
+                      <h6>Total amount for maintenance added</h6>
                     </div>
                   </Col>
                   <Col md={4}>
                     <div className="p-3">
                       <h4>
-                        {
-                          activityLog?.getDashboardStatsResponse?.data
-                            ?.rejected_bookings
-                        }
+                        {reporting?.getAllReportingResponse?.data?.system_users}
                       </h4>
-                      <h6>Rejected Bookings</h6>
+                      <h6> Count of system users </h6>
                     </div>
                   </Col>
                   <Col md={4}>
                     <div className="p-3">
                       <h4>
-                        {
-                          activityLog?.getDashboardStatsResponse?.data
-                            ?.pending_bookings
-                        }
+                        {reporting?.getAllReportingResponse?.data
+                          ?.total_revenue !== null ? (
+                          <FormatCurrency
+                            value={
+                              reporting?.getAllReportingResponse?.data
+                                ?.total_revenue
+                            }
+                            currency="USD"
+                          />
+                        ) : (
+                          ".."
+                        )}
                       </h4>
-                      <h6>Pending Bookings</h6>
+                      <h6> Total Revenue </h6>
                     </div>
                   </Col>
                 </Row>

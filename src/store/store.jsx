@@ -9,6 +9,7 @@ import fuelSlice from "../slices/fuel/fuelSlice";
 import contactSlice from "../slices/contact/contactSlice";
 import maintenanceSlice from "../slices/maintenance/maintenanceSlice";
 import amoSlice from "../slices/amo/amoSlice";
+import reportingSlice from "../slices/reporting/reportingSlice";
 
 const initialLoadingState = localStorage.getItem("loading") === "true";
 
@@ -24,6 +25,7 @@ const store = configureStore({
     contacts: contactSlice,
     maintenance: maintenanceSlice,
     amo: amoSlice,
+    reporting: reportingSlice,
 
     loading: (state = initialLoadingState, action) => {
       if (action.type.endsWith("/pending")) {
