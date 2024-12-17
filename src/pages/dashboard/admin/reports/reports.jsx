@@ -5,6 +5,7 @@ import { FaPlaneUp } from "react-icons/fa6";
 import { useEffect } from "react";
 import { getAllReportingAsync } from "../../../../slices/reporting/reportingSlice";
 import FormatCurrency from "../../../../util/formatCurrency";
+import ReportingFilter from "../../../../component/filters/reporting-filter";
 
 const StatsCard = ({ title, value, icon }) => {
   return (
@@ -33,9 +34,13 @@ const Reports = () => {
       console.log(error);
     }
   }, [dispatch]);
+
   return (
     <AdminLayout>
       <Container fluid>
+        <div>
+          <ReportingFilter />
+        </div>
         {/* Top Section */}
         <Row className="mb-4">
           <Col md={4}>

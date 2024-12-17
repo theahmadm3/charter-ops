@@ -141,22 +141,22 @@ function EditBookingStepFour(props) {
       ],
     };
 
-    // dispatch(
-    //   addBookingStepThreeAsync({
-    //     bookingId: props?.data[0]?.id,
-    //     values: payload,
-    //   })
-    // )
-    //   .then((response) => {
-    //     if (response?.payload?.success) {
-    //       const current = bookingInfo?.currentStep;
-    //       dispatch(setCurrentStep(current + 1));
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error occurred:", error);
-    //     toast.error("An unexpected error occurred.");
-    //   });
+    dispatch(
+      addBookingStepThreeAsync({
+        bookingId: props?.data[0]?.id,
+        values: payload,
+      })
+    )
+      .then((response) => {
+        if (response?.payload?.success) {
+          const current = bookingInfo?.currentStep;
+          dispatch(setCurrentStep(current + 1));
+        }
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+        toast.error("An unexpected error occurred.");
+      });
   };
 
   return (

@@ -33,9 +33,9 @@ function EditBookingStepFive(props) {
 
   // Initial values for the form
   const initialValues = {
-    crew_members: [],
     crew_notes: props?.data[0]?.trip_sheet?.crew_notes || "",
     passenger_notes: props?.data[0]?.trip_sheet?.passenger_notes || "",
+    crew_members: [],
   };
 
   // Validation schema
@@ -99,7 +99,7 @@ function EditBookingStepFive(props) {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ errors, touched, setFieldValue, handleChange }) => (
+        {({ errors, touched, values, setFieldValue, handleChange }) => (
           <Form>
             <Row>
               <Col md={6}>
@@ -139,7 +139,7 @@ function EditBookingStepFive(props) {
                   <label>Crew note</label>
                   <BootstrapForm.Control
                     as="textarea"
-                    value={props?.data[0]?.trip_sheet?.crew_notes}
+                    value={values.crew_notes} // Use Formik's values
                     placeholder="Crew note"
                     name="crew_notes"
                     onChange={handleChange}
@@ -156,7 +156,7 @@ function EditBookingStepFive(props) {
                   <label>Passenger note</label>
                   <BootstrapForm.Control
                     as="textarea"
-                    value={props?.data[0]?.trip_sheet?.passenger_notes}
+                    value={values.passenger_notes} // Use Formik's values
                     placeholder="Passenger notes"
                     name="passenger_notes"
                     onChange={handleChange}
