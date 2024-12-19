@@ -24,11 +24,24 @@ export const addAircraftMaintenanceOrgAsync = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await AddAircraftMaintenanceOrg(values);
-
+      toast.success("Aircraft Maintenance Organization added successfully!");
       return response;
     } catch (error) {
-      const errorMessage = error?.response?.data?.error || error.message;
-      toast.error(errorMessage);
+      const errorResponse = error?.response?.data;
+      const errorMessage =
+        errorResponse?.message || "An unexpected error occurred.";
+
+      // Display each validation error in a toast
+      if (errorResponse?.errors) {
+        Object.values(errorResponse.errors).forEach((errorArray) => {
+          errorArray.forEach((errorText) => {
+            toast.error(errorText);
+          });
+        });
+      } else {
+        toast.error(errorMessage);
+      }
+
       return rejectWithValue(errorMessage);
     }
   }
