@@ -61,7 +61,7 @@ const ReportingFilter = () => {
             <Row>
               <Col md={4}>
                 <Form.Group>
-                  <p className="m-0 p-0">Flight date</p>
+                  <p className="m-0 p-0">Filter by date</p>
                   <DatePicker
                     className="mb-2 form-control w-100"
                     selectsRange={true}

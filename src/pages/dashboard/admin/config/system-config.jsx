@@ -225,6 +225,12 @@ const SystemConfig = () => {
     }
   }, [dispatch]);
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat({
+      style: "currency",
+    }).format(value);
+  };
+
   return (
     <AdminLayout>
       <AddService
@@ -409,7 +415,6 @@ const SystemConfig = () => {
                     <th>Service Name</th>
                     <th>Rate Type</th>
                     <th>Charge Rate</th>
-                    <th>Currency</th>
                     <th>Remark</th>
                     <th>Main Service</th>
                     <th>Status</th>
@@ -423,8 +428,7 @@ const SystemConfig = () => {
                           <td>{index + 1}</td>
                           <td>{service?.service_name}</td>
                           <td>{service?.rate_type}</td>
-                          <td>{service?.charge_rate}</td>
-                          <td>{service?.currency}</td>
+                          <td>{formatCurrency(service?.charge_rate)}</td>
                           <td>{service?.remarks}</td>
                           <td>{service?.service_name}</td>
                           <td>{service?.status ? "Active" : "Not Active"}</td>

@@ -138,7 +138,6 @@ const Users = () => {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -153,7 +152,6 @@ const Users = () => {
                           <td>{first_name}</td>
                           <td>{last_name}</td>
                           <td>{email}</td>
-                          <td>{phone}</td>
                           <td>{status ? "Active" : "Not Active"}</td>
                           <td>
                             <Dropdown>
@@ -234,7 +232,6 @@ const Users = () => {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -249,7 +246,6 @@ const Users = () => {
                           <td>{first_name}</td>
                           <td>{last_name}</td>
                           <td>{email}</td>
-                          <td>{phone}</td>
                           <td>{status ? "Active" : "Not Active"}</td>
                           <td>
                             <Dropdown>

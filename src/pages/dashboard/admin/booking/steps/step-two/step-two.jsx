@@ -153,7 +153,14 @@ function BookingStepTwo() {
                     onClick={() => handleCardClick(aircraft.id)}
                   >
                     <Card.Body>
-                      <h3>{aircraft.model}</h3>
+                      <Row>
+                        <Col md={6}>
+                          <h3>{aircraft.aircraft_type}</h3>
+                        </Col>
+                        <Col md={6}>
+                          <h3>{aircraft.reg_no}</h3>
+                        </Col>
+                      </Row>
                       <Row>
                         <Col md={6}>
                           <Card.Text>

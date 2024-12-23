@@ -48,7 +48,7 @@ const ViewBooking = (props) => {
                   <Card.Body>
                     <Card.Text className="fw-bold">Aircraft </Card.Text>
                     <Card.Text>
-                      {props?.data[0]?.aircraft?.name || "--"}
+                      {props?.data[0]?.aircraft?.aircraft_type || "--"}
                     </Card.Text>
                   </Card.Body>
                 </Card>

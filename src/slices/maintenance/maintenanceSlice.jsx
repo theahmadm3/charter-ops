@@ -103,14 +103,14 @@ const maintenanceSlice = createSlice({
     builder.addCase(addMaintenanceAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.addMaintenanceResponse = action?.payload;
-        state.getAllMaintenanceResponse?.data?.unshift({
-          id: action.payload?.data?.id,
-          vendor_name: action.payload?.data?.vendor_name,
-          fuel_quantity: action.payload?.data?.fuel_quantity,
-          fuel_cost: action.payload?.data?.fuel_cost,
-          payment_status: action.payload?.data?.payment_status,
-          location: action.payload?.data?.location,
-        });
+        // state.getAllMaintenanceResponse?.data?.unshift({
+        //   id: action.payload?.data?.id,
+        //   vendor_name: action.payload?.data?.vendor_name,
+        //   fuel_quantity: action.payload?.data?.fuel_quantity,
+        //   fuel_cost: action.payload?.data?.fuel_cost,
+        //   payment_status: action.payload?.data?.payment_status,
+        //   location: action.payload?.data?.location,
+        // });
 
         toast.success(action?.payload?.message);
       }
