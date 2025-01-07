@@ -86,12 +86,17 @@ function EditBookingStepTwo(props) {
 
   if (selectedAircraft) return null;
 
-  const [selectedAircraftId, setSelectedAircraftId] = useState(null);
-
+  const [selectedAircraftId, setSelectedAircraftId] = useState(
+    props?.data[0]?.aircraft?.id || null
+  );
   const handleCardClick = (id) => {
     setSelectedAircraftId(id);
   };
-
+  useEffect(() => {
+    if (props?.data) {
+      setSelectedAircraftId(props.data[0]?.aircraft?.id);
+    }
+  }, [props?.data]);
   return (
     <Formik
       initialValues={{
@@ -102,45 +107,47 @@ function EditBookingStepTwo(props) {
     >
       {({ errors, touched, handleSubmit, values, handleChange }) => (
         <Form onSubmit={handleSubmit}>
-          {/* <Row>
-            <Col md={6}>
-              <BootstrapForm.Group className="mb-3">
-                <FloatingLabel
-                  controlId="floatingAircraft"
-                  label="Available Aircrafts"
-                >
-                  <BootstrapForm.Control
-                    as="select"
-                    name="aircraft_id"
-                    // onChange={(event) => {
-                    //   handleChange(event);
-                    //   handleSelectedAircraft(event);
-                    // }}
-                    onChange={handleChange}
-                    value={values.aircraft_id}
-                    isInvalid={touched.aircraft_id && !!errors.aircraft_id}
-                  >
-                    <option value="">Choose Available Aircraft</option>
-                    {Array.isArray(
-                      bookingInfo?.getAvailableAircraftResponse
-                    ) ? (
-                      bookingInfo.getAvailableAircraftResponse.map((type) => (
-                        <option value={type.id} key={type.id}>
-                          {type.name}
-                        </option>
-                      ))
-                    ) : (
-                      <option disabled>No aircraft available</option>
-                    )}
-                  </BootstrapForm.Control>
-                  <BootstrapForm.Control.Feedback type="invalid">
-                    {errors.aircraft_id}
-                  </BootstrapForm.Control.Feedback>
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col>
-          </Row> */}
+          <div className="my-5">
+            <h5>Selected Aircraft</h5>
+            <Card
+              className={`aircraft-card ${
+                selectedAircraftId === props?.data[0]?.aircraft?.id
+                  ? "selected"
+                  : ""
+              }`}
+              onClick={() => handleCardClick(props?.data[0]?.aircraft?.id)}
+            >
+              <Card.Body>
+                <Row>
+                  <Col md={6}>
+                    <h3>{props?.data[0]?.aircraft?.aircraft_type}</h3>
+                  </Col>
+                  <Col md={6}>
+                    <h3>{props?.data[0]?.aircraft?.reg_no}</h3>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={4}>
+                    <Card.Text>
+                      <strong>ID:</strong> {props?.data[0]?.aircraft?.id}
+                    </Card.Text>
+                    <Card.Text>
+                      <strong>Aircraft Type:</strong>{" "}
+                      {props?.data[0]?.aircraft?.aircraft_type}
+                    </Card.Text>
+                  </Col>
+                  <Col md={6}>
+                    <Card.Text>
+                      <strong>Crew Capacity:</strong>{" "}
+                      {props?.data[0]?.aircraft?.crew_capacity}
+                    </Card.Text>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </div>
           <Row>
+            <h5>Other Available Aircraft</h5>
             {Array.isArray(bookingInfo?.getAvailableAircraftResponse) ? (
               bookingInfo.getAvailableAircraftResponse.map((aircraft) => (
                 <Col md={6} key={aircraft.id} className="mb-4">
@@ -151,7 +158,6 @@ function EditBookingStepTwo(props) {
                     onClick={() => handleCardClick(aircraft.id)}
                   >
                     <Card.Body>
-                      {/* <h3>{aircraft.aircraft_type || aircraft?.reg_no}</h3> */}
                       <Row>
                         <Col md={6}>
                           <h3>{aircraft.aircraft_type}</h3>
@@ -170,7 +176,6 @@ function EditBookingStepTwo(props) {
                             {aircraft.aircraft_type}
                           </Card.Text>
                         </Col>
-
                         <Col md={6}>
                           <Card.Text>
                             <strong>Crew Capacity:</strong>{" "}

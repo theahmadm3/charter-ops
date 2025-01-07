@@ -48,7 +48,8 @@ function BookingStepFive() {
     )
       .then((response) => {
         if (response?.payload) {
-          navigate(-1);
+          // navigate(-1);
+          window.location.href = "/admin-booking";
         }
       })
       .catch((error) => {
@@ -64,6 +65,10 @@ function BookingStepFive() {
       console.log(error);
     }
   }, [dispatch]);
+
+  const handleNavigate = () => {
+    window.location.href = "/admin-booking";
+  };
   return (
     <>
       <Formik
@@ -170,10 +175,9 @@ function BookingStepFive() {
                 Back
               </Button>
               <Button
-                as={Link}
                 variant="white"
                 className="border border-main-color text-end"
-                to="/admin-booking"
+                onClick={() => handleNavigate()}
               >
                 Finish
               </Button>

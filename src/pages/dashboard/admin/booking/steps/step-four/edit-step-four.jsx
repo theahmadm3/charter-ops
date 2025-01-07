@@ -130,7 +130,7 @@ function EditBookingStepFour(props) {
 
     const payload = {
       passengers: [
-        formattedValues,
+        // formattedValues,
         ...values.passengers.map((passenger) => ({
           id: passenger.id,
           first_name: passenger.first_name,
@@ -140,7 +140,6 @@ function EditBookingStepFour(props) {
         })),
       ],
     };
-
     dispatch(
       addBookingStepThreeAsync({
         bookingId: props?.data[0]?.id,

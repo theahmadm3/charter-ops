@@ -11,7 +11,7 @@ import maintenanceSlice from "../slices/maintenance/maintenanceSlice";
 import amoSlice from "../slices/amo/amoSlice";
 import reportingSlice from "../slices/reporting/reportingSlice";
 
-const initialLoadingState = localStorage.getItem("loading") === "true";
+const initialLoadingState = sessionStorage.getItem("loading") === "true";
 
 const store = configureStore({
   reducer: {

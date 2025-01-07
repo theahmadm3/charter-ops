@@ -828,27 +828,24 @@ const configSlice = createSlice({
     });
 
     builder.addCase(updateAdditionalServiceAsync.fulfilled, (state, action) => {
-      if (action.payload.success) {
-        state.updateAdditionalServiceResponse = action.payload;
+      state.updateAdditionalServiceResponse = action.payload;
+      state.getAllAdditionalServicesResponse =
+        state.getAllAdditionalServicesResponse.map((service) =>
+          service.id === action.payload.id
+            ? {
+                id: action.payload?.id,
+                service_name: action.payload?.service_name,
+                rate_type: action.payload?.rate_type,
+                charge_rate: action.payload?.charge_rate,
+                currency: action.payload?.currency,
+                remarks: action.payload?.remarks,
+                status: action.payload?.status,
+                service_id: action.payload?.service_id,
+              }
+            : service
+        );
 
-        // Filter and replace the existing record with the new record
-        state.getAllAdditionalServicesResponse.data =
-          state.getAllAdditionalServicesResponse.data.map((service) =>
-            service.id === action.payload.data.id
-              ? {
-                  id: action.payload?.data?.id,
-                  service_name: action.payload?.data?.service_name,
-                  rate_type: action.payload?.data?.rate_type,
-                  charge_rate: action.payload?.data?.charge_rate,
-                  currency: action.payload?.data?.currency,
-                  remarks: action.payload?.data?.remarks,
-                  status: action.payload?.data?.status,
-                }
-              : service
-          );
-
-        toast.success(action.payload.message);
-      }
+      toast.success(action.payload.message);
     });
 
     builder.addCase(updateAdditionalServiceAsync.rejected, (state, action) => {

@@ -196,7 +196,7 @@ function EditBookingStepOne(props) {
   useEffect(() => {
     if (props.data[0]?.service) {
       setToServiceDefaultValue({
-        value: props.data[0]?.service?.service_name,
+        value: props.data[0]?.service?.id,
         label: props.data[0]?.service?.service_name,
       });
     }
@@ -213,6 +213,21 @@ function EditBookingStepOne(props) {
       console.log(error);
     }
   }, [dispatch]);
+  const convertTo12HourFormat = (time) => {
+    if (!time) return ""; // Handle empty or undefined time
+    const [hours, minutes] = time.split(":");
+    const isPM = hours >= 12;
+    const adjustedHours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+    const ampm = isPM ? "PM" : "AM";
+    return `${String(adjustedHours).padStart(2, "0")}:${minutes} ${ampm}`;
+  };
+  const [selectedFlightTime, setSelectedFlightTime] = useState(
+    convertTo12HourFormat(props.data[0]?.flight_time) || ""
+  );
+
+  const [selectedReturnTime, setSelectedReturnTime] = useState(
+    convertTo12HourFormat(props.data[0]?.return_time) || ""
+  );
 
   return (
     <>
@@ -380,22 +395,29 @@ function EditBookingStepOne(props) {
                         as="select"
                         className="py-3 custom-scroll-dropdown"
                         name="flight_time"
-                        value={values.flight_time || ""}
+                        value={selectedFlightTime}
                         style={{ maxHeight: "200px", overflowY: "auto" }}
                         onChange={(e) => {
-                          setFieldValue("flight_time", e.target.value);
+                          const newValue = e.target.value;
+                          setSelectedFlightTime(newValue); // Update local state
+                          setFieldValue("flight_time", newValue); // Update form state
                           setSavedValues((prev) => ({
                             ...prev,
-                            flight_time: e.target.value,
-                          }));
+                            flight_time: newValue,
+                          })); // Update saved values
                         }}
+                        aria-label="Select flight time"
+                        required
                       >
                         <option value="">Select Flight Time</option>
-                        {times.map((time, index) => (
-                          <option value={time} key={index}>
-                            {time}
-                          </option>
-                        ))}
+                        {times.map((time, index) => {
+                          const convertedTime = convertTo12HourFormat(time);
+                          return (
+                            <option value={convertedTime} key={index}>
+                              {convertedTime}
+                            </option>
+                          );
+                        })}
                       </BootstrapForm.Control>
 
                       <ErrorMessage
@@ -445,21 +467,26 @@ function EditBookingStepOne(props) {
                         as="select"
                         className="py-3"
                         name="return_time"
-                        value={values.return_time || props.data[0]?.return_time}
+                        value={selectedReturnTime}
                         onChange={(e) => {
-                          setFieldValue("return_time", e.target.value);
+                          const newValue = e.target.value;
+                          setSelectedReturnTime(newValue); // Update local state
+                          setFieldValue("return_time", newValue); // Update form state
                           setSavedValues((prev) => ({
                             ...prev,
-                            return_time: e.target.value,
-                          }));
+                            return_time: newValue,
+                          })); // Update saved values
                         }}
                       >
                         <option value="">Select Return Time</option>
-                        {times.map((time, index) => (
-                          <option value={time} key={index}>
-                            {time}
-                          </option>
-                        ))}
+                        {times.map((time, index) => {
+                          const convertedTime = convertTo12HourFormat(time); // Convert each time for display
+                          return (
+                            <option value={convertedTime} key={index}>
+                              {convertedTime}
+                            </option>
+                          );
+                        })}
                       </BootstrapForm.Control>
                       <ErrorMessage
                         name="return_time"
@@ -516,7 +543,7 @@ function EditBookingStepOne(props) {
                 <BootstrapForm.Group>
                   <label>Select Service</label>
                   <Select
-                    defaultValue={toServiceDefaultValue}
+                    value={toServiceDefaultValue}
                     options={
                       Array.isArray(configInfo?.getAllServicesResponse?.data)
                         ? configInfo?.getAllServicesResponse?.data?.map(
@@ -529,12 +556,12 @@ function EditBookingStepOne(props) {
                     }
                     className="form-control"
                     classNamePrefix="service_id"
-                    onChange={(selectedOptions) => {
-                      setFieldValue("service_id", selectedOptions);
-
+                    onChange={(selectedOption) => {
+                      setFieldValue("service_id", selectedOption);
+                      setToServiceDefaultValue(selectedOption);
                       setSavedValues((prev) => ({
                         ...prev,
-                        service_id: selectedOptions,
+                        service_id: selectedOption,
                       }));
                     }}
                   />

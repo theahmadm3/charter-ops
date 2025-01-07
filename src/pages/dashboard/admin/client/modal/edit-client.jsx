@@ -58,7 +58,7 @@ function EditClient(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Update Passenger
+          Update Client
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -264,7 +264,7 @@ function EditClient(props) {
                         <option value="">Select Type of ID</option>
                         <option value="passport">Passport</option>
                         <option value="driving licence">
-                          Driver's License
+                          Driver`&apos;`s License
                         </option>
                         <option value="national id">National ID</option>
                       </BootstrapForm.Control>
@@ -279,6 +279,7 @@ function EditClient(props) {
                     <FloatingLabel
                       controlId="floatingIdFileUpload"
                       label="ID File Upload"
+                      value={values.document_base64}
                     >
                       <BootstrapForm.Control
                         type="file"
