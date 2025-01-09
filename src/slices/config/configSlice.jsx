@@ -951,15 +951,22 @@ const configSlice = createSlice({
     builder.addCase(updateSupplierAsync.fulfilled, (state, action) => {
       if (action.payload) {
         state.updateSupplierResponse = action.payload;
-        state.getAllSuppliersResponse?.data?.unshift({
-          id: action.payload?.data?.id,
-          name: action.payload?.data?.name,
-          remarks: action.payload?.data?.remarks,
-          created_at: action.payload?.data?.created_at,
-          status: action.payload?.data?.status,
-        });
 
-        toast.success(action.payload?.message);
+        // Filter and replace the existing record with the new record
+        state.getAllSuppliersResponse.data =
+          state.getAllSuppliersResponse.data.map((client) =>
+            client.id === action.payload.data.id
+              ? {
+                  id: action.payload?.data?.id,
+                  name: action.payload?.data?.name,
+                  remarks: action.payload?.data?.remarks,
+                  created_at: action.payload?.data?.created_at,
+                  status: action.payload?.data?.status,
+                }
+              : client
+          );
+
+        toast.success(action.payload.message);
       }
     });
 

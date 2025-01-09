@@ -86,6 +86,12 @@ function BookingStepFour() {
   };
 
   const handleSubmit = (values) => {
+    const isValidPassenger = (passenger) =>
+      passenger.first_name &&
+      passenger.last_name &&
+      passenger.email &&
+      passenger.phone;
+
     const formattedValues = {
       first_name: values.first_name,
       last_name: values.last_name,
@@ -96,12 +102,14 @@ function BookingStepFour() {
     const payload = {
       passengers: [
         formattedValues,
-        ...values.passengers.map((passenger) => ({
-          first_name: passenger.first_name,
-          last_name: passenger.last_name,
-          email: passenger.email,
-          phone: passenger.phone,
-        })),
+        ...values.passengers
+          .filter(isValidPassenger) // Filter out empty or invalid objects
+          .map((passenger) => ({
+            first_name: passenger.first_name,
+            last_name: passenger.last_name,
+            email: passenger.email,
+            phone: passenger.phone,
+          })),
       ],
     };
 

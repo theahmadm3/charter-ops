@@ -50,9 +50,7 @@ const genderOptions = [
 ];
 
 function EditBookingStepFour(props) {
-  const [isChecked, setIsChecked] = useState(
-    props?.data[0]?.passengers ? true : false
-  );
+  const [isChecked, setIsChecked] = useState(props?.data[0]?.passengers > 0);
   const [passengers, setPassengers] = useState([
     {
       first_name: "",
