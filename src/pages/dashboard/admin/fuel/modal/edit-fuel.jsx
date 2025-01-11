@@ -14,7 +14,7 @@ import { updateFuelAsync } from "../../../../../slices/fuel/fuelSlice";
 
 const validationSchema = Yup.object().shape({
   aircraft_id: Yup.number().required("Aircraft ID is required"),
-  vendor_id: Yup.string().required("Vendor name is required"),
+  supplier_id: Yup.string().required("Supplier name is required"),
   fuel_quantity: Yup.number()
     .typeError("Fuel quantity must be a number")
     .min(1, "Fuel quantity must be greater than 0")
@@ -80,7 +80,7 @@ function EditFuel(props) {
         <Formik
           initialValues={{
             aircraft_id: props?.data?.[0]?.aircraft_id,
-            vendor_id: props?.data?.[0]?.vendor_id,
+            supplier_id: props?.data?.[0]?.supplier?.id,
             fuel_quantity: props?.data?.[0]?.fuel_quantity,
             fuel_cost: props?.data?.[0]?.fuel_cost,
             payment_status: props?.data?.[0]?.payment_status,
@@ -170,10 +170,10 @@ function EditFuel(props) {
                     >
                       <BootstrapForm.Control
                         as="select"
-                        name="vendor_id"
-                        value={values.vendor_id}
+                        name="supplier_id"
+                        value={values.supplier_id}
                         onChange={handleChange}
-                        isInvalid={touched.vendor_id && !!errors.vendor_id}
+                        isInvalid={touched.supplier_id && !!errors.supplier_id}
                       >
                         <option value="">Select Supplier</option>
                         {Array.isArray(
@@ -189,7 +189,7 @@ function EditFuel(props) {
                           : null}
                       </BootstrapForm.Control>
                       <ErrorMessage
-                        name="vendor_id"
+                        name="supplier_id"
                         component="div"
                         className="text-danger"
                       />

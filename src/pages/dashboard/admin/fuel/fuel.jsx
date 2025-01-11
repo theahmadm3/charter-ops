@@ -93,7 +93,7 @@ const Fuels = () => {
               {fuelInfo?.getAllFuelResponse?.data?.length > 0 ? (
                 fuelInfo?.getAllFuelResponse?.data.map((fuel, index) => {
                   const {
-                    vendor_name,
+                    supplier,
                     fuel_quantity,
                     fuel_cost,
                     location,
@@ -107,7 +107,7 @@ const Fuels = () => {
                       <td>
                         {aircraft?.aircraft_type + " " + aircraft?.reg_no}
                       </td>
-                      <td>{vendor_name}</td>
+                      <td>{supplier?.name}</td>
                       <td>{fuel_quantity}</td>
                       <td>{fuel_cost}</td>
                       <td>{location}</td>

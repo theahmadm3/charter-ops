@@ -14,7 +14,7 @@ import { addFuelAsync } from "../../../../../slices/fuel/fuelSlice";
 
 const validationSchema = Yup.object().shape({
   aircraft_id: Yup.number().required("Aircraft is required"),
-  vendor_id: Yup.string().required("Fuel  suppler is required"),
+  supplier_id: Yup.string().required("Fuel  suppler is required"),
   fuel_quantity: Yup.number()
     .typeError("Fuel quantity must be a number")
     .min(1, "Fuel quantity must be greater than 0")
@@ -78,7 +78,7 @@ function AddFuel(props) {
         <Formik
           initialValues={{
             aircraft_id: "",
-            vendor_id: "",
+            supplier_id: "",
             fuel_quantity: "",
             fuel_cost: "",
             payment_status: "",
@@ -92,7 +92,7 @@ function AddFuel(props) {
             const formattedValues = {
               ...values,
               aircraft_id: Number(values.aircraft_id),
-              vendor_id: Number(values.vendor_id),
+              supplier_id: Number(values.supplier_id),
             };
 
             // Dispatch the formatted values
@@ -159,10 +159,10 @@ function AddFuel(props) {
                     >
                       <BootstrapForm.Control
                         as="select"
-                        name="vendor_id"
-                        value={values.vendor_id}
+                        name="supplier_id"
+                        value={values.supplier_id}
                         onChange={handleChange}
-                        isInvalid={touched.vendor_id && !!errors.vendor_id}
+                        isInvalid={touched.supplier_id && !!errors.supplier_id}
                       >
                         <option value="">Select Supplier</option>
                         {Array.isArray(
@@ -178,7 +178,7 @@ function AddFuel(props) {
                           : null}
                       </BootstrapForm.Control>
                       <ErrorMessage
-                        name="vendor_id"
+                        name="supplier_id"
                         component="div"
                         className="text-danger"
                       />
