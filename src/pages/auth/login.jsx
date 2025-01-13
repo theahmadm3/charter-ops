@@ -37,8 +37,8 @@ const Login = () => {
                 <Card.Body>
                   <div className="text-center my-4">
                     <Image src={logo} width={140} />
-                    <h5 className="mt-4">Welcome</h5>
-                    <p>Please fill the form below to proceed</p>
+                    <h5 className="mt-4">Welcome to Flybird ERP Solution</h5>
+                    <p>Please fill the form below to login</p>
                   </div>
                   <div className="mt-5 px-3">
                     <Formik
