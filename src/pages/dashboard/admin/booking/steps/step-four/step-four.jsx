@@ -66,7 +66,7 @@ function BookingStepFour() {
         last_name: "",
         phone: "",
         email: "",
-        phone: "",
+        // phone: "",
         special_requests: "",
       },
     ]);
