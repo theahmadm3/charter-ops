@@ -25,7 +25,7 @@ function AdminNavigation() {
     await localStorage.removeItem("user");
     await localStorage.removeItem("expires_at");
     window.location.href = "/";
-    localStorage.removeItem("loading");
+    sessionStorage.removeItem("loading");
   };
 
   function scheduleLogout() {

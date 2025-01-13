@@ -25,32 +25,34 @@ const validationSchema = Yup.object({
 function EditBookingStepThree(props) {
   const bookingInfo = useSelector((state) => state?.booking);
   const configInfo = useSelector((state) => state?.config);
+  const dispatch = useDispatch();
+
   const handleSubmit = (values) => {
-    const formattedValues = {
-      ...values,
-      service_id: values.services.map((service) => service.value),
-    };
-    delete formattedValues.services; // Remove the original 'services' field
+    const filteredPayload = Object.keys(values).reduce((acc, key) => {
+      const value = values[key];
+      if (value !== null && value !== undefined && value !== "") {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
+    // Process additional services
+    filteredPayload.additional_services = Array.isArray(values.services)
+      ? values.services.map((service) => ({
+          service_id: service.value,
+        }))
+      : [];
+    delete filteredPayload.services;
 
     dispatch(
       addBookingStepFourAsync({
         bookingId: props?.data[0]?.id,
-        values: formattedValues,
+        values: filteredPayload,
       })
-    )
-      .then((response) => {
-        if (response?.payload?.success) {
-          const current = bookingInfo?.currentStep;
-          dispatch(setCurrentStep(current + 1));
-        } else {
-          console.log("Error please try again");
-        }
-      })
-      .catch((error) => {
-        console.error("Error occurred:", error);
-      });
+    ).catch((error) => {
+      console.error("Error occurred:", error);
+    });
   };
-  const dispatch = useDispatch();
 
   useEffect(() => {
     try {
