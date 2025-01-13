@@ -43,8 +43,10 @@ const FirstTimeLogin = () => {
                 <Card.Body>
                   <div className="text-center">
                     <Image src={logo} width={140} />
-                    <h5 className="mt-4">Welcome</h5>
-                    <p>Please fill the form below to proceed</p>
+                    <h5 className="mt-4">Welcome to Flybird ERP Solution</h5>
+                    {/* <h5 className="mt-4">Welcome</h5> */}
+                    {/* <p>Please fill the form below to proceed</p> */}
+                    <p>Please change your password to proceed</p>
                   </div>
                   <div className="mt-5 px-3">
                     <Formik
@@ -166,12 +168,12 @@ const FirstTimeLogin = () => {
                             </FloatingLabel>
                           </Form.Group>
 
-                          <div className="my-4">
+                          {/* <div className="my-4">
                             <Link to="/" className="">
                               Already have an account?{" "}
                               <span className=" fw-bold">Login</span>
                             </Link>
-                          </div>
+                          </div> */}
                           <div className="d-grid gap-2 mb-5">
                             <Button
                               type="submit"
