@@ -19,11 +19,11 @@ td {
   font-size: small;
 }
 
-#error-page {
+#error-page, #unauthorised-page {
   min-height: 100vh;
 }
 
-.error-content {
+.error-content, .unauthorised-content {
   max-width: 400px;
   padding: 20px;
 }
@@ -36,7 +36,7 @@ td {
   font-weight: bold;
 }
 
-.error-image-container {
+.error-image-container, .unauthorised-image-container {
   margin-top: 20px;
 }
 
