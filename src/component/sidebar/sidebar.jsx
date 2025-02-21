@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { GiFuelTank, GiHamburgerMenu } from "react-icons/gi";
-import { HiUsers } from "react-icons/hi";
+
 import {
   MdLocalAirport,
   MdOutlineBarChart,
@@ -18,6 +18,21 @@ import { FaEnvelopeOpenText } from "react-icons/fa";
 function SideBar() {
   const [showMenu, setShowMenu] = useState(false);
   const location = useLocation();
+  const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+  const isAdmin = user?.role?.role_name === "admin";
+  const department = user ? user.department : null;
+
+  const departmentPaths = {
+    "commercial": [
+      "/admin-dashboard",
+      "/admin-booking",
+      "/admin-transaction",
+      "/admin-clients",
+    ],
+    "logistics and supply": ["/admin-maintenance", "/admin-fuel"],
+  };
+
+  const allowedPaths = department ? departmentPaths[department.tolowerCase()] || [] : [];
 
   const menuItems = [
     {
@@ -30,7 +45,6 @@ function SideBar() {
       icon: <PiAirplaneInFlightFill className="sidebar-icon" />,
       text: "Flight/Aircraft Management",
     },
-
     {
       to: "/admin-maintenance",
       icon: <MdLocalAirport className="sidebar-icon" />,
@@ -41,7 +55,6 @@ function SideBar() {
       icon: <MdOutlineReceipt className="sidebar-icon" />,
       text: "Transaction & Payment",
     },
-
     {
       to: "/admin-fuel",
       icon: <GiFuelTank className="sidebar-icon" />,
@@ -74,9 +87,31 @@ function SideBar() {
     },
   ];
 
+  const filteredMenuItems = menuItems.filter((item) =>
+    allowedPaths.includes(item.to)
+  );
+
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
+
+  const renderMenuItems = (items) => (
+    items.map((item) => (
+      <Link
+        key={item.to}
+        to={item.to}
+        className={
+          location.pathname === item.to ?
+            "admin-active-side admin-sidebar-link" :
+            "admin-sidebar-link"
+        }
+      >
+        <span className="m-2 fw-bold">{item.icon}</span>
+        {item.text}
+      </Link>
+    ))
+  );
+
   return (
     <>
       <aside
@@ -92,22 +127,14 @@ function SideBar() {
           </div>
         </div>
         <div className="mt-5"></div>
-        {menuItems.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            className={
-              location.pathname === item.to
-                ? "admin-active-side admin-sidebar-link"
-                : "admin-sidebar-link"
-            }
-          >
-            <span className="m-2 fw-bold">{item.icon}</span>
-            {item.text}
-          </Link>
-        ))}
+        {
+          isAdmin ?
+            renderMenuItems(menuItems) :
+            renderMenuItems(filteredMenuItems)
+        }
       </aside>
     </>
   );
 }
+
 export default SideBar;
