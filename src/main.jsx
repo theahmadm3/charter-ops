@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Loading from "./util/loading.jsx";
 import store from "./store/store.jsx";
 import ErrorPage from "./error-page.jsx";
+import UnauthorisedPage from "./unauthorised-page.jsx";
 import { Provider } from "react-redux";
 import ForgetPassword from "./pages/auth/forget-password";
 import ResetPassword from "./pages/auth/reset-password";
@@ -27,19 +28,18 @@ import Maintenance from "./pages/dashboard/admin/maintenance/maintenance";
 import Transaction from "./pages/dashboard/admin/transaction/transaction";
 import Reports from "./pages/dashboard/admin/reports/reports.jsx";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
     errorElement: <ErrorPage />,
   },
-
   {
     path: "/first-time-login",
     element: <FirstTimeLogin />,
     errorElement: <ErrorPage />,
   },
-
   {
     path: "/forget-password",
     element: <ForgetPassword />,
@@ -50,7 +50,11 @@ const router = createBrowserRouter([
     element: <ResetPassword />,
     errorElement: <ErrorPage />,
   },
-
+  {
+    path: "/unauthorized",
+    element: <UnauthorisedPage />,
+    errorElement: <ErrorPage />,
+  },
   {
     path: "/admin-dashboard",
     element: (
@@ -100,17 +104,16 @@ const router = createBrowserRouter([
     path: "/admin-booking",
     element: (
       <ProtectedRoute>
-        <Booking />{" "}
+        <Booking />
       </ProtectedRoute>
     ),
-
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-add-booking",
     element: (
       <ProtectedRoute>
-        <AddBooking />{" "}
+        <AddBooking />
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
@@ -119,20 +122,18 @@ const router = createBrowserRouter([
     path: "/admin-fuel",
     element: (
       <ProtectedRoute>
-        <Fuels />{" "}
+        <Fuels />
       </ProtectedRoute>
     ),
-
     errorElement: <ErrorPage />,
   },
   {
     path: "/admin-maintenance",
     element: (
       <ProtectedRoute>
-        <Maintenance />{" "}
+        <Maintenance />
       </ProtectedRoute>
     ),
-
     errorElement: <ErrorPage />,
   },
   {
@@ -144,26 +145,22 @@ const router = createBrowserRouter([
     ),
     errorElement: <ErrorPage />,
   },
-
   {
     path: "/admin-transaction",
     element: (
       <ProtectedRoute>
-        <Transaction />{" "}
+        <Transaction />
       </ProtectedRoute>
     ),
-
     errorElement: <ErrorPage />,
   },
-
   {
     path: "/admin-report",
     element: (
       <ProtectedRoute>
-        <Reports />{" "}
+        <Reports />
       </ProtectedRoute>
     ),
-
     errorElement: <ErrorPage />,
   },
 ]);
