@@ -20,19 +20,19 @@ function SideBar() {
   const location = useLocation();
   const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
   const isAdmin = user?.role?.role_name === "admin";
-  const department = user ? user.department : null;
+  const department = user ? user.department?.name : null;
 
   const departmentPaths = {
-    "commercial": [
+    "Commercial": [
       "/admin-dashboard",
       "/admin-booking",
       "/admin-transaction",
       "/admin-clients",
     ],
-    "logistics and supply": ["/admin-maintenance", "/admin-fuel"],
+    "Logistics and Supply": ["/admin-dashboard", "/admin-maintenance", "/admin-fuel"],
   };
 
-  const allowedPaths = department ? departmentPaths[department.tolowerCase()] || [] : [];
+  const allowedPaths = department ? departmentPaths[department] || [] : [];
 
   const menuItems = [
     {

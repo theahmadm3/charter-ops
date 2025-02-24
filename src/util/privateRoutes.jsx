@@ -6,20 +6,20 @@ import { toast } from "react-toastify";
 export const ProtectedRoute = ({ children }) => {
   const authUser = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
-  const department = user?.department;
+  const department = user?.department?.name;
   const location = useLocation();
 
   const departmentPaths = {
-    commercial: [
+    "Commercial": [
       "/admin-dashboard",
       "/admin-booking",
       "/admin-transaction",
       "/admin-clients",
     ],
-    "logistics and supply": ["/admin-maintenance", "/admin-fuel"],
+    "Logistics and Supply": ["/admin-dashboard", "/admin-maintenance", "/admin-fuel"],
   };
 
-  const allowedPaths = department ? departmentPaths[department.toLowerCase()] || [] : [];
+  const allowedPaths = department ? departmentPaths[department] || [] : [];
 
   useEffect(() => {
     if (!authUser) {
