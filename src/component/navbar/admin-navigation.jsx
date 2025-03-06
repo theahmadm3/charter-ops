@@ -20,10 +20,7 @@ function AdminNavigation() {
 
   const handleLogout = async () => {
     dispatch(logoutAsync());
-
-    await localStorage.removeItem("token");
-    await localStorage.removeItem("user");
-    await localStorage.removeItem("expires_at");
+    
     window.location.href = "/";
     sessionStorage.removeItem("loading");
   };
