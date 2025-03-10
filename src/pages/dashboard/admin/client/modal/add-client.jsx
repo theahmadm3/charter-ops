@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Modal,
   Button,
@@ -17,16 +16,14 @@ const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("First name is required"),
   last_name: Yup.string().required("Last name is required"),
   email: Yup.string()
-    .email("Invalid email format")
-    .required("Email is required"),
+    .email("Invalid email format"),
   dob: Yup.date().required("Date of Birth is required").nullable(),
   // id_type: Yup.string().required("Type of ID is required"),
   phone: Yup.string()
     .matches(
       /^\+?[0-9]{11,15}$/,
       "Invalid phone number, must be between 11 to 15 digits and can optionally start with a +"
-    )
-    .required("Phone number is required"),
+    ),
   title: Yup.string(),
   // document_id: Yup.string().required("ID File Upload is required"),
   // nationality: Yup.string().required("Nationality is required"),
@@ -197,7 +194,7 @@ function AddClient(props) {
                       controlId="floatingEmail"
                       label={
                         <div>
-                          Email <span className="text-danger">*</span>
+                          Email
                         </div>
                       }
                     >
@@ -224,7 +221,7 @@ function AddClient(props) {
                       controlId="floatingPhoneNumber"
                       label={
                         <div>
-                          Phone Number <span className="text-danger">*</span>
+                          Phone Number
                         </div>
                       }
                     >
@@ -277,7 +274,7 @@ function AddClient(props) {
                         <option value="">Select Type of ID</option>
                         <option value="passport">Passport</option>
                         <option value="driving licence">
-                          Driver's License
+                          {"Driver's License"}
                         </option>
                         <option value="national id">National ID</option>
                       </BootstrapForm.Control>

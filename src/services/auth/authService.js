@@ -22,5 +22,6 @@ export const firstTimeLogin = async (credentials) => {
 
 export const logout = async () => {
   const response = await PostRequest("/users/logout");
+  localStorage.clear();
   return response;
 };
