@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Modal,
   Button,
   Form as BootstrapForm,
   FloatingLabel,
-  Image,
+  // Image,
   Row,
   Col,
 } from "react-bootstrap";
@@ -17,13 +17,11 @@ const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("First name is required"),
   last_name: Yup.string().required("Last name is required"),
   email: Yup.string()
-    .email("Invalid email format")
-    .required("Email is required"),
+    .email("Invalid email format"),
   // dob: Yup.date().required("Date of Birth is required").nullable(),
   // id_type: Yup.string().required("Type of ID is required"),
   phone: Yup.string()
-    .matches(/^\d{10}$/, "Phone number must be 10 digits")
-    .required("Phone number is required"),
+    .matches(/^\d{10}$/, "Phone number must be 10 digits"),
   title: Yup.string(),
   // document_id: Yup.string().required("ID File Upload is required"),
 });
@@ -184,7 +182,7 @@ function EditClient(props) {
                       controlId="floatingEmail"
                       label={
                         <div>
-                          Email <span className="text-danger">*</span>
+                          Email
                         </div>
                       }
                     >
@@ -211,7 +209,7 @@ function EditClient(props) {
                       controlId="floatingPhoneNumber"
                       label={
                         <div>
-                          Phone Number <span className="text-danger">*</span>
+                          Phone Number
                         </div>
                       }
                     >

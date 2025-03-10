@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Modal,
   Button,
@@ -195,7 +194,7 @@ function AddClient(props) {
                       controlId="floatingEmail"
                       label={
                         <div>
-                          Email <span className="text-danger">*</span>
+                          Email
                         </div>
                       }
                     >
@@ -222,7 +221,7 @@ function AddClient(props) {
                       controlId="floatingPhoneNumber"
                       label={
                         <div>
-                          Phone Number <span className="text-danger">*</span>
+                          Phone Number
                         </div>
                       }
                     >
