@@ -241,25 +241,6 @@ function AddClient(props) {
                 </Col>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel controlId="floatingDob" label="Birthday">
-                      <BootstrapForm.Control
-                        type="date"
-                        name="dob"
-                        value={values.dob}
-                        onChange={handleChange}
-                        isInvalid={touched.dob && !!errors.dob}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.dob}
-                      </BootstrapForm.Control.Feedback>
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingTypeOfId"
                       label="Type of ID"
@@ -284,6 +265,51 @@ function AddClient(props) {
                     </FloatingLabel>
                   </BootstrapForm.Group>
                 </Col>
+                {/* <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel controlId="floatingDob" label="Birthday">
+                      <BootstrapForm.Control
+                        type="date"
+                        name="dob"
+                        value={values.dob}
+                        onChange={handleChange}
+                        isInvalid={touched.dob && !!errors.dob}
+                      />
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.dob}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col> */}
+              </Row>
+
+              <Row>
+                {/* <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingTypeOfId"
+                      label="Type of ID"
+                    >
+                      <BootstrapForm.Control
+                        as="select"
+                        name="id_type"
+                        value={values.id_type}
+                        onChange={handleChange}
+                        isInvalid={touched.id_type && !!errors.id_type}
+                      >
+                        <option value="">Select Type of ID</option>
+                        <option value="passport">Passport</option>
+                        <option value="driving licence">
+                          {"Driver's License"}
+                        </option>
+                        <option value="national id">National ID</option>
+                      </BootstrapForm.Control>
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.id_type}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col> */}
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel

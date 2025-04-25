@@ -17,7 +17,7 @@ import {
 
 const validationSchema = Yup.object().shape({
   aircraft_id: Yup.number().required("Aircraft ID is required"),
-  type_of_maintenance: Yup.string().required("Type of maintenance is required"),
+  maintenance_type: Yup.string().required("Type of maintenance is required"),
   amo_id: Yup.number()
     .typeError("AMO ID must be a number")
     .required("AMO ID is required"),
@@ -90,7 +90,7 @@ function EditMaintenance(props) {
         <Formik
           initialValues={{
             aircraft_id: props?.data?.[0]?.aircraft_id,
-            type_of_maintenance: props?.data?.[0]?.type_of_maintenance,
+            maintenance_type: props?.data?.[0]?.maintenance_type,
             amo_id: props?.data?.[0]?.amo_id,
             // invoice_received: "",
             amount_paid: props?.data?.[0]?.amount_paid,
@@ -170,12 +170,12 @@ function EditMaintenance(props) {
                     >
                       <BootstrapForm.Control
                         as="select"
-                        name="type_of_maintenance"
-                        value={values.type_of_maintenance}
+                        name="maintenance_type"
+                        value={values.maintenance_type}
                         onChange={handleChange}
                         isInvalid={
-                          touched.type_of_maintenance &&
-                          !!errors.type_of_maintenance
+                          touched.maintenance_type &&
+                          !!errors.maintenance_type
                         }
                       >
                         <option value="">Select Maintenance Type</option>
@@ -183,7 +183,7 @@ function EditMaintenance(props) {
                         <option value="unscheduled">Unscheduled</option>
                       </BootstrapForm.Control>
                       <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.type_of_maintenance}
+                        {errors.maintenance_type}
                       </BootstrapForm.Control.Feedback>
                     </FloatingLabel>
                   </BootstrapForm.Group>
