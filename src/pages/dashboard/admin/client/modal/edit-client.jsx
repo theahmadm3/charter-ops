@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
   // dob: Yup.date().required("Date of Birth is required").nullable(),
   // id_type: Yup.string().required("Type of ID is required"),
   phone: Yup.string()
-    .matches(/^\d{10}$/, "Phone number must be 10 digits"),
+    .matches(/^\d{11}$/, "Phone number must be 11 digits"),
   title: Yup.string(),
   // document_id: Yup.string().required("ID File Upload is required"),
 });
@@ -229,25 +229,6 @@ function EditClient(props) {
                 </Col>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel controlId="floatingDob" label="Birthday">
-                      <BootstrapForm.Control
-                        type="date"
-                        name="dob"
-                        value={values.dob}
-                        onChange={handleChange}
-                        isInvalid={touched.dob && !!errors.dob}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.dob}
-                      </BootstrapForm.Control.Feedback>
-                    </FloatingLabel>
-                  </BootstrapForm.Group>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingTypeOfId"
                       label="Type of ID"
@@ -272,6 +253,26 @@ function EditClient(props) {
                     </FloatingLabel>
                   </BootstrapForm.Group>
                 </Col>
+                {/* <Col md={6}>
+                  <BootstrapForm.Group className="mb-3">
+                    <FloatingLabel controlId="floatingDob" label="Birthday">
+                      <BootstrapForm.Control
+                        type="date"
+                        name="dob"
+                        value={values.dob}
+                        onChange={handleChange}
+                        isInvalid={touched.dob && !!errors.dob}
+                      />
+                      <BootstrapForm.Control.Feedback type="invalid">
+                        {errors.dob}
+                      </BootstrapForm.Control.Feedback>
+                    </FloatingLabel>
+                  </BootstrapForm.Group>
+                </Col> */}
+              </Row>
+
+              <Row>
+
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
