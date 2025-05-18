@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import {
@@ -22,7 +22,6 @@ const StaffForm = ({ props }) => {
       .email("Invalid email address")
       .required("Email is required"),
     role_id: Yup.string().required("Role is required"),
-    department_id: Yup.string().required("Department is required"),
   });
 
   return (
@@ -32,7 +31,6 @@ const StaffForm = ({ props }) => {
         last_name: "",
         email: "",
         role_id: "",
-        department_id: "",
         user_type: "staff",
       }}
       validationSchema={validationSchema}
@@ -134,7 +132,7 @@ const StaffForm = ({ props }) => {
                     value={values.role_id}
                     onChange={handleChange}
                   >
-                    <option value="">Select Role</option>
+                    <option value="">Select Department and Role</option>
                     {configInfo?.getAllRoleResponse?.data?.map((role) => (
                       <option value={role.id} key={role.id}>
                         {role?.role_name}
@@ -143,40 +141,6 @@ const StaffForm = ({ props }) => {
                   </BootstrapForm.Control>
                   {errors.role_id && touched.role_id ? (
                     <small className="text-danger">{errors.role_id}</small>
-                  ) : null}
-                </FloatingLabel>
-              </BootstrapForm.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={12}>
-              <BootstrapForm.Group>
-                <FloatingLabel
-                  controlId="floatingDepartmentId"
-                  label="Select Department"
-                  className="my-2"
-                >
-                  <BootstrapForm.Control
-                    as="select"
-                    aria-label="Select department"
-                    name="department_id"
-                    value={values.department_id}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Department</option>
-
-                    {configInfo?.getAllDepartmentsResponse?.data?.map(
-                      (department) => (
-                        <option value={department.id} key={department.id}>
-                          {department?.name}
-                        </option>
-                      )
-                    )}
-                  </BootstrapForm.Control>
-                  {errors.department_id && touched.department_id ? (
-                    <small className="text-danger">
-                      {errors.department_id}
-                    </small>
                   ) : null}
                 </FloatingLabel>
               </BootstrapForm.Group>
