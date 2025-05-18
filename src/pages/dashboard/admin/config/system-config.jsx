@@ -4,19 +4,19 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   activateAdditionalServiceAsync,
-  activateDepartmentAsync,
+  // activateDepartmentAsync,
   activatePartnershipAsync,
   activateRoleAsync,
   activateServiceAsync,
   activateSupplierAsync,
   deactivateAdditionalServiceAsync,
-  deactivateDepartmentAsync,
+  // deactivateDepartmentAsync,
   deactivatePartnershipAsync,
   deactivateRoleAsync,
   deactivateServiceAsync,
   deactivateSupplierAsync,
   getAllAdditionalSServicesAsync,
-  getAllDepartmentsAsync,
+  // getAllDepartmentsAsync,
   getAllPartnershipsAsync,
   getAllRoleAsync,
   getAllServicesAsync,
@@ -25,9 +25,9 @@ import {
 import AddService from "./modal/service/add-service";
 import { HiDotsHorizontal } from "react-icons/hi";
 import EditService from "./modal/service/edit-service";
-import AddDepartment from "./modal/department/add-department";
+// import AddDepartment from "./modal/department/add-department";
 import moment from "moment";
-import EditDepartment from "./modal/department/edit-department";
+// import EditDepartment from "./modal/department/edit-department";
 import AddSupplier from "./modal/supplier/add-supplier";
 import EditSupplier from "./modal/supplier/edit-supplier";
 import AddPartnership from "./modal/partnership/add-partnership";
@@ -45,20 +45,20 @@ const SystemConfig = () => {
   const [modalAddAdditionalService, setModalAddAdditionlService] =
     useState(false);
   const [modalEditService, setModalEditService] = useState(false);
-  const [modalAddDepartment, setModalAddDepartment] = useState(false);
-  const [modalEditDepartment, setModalEditDepartment] = useState(false);
+  // const [modalAddDepartment, setModalAddDepartment] = useState(false);
+  // const [modalEditDepartment, setModalEditDepartment] = useState(false);
   const [modalAddSupplier, setModalAddSupplier] = useState(false);
   const [modalEditSupplier, setModalEditSupplier] = useState(false);
   const [modalAddPartnership, setModalAddPartnership] = useState(false);
   const [modalEditPartnership, setModalEditPartnership] = useState(false);
   const [modalEditAdditionalService, setModalEditAdditionalService] =
     useState(false);
-  const [serviceId, setServiceId] = useState();
+  // const [serviceId, setServiceId] = useState();
 
   const configInfo = useSelector((state) => state?.config);
   const amoInfo = useSelector((state) => state?.amo);
   const [updateService, setUpdateService] = useState([]);
-  const [updateDepartment, setUpdateDepartment] = useState([]);
+  // const [updateDepartment, setUpdateDepartment] = useState([]);
   const [updateSupplier, setUpdateSupplier] = useState([]);
   const [updatePartnership, setUpdatePartnership] = useState([]);
   const [updateAdditionalService, setUpdateAdditionalService] = useState([]);
@@ -113,12 +113,12 @@ const SystemConfig = () => {
     dispatch(activatePartnershipAsync({ id }));
   };
 
-  const handleDeactivateDepartment = (id) => {
-    dispatch(deactivateDepartmentAsync({ id }));
-  };
-  const handleActivateDepartment = (id) => {
-    dispatch(activateDepartmentAsync({ id }));
-  };
+  // const handleDeactivateDepartment = (id) => {
+  //   dispatch(deactivateDepartmentAsync({ id }));
+  // };
+  // const handleActivateDepartment = (id) => {
+  //   dispatch(activateDepartmentAsync({ id }));
+  // };
 
   const handleDeactivateRole = (id) => {
     dispatch(deactivateRoleAsync({ id }));
@@ -127,15 +127,15 @@ const SystemConfig = () => {
     dispatch(activateRoleAsync({ id }));
   };
 
-  const handleEditDepartment = (id) => {
-    setModalEditDepartment(true);
+  // const handleEditDepartment = (id) => {
+  //   setModalEditDepartment(true);
 
-    const updateDepartment =
-      configInfo?.getAllDepartmentsResponse?.data?.filter(
-        (data) => data.id === id
-      );
-    setUpdateDepartment(updateDepartment);
-  };
+  //   const updateDepartment =
+  //     configInfo?.getAllDepartmentsResponse?.data?.filter(
+  //       (data) => data.id === id
+  //     );
+  //   setUpdateDepartment(updateDepartment);
+  // };
 
   // const handleAddAdditionalService = (id) => {
   //   setModalAddAdditionlService(true);
@@ -217,7 +217,7 @@ const SystemConfig = () => {
       dispatch(getAllAdditionalSServicesAsync());
       dispatch(getAllPartnershipsAsync());
       dispatch(getAllSuppliersAsync());
-      dispatch(getAllDepartmentsAsync());
+      // dispatch(getAllDepartmentsAsync());
       dispatch(getAllRoleAsync());
       dispatch(getAllAircraftMaintenanceOrgAsync());
     } catch (error) {
@@ -252,7 +252,7 @@ const SystemConfig = () => {
         onHide={() => setModalEditService(false)}
         data={updateService}
       />
-      <AddDepartment
+      {/* <AddDepartment
         show={modalAddDepartment}
         onHide={() => setModalAddDepartment(false)}
       />
@@ -260,7 +260,7 @@ const SystemConfig = () => {
         show={modalEditDepartment}
         onHide={() => setModalEditDepartment(false)}
         data={updateDepartment}
-      />
+      /> */}
       <AddSupplier
         show={modalAddSupplier}
         onHide={() => setModalAddSupplier(false)}
@@ -487,7 +487,7 @@ const SystemConfig = () => {
               </Table>
             </div>
           </Tab>
-          <Tab
+          {/* <Tab
             eventKey="departments"
             title={
               <span onClick={() => dispatch(getAllDepartmentsAsync())}>
@@ -561,14 +561,14 @@ const SystemConfig = () => {
                                       Activate
                                     </Dropdown.Item>
                                   )}
-                                  {/* <Dropdown.Item
+                                  <Dropdown.Item
                                     className="small bg-danger text-white"
                                     onClick={() =>
-                                      handleDeletDepartment(department.id)
+                                      handleDeleteDepartment(department.id)
                                     }
                                   >
                                     Delete
-                                  </Dropdown.Item> */}
+                                  </Dropdown.Item>
                                 </Dropdown.Menu>
                               </Dropdown>
                             </td>
@@ -584,7 +584,7 @@ const SystemConfig = () => {
                 </tbody>
               </Table>
             </div>
-          </Tab>
+          </Tab> */}
           <Tab
             eventKey="Fuel"
             title={
@@ -709,7 +709,7 @@ const SystemConfig = () => {
                 </thead>
                 <tbody>
                   {configInfo?.getAllPartnershipTypesResponse?.data?.length >
-                  0 ? (
+                    0 ? (
                     configInfo?.getAllPartnershipTypesResponse?.data?.map(
                       (partnership, index) => {
                         const { name, created_at, status } = partnership;
@@ -790,7 +790,7 @@ const SystemConfig = () => {
           <Tab
             eventKey="role"
             title={
-              <span onClick={() => dispatch(getAllRoleAsync())}>Roles</span>
+              <span onClick={() => dispatch(getAllRoleAsync())}>Department and Roles</span>
             }
           >
             <div>
@@ -897,7 +897,7 @@ const SystemConfig = () => {
                 </thead>
                 <tbody>
                   {amoInfo?.getAllAircraftMaintenanceOrgResponse?.data?.length >
-                  0 ? (
+                    0 ? (
                     amoInfo.getAllAircraftMaintenanceOrgResponse?.data?.map(
                       (service, index) => (
                         <tr key={index}>
