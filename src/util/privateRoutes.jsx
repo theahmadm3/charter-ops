@@ -6,20 +6,30 @@ import { toast } from "react-toastify";
 export const ProtectedRoute = ({ children }) => {
   const authUser = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
-  const department = user?.department?.name;
+  const role = user?.role?.role_name?.toLowerCase();
   const location = useLocation();
 
-  const departmentPaths = {
-    "Commercial": [
+  const rolePaths = {
+    "commercial": [
       "/admin-dashboard",
       "/admin-booking",
       "/admin-transaction",
       "/admin-clients",
     ],
-    "Logistics and Supply": ["/admin-dashboard", "/admin-maintenance", "/admin-fuel"],
+    "logistics": [
+      "/admin-dashboard",
+      "/admin-maintenance",
+      "/admin-fuel",
+    ],
+    "maintenance": [
+      "/admin-dashboard",
+      "/admin-maintenance",
+      "/admin-fuel",
+    ],
   };
 
-  const allowedPaths = department ? departmentPaths[department] || [] : [];
+  // Determine allowed paths for the user's role (empty array if role not found)
+  const allowedPaths = role ? rolePaths[role] || [] : [];
 
   useEffect(() => {
     if (!authUser) {
