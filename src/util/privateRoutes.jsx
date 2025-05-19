@@ -6,22 +6,22 @@ import { toast } from "react-toastify";
 export const ProtectedRoute = ({ children }) => {
   const authUser = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
-  const role = user?.role?.role_name?.toLowerCase();
+  const role = user?.role?.role_name
   const location = useLocation();
 
   const rolePaths = {
-    "commercial": [
+    "Commercial": [
       "/admin-dashboard",
       "/admin-booking",
       "/admin-transaction",
       "/admin-clients",
     ],
-    "logistics": [
+    "Logistics and Supply": [
       "/admin-dashboard",
       "/admin-maintenance",
       "/admin-fuel",
     ],
-    "maintenance": [
+    "Maintenance": [
       "/admin-dashboard",
       "/admin-maintenance",
       "/admin-fuel",
