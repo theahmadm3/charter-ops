@@ -15,6 +15,7 @@ export const ProtectedRoute = ({ children }) => {
       "/admin-booking",
       "/admin-transaction",
       "/admin-clients",
+      "/admin-add-booking",
     ],
     "Logistics and Supply": [
       "/admin-dashboard",
