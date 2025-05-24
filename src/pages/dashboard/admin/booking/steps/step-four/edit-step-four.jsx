@@ -289,7 +289,7 @@ function EditBookingStepFour(props) {
               name="passengers"
               render={(arrayHelpers) => (
                 <>
-                  {values.passengers.map((passenger, index) => (
+                  {values.passengers.slice(1).map((passenger, index) => (
                     <div
                       key={passenger?.id}
                       className="passenger-form mt-3 border p-3"
