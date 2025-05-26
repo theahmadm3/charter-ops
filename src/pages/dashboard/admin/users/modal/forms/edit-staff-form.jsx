@@ -26,7 +26,7 @@ const EditStaffForm = ({ onHide, data }) => {
       .email("Invalid email address")
       .required("Email is required"),
     role_id: Yup.string().required("Role is required"),
-    department_id: Yup.string().required("Department is required"),
+    // department_id: Yup.string().required("Department is required"),
   });
 
   return (
@@ -36,7 +36,7 @@ const EditStaffForm = ({ onHide, data }) => {
         last_name: data?.data[0].last_name,
         email: data?.data[0].email,
         role_id: data?.data[0].role_id,
-        department_id: data?.data[0].department_id,
+        // department_id: data?.data[0].department_id,
         user_type: "staff",
       }}
       validationSchema={validationSchema}
@@ -153,7 +153,7 @@ const EditStaffForm = ({ onHide, data }) => {
               </BootstrapForm.Group>
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col md={12}>
               <BootstrapForm.Group>
                 <FloatingLabel
@@ -186,7 +186,7 @@ const EditStaffForm = ({ onHide, data }) => {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
-          </Row>
+          </Row> */}
           <div className="d-flex justify-content-end mt-3">
             <Button type="submit" disabled={!dirty}>
               Save

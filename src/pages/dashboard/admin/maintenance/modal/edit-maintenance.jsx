@@ -144,12 +144,12 @@ function EditMaintenance(props) {
                       <option value="">Select Aircraft</option>
                       {Array.isArray(airCraftInfo?.getAllAircraftResponse?.data)
                         ? airCraftInfo?.getAllAircraftResponse?.data.map(
-                            (aircraft, index) => (
-                              <option value={aircraft.id} key={index}>
-                                {aircraft.reg_no}
-                              </option>
-                            )
+                          (aircraft, index) => (
+                            <option value={aircraft.id} key={index}>
+                              {aircraft.reg_no}
+                            </option>
                           )
+                        )
                         : null}
                     </BootstrapForm.Control>
                     <ErrorMessage
@@ -178,7 +178,7 @@ function EditMaintenance(props) {
                           !!errors.maintenance_type
                         }
                       >
-                        <option value="">Select Maintenance Type</option>
+                        <option value="">{values.maintenance_type}</option>
                         <option value="scheduled">Scheduled</option>
                         <option value="unscheduled">Unscheduled</option>
                       </BootstrapForm.Control>
@@ -203,12 +203,12 @@ function EditMaintenance(props) {
                           amoInfo?.getAllAircraftMaintenanceOrgResponse?.data
                         )
                           ? amoInfo?.getAllAircraftMaintenanceOrgResponse?.data.map(
-                              (amo, index) => (
-                                <option value={amo.id} key={index}>
-                                  {amo.name}
-                                </option>
-                              )
+                            (amo, index) => (
+                              <option value={amo.id} key={index}>
+                                {amo.name}
+                              </option>
                             )
+                          )
                           : null}
                       </BootstrapForm.Control>
                       <BootstrapForm.Control.Feedback type="invalid">
@@ -246,23 +246,19 @@ function EditMaintenance(props) {
                   </BootstrapForm.Group>
                 </Col> */}
                 <Col md={6}>
-                  <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel
-                      controlId="floatingAmountPaid"
-                      label="Amount Paid"
-                    >
-                      <BootstrapForm.Control
-                        type="number"
-                        placeholder="Amount Paid"
-                        name="amount_paid"
-                        value={values.amount_paid}
-                        onChange={handleChange}
-                        isInvalid={touched.amount_paid && !!errors.amount_paid}
-                      />
-                      <BootstrapForm.Control.Feedback type="invalid">
-                        {errors.amount_paid}
-                      </BootstrapForm.Control.Feedback>
-                    </FloatingLabel>
+                  <BootstrapForm.Group controlId="amountPaid">
+                    <BootstrapForm.Label>Amount Paid</BootstrapForm.Label>
+                    <BootstrapForm.Control
+                      type="number"
+                      placeholder={values.amount_paid}
+                      name="amount_paid"
+                      value={values.amount_paid}
+                      onChange={handleChange}
+                      isInvalid={touched.amount_paid && !!errors.amount_paid}
+                    />
+                    <BootstrapForm.Control.Feedback type="invalid">
+                      {errors.amount_paid}
+                    </BootstrapForm.Control.Feedback>
                   </BootstrapForm.Group>
                 </Col>
                 <Col md={6}>
