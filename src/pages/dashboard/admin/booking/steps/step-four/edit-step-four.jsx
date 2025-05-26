@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import {
@@ -14,7 +16,7 @@ import {
   setCurrentStep,
 } from "../../../../../../slices/booking/bookingSlice";
 import { nationalityOptions } from "../../../../../../util/data";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ImNotification } from "react-icons/im";
@@ -51,6 +53,7 @@ const genderOptions = [
 
 function EditBookingStepFour(props) {
   const [isChecked, setIsChecked] = useState(props?.data[0]?.passengers > 0);
+
   const [passengers, setPassengers] = useState([
     {
       first_name: "",
@@ -63,13 +66,25 @@ function EditBookingStepFour(props) {
       special_requests: "",
     },
   ]);
+  const [showInitialPassenger, setShowInitialPassenger] = useState(true);
+  useEffect(() => {
+    if (isChecked) {
+      setShowInitialPassenger(false);
+    }
+    else {
+      setShowInitialPassenger(true);
+    }
+  }, [isChecked])
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const bookingInfo = useSelector((state) => state?.booking);
 
-  const handleCheckboxChange = (e) => setIsChecked(e.target.checked);
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked)
+    setShowInitialPassenger(!showInitialPassenger);
+  };
 
   const handleAddPassenger = () => {
     setPassengers([
@@ -188,7 +203,7 @@ function EditBookingStepFour(props) {
             </p>
           </Alert>
 
-          <Row>
+          {showInitialPassenger && (<Row>
             <Col md={6}>
               <BootstrapForm.Group className="mb-3">
                 <FloatingLabel controlId="floatingFirstName" label="First Name">
@@ -268,7 +283,7 @@ function EditBookingStepFour(props) {
                 </FloatingLabel>
               </BootstrapForm.Group>
             </Col>
-          </Row>
+          </Row>)}
 
           <Row>
             <Col md={12}>
@@ -289,7 +304,7 @@ function EditBookingStepFour(props) {
               name="passengers"
               render={(arrayHelpers) => (
                 <>
-                  {values.passengers.slice(1).map((passenger, index) => (
+                  {values.passengers.map((passenger, index) => (
                     <div
                       key={passenger?.id}
                       className="passenger-form mt-3 border p-3"
