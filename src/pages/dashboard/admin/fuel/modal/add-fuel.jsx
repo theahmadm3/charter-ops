@@ -189,7 +189,11 @@ function AddFuel(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingFuelQuantity"
-                      label="Fuel Quantity"
+                      label={
+                        <div>
+                          Fuel Quantity <span className="text-danger"> *</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="number"
@@ -213,7 +217,11 @@ function AddFuel(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingFuelCost"
-                      label="Fuel Cost"
+                      label={
+                        <div>
+                          Fuel Cost <span className="text-danger"> *</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="number"
@@ -232,7 +240,11 @@ function AddFuel(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingPaymentStatus"
-                      label="Payment Status"
+                      label={
+                        <div>
+                          Select Payment Status <span className="text-danger"> *</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         as="select"
@@ -259,7 +271,11 @@ function AddFuel(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingLocation"
-                      label="Location"
+                      label={
+                        <div>
+                          Location <span className="text-danger"> *</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="text"
