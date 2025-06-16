@@ -155,7 +155,7 @@ const Transaction = () => {
                 <th>Booked By</th>
                 <th>Client</th>
                 <th>Aircraft</th>
-                <th>Status</th>
+                
                 <th>Amount</th>
                 <th>Payment Status</th>
                 <th></th>
@@ -174,7 +174,7 @@ const Transaction = () => {
                       return_time,
                       payment_status,
                       client,
-                      status,
+                      
                       bookedBy,
                       aircraft,
                       total_amount,
@@ -201,7 +201,7 @@ const Transaction = () => {
                         <td>
                           {aircraft?.reg_no + " " + aircraft?.aircraft_type}
                         </td>
-                        <td>{status === "no_show" ? "no show" : status}</td>
+                        
                         <td>
                           {total_amount
                             ? new Intl.NumberFormat("en-US", {
