@@ -299,9 +299,9 @@ function EditBookingStepOne(props) {
                     options={
                       Array.isArray(configInfo?.getAllAirportsResponse)
                         ? configInfo.getAllAirportsResponse.map((option) => ({
-                            value: option?.name,
-                            label: option?.name,
-                          }))
+                          value: option?.name,
+                          label: option?.location,
+                        }))
                         : []
                     }
                     className="form-control"
@@ -333,9 +333,9 @@ function EditBookingStepOne(props) {
                     options={
                       Array.isArray(configInfo?.getAllAirportsResponse)
                         ? configInfo.getAllAirportsResponse.map((option) => ({
-                            value: option?.name,
-                            label: option?.name,
-                          }))
+                          value: option?.name,
+                          label: option?.location,
+                        }))
                         : []
                     }
                     className="form-control"
@@ -522,12 +522,12 @@ function EditBookingStepOne(props) {
                     <option value="">Select Client</option>
                     {Array.isArray(clientInfo?.getAllClientsResponse?.data)
                       ? clientInfo?.getAllClientsResponse?.data?.map(
-                          (client, index) => (
-                            <option value={client.id} key={index}>
-                              {client.first_name + " " + client.last_name}
-                            </option>
-                          )
+                        (client, index) => (
+                          <option value={client.id} key={index}>
+                            {client.first_name + " " + client.last_name}
+                          </option>
                         )
+                      )
                       : null}
                   </BootstrapForm.Control>
 
@@ -547,11 +547,11 @@ function EditBookingStepOne(props) {
                     options={
                       Array.isArray(configInfo?.getAllServicesResponse?.data)
                         ? configInfo?.getAllServicesResponse?.data?.map(
-                            (option) => ({
-                              value: option?.id,
-                              label: option?.service_name,
-                            })
-                          )
+                          (option) => ({
+                            value: option?.id,
+                            label: option?.service_name,
+                          })
+                        )
                         : []
                     }
                     className="form-control"
@@ -616,11 +616,11 @@ function EditBookingStepOne(props) {
                                     configInfo?.getAllAirportsResponse
                                   )
                                     ? configInfo.getAllAirportsResponse.map(
-                                        (option) => ({
-                                          value: option?.name,
-                                          label: option?.name,
-                                        })
-                                      )
+                                      (option) => ({
+                                        value: option?.name,
+                                        label: option?.location,
+                                      })
+                                    )
                                     : []
                                 }
                                 placeholder="Select an Airport"
@@ -637,11 +637,11 @@ function EditBookingStepOne(props) {
                                     prevLegs.map((legItem, legIndex) =>
                                       legIndex === index
                                         ? {
-                                            ...legItem,
-                                            from: selectedOption
-                                              ? selectedValue
-                                              : legItem.from,
-                                          }
+                                          ...legItem,
+                                          from: selectedOption
+                                            ? selectedValue
+                                            : legItem.from,
+                                        }
                                         : legItem
                                     )
                                   );
@@ -671,11 +671,11 @@ function EditBookingStepOne(props) {
                                     configInfo?.getAllAirportsResponse
                                   )
                                     ? configInfo.getAllAirportsResponse.map(
-                                        (option) => ({
-                                          value: option?.name,
-                                          label: option?.name,
-                                        })
-                                      )
+                                      (option) => ({
+                                        value: option?.name,
+                                        label: option?.location,
+                                      })
+                                    )
                                     : []
                                 }
                                 placeholder="Select an Airport"
@@ -692,11 +692,11 @@ function EditBookingStepOne(props) {
                                     prevLegs.map((legItem, legIndex) =>
                                       legIndex === index
                                         ? {
-                                            ...legItem,
-                                            to: selectedOption
-                                              ? selectedValue
-                                              : legItem.to,
-                                          }
+                                          ...legItem,
+                                          to: selectedOption
+                                            ? selectedValue
+                                            : legItem.to,
+                                        }
                                         : legItem
                                     )
                                   );
@@ -726,10 +726,10 @@ function EditBookingStepOne(props) {
                                     name={`legs[${index}].departure_date_time`}
                                     value={
                                       leg.departure_date &&
-                                      !isNaN(new Date(leg.departure_date))
+                                        !isNaN(new Date(leg.departure_date))
                                         ? new Date(leg.departure_date)
-                                            .toISOString()
-                                            .split("T")[0]
+                                          .toISOString()
+                                          .split("T")[0]
                                         : ""
                                     }
                                     onChange={(e) =>
@@ -803,18 +803,18 @@ function EditBookingStepOne(props) {
                                     name={`legs[${index}].arrival_date_time`}
                                     value={
                                       leg.arrival_date &&
-                                      !isNaN(new Date(leg.arrival_date))
+                                        !isNaN(new Date(leg.arrival_date))
                                         ? new Date(leg.arrival_date)
-                                            .toISOString()
-                                            .split("T")[0]
+                                          .toISOString()
+                                          .split("T")[0]
                                         : ""
                                     }
                                     min={
                                       leg.departure_date &&
-                                      !isNaN(new Date(leg.departure_date))
+                                        !isNaN(new Date(leg.departure_date))
                                         ? new Date(leg.departure_date)
-                                            .toISOString()
-                                            .split("T")[0]
+                                          .toISOString()
+                                          .split("T")[0]
                                         : new Date().toISOString().split("T")[0]
                                     }
                                     onChange={(e) =>
