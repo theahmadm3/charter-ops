@@ -174,78 +174,69 @@ const Transaction = () => {
                       return_time,
                       payment_status,
                       client,
-                      
                       bookedBy,
                       aircraft,
                       total_amount,
                     } = booking;
                     return (
+                      payment_status === "paid" && (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{from_location + " -> " + to_location}</td>
                         <td>
-                          {`${moment(flight_date).format("ll")} | ${moment(
-                            flight_time,
-                            "HH:mm:ss"
-                          ).format("LT")}`}
-                          &rarr;
-                          {`${moment(return_date).format("ll")} | ${moment(
-                            return_time,
-                            "HH:mm:ss"
-                          ).format("LT")}`}
+                        {`${moment(flight_date).format("ll")} | ${moment(
+                          flight_time,
+                          "HH:mm:ss"
+                        ).format("LT")}`}
+                        &rarr;
+                        {`${moment(return_date).format("ll")} | ${moment(
+                          return_time,
+                          "HH:mm:ss"
+                        ).format("LT")}`}
                         </td>
                         <td>
-                          {bookedBy?.first_name + " " + bookedBy?.last_name}
+                        {bookedBy?.first_name + " " + bookedBy?.last_name}
                         </td>
                         <td>{client?.first_name + " " + client?.last_name}</td>
                         <td>
-                          {aircraft?.reg_no + " " + aircraft?.aircraft_type}
+                        {aircraft?.reg_no + " " + aircraft?.aircraft_type}
                         </td>
                         
                         <td>
-                          {total_amount
-                            ? new Intl.NumberFormat("en-US", {
-                                style: "currency",
-                                currency: "USD",
-                              }).format(total_amount)
-                            : "--"}
+                        {total_amount
+                          ? new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                          }).format(total_amount)
+                          : "--"}
                         </td>
-                        <td
-                          className={
-                            payment_status === "paid"
-                              ? "text-success"
-                              : "text-warning"
-                          }
-                        >
-                          {payment_status}
-                        </td>
+                        <td className="text-success">{payment_status}</td>
                         <td>
-                          <Dropdown>
-                            <Dropdown.Toggle
-                              variant="light"
-                              className="border-0"
-                            >
-                              <HiDotsHorizontal />
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                              <Dropdown.Item
-                                className="small"
-                                onClick={() => handleViewBooking(booking.id)}
-                              >
-                                View More
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                className="small"
-                                onClick={() => handleViewReceipt(booking.id)}
-                              >
-                                {status === "pending"
-                                  ? "View Invoice"
-                                  : "View Receipt"}
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                        <Dropdown>
+                          <Dropdown.Toggle
+                          variant="light"
+                          className="border-0"
+                          >
+                          <HiDotsHorizontal />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                          <Dropdown.Item
+                            className="small"
+                            onClick={() => handleViewBooking(booking.id)}
+                          >
+                            View More
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="small"
+                            onClick={() => handleViewReceipt(booking.id)}
+                          >
+                            View Receipt
+                          </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
                         </td>
                       </tr>
+                      )
                     );
                   }
                 )
