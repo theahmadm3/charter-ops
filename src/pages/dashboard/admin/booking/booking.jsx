@@ -287,6 +287,15 @@ const Booking = () => {
                     Book A Flight
                   </Button>
                 </Col>
+                <Col>
+                  <Button
+                    // onClick={() => handleAdd()}
+                    className="shadow mt-3"
+                  // size="sm"
+                  >
+                    Export
+                  </Button>
+                </Col>
               </Row>
               <Table striped hover responsive>
                 <thead>
@@ -325,9 +334,9 @@ const Booking = () => {
                             <td>{moment(flight_date).format("ll")}</td>
                             <td>
                               {aircraft.reg_no}
-                              {moment(flight_date).format("ll") +
+                              {/* {moment(flight_date).format("ll") +
                                 " | " +
-                                (flight_time ? moment(flight_time, "HH:mm:ss").format("LT") : "N/A")}
+                                (flight_time ? moment(flight_time, "HH:mm:ss").format("LT") : "N/A")} */}
                             </td>
                             <td>{from_location || "N/A"} {flight_time ? moment(flight_time, "HH:mm:ss").format("LT") : "N/A"}</td>
                             <td>{to_location || "N/A"} {return_time ? moment(return_time, "HH:mm:ss").format("LT") : "N/A"}</td>
