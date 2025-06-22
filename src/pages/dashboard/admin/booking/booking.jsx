@@ -274,10 +274,10 @@ const Booking = () => {
                 </span>
               }
             >
-              <Row className="my-3">
-                <Col md={10}>
+              <Row className="my-3 w-100">
                   <BookingFilter />
-                </Col>
+              </Row>
+              <Row className="my-3">
                 <Col>
                   <Button
                     onClick={() => handleAdd()}
