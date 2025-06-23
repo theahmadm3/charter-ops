@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
@@ -89,6 +90,7 @@ export const ExportToExcelRequest = async (url, data) => {
     return { success: true };
   } catch (error) {
     console.error("Download Error:", error);
+    toast.error("Download Error:", error);
     throw error;
   }
 };
