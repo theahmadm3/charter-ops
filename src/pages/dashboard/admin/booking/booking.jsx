@@ -23,7 +23,7 @@ import {
 } from "../../../../slices/booking/bookingSlice";
 import { useNavigate } from "react-router-dom";
 import ViewBooking from "./modals/view-booking";
-import ExportToExcel from "./modals/export-to-excel";
+// import ExportToExcel from "./modals/export-to-excel";
 import {
   activateAircraftAsync,
   deactivateAircraftAsync,
@@ -289,7 +289,7 @@ const Booking = () => {
                   </Button>
                 </Col>
                 <Col>
-                  <ExportToExcel />
+                  {/* <ExportToExcel /> */}
                 </Col>
               </Row>
               <Table striped hover responsive>
