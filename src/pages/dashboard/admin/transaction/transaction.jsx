@@ -48,7 +48,7 @@ const Transaction = () => {
     bookingInfo?.getAllBookingResponse?.meta?.current_page[0]
   );
   useEffect(() => {
-    dispatch(getAllBookingAsync({ page: currentPage }));
+    dispatch(getAllBookingAsync({ page: currentPage, payment_status: "paid" }));
   }, [currentPage, dispatch]);
 
   const handlePageChange = (newPage) => {
