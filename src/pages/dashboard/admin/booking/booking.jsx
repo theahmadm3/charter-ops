@@ -23,6 +23,7 @@ import {
 } from "../../../../slices/booking/bookingSlice";
 import { useNavigate } from "react-router-dom";
 import ViewBooking from "./modals/view-booking";
+import ExportToExcel from "./modals/export-to-excel";
 import {
   activateAircraftAsync,
   deactivateAircraftAsync,
@@ -275,7 +276,7 @@ const Booking = () => {
               }
             >
               <Row className="my-3 w-100">
-                  <BookingFilter />
+                <BookingFilter />
               </Row>
               <Row className="my-3">
                 <Col>
@@ -288,13 +289,7 @@ const Booking = () => {
                   </Button>
                 </Col>
                 <Col>
-                  <Button
-                    // onClick={() => handleAdd()}
-                    className="shadow mt-3"
-                  // size="sm"
-                  >
-                    Export
-                  </Button>
+                  <ExportToExcel />
                 </Col>
               </Row>
               <Table striped hover responsive>
@@ -333,7 +328,7 @@ const Booking = () => {
                             <td>{index + 1}</td>
                             <td>{moment(flight_date).format("ll")}</td>
                             <td>
-                              {aircraft.reg_no}
+                              {aircraft?.reg_no}
                               {/* {moment(flight_date).format("ll") +
                                 " | " +
                                 (flight_time ? moment(flight_time, "HH:mm:ss").format("LT") : "N/A")} */}
@@ -346,7 +341,7 @@ const Booking = () => {
                                 ? client.first_name + " " + client.last_name
                                 : "N/A"}
                             </td>
-                            <td>{aircraft.remarks || "N/A"}</td>
+                            <td>{aircraft?.remarks || "N/A"}</td>
                             <td>
                               <Dropdown>
                                 <Dropdown.Toggle
