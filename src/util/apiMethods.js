@@ -69,28 +69,34 @@ export const DeleteRequest = async (url) => {
     throw error;
   }
 };
-
-export const ExportToExcelRequest = async (url, data) => {
+export const DownloadRequest = async (url, data) => {
   try {
-    const response = await api.post(url, data, {
-      responseType: "blob",
+    const response = await api.get(url, data, {
+      responseType: "blob", // Important for binary files
     });
-    // Create a URL for the blob and trigger download
+
+    // Create a blob and download link
     const blob = new Blob([response.data], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      type: response.headers["content-type"],
     });
-    const urlObject = window.URL.createObjectURL(blob);
+
+    const downloadUrl = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.href = urlObject;
-    link.download = `flybird-bookings-${new Date().toISOString()}.xlsx`;
+
+    // Extract filename from content-disposition
+    const disposition = response.headers["content-disposition"];
+    const match = disposition && disposition.match(/filename="?(.+)"?/);
+    const filename = match ? match[1] : "export.xlsx";
+
+    link.href = downloadUrl;
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(urlObject);
-    return { success: true };
+    link.remove();
+    window.URL.revokeObjectURL(downloadUrl);
   } catch (error) {
-    console.error("Download Error:", error);
-    toast.error("Download Error:", error);
+    console.error("Download error:", error);
     throw error;
   }
 };
+

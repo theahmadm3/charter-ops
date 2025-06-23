@@ -39,6 +39,7 @@ import { toast } from "react-toastify";
 import ViewBookingFile from "./modals/view-files";
 import moment from "moment";
 import CustomPagination from "../../../../util/pagination";
+import ExportToExcel from "./modals/export-bookings";
 
 const Booking = () => {
   const dispatch = useDispatch();
@@ -289,7 +290,7 @@ const Booking = () => {
                   </Button>
                 </Col>
                 <Col>
-                  {/* <ExportToExcel /> */}
+                  <ExportToExcel />
                 </Col>
               </Row>
               <Table striped hover responsive>
