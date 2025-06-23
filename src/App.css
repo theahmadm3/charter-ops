@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 } */
+
+/* Default: hidden */
+.d-hide {
+	display: none;
+}
+
+/* On medium screens (md) and above: flex */
+@media (min-width: 768px) {
+	.d-flex-large {
+		display: flex;
+	}
+}

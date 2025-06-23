@@ -68,3 +68,27 @@ export const DeleteRequest = async (url) => {
     throw error;
   }
 };
+
+export const ExportToExcelRequest = async (url, data) => {
+  try {
+    const response = await api.post(url, data, {
+      responseType: "blob",
+    });
+    // Create a URL for the blob and trigger download
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const urlObject = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = urlObject;
+    link.download = `flybird-bookings-${new Date().toISOString()}.xlsx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(urlObject);
+    return { success: true };
+  } catch (error) {
+    console.error("Download Error:", error);
+    throw error;
+  }
+};
