@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
@@ -69,24 +68,29 @@ export const DeleteRequest = async (url) => {
     throw error;
   }
 };
-export const DownloadRequest = async (url, data) => {
+
+export const DownloadRequest = async (url) => {
   try {
-    const response = await api.get(url, data, {
-      responseType: "blob", // Important for binary files
+    const response = await api.get(url, {
+      responseType: "blob",
+      headers: {
+        'accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'X-CSRF-TOKEN': localStorage.getItem('csrf_token') || ''
+      }
     });
 
-    // Create a blob and download link
+    // Create download link
     const blob = new Blob([response.data], {
-      type: response.headers["content-type"],
+      type: response.headers['content-type'],
     });
 
     const downloadUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
+    const link = document.createElement('a');
 
-    // Extract filename from content-disposition
-    const disposition = response.headers["content-disposition"];
-    const match = disposition && disposition.match(/filename="?(.+)"?/);
-    const filename = match ? match[1] : "export.xlsx";
+    // Extract filename
+    const disposition = response.headers['content-disposition'];
+    const match = disposition?.match(/filename="?(.+)"?/);
+    const filename = match ? match[1] : 'export.xlsx';
 
     link.href = downloadUrl;
     link.download = filename;
@@ -94,9 +98,10 @@ export const DownloadRequest = async (url, data) => {
     link.click();
     link.remove();
     window.URL.revokeObjectURL(downloadUrl);
+
+    return response;
   } catch (error) {
-    console.error("Download error:", error);
+    console.error('Download error:', error);
     throw error;
   }
 };
-

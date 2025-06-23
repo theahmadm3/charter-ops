@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ExportBookings } from "../../services/exports/exportsService";
 
-
 export const exportBookingsAsync = createAsyncThunk(
     "export/bookings",
     async (params, { rejectWithValue }) => {
@@ -17,13 +16,11 @@ export const exportBookingsAsync = createAsyncThunk(
 const exportSlice = createSlice({
     name: "export",
     initialState: {
-        exportResponse: null,
         loading: false,
         error: null,
     },
     reducers: {
         resetExportState: (state) => {
-            state.exportResponse = null;
             state.loading = false;
             state.error = null;
         },
@@ -34,9 +31,8 @@ const exportSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(exportBookingsAsync.fulfilled, (state, action) => {
+            .addCase(exportBookingsAsync.fulfilled, (state) => {
                 state.loading = false;
-                state.exportResponse = action.payload;
                 state.error = null;
             })
             .addCase(exportBookingsAsync.rejected, (state, action) => {

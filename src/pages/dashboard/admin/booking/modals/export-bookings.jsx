@@ -5,7 +5,6 @@ import { Formik, Field, Form as FormikForm } from 'formik';
 import * as Yup from 'yup';
 import { exportBookingsAsync, resetExportState } from '../../../../../slices/exports/exportsSlice';
 
-
 const ExportToExcel = () => {
     const [show, setShow] = useState(false);
     const dispatch = useDispatch();
@@ -18,21 +17,18 @@ const ExportToExcel = () => {
 
     const handleShow = () => setShow(true);
 
-    // Initial form values
     const initialValues = {
         start_date: '',
         end_date: '',
         aircraft_type: '',
     };
 
-    // Yup schema (minimal validation since service handles main logic)
     const validationSchema = Yup.object({
         start_date: Yup.string().optional(),
         end_date: Yup.string().optional(),
         aircraft_type: Yup.string().optional(),
     });
 
-    // Check if all fields are empty to disable submit button
     const isFormEmpty = (values) =>
         !values.start_date && !values.end_date && !values.aircraft_type;
 
@@ -83,7 +79,7 @@ const ExportToExcel = () => {
                                         name="end_date"
                                         type="date"
                                         as={Form.Control}
-                                        disabled={!values.start_date}
+                                        min={values.start_date}
                                         isInvalid={touched.end_date && !!errors.end_date}
                                     />
                                     <Form.Control.Feedback type="invalid">
