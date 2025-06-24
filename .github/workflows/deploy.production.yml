@@ -42,9 +42,12 @@ jobs:
           echo "📦 Installing dependencies..."
           npm install --legacy-peer-deps
 
+          echo "🔨 Rebuilding esbuild..."
+          npm rebuild esbuild
+
           echo "🏗️ Building app..."
           npm run build
-          
+
           echo "🔁 Restarting NGINX..."
           sudo systemctl reload nginx
 
