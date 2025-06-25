@@ -31,7 +31,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.SSH_PASSWORD }}
         port: 22
-        source: ".output/public/*"
+        source: "dist/*"
         target: "/var/www/prod/flybird/flybird-fe/dist"
 
     - name: 🔁 Reload NGINX
