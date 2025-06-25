@@ -136,12 +136,12 @@ function AddMaintenance(props) {
                       <option value="">Select Aircraft</option>
                       {Array.isArray(airCraftInfo?.getAllAircraftResponse?.data)
                         ? airCraftInfo?.getAllAircraftResponse?.data.map(
-                            (aircraft, index) => (
-                              <option value={aircraft.id} key={index}>
-                                {aircraft.reg_no}
-                              </option>
-                            )
+                          (aircraft, index) => (
+                            <option value={aircraft.id} key={index}>
+                              {aircraft.reg_no}
+                            </option>
                           )
+                        )
                         : null}
                     </BootstrapForm.Control>
                     <ErrorMessage
@@ -158,7 +158,12 @@ function AddMaintenance(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingTypeOfMaintenance"
-                      label="Type of Maintenance"
+                      label={
+                        <div>
+                          Type of Maintenance <span className="text-danger"> *</span>
+                        </div>
+                      }
+
                     >
                       <BootstrapForm.Control
                         as="select"
@@ -182,7 +187,11 @@ function AddMaintenance(props) {
                 </Col>
                 <Col md={6}>
                   <BootstrapForm.Group className="mb-3">
-                    <FloatingLabel controlId="floatingAMO" label="AMO">
+                    <FloatingLabel controlId="floatingAMO" label={
+                      <div>
+                        AMO <span className="text-danger"> *</span>
+                      </div>
+                    }>
                       <BootstrapForm.Control
                         as="select"
                         name="amo_id"
@@ -195,12 +204,12 @@ function AddMaintenance(props) {
                           amoInfo?.getAllAircraftMaintenanceOrgResponse?.data
                         )
                           ? amoInfo?.getAllAircraftMaintenanceOrgResponse?.data.map(
-                              (amo, index) => (
-                                <option value={amo.id} key={index}>
-                                  {amo.name}
-                                </option>
-                              )
+                            (amo, index) => (
+                              <option value={amo.id} key={index}>
+                                {amo.name}
+                              </option>
                             )
+                          )
                           : null}
                       </BootstrapForm.Control>
                       <BootstrapForm.Control.Feedback type="invalid">
@@ -241,7 +250,11 @@ function AddMaintenance(props) {
                   <BootstrapForm.Group className="mb-3">
                     <FloatingLabel
                       controlId="floatingAmountPaid"
-                      label="Amount Paid"
+                      label={
+                        <div>
+                          Amount Paid <span className="text-danger"> *</span>
+                        </div>
+                      }
                     >
                       <BootstrapForm.Control
                         type="number"

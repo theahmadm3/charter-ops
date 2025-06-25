@@ -23,6 +23,7 @@ import {
 } from "../../../../slices/booking/bookingSlice";
 import { useNavigate } from "react-router-dom";
 import ViewBooking from "./modals/view-booking";
+// import ExportToExcel from "./modals/export-to-excel";
 import {
   activateAircraftAsync,
   deactivateAircraftAsync,
@@ -38,6 +39,7 @@ import { toast } from "react-toastify";
 import ViewBookingFile from "./modals/view-files";
 import moment from "moment";
 import CustomPagination from "../../../../util/pagination";
+import ExportToExcel from "./modals/export-bookings";
 
 const Booking = () => {
   const dispatch = useDispatch();
@@ -274,31 +276,34 @@ const Booking = () => {
                 </span>
               }
             >
+              <Row className="my-3 w-100">
+                <BookingFilter />
+              </Row>
               <Row className="my-3">
-                <Col md={10}>
-                  <BookingFilter />
-                </Col>
                 <Col>
                   <Button
                     onClick={() => handleAdd()}
                     className="shadow mt-3"
-                    // size="sm"
+                  // size="sm"
                   >
                     Book A Flight
                   </Button>
+                </Col>
+                <Col>
+                  <ExportToExcel />
                 </Col>
               </Row>
               <Table striped hover responsive>
                 <thead>
                   <tr>
                     <th>S/N</th>
+                    <th>Date</th>
+                    <th>A/C Type</th>
                     <th>Departure</th>
-                    <th>Departure Date/Time</th>
                     <th>Arrival</th>
-                    <th>Arrival Date/Time</th>
+                    <th>Waiting</th>
                     <th>Client</th>
-                    <th>Payment Status</th>
-                    <th>Status</th>
+                    <th>Remarks</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -307,12 +312,14 @@ const Booking = () => {
                     bookingInfo?.getAllBookingResponse?.data.map(
                       (booking, index) => {
                         const {
+                          aircraft,
                           from_location,
                           to_location,
                           flight_time,
                           flight_date,
                           return_date,
                           return_time,
+                          overtime,
                           payment_status,
                           client,
                           status,
@@ -320,23 +327,22 @@ const Booking = () => {
                         return (
                           <tr key={index}>
                             <td>{index + 1}</td>
-                            <td>{from_location}</td>
+                            <td>{moment(flight_date).format("ll")}</td>
                             <td>
-                              {moment(flight_date).format("ll") +
+                              {aircraft?.reg_no}
+                              {/* {moment(flight_date).format("ll") +
                                 " | " +
-                                moment(flight_time, "HH:mm:ss").format("LT")}
+                                (flight_time ? moment(flight_time, "HH:mm:ss").format("LT") : "N/A")} */}
                             </td>
-                            <td>{to_location}</td>
+                            <td>{from_location || "N/A"} {flight_time ? moment(flight_time, "HH:mm:ss").format("LT") : "N/A"}</td>
+                            <td>{to_location || "N/A"} {return_time ? moment(return_time, "HH:mm:ss").format("LT") : "N/A"}</td>
+                            <td>{overtime || "N/A"}</td>
                             <td>
-                              {moment(return_date).format("ll") +
-                                " | " +
-                                moment(return_time, "HH:mm:ss").format("LT")}
+                              {client?.first_name && client?.last_name
+                                ? client.first_name + " " + client.last_name
+                                : "N/A"}
                             </td>
-                            <td>
-                              {client?.first_name + " " + client?.last_name}
-                            </td>
-                            <td>{payment_status}</td>
-                            <td>{status === "no_show" ? "no show" : status}</td>
+                            <td>{aircraft?.remarks || "N/A"}</td>
                             <td>
                               <Dropdown>
                                 <Dropdown.Toggle
@@ -490,7 +496,7 @@ const Booking = () => {
                               <td>{crew_capacity}</td>
                               <td>
                                 {inflight_services &&
-                                inflight_services.length > 0 ? (
+                                  inflight_services.length > 0 ? (
                                   inflight_services.map((service, idx) => (
                                     <span key={idx}>
                                       {service}
