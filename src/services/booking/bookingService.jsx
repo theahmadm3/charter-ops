@@ -24,6 +24,10 @@ export const GetAllBookings = async (params) => {
     queryParams.push(`flight_date=${encodeURIComponent(params.flight_date)}`);
   if (params.return_date)
     queryParams.push(`return_date=${encodeURIComponent(params.return_date)}`);
+  if (params.start_date)
+    queryParams.push(`start_date=${encodeURIComponent(params.start_date)}`);
+  if (params.end_date)
+    queryParams.push(`end_date=${encodeURIComponent(params.end_date)}`);
 
   // Join the query string parts with "&"
   const queryString = queryParams.length ? `?${queryParams.join("&")}` : "";
@@ -131,3 +135,5 @@ export const GetBookingTripConfirmation = async (booking_id) => {
   );
   return response;
 };
+
+

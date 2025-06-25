@@ -48,7 +48,7 @@ const Transaction = () => {
     bookingInfo?.getAllBookingResponse?.meta?.current_page[0]
   );
   useEffect(() => {
-    dispatch(getAllBookingAsync({ page: currentPage }));
+    dispatch(getAllBookingAsync({ page: currentPage, payment_status: "paid" }));
   }, [currentPage, dispatch]);
 
   const handlePageChange = (newPage) => {
@@ -155,7 +155,7 @@ const Transaction = () => {
                 <th>Booked By</th>
                 <th>Client</th>
                 <th>Aircraft</th>
-                <th>Status</th>
+
                 <th>Amount</th>
                 <th>Payment Status</th>
                 <th></th>
@@ -174,7 +174,6 @@ const Transaction = () => {
                       return_time,
                       payment_status,
                       client,
-                      status,
                       bookedBy,
                       aircraft,
                       total_amount,
@@ -201,24 +200,16 @@ const Transaction = () => {
                         <td>
                           {aircraft?.reg_no + " " + aircraft?.aircraft_type}
                         </td>
-                        <td>{status === "no_show" ? "no show" : status}</td>
+
                         <td>
                           {total_amount
                             ? new Intl.NumberFormat("en-US", {
-                                style: "currency",
-                                currency: "USD",
-                              }).format(total_amount)
+                              style: "currency",
+                              currency: "USD",
+                            }).format(total_amount)
                             : "--"}
                         </td>
-                        <td
-                          className={
-                            payment_status === "paid"
-                              ? "text-success"
-                              : "text-warning"
-                          }
-                        >
-                          {payment_status}
-                        </td>
+                        <td className="text-success">{payment_status}</td>
                         <td>
                           <Dropdown>
                             <Dropdown.Toggle
@@ -238,9 +229,7 @@ const Transaction = () => {
                                 className="small"
                                 onClick={() => handleViewReceipt(booking.id)}
                               >
-                                {status === "pending"
-                                  ? "View Invoice"
-                                  : "View Receipt"}
+                                View Receipt
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>

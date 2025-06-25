@@ -101,7 +101,7 @@ function AdminNavigation() {
   setupInactivityTimer();
   return (
     <>
-      <Navbar expand="lg" className=" shadow bg-body-tertiary" sticky="top">
+      <Navbar className=" shadow bg-body-tertiary" sticky="top">
         <Container>
           <Navbar.Brand href="/"> </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

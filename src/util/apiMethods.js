@@ -68,3 +68,40 @@ export const DeleteRequest = async (url) => {
     throw error;
   }
 };
+
+export const DownloadRequest = async (url) => {
+  try {
+    const response = await api.get(url, {
+      responseType: "blob",
+      headers: {
+        'accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'X-CSRF-TOKEN': localStorage.getItem('csrf_token') || ''
+      }
+    });
+
+    // Create download link
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type'],
+    });
+
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    // Extract filename
+    const disposition = response.headers['content-disposition'];
+    const match = disposition?.match(/filename="?(.+)"?/);
+    const filename = match ? match[1] : 'export.xlsx';
+
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(downloadUrl);
+
+    return response;
+  } catch (error) {
+    console.error('Download error:', error);
+    throw error;
+  }
+};
