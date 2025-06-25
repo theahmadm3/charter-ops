@@ -6,49 +6,40 @@ on:
       - prod  # adjust as needed
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: ⬇ Checkout code (just to satisfy GH Actions, not used directly)
-      uses: actions/checkout@v4
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
 
-    - name: 🚀 Deploy via SSH
+    - name: 🧠 Use Node.js 18
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: 📦 Install dependencies
+      run: npm install --legacy-peer-deps
+
+    - name: 🏗️ Build app
+      run: npm run build
+
+    - name: 🚀 Upload build to server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
+        source: ".output/public/*"
+        target: "/var/www/prod/flybird/flybird-fe/dist"
+
+    - name: 🔁 Reload NGINX
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
         password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
         script: |
-          set -e
-          echo "🔑 Starting Flybird PHP deployment..."
-          cd /var/www/prod/flybird/flybird-fe || { echo '❌ Directory not found'; exit 1; }
-
-          echo "make a safe directory"
-          git config --global --add safe.directory /var/www/prod/flybird/flybird-fe
-
-          echo "📥 Pulling latest code..."
-          git pull origin master
-
-          echo "🧠 Using Node 18..."
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-          [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-
-          nvm install 18
-          nvm use 18
-
-          echo "📦 Installing dependencies..."
-          npm install --legacy-peer-deps
-
-          echo "🔨 Rebuilding esbuild..."
-          npm rebuild esbuild
-
-          echo "🏗️ Building app..."
-          npm run build
-
-          echo "🔁 Restarting NGINX..."
           sudo systemctl reload nginx
-
-          echo "✅ Flybird deployment completed successfully!"
