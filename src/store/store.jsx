@@ -10,6 +10,7 @@ import contactSlice from "../slices/contact/contactSlice";
 import maintenanceSlice from "../slices/maintenance/maintenanceSlice";
 import amoSlice from "../slices/amo/amoSlice";
 import reportingSlice from "../slices/reporting/reportingSlice";
+import exportSlice from "../slices/exports/exportsSlice"
 
 const initialLoadingState = sessionStorage.getItem("loading") === "true";
 
@@ -26,6 +27,7 @@ const store = configureStore({
     maintenance: maintenanceSlice,
     amo: amoSlice,
     reporting: reportingSlice,
+    export: exportSlice,
 
     loading: (state = initialLoadingState, action) => {
       if (action.type.endsWith("/pending")) {

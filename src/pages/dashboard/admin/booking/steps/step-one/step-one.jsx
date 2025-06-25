@@ -82,9 +82,9 @@ function BookingStepOne() {
       id: uuidv4(),
       from: bookingInfo?.addBookingStepOneResponse?.data?.from_location
         ? {
-            value: bookingInfo.addBookingStepOneResponse.data.from_location,
-            label: bookingInfo.addBookingStepOneResponse.data.from_location,
-          }
+          value: bookingInfo.addBookingStepOneResponse.data.from_location,
+          label: bookingInfo.addBookingStepOneResponse.data.from_location,
+        }
         : "",
       to: "",
       departure_date: "",
@@ -240,9 +240,9 @@ function BookingStepOne() {
 
   const airFrom = bookingInfo?.addBookingStepOneResponse?.data?.from_location
     ? {
-        value: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
-        label: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
-      }
+      value: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
+      label: bookingInfo?.addBookingStepOneResponse?.data?.from_location,
+    }
     : null;
 
   const [airTo, setAirTo] = useState(() => {
@@ -296,12 +296,12 @@ function BookingStepOne() {
             multi_leg: isChecked,
             ...(isChecked &&
               legs && {
-                legs: legs.map(({ id, from, to, ...rest }) => ({
-                  ...rest,
-                  from: from ? from.value : null,
-                  to: to ? to.value : null,
-                })),
-              }),
+              legs: legs.map(({ id, from, to, ...rest }) => ({
+                ...rest,
+                from: from ? from.value : null,
+                to: to ? to.value : null,
+              })),
+            }),
           };
 
           dispatch(addBookingStepOneAsync(payload))
@@ -335,9 +335,9 @@ function BookingStepOne() {
                     options={
                       Array.isArray(configInfo?.getAllAirportsResponse)
                         ? configInfo.getAllAirportsResponse.map((option) => ({
-                            value: option?.name,
-                            label: option?.name,
-                          }))
+                          value: option?.name,
+                          label: option?.location,
+                        }))
                         : []
                     }
                     className="form-control"
@@ -369,9 +369,9 @@ function BookingStepOne() {
                     options={
                       Array.isArray(configInfo?.getAllAirportsResponse)
                         ? configInfo.getAllAirportsResponse.map((option) => ({
-                            value: option?.name,
-                            label: option?.name,
-                          }))
+                          value: option?.name,
+                          label: option?.location,
+                        }))
                         : []
                     }
                     className="form-control"
@@ -553,12 +553,12 @@ function BookingStepOne() {
                     <option value="">Select Client</option>
                     {Array.isArray(clientInfo?.getAllClientsResponse?.data)
                       ? clientInfo?.getAllClientsResponse?.data?.map(
-                          (client, index) => (
-                            <option value={client.id} key={index}>
-                              {client.first_name + " " + client.last_name}
-                            </option>
-                          )
+                        (client, index) => (
+                          <option value={client.id} key={index}>
+                            {client.first_name + " " + client.last_name}
+                          </option>
                         )
+                      )
                       : null}
                   </BootstrapForm.Control>
 
@@ -583,11 +583,11 @@ function BookingStepOne() {
                     options={
                       Array.isArray(configInfo?.getAllServicesResponse?.data)
                         ? configInfo?.getAllServicesResponse?.data?.map(
-                            (option) => ({
-                              value: option?.id,
-                              label: option?.service_name,
-                            })
-                          )
+                          (option) => ({
+                            value: option?.id,
+                            label: option?.service_name,
+                          })
+                        )
                         : []
                     }
                     className="form-control"
@@ -646,30 +646,30 @@ function BookingStepOne() {
                                 defaultValue={
                                   index > 0
                                     ? {
-                                        value:
-                                          legs[index - 1]?.to?.value ||
-                                          legs[index - 1]?.to,
-                                        label:
-                                          legs[index - 1]?.to?.label ||
-                                          legs[index - 1]?.to,
-                                      }
+                                      value:
+                                        legs[index - 1]?.to?.value ||
+                                        legs[index - 1]?.to,
+                                      label:
+                                        legs[index - 1]?.to?.label ||
+                                        legs[index - 1]?.to,
+                                    }
                                     : {
-                                        value: value?.to_location?.value || "",
-                                        label:
-                                          value?.to_location?.label ||
-                                          "Select Departure",
-                                      }
+                                      value: value?.to_location?.value || "",
+                                      label:
+                                        value?.to_location?.label ||
+                                        "Select Departure",
+                                    }
                                 }
                                 options={
                                   Array.isArray(
                                     configInfo?.getAllAirportsResponse
                                   )
                                     ? configInfo.getAllAirportsResponse.map(
-                                        (option) => ({
-                                          value: option?.name,
-                                          label: option?.name,
-                                        })
-                                      )
+                                      (option) => ({
+                                        value: option?.name,
+                                        label: option?.location,
+                                      })
+                                    )
                                     : []
                                 }
                                 placeholder="Select an Airport"
@@ -683,9 +683,9 @@ function BookingStepOne() {
                                 onChange={(selectedOption) => {
                                   const selectedValue = selectedOption
                                     ? {
-                                        value: selectedOption.value,
-                                        label: selectedOption.label,
-                                      }
+                                      value: selectedOption.value,
+                                      label: selectedOption.label,
+                                    }
                                     : legs[index].from; // Keep the current value if nothing changes
 
                                   // Only update if the user has selected a new option
@@ -693,14 +693,14 @@ function BookingStepOne() {
                                     prevLegs.map((legItem, legIndex) =>
                                       legIndex === index
                                         ? {
-                                            ...legItem,
-                                            from:
-                                              selectedOption ||
+                                          ...legItem,
+                                          from:
+                                            selectedOption ||
                                               legItem.from === null // check if user changed the value
-                                                ? selectedValue // update the state only if a new selection is made
-                                                : legItem.from ||
-                                                  legs[index - 1]?.to, // default to previous leg's to value
-                                          }
+                                              ? selectedValue // update the state only if a new selection is made
+                                              : legItem.from ||
+                                              legs[index - 1]?.to, // default to previous leg's to value
+                                        }
                                         : legItem
                                     )
                                   );
@@ -728,11 +728,11 @@ function BookingStepOne() {
                                     configInfo?.getAllAirportsResponse
                                   )
                                     ? configInfo.getAllAirportsResponse.map(
-                                        (option) => ({
-                                          value: option?.name,
-                                          label: option?.name,
-                                        })
-                                      )
+                                      (option) => ({
+                                        value: option?.name,
+                                        label: option?.location,
+                                      })
+                                    )
                                     : []
                                 }
                                 placeholder="Select an Airport"
@@ -776,20 +776,20 @@ function BookingStepOne() {
                                     name={`legs[${index}].departure_date_time`}
                                     value={
                                       leg.departure_date_time &&
-                                      !isNaN(new Date(leg.departure_date_time))
+                                        !isNaN(new Date(leg.departure_date_time))
                                         ? new Date(leg.departure_date_time)
-                                            .toISOString()
-                                            .split("T")[0]
+                                          .toISOString()
+                                          .split("T")[0]
                                         : ""
                                     }
                                     min={
                                       index > 0 &&
-                                      legs[index - 1].arrival_date_time
+                                        legs[index - 1].arrival_date_time
                                         ? new Date(
-                                            legs[index - 1].arrival_date_time
-                                          )
-                                            .toISOString()
-                                            .split("T")[0]
+                                          legs[index - 1].arrival_date_time
+                                        )
+                                          .toISOString()
+                                          .split("T")[0]
                                         : new Date().toISOString().split("T")[0]
                                     }
                                     onChange={(e) =>
@@ -863,18 +863,18 @@ function BookingStepOne() {
                                     name={`legs[${index}].arrival_date_time`}
                                     value={
                                       leg.arrival_date_time &&
-                                      !isNaN(new Date(leg.arrival_date_time))
+                                        !isNaN(new Date(leg.arrival_date_time))
                                         ? new Date(leg.arrival_date_time)
-                                            .toISOString()
-                                            .split("T")[0]
+                                          .toISOString()
+                                          .split("T")[0]
                                         : ""
                                     }
                                     min={
                                       leg.departure_date_time &&
-                                      !isNaN(new Date(leg.departure_date_time))
+                                        !isNaN(new Date(leg.departure_date_time))
                                         ? new Date(leg.departure_date_time)
-                                            .toISOString()
-                                            .split("T")[0]
+                                          .toISOString()
+                                          .split("T")[0]
                                         : new Date().toISOString().split("T")[0]
                                     }
                                     onChange={(e) =>

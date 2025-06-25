@@ -148,39 +148,39 @@ function BookingStepTwo() {
                 <Col md={6} key={aircraft.id} className="mb-4">
                   <Card
                     className={`aircraft-card ${
-                      selectedAircraftId === aircraft.id ? "selected" : ""
+                      selectedAircraftId === aircraft?.id ? "selected" : ""
                     }`}
-                    onClick={() => handleCardClick(aircraft.id)}
+                    onClick={() => handleCardClick(aircraft?.id)}
                   >
                     <Card.Body>
                       <Row>
                         <Col md={6}>
-                          <h3>{aircraft.aircraft_type}</h3>
+                          <h3>{aircraft?.aircraft_type}</h3>
                         </Col>
                         <Col md={6}>
-                          <h3>{aircraft.reg_no}</h3>
+                          <h3>{aircraft?.reg_no}</h3>
                         </Col>
                       </Row>
                       <Row>
                         <Col md={6}>
                           <Card.Text>
-                            <strong>ID:</strong> {aircraft.id}
+                            <strong>ID:</strong> {aircraft?.id}
                           </Card.Text>
                           <Card.Text>
                             <strong>Aircraft Type:</strong>{" "}
-                            {aircraft.aircraft_type}
+                            {aircraft?.aircraft_type}
                           </Card.Text>
                         </Col>
 
                         <Col md={4}>
                           <Card.Text>
                             <strong>Crew Capacity:</strong>{" "}
-                            {aircraft.crew_capacity}
+                            {aircraft?.crew_capacity}
                           </Card.Text>
 
                           <Card.Text>
                             <strong>Seat Capacity:</strong>{" "}
-                            {aircraft.total_seat_capacity}
+                            {aircraft?.total_seat_capacity}
                           </Card.Text>
                         </Col>
                       </Row>

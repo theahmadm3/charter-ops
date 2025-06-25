@@ -15,13 +15,21 @@ const BookingFilter = () => {
   const dispatch = useDispatch();
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
+  const [bookingsDateRange, setBookingsDateRange] = useState([null, null]);
+  const [bookingsStartDate, bookingsEndDate] = bookingsDateRange;
 
-  const handleFetch = async () => {
-    await dispatch(getAllBookingAsync({}));
-  };
+
 
   const handleDateChange = (update) => {
     setDateRange(update);
+  };
+
+  const handleBookingsDateRange = (update) => {
+    setBookingsDateRange(update);
+  }
+
+  const handleFetch = async () => {
+    await dispatch(getAllBookingAsync({}));
   };
 
   return (
@@ -43,6 +51,12 @@ const BookingFilter = () => {
               ? moment(startDate).format("YYYY-MM-DD")
               : "",
             return_date: endDate ? moment(endDate).format("YYYY-MM-DD") : "",
+            start_date: bookingsStartDate
+              ? moment(bookingsStartDate).format("YYYY-MM-DD")
+              : "",
+            end_date: bookingsEndDate
+              ? moment(bookingsEndDate).format("YYYY-MM-DD")
+              : "",
           };
           dispatch(getAllBookingAsync(payload))
             .then((response) => {
@@ -129,13 +143,26 @@ const BookingFilter = () => {
 
               <Col md={3}>
                 <Form.Group>
-                  <p className="m-0 p-0">Flight date</p>
+                  <p className="m-0 p-0">Flight Date (return date optional)</p>
                   <DatePicker
                     className="form-control mb-2"
                     selectsRange={true}
                     startDate={startDate}
                     endDate={endDate}
                     onChange={handleDateChange}
+                    isClearable={true}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={3}>
+                <Form.Group>
+                  <p className="m-0 p-0">Search by Bookings Date (end date optional)</p>
+                  <DatePicker
+                    className="form-control mb-2"
+                    selectsRange={true}
+                    startDate={bookingsStartDate}
+                    endDate={bookingsEndDate}
+                    onChange={handleBookingsDateRange}
                     isClearable={true}
                   />
                 </Form.Group>
