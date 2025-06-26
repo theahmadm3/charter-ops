@@ -112,10 +112,13 @@ const ExportToExcel = () => {
                                         {loading ? 'Exporting...' : 'Export'}
                                     </Button>
                                 </Modal.Footer>
+
                             </FormikForm>
                         )}
                     </Formik>
+
                 </Modal.Body>
+                
             </Modal>
         </>
     );
