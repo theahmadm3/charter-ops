@@ -329,7 +329,7 @@ const Booking = () => {
                             <td>{index + 1}</td>
                             <td>{moment(flight_date).format("ll")}</td>
                             <td>
-                              {aircraft?.reg_no}
+                              {aircraft?.reg_no || "N/A"}
                               {/* {moment(flight_date).format("ll") +
                                 " | " +
                                 (flight_time ? moment(flight_time, "HH:mm:ss").format("LT") : "N/A")} */}

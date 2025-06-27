@@ -25,7 +25,7 @@ const validationSchema = Yup.object({
 });
 
 function BookingStepSix() {
-  const handleSubmit = () => {};
+  const handleSubmit = () => { };
   const dispatch = useDispatch();
 
   const bookingInfo = useSelector((state) => state?.booking);
@@ -47,7 +47,7 @@ function BookingStepSix() {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ errors, touched, handleChange, values, handleSubmit }) => (
+        {({ errors, touched, handleChange, values, handleSubmit, isSubmitting }) => (
           <Form>
             <Row>
               <Col md={6}>
@@ -87,7 +87,12 @@ function BookingStepSix() {
               >
                 Next
               </Button> */}
-              <Button type="submit">Save</Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+              >
+                Save
+              </Button>
             </div>
           </Form>
         )}
