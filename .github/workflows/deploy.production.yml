@@ -3,7 +3,7 @@ name: Deploy Flybird Frontend Prod
 on:
   push:
     branches:
-      - prod  # adjust as needed
+      - prod
 
 jobs:
   build-and-deploy:
@@ -33,6 +33,7 @@ jobs:
         port: 22
         source: "dist/*"
         target: "/var/www/prod/flybird/flybird-fe/dist"
+        overwrite: true
 
     - name: 🔁 Reload NGINX
       uses: appleboy/ssh-action@v1.0.0
