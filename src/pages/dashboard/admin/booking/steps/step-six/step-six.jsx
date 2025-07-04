@@ -91,7 +91,7 @@ function BookingStepSix() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                Save
+                {isSubmitting ? "Saving..." : "Save"}
               </Button>
             </div>
           </Form>
