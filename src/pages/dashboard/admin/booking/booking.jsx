@@ -40,6 +40,7 @@ import ViewBookingFile from "./modals/view-files";
 import moment from "moment";
 import CustomPagination from "../../../../util/pagination";
 import ExportToExcel from "./modals/export-bookings";
+import { capitalise } from "../../../../util/usableFunctions";
 
 const Booking = () => {
   const dispatch = useDispatch();
@@ -304,6 +305,7 @@ const Booking = () => {
                     <th>Waiting</th>
                     <th>Client</th>
                     <th>Remarks</th>
+                    <th>Status</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -343,6 +345,7 @@ const Booking = () => {
                                 : "N/A"}
                             </td>
                             <td>{aircraft?.remarks || "N/A"}</td>
+                            <td>{capitalise(status)}</td>
                             <td>
                               <Dropdown>
                                 <Dropdown.Toggle
