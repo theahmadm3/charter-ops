@@ -277,23 +277,28 @@ const Booking = () => {
                 </span>
               }
             >
-              <Row className="my-3 w-100">
+              <Row className="w-100">
                 <BookingFilter />
               </Row>
-              <Row className="my-3">
-                <Col>
-                  <Button
-                    onClick={() => handleAdd()}
-                    className="shadow mt-3"
-                  // size="sm"
-                  >
-                    Book A Flight
-                  </Button>
+              <div className="w-100 d-inline-flex align-items-center justify-content-end gap-4 my-4">
+                <ExportToExcel />
+                <Button
+                  onClick={() => handleAdd()}
+                  className="shadow "
+                // size="sm"
+                >
+                  Book A Flight
+                </Button>
+              </div>
+              {/* <Row className="my-3 w-100">
+                <Col md={6}>
+
                 </Col>
-                <Col>
-                  <ExportToExcel />
+                <Col md={6} className="text-end">
+
                 </Col>
-              </Row>
+              </Row> */}
+
               <Table striped hover responsive>
                 <thead>
                   <tr>
