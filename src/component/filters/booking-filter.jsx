@@ -1,9 +1,9 @@
-import { Formik, useFormikContext } from "formik";
+// Improved UI with visual polish and spacing consistency
+import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { getAllBookingAsync } from "../../slices/booking/bookingSlice";
-import { Button, Col, FloatingLabel, Form, Row } from "react-bootstrap";
-import { IoChevronForward, IoSearchCircleSharp } from "react-icons/io5";
+import { Button, Col, FloatingLabel, Form, Row, Card } from "react-bootstrap";
 import { MdCancel } from "react-icons/md";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,22 +18,16 @@ const BookingFilter = () => {
   const [bookingsDateRange, setBookingsDateRange] = useState([null, null]);
   const [bookingsStartDate, bookingsEndDate] = bookingsDateRange;
 
-
-
-  const handleDateChange = (update) => {
-    setDateRange(update);
-  };
-
-  const handleBookingsDateRange = (update) => {
-    setBookingsDateRange(update);
-  }
+  const handleDateChange = (update) => setDateRange(update);
+  const handleBookingsDateRange = (update) => setBookingsDateRange(update);
 
   const handleFetch = async () => {
     await dispatch(getAllBookingAsync({}));
   };
 
   return (
-    <>
+    <Card className="shadow p-4 border-0 rounded-4 bg-light">
+      <h5 className="mb-4">Filter Bookings</h5>
       <Formik
         initialValues={{
           service_name: "",
@@ -41,9 +35,7 @@ const BookingFilter = () => {
           aircraft_reg_no: "",
           status: "",
         }}
-        validationSchema={Yup.object().shape({
-          // Add your validation rules here
-        })}
+        validationSchema={Yup.object().shape({})}
         onSubmit={(values) => {
           const payload = {
             ...values,
@@ -61,140 +53,118 @@ const BookingFilter = () => {
           dispatch(getAllBookingAsync(payload))
             .then((response) => {
               if (response.payload.success) {
-                // Handle success
+                // handle success
               }
             })
-            .catch((error) => {
-              console.error("Error occurred:", error);
-            });
+            .catch((error) => console.error("Error occurred:", error));
         }}
         validateOnChange
         validateOnBlur
         validateOnSubmit
       >
-        {({ errors, touched, handleSubmit, values, handleChange }) => (
+        {({ handleSubmit, values, handleChange }) => (
           <Form onSubmit={handleSubmit}>
-            <Row>
-              {/* <Col md={2}>
-                <Form.Group>
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Trip Type"
-                    className="my-2"
-                  >
-                    <Form.Select
-                      aria-label="Floating label select example"
-                      name="trip_type"
-                      value={values.trip_type}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Trip Type</option>
-                      <option value="local">Local</option>
-                      <option value="international">International</option>
-                    </Form.Select>
-                    {errors.trip_type && touched.trip_type ? (
-                      <small className="text-danger">{errors.trip_type}</small>
-                    ) : null}
-                  </FloatingLabel>
-                </Form.Group>
-              </Col> */}
-
+            <Row className="g-4">
               <Col md={3}>
-                <Form.Group>
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Aircraft Reg No"
-                    className="my-2"
-                  >
-                    <Form.Control
-                      type="text"
-                      placeholder=""
-                      name="aircraft_reg_no"
-                      value={values.aircraft_reg_no}
-                      onChange={handleChange}
-                    />
-                  </FloatingLabel>
-                </Form.Group>
-              </Col>
-
-              <Col md={3}>
-                <Form.Group>
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Status"
-                    className="my-2"
-                  >
-                    <Form.Select
-                      aria-label="Floating label select example"
-                      name="status"
-                      value={values.status}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Status</option>
-                      <option value="pending">Pending</option>
-                      <option value="approved">Approve</option>
-                      <option value="rejected">Reject</option>
-                      <option value="completed">Completed</option>
-                      <option value="no_show">No Show</option>
-                    </Form.Select>
-                  </FloatingLabel>
-                </Form.Group>
-              </Col>
-
-              <Col md={3}>
-                <Form.Group>
-                  <p className="m-0 p-0">Flight Date (return date optional)</p>
-                  <DatePicker
-                    className="form-control mb-2"
-                    selectsRange={true}
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={handleDateChange}
-                    isClearable={true}
+                <FloatingLabel label="Aircraft Reg No">
+                  <Form.Control
+                    type="text"
+                    name="aircraft_reg_no"
+                    value={values.aircraft_reg_no}
+                    onChange={handleChange}
+                    placeholder="Aircraft Reg No"
                   />
-                </Form.Group>
-              </Col>
-              <Col md={3}>
-                <Form.Group>
-                  <p className="m-0 p-0">Search by Bookings Date (end date optional)</p>
-                  <DatePicker
-                    className="form-control mb-2"
-                    selectsRange={true}
-                    startDate={bookingsStartDate}
-                    endDate={bookingsEndDate}
-                    onChange={handleBookingsDateRange}
-                    isClearable={true}
-                  />
-                </Form.Group>
+                </FloatingLabel>
               </Col>
 
-              <Col md={2}>
-                <Button
-                  type="submit"
-                  variant="success"
-                  className="my-2 me-3 py-3 border-0"
-                >
-                  <span>
-                    <FaSearch />{" "}
-                  </span>
+              <Col md={3}>
+                <FloatingLabel label="Status">
+                  <Form.Select
+                    name="status"
+                    value={values.status}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approve</option>
+                    <option value="rejected">Reject</option>
+                    <option value="completed">Completed</option>
+                    <option value="no_show">No Show</option>
+                  </Form.Select>
+                </FloatingLabel>
+              </Col>
+
+              <Col md={3}>
+                <Form.Label className="fw-semibold">Flight Date Range</Form.Label>
+                <DatePicker
+                  className="form-control rounded-3"
+                  selectsRange
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={handleDateChange}
+                  isClearable
+                  placeholderText="Start - End"
+                />
+              </Col>
+
+              <Col md={3}>
+                <Form.Label className="fw-semibold">
+                  Booking Date Range
+                </Form.Label>
+                <DatePicker
+                  className="form-control rounded-3"
+                  selectsRange
+                  startDate={bookingsStartDate}
+                  endDate={bookingsEndDate}
+                  onChange={handleBookingsDateRange}
+                  isClearable
+                  placeholderText="Start - End"
+                />
+              </Col>
+
+              <Col xs={12} className="text-end">
+                <Button type="submit" variant="primary" className="me-3 px-4 py-2 rounded-pill">
+                  <FaSearch className="me-2" /> Search
                 </Button>
-
                 <Button
-                  variant="danger"
-                  className="my-2 me-3 py-3 border-0"
+                  variant="outline-secondary"
                   onClick={handleFetch}
+                  className="px-4 py-2 rounded-pill"
                 >
-                  <span>
-                    <MdCancel />
-                  </span>
+                  <MdCancel className="me-2" /> Reset
                 </Button>
               </Col>
             </Row>
           </Form>
         )}
       </Formik>
-    </>
+    </Card>
   );
 };
 
 export default BookingFilter;
+
+
+{/* <Col md={2}>
+                        <Form.Group>
+                          <FloatingLabel
+                            controlId="floatingInput"
+                            label="Trip Type"
+                            className="my-2"
+                          >
+                            <Form.Select
+                              aria-label="Floating label select example"
+                              name="trip_type"
+                              value={values.trip_type}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select Trip Type</option>
+                              <option value="local">Local</option>
+                              <option value="international">International</option>
+                            </Form.Select>
+                            {errors.trip_type && touched.trip_type ? (
+                              <small className="text-danger">{errors.trip_type}</small>
+                            ) : null}
+                          </FloatingLabel>
+                        </Form.Group>
+                      </Col> */}
