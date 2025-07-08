@@ -94,7 +94,7 @@ const Maintenance = () => {
                         <td>{index + 1}</td>
                         <td>
                           {" "}
-                          {aircraft?.reg_no + " " + aircraft?.aircraft_type}
+                          {aircraft?.reg_no + " " + aircraft?.aircraft_type || ""}
                         </td>
                         <td>{maintenance_type}</td>
                         <td>{amo?.name}</td>

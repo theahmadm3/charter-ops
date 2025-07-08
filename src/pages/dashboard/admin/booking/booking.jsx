@@ -40,6 +40,7 @@ import ViewBookingFile from "./modals/view-files";
 import moment from "moment";
 import CustomPagination from "../../../../util/pagination";
 import ExportToExcel from "./modals/export-bookings";
+import { capitalise } from "../../../../util/usableFunctions";
 
 const Booking = () => {
   const dispatch = useDispatch();
@@ -276,23 +277,28 @@ const Booking = () => {
                 </span>
               }
             >
-              <Row className="my-3 w-100">
+              <Row className="w-100">
                 <BookingFilter />
               </Row>
-              <Row className="my-3">
-                <Col>
-                  <Button
-                    onClick={() => handleAdd()}
-                    className="shadow mt-3"
-                  // size="sm"
-                  >
-                    Book A Flight
-                  </Button>
+              <div className="w-100 d-inline-flex align-items-center justify-content-end gap-4 my-4">
+                <ExportToExcel />
+                <Button
+                  onClick={() => handleAdd()}
+                  className="shadow "
+                // size="sm"
+                >
+                  Book A Flight
+                </Button>
+              </div>
+              {/* <Row className="my-3 w-100">
+                <Col md={6}>
+
                 </Col>
-                <Col>
-                  <ExportToExcel />
+                <Col md={6} className="text-end">
+
                 </Col>
-              </Row>
+              </Row> */}
+
               <Table striped hover responsive>
                 <thead>
                   <tr>
@@ -304,6 +310,7 @@ const Booking = () => {
                     <th>Waiting</th>
                     <th>Client</th>
                     <th>Remarks</th>
+                    <th>Status</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -329,7 +336,7 @@ const Booking = () => {
                             <td>{index + 1}</td>
                             <td>{moment(flight_date).format("ll")}</td>
                             <td>
-                              {aircraft?.reg_no}
+                              {aircraft?.reg_no || "N/A"}
                               {/* {moment(flight_date).format("ll") +
                                 " | " +
                                 (flight_time ? moment(flight_time, "HH:mm:ss").format("LT") : "N/A")} */}
@@ -343,6 +350,7 @@ const Booking = () => {
                                 : "N/A"}
                             </td>
                             <td>{aircraft?.remarks || "N/A"}</td>
+                            <td>{capitalise(status)}</td>
                             <td>
                               <Dropdown>
                                 <Dropdown.Toggle
