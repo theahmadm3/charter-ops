@@ -105,7 +105,7 @@ const Fuels = () => {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>
-                        {aircraft?.aircraft_type + " " + aircraft?.reg_no}
+                        {aircraft?.aircraft_type + " " + aircraft?.reg_no || ""}
                       </td>
                       <td>{supplier?.name}</td>
                       <td>{fuel_quantity}</td>

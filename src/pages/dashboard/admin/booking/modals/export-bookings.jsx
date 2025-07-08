@@ -58,7 +58,7 @@ const ExportToExcel = () => {
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                     >
-                        {({ values, errors, touched }) => (
+                        {({ values, errors, touched, isSubmitting }) => (
                             <FormikForm>
                                 <Form.Group className="mb-3" controlId="start_date">
                                     <Form.Label>Start Date</Form.Label>
@@ -107,15 +107,18 @@ const ExportToExcel = () => {
                                     <Button
                                         variant="primary"
                                         type="submit"
-                                        disabled={loading || isFormEmpty(values)}
+                                        disabled={loading || isFormEmpty(values) || isSubmitting}
                                     >
                                         {loading ? 'Exporting...' : 'Export'}
                                     </Button>
                                 </Modal.Footer>
+
                             </FormikForm>
                         )}
                     </Formik>
+
                 </Modal.Body>
+
             </Modal>
         </>
     );

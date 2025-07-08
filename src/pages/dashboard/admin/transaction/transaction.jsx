@@ -198,7 +198,9 @@ const Transaction = () => {
                         </td>
                         <td>{client?.first_name + " " + client?.last_name}</td>
                         <td>
-                          {aircraft?.reg_no + " " + aircraft?.aircraft_type}
+                          {aircraft?.reg_no && aircraft?.aircraft_type
+                            ? aircraft?.reg_no + " " + aircraft?.aircraft_type
+                            : "No Aircraft"}
                         </td>
 
                         <td>
