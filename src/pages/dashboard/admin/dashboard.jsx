@@ -60,7 +60,7 @@ const AdminDashboard = () => {
       <Container fluid>
         <Row className="my-5 ">
           <Col md={6}>
-            <Card className=" bg-color-1 ">
+            <Card className=" bg-primary text-light">
               <Card.Body>
                 <Row>
                   <Col md={8}>
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
           </Col> */}
 
           <Col md={12}>
-            <Card className="bg-color-1">
+            <Card className="bg-primary text-light">
               <Card.Body>
                 <Row>
                   <Col md={4}>
