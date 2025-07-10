@@ -36,11 +36,11 @@ const Login = () => {
               <Card className="shadow border-0 login-form-container p-5">
                 <Card.Body>
                   <div className="text-center my-4">
-                  <div className="skyops-logo">
-            <span className="sky">Charter</span><span className="ops">O<span className="cloud"></span>ps</span>
-          </div>
+                    <div className="skyops-logo">
+                      <span className="sky">Charter</span> <br /><span className="ops">O<span className="cloud"></span>ps</span>
+                    </div>
                     <h5 className="mt-4">Welcome to Charter Ops</h5>
-                    
+
                   </div>
                   <div className="mt-5 px-3">
                     <Formik
