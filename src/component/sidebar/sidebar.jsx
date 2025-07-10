@@ -131,7 +131,7 @@ function SideBar() {
       >
         <div className="text-center py-1">
           <div className="skyops-logo">
-            <span className="sky">Sky</span><span className="ops">O<span className="cloud"></span>ps</span>
+            <span className="sky">Charter</span><span className="ops">O<span className="cloud"></span>ps</span>
           </div>
         </div>
         <div className="sidebar-toggle shadow" id="m-tog" onClick={toggleMenu}>

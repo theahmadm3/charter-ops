@@ -36,9 +36,11 @@ const Login = () => {
               <Card className="shadow border-0 login-form-container p-5">
                 <Card.Body>
                   <div className="text-center my-4">
-                    <Image src={logo} width={140} />
-                    <h5 className="mt-4">Welcome to Flybird ERP Solution</h5>
-                    <p>Please fill the form below to login</p>
+                  <div className="skyops-logo">
+            <span className="sky">Charter</span><span className="ops">O<span className="cloud"></span>ps</span>
+          </div>
+                    <h5 className="mt-4">Welcome to Charter Ops</h5>
+                    
                   </div>
                   <div className="mt-5 px-3">
                     <Formik
