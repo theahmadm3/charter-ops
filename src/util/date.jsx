@@ -23,7 +23,7 @@ const DateTimeDisplay = () => {
   const greeting = getGreeting();
 
   return (
-    <div className="small text-muted">
+    <div className="small" style={{color: 'white'}}>
       <p>
         {greeting} | {currentDateTime}
       </p>

@@ -130,7 +130,9 @@ function SideBar() {
         style={{ left: showMenu ? "0" : "-390px" }}
       >
         <div className="text-center py-1">
-          <Image src={logo} className="img-fluid" />
+          <div className="skyops-logo">
+            <span className="sky">Sky</span><span className="ops">O<span className="cloud"></span>ps</span>
+          </div>
         </div>
         <div className="sidebar-toggle shadow" id="m-tog" onClick={toggleMenu}>
           <div className="text-center mt-1 p-1  h3">
