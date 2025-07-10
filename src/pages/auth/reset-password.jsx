@@ -34,7 +34,7 @@ const ResetPassword = () => {
                 <Card.Body>
                   <div className="text-center my-4">
                     <Image src={logo} width={140} />
-                    <h5 className="mt-4">Welcome to Flybird ERP Solution</h5>
+                    {/* <h5 className="mt-4">Welcome to Flybird ERP Solution</h5> */}
                     <p>Please fill the form below to reset your password</p>
                   </div>
                   <div className="mt-5 px-3">

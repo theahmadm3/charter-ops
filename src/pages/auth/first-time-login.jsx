@@ -43,8 +43,8 @@ const FirstTimeLogin = () => {
                 <Card.Body>
                   <div className="text-center">
                     <Image src={logo} width={140} />
-                    <h5 className="mt-4">Welcome to Flybird ERP Solution</h5>
-                    {/* <h5 className="mt-4">Welcome</h5> */}
+                    {/* <h5 className="mt-4">Welcome to Flybird ERP Solution</h5> */}
+                    <h5 className="mt-4">Welcome</h5>
                     {/* <p>Please fill the form below to proceed</p> */}
                     <p>Please change your password to proceed</p>
                   </div>
