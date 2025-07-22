@@ -29,15 +29,16 @@ const Login = () => {
   return (
     <>
       <Container fluid className="login-container">
-        <Row>
+        <Row style={{ overflowY: "auto" }}>
           <Col md={7}></Col>
-          <Col md={4} className=" align-items-center justify-content-center">
+          <Col md={4} className="align-items-center justify-content-center">
             <div className="mt-5">
-              <Card className="shadow border-0 login-form-container p-5">
+              <Card className="shadow border-0 login-form-container p-5 tw-backdrop-blur-sm tw-bg-white/5 tw-border-b tw-border-white/10 tw-shadow-sm"
+                style={{ background: 'linear-gradient(to bottom, rgba(135, 206, 235, 0.7), rgba(70, 130, 180, 0.8))' }}>
                 <Card.Body>
-                  <div className="text-center my-4">
+                  <div className="text-center mb-4">
                     <div className="skyops-logo">
-                      <span className="sky">Charter</span> <br /><span className="ops">O<span className="cloud"></span>ps</span>
+                      <span className="sky">Charter</span> <span className="ops">O<span className="cloud"></span>ps</span>
                     </div>
                     <h5 className="mt-4">Welcome to Charter Ops</h5>
 
@@ -155,6 +156,7 @@ const Login = () => {
                             <Button
                               type="submit"
                               className="my-4 py-3 border-0 bg-color-2"
+                              variant="secondary"
                             >
                               <span className="text-center fw-bold">Login</span>
                             </Button>

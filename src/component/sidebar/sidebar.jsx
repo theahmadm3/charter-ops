@@ -1,5 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { GiFuelTank, GiHamburgerMenu } from "react-icons/gi";
 
 import {
@@ -108,26 +108,53 @@ function SideBar() {
 
   const renderMenuItems = (items) => (
     items.map((item) => (
-      <Link
+      <NavLink
         key={item.to}
         to={item.to}
-        className={
-          location.pathname === item.to ?
-            "admin-active-side admin-sidebar-link" :
-            "admin-sidebar-link"
+        className={({ isActive }) =>
+          `tw-rounded-full tw-inline-flex tw-items-center tw-hover:bg-white tw-hover:text-black sidebar-links ${isActive
+            ? "tw-bg-white tw-text-black shadow"
+            : "tw-text-white"
+          }`
         }
       >
         <span className="m-2 fw-bold">{item.icon}</span>
         {item.text}
-      </Link>
+      </NavLink>
     ))
   );
 
   return (
+    // <>
+    //   <aside
+    //     className="sidebar tw-fixed tw-h-screen tw-bg-gradient-to-b tw-from-indigo-900 tw-to-indigo-950 tw-text-white tw-shadow-lg"
+    //     style={{ left: showMenu ? "0" : "-390px" }}
+    //   >
+    //     <div className="text-center py-1">
+    //       <div className="skyops-logo">
+    //         <span className="sky">Charter</span><span className="ops">O<span className="cloud"></span>ps</span>
+    //       </div>
+    //     </div>
+
+    //     <div className="sidebar-toggle shadow" id="m-tog" onClick={toggleMenu}>
+    //       <div className="text-center mt-1 p-1 h3">
+    //         <GiHamburgerMenu />
+    //       </div>
+    //     </div>
+
+    //     <div className="tw-p-6 tw-flex tw-flex-col tw-gap-4">
+    //       {
+    //         isAdmin ?
+    //           renderMenuItems(menuItems) :
+    //           renderMenuItems(filteredMenuItems)
+    //       }
+    //     </div>
+    //   </aside>
+    // </>
     <>
       <aside
-        className="sidebar shadow"
-        style={{ left: showMenu ? "0" : "-390px" }}
+        className="sidebar shadow tw-backdrop-blur-sm tw-bg-white/5 tw-border-b tw-border-white/10 tw-shadow-sm"
+        style={{ left: showMenu ? "0" : "-390px", background: 'linear-gradient(to bottom, rgba(135, 206, 235, 0.3), rgba(70, 130, 180, 0.4))' }}
       >
         <div className="text-center py-1">
           <div className="skyops-logo">
@@ -139,12 +166,13 @@ function SideBar() {
             <GiHamburgerMenu />
           </div>
         </div>
-        <div className="mt-5"></div>
-        {
-          isAdmin ?
-            renderMenuItems(menuItems) :
-            renderMenuItems(filteredMenuItems)
-        }
+        <div className="mt-5 tw-flex tw-flex-col tw-gap-y-5 tw-px-2">
+          {
+            isAdmin ?
+              renderMenuItems(menuItems) :
+              renderMenuItems(filteredMenuItems)
+          }
+        </div>
       </aside>
     </>
   );

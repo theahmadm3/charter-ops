@@ -57,87 +57,85 @@ const AdminDashboard = () => {
 
   return (
     <AdminLayout>
-      <Container fluid>
-        <Row className="my-5 ">
-          <Col md={6}>
-            <Card className=" bg-primary text-light">
-              <Card.Body>
-                <Row>
-                  <Col md={8}>
-                    <h2 className="text-capitalize">
+      <div className="tw-container-fluid">
+        <div className="tw-flex tw-flex-wrap tw--mx-4 tw-my-12">
+          <div className="tw-w-full md:tw-w-1/2 tw-px-4 tw-mb-8">
+            <div className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-text-white tw-rounded-lg tw-shadow-lg tw-overflow-hidden">
+              <div className="tw-p-6">
+                <div className="tw-flex tw-flex-wrap tw--mx-4">
+                  <div className="tw-w-full md:tw-w-2/3 tw-px-4">
+                    <h2 className="tw-text-2xl tw-font-bold tw-capitalize">
                       Welcome,{" "}
-                      <span className="text-capitalize">
+                      <span className="tw-capitalize">
                         {loginUser?.first_name}
                       </span>
                     </h2>
-                    <p>
+                    <p className="tw-mt-2">
                       <DateTimeDisplay />
                     </p>
-                  </Col>
-                  <Col md={4}>
-                    <p className="mt-4">
-                      <small>
-                        Last Login:{" "}
-                        {moment(loginUser?.last_seen_at).format("lll")}
-                      </small>
+                  </div>
+                  <div className="tw-w-full md:tw-w-1/3 tw-px-4">
+                    <p className="tw-mt-4 tw-text-sm tw-opacity-80">
+                      Last Login:{" "}
+                      {moment(loginUser?.last_seen_at).format("lll")}
                     </p>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <Col md={3}>
-            <Card>
-              <Card.Body>
-                <Row>
-                  <Col md={8}>
-                    <div className="my-3">
-                      <h4>
+          <div className="tw-w-full md:tw-w-1/4 tw-px-4 tw-mb-8">
+            <div className="tw-bg-white tw-rounded-lg tw-shadow tw-overflow-hidden">
+              <div className="tw-p-6">
+                <div className="tw-flex tw-flex-wrap tw--mx-4">
+                  <div className="tw-w-2/3 tw-px-4">
+                    <div className="tw-my-3">
+                      <h4 className="tw-text-3xl tw-font-bold">
                         {
                           activityLog?.getDashboardStatsResponse?.data
                             ?.total_aircrafts
                         }
                       </h4>
-                      <h4>Aircraft</h4>
+                      <h4 className="tw-text-lg tw-font-medium">Aircraft</h4>
                     </div>
-                  </Col>
-                  <Col>
-                    <div className="bg-primary text-center py-4 text-white rounded">
-                      <FaPlaneUp className="h3" />
+                  </div>
+                  <div className="tw-w-1/3 tw-px-4">
+                    <div className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-py-4 tw-px-1 tw-text-white tw-rounded-lg">
+                      <FaPlaneUp className="tw-text-2xl" />
                     </div>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={3}>
-            <Card>
-              <Card.Body>
-                <Row>
-                  <Col md={8}>
-                    <div className="my-3">
-                      <h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="tw-w-full md:tw-w-1/4 tw-px-4 tw-mb-8">
+            <div className="tw-bg-white tw-rounded-lg tw-shadow tw-overflow-hidden">
+              <div className="tw-p-6">
+                <div className="tw-flex tw-flex-wrap tw--mx-4">
+                  <div className="tw-w-2/3 tw-px-4">
+                    <div className="tw-my-3">
+                      <h4 className="tw-text-3xl tw-font-bold">
                         {
                           activityLog?.getDashboardStatsResponse?.data
                             ?.total_bookings
                         }
                       </h4>
-                      <h4>Bookings</h4>
+                      <h4 className="tw-text-lg tw-font-medium">Bookings</h4>
                     </div>
-                  </Col>
-                  <Col>
-                    <div className="bg-primary text-center py-4 text-white rounded">
-                      <FaPlaneUp className="h3" />
+                  </div>
+                  <div className="tw-w-1/3 tw-px-4">
+                    <div className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-text-center tw-py-4 tw-px-1 tw-text-white tw-rounded-lg">
+                      <FaPlaneUp className="tw-text-2xl" />
                     </div>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <Row className="my-5">
+        <div className="tw-flex tw-flex-wrap tw--mx-4 tw-my-12">
           {/* <Col md={4}>
             <Card>
               <Card.Body>
@@ -158,81 +156,81 @@ const AdminDashboard = () => {
             </Card>
           </Col> */}
 
-          <Col md={12}>
-            <Card className="bg-primary text-light">
-              <Card.Body>
-                <Row>
-                  <Col md={4}>
-                    <div className="p-3">
-                      <h4>
+          <div className="tw-w-full tw-px-4 tw-mb-8">
+            <div className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-text-white tw-rounded-lg tw-shadow-lg tw-overflow-hidden">
+              <div className="tw-p-6">
+                <div className="tw-flex tw-flex-wrap tw--mx-4">
+                  <div className="tw-w-full md:tw-w-1/3 tw-px-4">
+                    <div className="tw-p-3">
+                      <h4 className="tw-text-3xl tw-font-bold">
                         {
                           activityLog?.getDashboardStatsResponse?.data
                             ?.approved_bookings
                         }
                       </h4>
-                      <h6>Approved Bookings</h6>
+                      <h6 className="tw-text-lg tw-font-medium">Approved Bookings</h6>
                     </div>
-                  </Col>
-                  <Col md={4}>
-                    <div className="p-3">
-                      <h4>
+                  </div>
+                  <div className="tw-w-full md:tw-w-1/3 tw-px-4">
+                    <div className="tw-p-3">
+                      <h4 className="tw-text-3xl tw-font-bold">
                         {
                           activityLog?.getDashboardStatsResponse?.data
                             ?.rejected_bookings
                         }
                       </h4>
-                      <h6>Rejected Bookings</h6>
+                      <h6 className="tw-text-lg tw-font-medium">Rejected Bookings</h6>
                     </div>
-                  </Col>
-                  <Col md={4}>
-                    <div className="p-3">
-                      <h4>
+                  </div>
+                  <div className="tw-w-full md:tw-w-1/3 tw-px-4">
+                    <div className="tw-p-3">
+                      <h4 className="tw-text-3xl tw-font-bold">
                         {
                           activityLog?.getDashboardStatsResponse?.data
                             ?.pending_bookings
                         }
                       </h4>
-                      <h6>Pending Bookings</h6>
+                      <h6 className="tw-text-lg tw-font-medium">Pending Bookings</h6>
                     </div>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <Row>
-          <Col md={6}>
+        <div className="tw-flex tw-flex-wrap tw--mx-4">
+          <div className="tw-w-full md:tw-w-1/2 tw-px-4 tw-mb-8">
             {/* Bar Chart */}
             <BarChart
               chartData={chartData}
               chartTitle="Monthly Bookings Summary"
             />
-          </Col>
-          <Col md={6}>
+          </div>
+          <div className="tw-w-full md:tw-w-1/2 tw-px-4 tw-mb-8">
             {/* Recent Notifications */}
             <section>
-              <Card className="my-4 activity-log-card">
-                <Card.Body>
-                  <Table>
+              <div className="tw-bg-white tw-rounded-lg tw-shadow tw-overflow-hidden tw-my-6">
+                <div className="tw-p-6">
+                  <table className="tw-w-full">
                     <thead>
                       <tr>
-                        <th>Recent Notification</th>
+                        <th className="tw-text-left tw-py-3 tw-px-4 tw-font-semibold tw-text-lg">Recent Notification</th>
                       </tr>
                     </thead>
                     <tbody>
                       {activityLog?.getActivityLogResponse?.data?.map(
                         (activity, index) => (
-                          <tr key={index}>
-                            <td>
+                          <tr key={index} className="tw-border-t">
+                            <td className="tw-py-3 tw-px-4">
                               <p>
                                 {activity?.full_name}
                                 <br />
-                                <small>{activity?.activity}</small>
+                                <small className="tw-text-gray-600">{activity?.activity}</small>
                               </p>
                             </td>
-                            <td>
-                              <span className="text-success">
+                            <td className="tw-py-3 tw-px-4 tw-text-right">
+                              <span className="tw-text-green-500">
                                 {moment(activity?.created_at).format("lll")}
                               </span>
                             </td>
@@ -240,13 +238,13 @@ const AdminDashboard = () => {
                         )
                       )}
                     </tbody>
-                  </Table>
-                </Card.Body>
-              </Card>
+                  </table>
+                </div>
+              </div>
             </section>
-          </Col>
-        </Row>
-      </Container>
+          </div>
+        </div>
+      </div>
     </AdminLayout>
   );
 };

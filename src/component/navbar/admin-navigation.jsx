@@ -20,7 +20,7 @@ function AdminNavigation() {
 
   const handleLogout = async () => {
     dispatch(logoutAsync());
-    
+
     window.location.href = "/";
     sessionStorage.removeItem("loading");
   };
@@ -101,7 +101,7 @@ function AdminNavigation() {
   setupInactivityTimer();
   return (
     <>
-      <Navbar className=" shadow bg-body-tertiary" sticky="top">
+      <Navbar className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-m-2 tw-rounded-full" sticky="top">
         <Container>
           <Navbar.Brand href="/"> </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -113,7 +113,7 @@ function AdminNavigation() {
                 {/* <Image src={bellIcon} className="m-3" /> */}
               </div>
               <Dropdown>
-                <Dropdown.Toggle variant="white" id="dropdown-basic">
+                <Dropdown.Toggle variant="white" id="dropdown-basic" style={{ color: 'white' }}>
                   <span className="small">
                     Welcome <br />
                     <small className=""> {loginUser?.first_name} </small>
