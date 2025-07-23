@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/auth/login.jsx";
+import Signup from "./pages/auth/signup.jsx";
 import Loading from "./util/loading.jsx";
 import store from "./store/store.jsx";
 import ErrorPage from "./error-page.jsx";
@@ -28,12 +29,23 @@ import ContactRequests from "./pages/dashboard/admin/contact-request/contact-req
 import Maintenance from "./pages/dashboard/admin/maintenance/maintenance";
 import Transaction from "./pages/dashboard/admin/transaction/transaction";
 import Reports from "./pages/dashboard/admin/reports/reports.jsx";
+import App from "./App.jsx";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/landing",
+    element: <App />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
     errorElement: <ErrorPage />,
   },
   {
