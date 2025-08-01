@@ -165,6 +165,14 @@ const Login = () => {
                       )}
                     </Formik>
                   </div>
+                  <div className="text-center">
+                    <span className="text-muted">
+                      {`Don't have an account? `}
+                      <Link to="/signup" className="text-color-2">
+                        Sign Up
+                      </Link>
+                    </span>
+                  </div>
                 </Card.Body>
               </Card>
             </div>

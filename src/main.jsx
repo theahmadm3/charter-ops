@@ -34,12 +34,12 @@ import App from "./App.jsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <Login />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/landing",
+    path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
   },
