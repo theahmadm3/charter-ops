@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { GiFuelTank, GiHamburgerMenu } from "react-icons/gi";
 
 import {
@@ -14,6 +15,8 @@ import logo from "../../assets/images/flybird-logo.png";
 import { Image } from "react-bootstrap";
 import { IoIosPeople } from "react-icons/io";
 import { FaEnvelopeOpenText } from "react-icons/fa";
+import LogoutSection from "../../util/logoutSection";
+import { logoutAsync } from "../../slices/auth/authSlice";
 
 function SideBar() {
   const [showMenu, setShowMenu] = useState(false);
@@ -21,6 +24,13 @@ function SideBar() {
   const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
   const isAdmin = user?.role?.role_name === "admin";
   const role = user?.role?.role_name;
+
+  const handleLogout = async () => {
+      dispatch(logoutAsync());
+  
+      window.location.href = "/";
+      sessionStorage.removeItem("loading");
+    };
 
   const rolePaths = {
     "Commercial": [
@@ -153,8 +163,8 @@ function SideBar() {
     // </>
     <>
       <aside
-        className="sidebar shadow tw-border-b tw-border-white/10 tw-shadow-sm"
-        style={{ left: showMenu ? "0" : "-390px", background: 'linear-gradient(to bottom, rgba(135, 206, 235, 0.3), rgba(70, 130, 180, 0.4))' }}
+        className="sidebar shadow tw-border-b tw-border-white/10 tw-shadow-sm tw-bg-sky-800"
+        style={{ left: showMenu ? "0" : "-390px" }}
       >
         <div className="text-center py-1">
           <div className="skyops-logo">
@@ -173,6 +183,7 @@ function SideBar() {
               renderMenuItems(filteredMenuItems)
           }
         </div>
+        <LogoutSection user={user} handleLogout={handleLogout} />
       </aside>
     </>
   );
