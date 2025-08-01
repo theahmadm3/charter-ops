@@ -2,7 +2,7 @@
 
 import { Card, Col, Container, Row, Table } from "react-bootstrap";
 import AdminLayout from "../../../component/layout/admin-layout";
-import { FaPlaneUp } from "react-icons/fa6";
+import { FaPlaneUp, FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import DateTimeDisplay from "../../../util/date";
 import moment from "moment";
 import { useEffect } from "react";
@@ -57,192 +57,244 @@ const AdminDashboard = () => {
 
   return (
     <AdminLayout>
-      <div className="tw-container-fluid">
-        <div className="tw-flex tw-flex-wrap tw--mx-4 tw-my-12">
-          <div className="tw-w-full md:tw-w-1/2 tw-px-4 tw-mb-8">
-            <div className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-text-white tw-rounded-lg tw-shadow-lg tw-overflow-hidden">
-              <div className="tw-p-6">
-                <div className="tw-flex tw-flex-wrap tw--mx-4">
-                  <div className="tw-w-full md:tw-w-2/3 tw-px-4">
-                    <h2 className="tw-text-2xl tw-font-bold tw-capitalize">
-                      Welcome,{" "}
-                      <span className="tw-capitalize">
-                        {loginUser?.first_name}
-                      </span>
-                    </h2>
-                    <p className="tw-mt-2">
-                      <DateTimeDisplay />
-                    </p>
-                  </div>
-                  <div className="tw-w-full md:tw-w-1/3 tw-px-4">
-                    <p className="tw-mt-4 tw-text-sm tw-opacity-80">
-                      Last Login:{" "}
-                      {moment(loginUser?.last_seen_at).format("lll")}
-                    </p>
-                  </div>
+      <div className="tw-bg-gray-50 tw-min-h-screen">
+        <div className="tw-container tw-mx-auto tw-px-6 tw-py-8">
+          {/* Header Section */}
+          <div className="tw-mb-8">
+            <h1 className="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+              Welcome back, {loginUser?.first_name || 'Admin'}
+            </h1>
+            <p className="tw-text-gray-600">
+              Track, manage and monitor your aviation operations
+            </p>
+          </div>
+
+          <div className="tw-mt-8 tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6 tw-mb-8">
+            <div className="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6 tw-text-center">
+              <h4 className="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">
+                {activityLog?.getDashboardStatsResponse?.data?.approved_bookings || 0}
+              </h4>
+              <p className="tw-text-gray-600">Approved Bookings</p>
+            </div>
+            <div className="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6 tw-text-center">
+              <h4 className="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">
+                {activityLog?.getDashboardStatsResponse?.data?.rejected_bookings || 0}
+              </h4>
+              <p className="tw-text-gray-600">Rejected Bookings</p>
+            </div>
+            <div className="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6 tw-text-center">
+              <h4 className="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">
+                {activityLog?.getDashboardStatsResponse?.data?.pending_bookings || 0}
+              </h4>
+              <p className="tw-text-gray-600">Pending Bookings</p>
+            </div>
+          </div>
+
+          {/* Stats Cards Row */}
+          <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-0 tw-mb-8">
+            {/* Total Aircraft */}
+            <div className="tw-bg-white tw-shadow-sm tw-p-6">
+              <div className="tw-flex tw-justify-between tw-items-start tw-mb-4">
+                <div>
+                  <p className="tw-text-gray-600 tw-text-sm tw-font-medium">Total Aircraft</p>
+                  <p className="tw-text-3xl tw-font-bold tw-text-gray-900">
+                    {activityLog?.getDashboardStatsResponse?.data?.total_aircrafts || 0}
+                  </p>
                 </div>
+                <div className="tw-bg-blue-50 tw-p-3 tw-rounded-lg">
+                  <FaPlaneUp className="tw-text-blue-600 tw-text-xl" />
+                </div>
+              </div>
+              <div className="tw-flex tw-items-center">
+                <FaArrowUp className="tw-text-green-500 tw-text-sm tw-mr-1" />
+                <span className="tw-text-green-500 tw-text-sm tw-font-medium">40%</span>
+                <span className="tw-text-gray-500 tw-text-sm tw-ml-2">Overall Progress</span>
+              </div>
+            </div>
+
+            {/* Total Bookings */}
+            <div className="tw-bg-white tw-shadow-sm tw-p-6">
+              <div className="tw-flex tw-justify-between tw-items-start tw-mb-4">
+                <div>
+                  <p className="tw-text-gray-600 tw-text-sm tw-font-medium">Total Bookings</p>
+                  <p className="tw-text-3xl tw-font-bold tw-text-gray-900">
+                    {activityLog?.getDashboardStatsResponse?.data?.total_bookings || 0}
+                  </p>
+                </div>
+                <div className="tw-bg-red-50 tw-p-3 tw-rounded-lg">
+                  <FaPlaneUp className="tw-text-red-600 tw-text-xl" />
+                </div>
+              </div>
+              <div className="tw-flex tw-items-center">
+                <FaArrowDown className="tw-text-red-500 tw-text-sm tw-mr-1" />
+                <span className="tw-text-red-500 tw-text-sm tw-font-medium">40%</span>
+                <span className="tw-text-gray-500 tw-text-sm tw-ml-2">Overall Progress</span>
+              </div>
+            </div>
+
+            {/* Total Revenue */}
+            <div className="tw-bg-white tw-shadow-sm tw-p-6">
+              <div className="tw-flex tw-justify-between tw-items-start tw-mb-4">
+                <div>
+                  <p className="tw-text-gray-600 tw-text-sm tw-font-medium">Total Revenue</p>
+                  <p className="tw-text-3xl tw-font-bold tw-text-gray-900">
+                    {activityLog?.getDashboardStatsResponse?.data?.total_revenue || '180'}
+                  </p>
+                </div>
+                <div className="tw-bg-yellow-50 tw-p-3 tw-rounded-lg">
+                  <FaPlaneUp className="tw-text-yellow-600 tw-text-xl" />
+                </div>
+              </div>
+              <div className="tw-flex tw-items-center">
+                <span className="tw-text-yellow-500 tw-text-sm tw-font-medium">↔ 0%</span>
+                <span className="tw-text-gray-500 tw-text-sm tw-ml-2">No change</span>
               </div>
             </div>
           </div>
 
-          <div className="tw-w-full md:tw-w-1/4 tw-px-4 tw-mb-8">
-            <div className="tw-bg-white tw-rounded-lg tw-shadow tw-overflow-hidden">
-              <div className="tw-p-6">
-                <div className="tw-flex tw-flex-wrap tw--mx-4">
-                  <div className="tw-w-2/3 tw-px-4">
-                    <div className="tw-my-3">
-                      <h4 className="tw-text-3xl tw-font-bold">
-                        {
-                          activityLog?.getDashboardStatsResponse?.data
-                            ?.total_aircrafts
-                        }
-                      </h4>
-                      <h4 className="tw-text-lg tw-font-medium">Aircraft</h4>
-                    </div>
-                  </div>
-                  <div className="tw-w-1/3 tw-px-4">
-                    <div className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-py-4 tw-px-1 tw-text-white tw-rounded-lg">
-                      <FaPlaneUp className="tw-text-2xl" />
-                    </div>
-                  </div>
+          {/* Main Content Grid */}
+          <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 tw-gap-8">
+            {/* Left Column - Chart and Status */}
+            <div className="lg:tw-col-span-2 tw-space-y-8">
+              {/* Chart Section */}
+              <div className="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6">
+                <div className="tw-flex tw-justify-between tw-items-center tw-mb-6">
+                  <h3 className="tw-text-lg tw-font-semibold tw-text-gray-900">
+                    Booking Details
+                  </h3>
+                  <select className="tw-text-sm tw-border tw-border-gray-300 tw-rounded tw-px-3 tw-py-1">
+                    <option>October</option>
+                  </select>
                 </div>
+                <BarChart
+                  chartData={chartData}
+                  chartTitle=""
+                />
               </div>
-            </div>
-          </div>
-          <div className="tw-w-full md:tw-w-1/4 tw-px-4 tw-mb-8">
-            <div className="tw-bg-white tw-rounded-lg tw-shadow tw-overflow-hidden">
-              <div className="tw-p-6">
-                <div className="tw-flex tw-flex-wrap tw--mx-4">
-                  <div className="tw-w-2/3 tw-px-4">
-                    <div className="tw-my-3">
-                      <h4 className="tw-text-3xl tw-font-bold">
-                        {
-                          activityLog?.getDashboardStatsResponse?.data
-                            ?.total_bookings
-                        }
-                      </h4>
-                      <h4 className="tw-text-lg tw-font-medium">Bookings</h4>
-                    </div>
-                  </div>
-                  <div className="tw-w-1/3 tw-px-4">
-                    <div className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-text-center tw-py-4 tw-px-1 tw-text-white tw-rounded-lg">
-                      <FaPlaneUp className="tw-text-2xl" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="tw-flex tw-flex-wrap tw--mx-4 tw-my-12">
-          {/* <Col md={4}>
-            <Card>
-              <Card.Body>
-                <Row>
-                  <Col md={8}>
-                    <div className="mt-4">
-                      <h4>{activityLog?.getDashboardStatsResponse?.data?.on_ground_bookings ? activityLog?.getDashboardStatsResponse?.data?.on_ground_bookings : 0}</h4>
-                      <h6>On Ground Aircraft</h6>
-                    </div>
-                  </Col>
-                  <Col>
-                    <div className="bg-primary text-center py-4 text-white rounded">
-                      <FaPlaneUp className="h3" />
-                    </div>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col> */}
-
-          <div className="tw-w-full tw-px-4 tw-mb-8">
-            <div className="tw-backdrop-blur-sm tw-bg-cyan-950/40 tw-border-b tw-border-white/10 tw-shadow-sm tw-text-white tw-rounded-lg tw-shadow-lg tw-overflow-hidden">
-              <div className="tw-p-6">
-                <div className="tw-flex tw-flex-wrap tw--mx-4">
-                  <div className="tw-w-full md:tw-w-1/3 tw-px-4">
-                    <div className="tw-p-3">
-                      <h4 className="tw-text-3xl tw-font-bold">
-                        {
-                          activityLog?.getDashboardStatsResponse?.data
-                            ?.approved_bookings
-                        }
-                      </h4>
-                      <h6 className="tw-text-lg tw-font-medium">Approved Bookings</h6>
-                    </div>
-                  </div>
-                  <div className="tw-w-full md:tw-w-1/3 tw-px-4">
-                    <div className="tw-p-3">
-                      <h4 className="tw-text-3xl tw-font-bold">
-                        {
-                          activityLog?.getDashboardStatsResponse?.data
-                            ?.rejected_bookings
-                        }
-                      </h4>
-                      <h6 className="tw-text-lg tw-font-medium">Rejected Bookings</h6>
-                    </div>
-                  </div>
-                  <div className="tw-w-full md:tw-w-1/3 tw-px-4">
-                    <div className="tw-p-3">
-                      <h4 className="tw-text-3xl tw-font-bold">
-                        {
-                          activityLog?.getDashboardStatsResponse?.data
-                            ?.pending_bookings
-                        }
-                      </h4>
-                      <h6 className="tw-text-lg tw-font-medium">Pending Bookings</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="tw-flex tw-flex-wrap tw--mx-4">
-          <div className="tw-w-full md:tw-w-1/2 tw-px-4 tw-mb-8">
-            {/* Bar Chart */}
-            <BarChart
-              chartData={chartData}
-              chartTitle="Monthly Bookings Summary"
-            />
-          </div>
-          <div className="tw-w-full md:tw-w-1/2 tw-px-4 tw-mb-8">
-            {/* Recent Notifications */}
-            <section>
-              <div className="tw-bg-white tw-rounded-lg tw-shadow tw-overflow-hidden tw-my-6">
-                <div className="tw-p-6">
+              {/* Booking Status Table */}
+              <div className="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6">
+                <h3 className="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-6">
+                  Booking Status
+                </h3>
+                <div className="tw-overflow-x-auto">
                   <table className="tw-w-full">
                     <thead>
-                      <tr>
-                        <th className="tw-text-left tw-py-3 tw-px-4 tw-font-semibold tw-text-lg">Recent Notification</th>
+                      <tr className="tw-border-b tw-border-gray-200">
+                        <th className="tw-text-left tw-py-3 tw-px-4 tw-font-medium tw-text-gray-600">
+                          Aircraft Name
+                        </th>
+                        <th className="tw-text-left tw-py-3 tw-px-4 tw-font-medium tw-text-gray-600">
+                          Status Level
+                        </th>
+                        <th className="tw-text-right tw-py-3 tw-px-4 tw-font-medium tw-text-gray-600">
+                          Status
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {activityLog?.getActivityLogResponse?.data?.map(
-                        (activity, index) => (
-                          <tr key={index} className="tw-border-t">
-                            <td className="tw-py-3 tw-px-4">
-                              <p>
-                                {activity?.full_name}
-                                <br />
-                                <small className="tw-text-gray-600">{activity?.activity}</small>
-                              </p>
-                            </td>
-                            <td className="tw-py-3 tw-px-4 tw-text-right">
-                              <span className="tw-text-green-500">
-                                {moment(activity?.created_at).format("lll")}
-                              </span>
-                            </td>
-                          </tr>
-                        )
-                      )}
+                      <tr className="tw-border-b tw-border-gray-100">
+                        <td className="tw-py-4 tw-px-4 tw-text-gray-900">Gulfstream G650</td>
+                        <td className="tw-py-4 tw-px-4 tw-text-gray-600">Ready</td>
+                        <td className="tw-py-4 tw-px-4 tw-text-right">
+                          <span className="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-800">
+                            ▲ Active
+                          </span>
+                        </td>
+                      </tr>
+                      <tr className="tw-border-b tw-border-gray-100">
+                        <td className="tw-py-4 tw-px-4 tw-text-gray-900">Boeing 737</td>
+                        <td className="tw-py-4 tw-px-4 tw-text-gray-600">Maintenance</td>
+                        <td className="tw-py-4 tw-px-4 tw-text-right">
+                          <span className="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-800">
+                            ▲ Active
+                          </span>
+                        </td>
+                      </tr>
+                      <tr className="tw-border-b tw-border-gray-100">
+                        <td className="tw-py-4 tw-px-4 tw-text-gray-900">Cessna Citation</td>
+                        <td className="tw-py-4 tw-px-4 tw-text-gray-600">In Flight</td>
+                        <td className="tw-py-4 tw-px-4 tw-text-right">
+                          <span className="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-800">
+                            ▲ Active
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="tw-py-4 tw-px-4 tw-text-gray-900">Bombardier Global</td>
+                        <td className="tw-py-4 tw-px-4 tw-text-gray-600">Grounded</td>
+                        <td className="tw-py-4 tw-px-4 tw-text-right">
+                          <span className="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-800">
+                            ▲ Active
+                          </span>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
+
+                {/* Pagination */}
+                <div className="tw-flex tw-justify-between tw-items-center tw-mt-6">
+                  <button className="tw-flex tw-items-center tw-text-gray-600 tw-text-sm">
+                    ← Previous
+                  </button>
+                  <div className="tw-flex tw-space-x-2">
+                    {[1, 2, 3, '...', 8, 9, 10].map((page, index) => (
+                      <button
+                        key={index}
+                        className={`tw-px-3 tw-py-1 tw-text-sm tw-rounded ${page === 1
+                          ? 'tw-bg-blue-600 tw-text-white'
+                          : 'tw-text-gray-600 hover:tw-bg-gray-100'
+                          }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                  <button className="tw-flex tw-items-center tw-text-gray-600 tw-text-sm">
+                    Next →
+                  </button>
+                </div>
               </div>
-            </section>
+            </div>
+
+            {/* Right Column - Recent Requests */}
+            <div className="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6">
+              <h3 className="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-6">
+                Recent Request
+              </h3>
+              <div className="tw-space-y-4">
+                {activityLog?.getActivityLogResponse?.data?.slice(0, 4).map(
+                  (activity, index) => (
+                    <div key={index} className="tw-flex tw-items-start tw-space-x-3">
+                      <div className="tw-w-8 tw-h-8 tw-bg-gray-300 tw-rounded-full tw-flex-shrink-0"></div>
+                      <div className="tw-flex-1 tw-min-w-0">
+                        <div className="tw-flex tw-justify-between tw-items-start tw-mb-1">
+                          <p className="tw-text-sm tw-font-medium tw-text-gray-900">
+                            {activity?.full_name || 'Jacob Yakubu'}
+                          </p>
+                          <span className={`tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium ${index % 3 === 0 ? 'tw-bg-green-100 tw-text-green-800' :
+                            index % 3 === 1 ? 'tw-bg-yellow-100 tw-text-yellow-800' :
+                              'tw-bg-red-100 tw-text-red-800'
+                            }`}>
+                            {index % 3 === 0 ? 'Approved' : index % 3 === 1 ? 'Pending' : 'Rejected'}
+                          </span>
+                        </div>
+                        <p className="tw-text-xs tw-text-gray-500 tw-mb-1">
+                          {moment(activity?.created_at).format('MMM DD, YYYY')}
+                        </p>
+                        <p className="tw-text-sm tw-text-gray-600 tw-leading-relaxed">
+                          {activity?.activity || 'Funds needed to purchase additional binding wire and site refreshments for labours during concrete pouring scheduled this weekend.'}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
           </div>
+
+          
         </div>
       </div>
     </AdminLayout>

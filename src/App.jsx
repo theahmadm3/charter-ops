@@ -153,8 +153,8 @@ const App = () => {
 
   const plans = [
     {
-      name: "Monthly Plan",
-      price: billingCycle === "monthly" ? "₦45,000" : "₦40,500",
+      name: "Basic",
+      price: billingCycle === "monthly" ? "₦100,000" : "₦1,000,000",
       period: "per month",
       features: [
         "Up to 5 aircraft",
@@ -166,8 +166,8 @@ const App = () => {
       popular: false,
     },
     {
-      name: "Quarterly Plan",
-      price: billingCycle === "monthly" ? "₦120,000" : "₦108,000",
+      name: "Premium",
+      price: billingCycle === "monthly" ? "₦250,000" : "₦200,000",
       period: "per quarter",
       features: [
         "Up to 15 aircraft",
@@ -177,11 +177,11 @@ const App = () => {
         "Priority support",
         "Fuel management",
       ],
-      popular: false,
+      popular: true,
     },
     {
-      name: "Annual Plan",
-      price: billingCycle === "monthly" ? "₦420,000" : "₦378,000",
+      name: "Enterprise",
+      price: billingCycle === "monthly" ? "Contact sales" : "Contact sales",
       period: "per year",
       features: [
         "Unlimited aircraft",
@@ -193,7 +193,7 @@ const App = () => {
         "API access",
         "Custom integrations",
       ],
-      popular: true,
+      popular: false,
     },
   ];
 
@@ -251,29 +251,29 @@ const App = () => {
   return (
     <div className="tw-min-h-screen tw-bg-white tw-font-sans" style={{ fontFamily: 'Montserrat, sans-serif' }}>
       {/* Hero Section */}
-      <section className="tw-relative tw-min-h-screen tw-bg-gradient-to-br tw-from-blue-900 tw-to-sky-700 tw-overflow-hidden">
+      <section className="tw-relative tw-min-h-screen tw-bg-white tw-overflow-hidden">
         {/* Background Animation */}
-        <div className="tw-absolute tw-inset-0 tw-opacity-10">
+        <div className="tw-absolute tw-inset-0 tw-opacity-5">
           <div className="tw-absolute tw-top-1/4 tw-left-1/4 tw-w-64 tw-h-64 tw-bg-sky-400 tw-rounded-full tw-blur-3xl tw-animate-pulse"></div>
           <div className="tw-absolute tw-bottom-1/4 tw-right-1/4 tw-w-96 tw-h-96 tw-bg-blue-400 tw-rounded-full tw-blur-3xl tw-animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
 
         {/* Navigation */}
-        <Navbar expand="lg" variant="dark" className="tw-relative tw-z-10">
+        <Navbar expand="lg" variant="light" className="tw-relative tw-z-10 tw-bg-white tw-shadow-sm">
           <Container>
             <Navbar.Brand className="tw-flex tw-items-center tw-space-x-2">
               <div className="tw-w-10 tw-h-10 tw-bg-sky-500 tw-rounded-lg tw-flex tw-items-center tw-justify-center">
                 <span className="tw-text-white tw-font-bold tw-text-xl">✈</span>
               </div>
-              <span className="tw-text-white tw-text-2xl tw-font-bold">Charter Ops</span>
+              <span className="tw-text-gray-900 tw-text-2xl tw-font-bold">Charter Ops</span>
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
               <Nav className="tw-ms-auto">
-                <Nav.Link href="#features" className="tw-text-white hover:tw-text-sky-300">Features</Nav.Link>
-                <Nav.Link href="#pricing" className="tw-text-white hover:tw-text-sky-300">Pricing</Nav.Link>
-                <Nav.Link href="#demo" className="tw-text-white hover:tw-text-sky-300">Demo</Nav.Link>
-                <Nav.Link href="#contact" className="tw-text-white hover:tw-text-sky-300">Contact</Nav.Link>
+                <Nav.Link href="#features" className="tw-text-gray-700 hover:tw-text-sky-600">Features</Nav.Link>
+                <Nav.Link href="#pricing" className="tw-text-gray-700 hover:tw-text-sky-600">Pricing</Nav.Link>
+                <Nav.Link href="#demo" className="tw-text-gray-700 hover:tw-text-sky-600">Demo</Nav.Link>
+                <Nav.Link href="#contact" className="tw-text-gray-700 hover:tw-text-sky-600">Contact</Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -284,26 +284,26 @@ const App = () => {
           <Row className="tw-justify-center">
             <Col lg={8} xl={6}>
               <div className="tw-text-center tw-space-y-8 tw-mb-12">
-                <h1 className="tw-text-5xl lg:tw-text-7xl tw-font-bold tw-text-white tw-leading-tight">
+                <h1 className="tw-text-5xl lg:tw-text-7xl tw-font-bold tw-text-gray-900 tw-leading-tight">
                   Smart ERP for
-                  <span className="tw-text-sky-400 tw-block">Private Charter</span>
-                  <span className="tw-text-sky-300">Companies</span>
+                  <span className="tw-text-sky-600 tw-block">Private Charter</span>
+                  <span className="tw-text-sky-500">Companies</span>
                 </h1>
-                <p className="tw-text-xl tw-text-gray-200 tw-leading-relaxed">
+                <p className="tw-text-xl tw-text-gray-600 tw-leading-relaxed">
                   Automate your bookings, operations, and finance in one powerful aviation suite.
                 </p>
-                <div className="tw-flex tw-flex-col sm:tw-flex-row tw-gap-4 tw-justify-center">
+                <div className="tw-flex tw-flex-row tw-gap-3 tw-justify-center">
                   <Button
                     size="lg"
-                    className="tw-bg-sky-600 tw-border-sky-600 hover:tw-bg-sky-700 tw-px-8 tw-py-3 tw-text-lg tw-font-semibold"
+                    className="tw-bg-sky-600 tw-border-sky-600 hover:tw-bg-sky-700 tw-px-6 tw-py-2 tw-text-base tw-font-semibold"
                     onClick={() => setShowTrialModal(true)}
                   >
                     Start Free Trial
                   </Button>
                   <Button
                     size="lg"
-                    variant="outline-light"
-                    className="tw-border-2 tw-px-8 tw-py-3 tw-text-lg tw-font-semibold"
+                    variant="outline-primary"
+                    className="tw-border-2 tw-border-sky-600 tw-text-sky-600 hover:tw-bg-sky-600 hover:tw-text-white tw-px-6 tw-py-2 tw-text-base tw-font-semibold"
                     onClick={() => setShowDemoModal(true)}
                   >
                     Book a Demo
@@ -315,45 +315,15 @@ const App = () => {
           <Row className="tw-justify-center">
             <Col lg={8} xl={6}>
               <div className="tw-relative">
-                <Card className="tw-bg-white/10 tw-backdrop-blur-lg tw-border-white/20">
-                  <Card.Body className="tw-p-8">
-                    <div className="tw-flex tw-items-center tw-justify-between tw-mb-6">
-                      <h3 className="tw-text-white tw-text-xl tw-font-semibold">Charter Ops Dashboard</h3>
-                      <div className="tw-flex tw-space-x-2">
-                        <div className="tw-w-3 tw-h-3 tw-bg-red-500 tw-rounded-full"></div>
-                        <div className="tw-w-3 tw-h-3 tw-bg-yellow-500 tw-rounded-full"></div>
-                        <div className="tw-w-3 tw-h-3 tw-bg-green-500 tw-rounded-full"></div>
-                      </div>
-                    </div>
-                    <Row>
-                      <Col sm={6}>
-                        <div className="tw-bg-sky-500/20 tw-rounded-lg tw-p-4 tw-mb-4">
-                          <div className="tw-text-sky-200 tw-text-sm">Active Flights</div>
-                          <div className="tw-text-white tw-text-2xl tw-font-bold">12</div>
-                        </div>
-                      </Col>
-                      <Col sm={6}>
-                        <div className="tw-bg-green-500/20 tw-rounded-lg tw-p-4 tw-mb-4">
-                          <div className="tw-text-green-200 tw-text-sm">Revenue Today</div>
-                          <div className="tw-text-white tw-text-2xl tw-font-bold">₦2.4M</div>
-                        </div>
-                      </Col>
-                    </Row>
-                    <div className="tw-bg-white/5 tw-rounded-lg tw-p-4">
-                      <div className="tw-text-white tw-text-sm tw-mb-2">Flight Schedule</div>
-                      <div className="tw-space-y-2">
-                        <div className="tw-flex tw-justify-between tw-text-gray-300 tw-text-sm">
-                          <span>Lagos → Abuja</span>
-                          <span>14:30</span>
-                        </div>
-                        <div className="tw-flex tw-justify-between tw-text-gray-300 tw-text-sm">
-                          <span>Abuja → Port Harcourt</span>
-                          <span>16:45</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Card.Body>
-                </Card>
+                {/* Demo Picture Placeholder */}
+                <div className="tw-bg-gray-100 tw-border-2 tw-border-dashed tw-border-gray-300 tw-rounded-lg tw-p-12 tw-text-center">
+                  <div className="tw-text-gray-400 tw-text-6xl tw-mb-4">🖼️</div>
+                  <h3 className="tw-text-gray-600 tw-text-xl tw-font-semibold tw-mb-2">Demo Screenshot Placeholder</h3>
+                  <p className="tw-text-gray-500 tw-text-sm">Replace this with your Charter Ops dashboard screenshot</p>
+                  <div className="tw-mt-4 tw-text-xs tw-text-gray-400">
+                    Recommended size: 800x600px or larger
+                  </div>
+                </div>
               </div>
             </Col>
           </Row>
@@ -529,9 +499,9 @@ const App = () => {
               </div>
             </div>
           </div>
-          <Row>
+          <div className="tw-flex tw-flex-wrap tw-gap-6 tw-justify-center">
             {plans.map((plan, index) => (
-              <Col md={4} key={index} className="tw-mb-8 tw-flex tw-flex-col tw-justify-between">
+              <div key={index} className="tw-flex flex-col justify-between">
                 <Card className={`tw-h-full tw-relative tw-transition-all tw-duration-300 ${plan.popular ? 'tw-border-sky-500 tw-shadow-xl tw-scale-105' : 'tw-border-gray-200 hover:tw-shadow-lg hover:tw-translate-y-1'}`}>
                   {plan.popular && (
                     <div className="tw-absolute -tw-top-3 tw-left-1/2 tw-transform -tw-translate-x-1/2">
@@ -559,14 +529,49 @@ const App = () => {
                     <Button
                       size="lg"
                       className={`tw-w-full tw-py-3 tw-font-semibold ${plan.popular ? 'tw-bg-sky-600 tw-border-sky-600 hover:tw-bg-sky-700' : 'tw-bg-blue-800 tw-border-blue-800 hover:tw-bg-blue-900'}`}
+                      onClick={() => setShowTrialModal(true)}
                     >
                       Start Free Trial
                     </Button>
                   </Card.Body>
                 </Card>
-              </Col>
+              </div>
+              // <Col md={4} key={index} className="tw-mb-8 tw-flex tw-flex-col tw-justify-between">
+              //   <Card className={`tw-h-full tw-relative tw-transition-all tw-duration-300 ${plan.popular ? 'tw-border-sky-500 tw-shadow-xl tw-scale-105' : 'tw-border-gray-200 hover:tw-shadow-lg hover:tw-translate-y-1'}`}>
+              //     {plan.popular && (
+              //       <div className="tw-absolute -tw-top-3 tw-left-1/2 tw-transform -tw-translate-x-1/2">
+              //         <Badge bg="primary" className="tw-bg-sky-500 tw-px-4 tw-py-1">
+              //           Best Value ✅
+              //         </Badge>
+              //       </div>
+              //     )}
+              //     <Card.Body className="tw-text-center tw-flex tw-flex-col tw-justify-between">
+              //       <Card.Title className="tw-text-blue-900 tw-text-2xl tw-font-bold tw-mb-2">
+              //         {plan.name}
+              //       </Card.Title>
+              //       <div className="tw-text-4xl tw-font-bold tw-text-blue-900 tw-mb-2">
+              //         {plan.price}
+              //       </div>
+              //       <div className="tw-text-gray-600 tw-mb-4">{plan.period}</div>
+              //       <ul className="tw-list-none tw-space-y-3 tw-mb-8 tw-text-left">
+              //         {plan.features.map((feature, featureIndex) => (
+              //           <li key={featureIndex} className="tw-flex tw-items-center">
+              //             <span className="tw-text-green-500 tw-mr-3">✓</span>
+              //             <span className="tw-text-gray-700">{feature}</span>
+              //           </li>
+              //         ))}
+              //       </ul>
+              //       <Button
+              //         size="lg"
+              //         className={`tw-w-full tw-py-3 tw-font-semibold ${plan.popular ? 'tw-bg-sky-600 tw-border-sky-600 hover:tw-bg-sky-700' : 'tw-bg-blue-800 tw-border-blue-800 hover:tw-bg-blue-900'}`}
+              //       >
+              //         Start Free Trial
+              //       </Button>
+              //     </Card.Body>
+              //   </Card>
+              // </Col>
             ))}
-          </Row>
+          </div>
         </Container>
       </section>
 
@@ -641,47 +646,92 @@ const App = () => {
       </section>
 
       {/* Final CTA Section */}
-      <section className="tw-relative tw-py-20 tw-bg-gradient-to-br tw-from-blue-900 tw-via-blue-800 tw-to-sky-900 tw-overflow-hidden">
+      <section className="tw-relative tw-py-32 tw-bg-gradient-to-br tw-from-slate-900 tw-via-blue-900 tw-to-indigo-900 tw-overflow-hidden">
+        {/* Animated Background Grid */}
         <div className="tw-absolute tw-inset-0 tw-opacity-20">
-          <div className="tw-absolute tw-inset-0 tw-bg-gradient-to-r tw-from-blue-900/80 tw-to-sky-900/80"></div>
+          <div className="tw-absolute tw-inset-0" style={{
+            backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }}></div>
         </div>
-        <div className="tw-absolute tw-inset-0 tw-opacity-10">
-          <div className="tw-absolute tw-top-1/4 tw-right-1/4 tw-w-64 tw-h-64 tw-bg-sky-400 tw-rounded-full tw-blur-3xl tw-animate-pulse"></div>
-          <div className="tw-absolute tw-bottom-1/4 tw-left-1/4 tw-w-96 tw-h-96 tw-bg-blue-400 tw-rounded-full tw-blur-3xl tw-animate-pulse" style={{ animationDelay: '2s' }}></div>
+
+        {/* Floating Orbs with Better Animation */}
+        <div className="tw-absolute tw-inset-0 tw-opacity-30">
+          <div className="tw-absolute tw-top-1/4 tw-right-1/4 tw-w-72 tw-h-72 tw-bg-gradient-to-br tw-from-sky-400 tw-to-blue-500 tw-rounded-full tw-blur-3xl tw-animate-pulse"></div>
+          <div className="tw-absolute tw-bottom-1/4 tw-left-1/4 tw-w-96 tw-h-96 tw-bg-gradient-to-br tw-from-indigo-400 tw-to-purple-500 tw-rounded-full tw-blur-3xl tw-animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+          <div className="tw-absolute tw-top-1/2 tw-left-1/2 tw-transform tw--translate-x-1/2 tw--translate-y-1/2 tw-w-64 tw-h-64 tw-bg-gradient-to-br tw-from-cyan-400 tw-to-blue-400 tw-rounded-full tw-blur-3xl tw-animate-pulse" style={{ animationDelay: '3s' }}></div>
         </div>
-        <Container className="tw-relative tw-z-10 tw-text-center">
-          <h2 className="tw-text-4xl lg:tw-text-6xl tw-font-bold tw-text-white tw-mb-6">
-            Start Managing Smarter Today
-          </h2>
-          <p className="tw-text-xl tw-text-gray-200 tw-mb-12 tw-max-w-3xl tw-mx-auto">
-            Try all features free for 30 days. No credit card required.
-          </p>
-          <div className="tw-flex tw-flex-col sm:tw-flex-row tw-gap-6 tw-justify-center">
-            <Button
-              size="lg"
-              className="tw-bg-sky-600 tw-border-sky-600 hover:tw-bg-sky-700 tw-px-12 tw-py-4 tw-text-xl tw-font-semibold tw-shadow-2xl"
-              onClick={() => setShowTrialModal(true)}
-            >
-              Start Free Trial
-            </Button>
-            <Button
-              size="lg"
-              variant="outline-light"
-              className="tw-border-2 tw-px-12 tw-py-4 tw-text-xl tw-font-semibold"
-              onClick={() => setShowDemoModal(true)}
-            >
-              Book a Demo
-            </Button>
-          </div>
-          <div className="tw-mt-12 tw-text-gray-300">
-            <p className="tw-text-lg">Join hundreds of charter companies already using Charter Ops</p>
-            <div className="tw-flex tw-justify-center tw-items-center tw-mt-6 tw-space-x-8 tw-opacity-60">
-              <div className="tw-text-sm">✈️ Trusted by 200+ Companies</div>
-              <div className="tw-text-sm">🛡️ Enterprise Security</div>
-              <div className="tw-text-sm">🚀 99.9% Uptime</div>
+
+        {/* Glassmorphism Card Container */}
+        <Container className="tw-relative tw-z-10">
+          <div className="tw-bg-white/5 tw-backdrop-blur-xl tw-border tw-border-white/10 tw-rounded-3xl tw-p-16 tw-shadow-2xl">
+            <div className="tw-text-center tw-max-w-4xl tw-mx-auto">
+              {/* Badge */}
+              <div className="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-bg-sky-500/20 tw-backdrop-blur-sm tw-border tw-border-sky-400/30 tw-rounded-full tw-text-sky-300 tw-text-sm tw-font-medium tw-mb-8">
+                <span className="tw-w-2 tw-h-2 tw-bg-sky-400 tw-rounded-full tw-mr-2 tw-animate-pulse"></span>
+                Limited Time: 30-Day Free Trial
+              </div>
+
+              {/* Main Heading with Gradient Text */}
+              <h2 className="tw-text-5xl lg:tw-text-7xl tw-font-extrabold tw-mb-6 tw-leading-tight">
+                <span className="tw-bg-gradient-to-r tw-from-white tw-via-sky-200 tw-to-blue-300 tw-bg-clip-text tw-text-transparent">
+                  Start Managing
+                </span>
+                <br />
+                <span className="tw-bg-gradient-to-r tw-from-sky-400 tw-via-blue-400 tw-to-indigo-400 tw-bg-clip-text tw-text-transparent">
+                  Smarter Today
+                </span>
+              </h2>
+
+              <p className="tw-text-xl tw-text-gray-300 tw-mb-12 tw-max-w-2xl tw-mx-auto tw-leading-relaxed">
+                Join the aviation revolution. Try all premium features free for 30 days.
+                <span className="tw-text-sky-300 tw-font-semibold"> No credit card required.</span>
+              </p>
+
+              {/* CTA Buttons with Enhanced Styling */}
+              <div className="tw-inline-flex tw-gap-4 tw-justify-center tw-mb-16">
+                <Button
+                  size="lg"
+                  className="tw-bg-gradient-to-r tw-from-sky-500 tw-to-blue-600 tw-border-0 hover:tw-from-sky-600 hover:tw-to-blue-700 tw-px-10 tw-py-4 tw-text-lg tw-font-bold tw-shadow-xl tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl"
+                  onClick={() => setShowTrialModal(true)}
+                >
+                  <span className="tw-flex tw-items-center">
+                    🚀 Start Free Trial
+                  </span>
+                </Button>
+                <Button
+                  size="lg"
+                  className="tw-bg-white/10 tw-backdrop-blur-sm tw-border-2 tw-border-white/30 tw-text-white hover:tw-bg-white/20 hover:tw-border-white/50 tw-px-10 tw-py-4 tw-text-lg tw-font-bold tw-transition-all tw-duration-300"
+                  onClick={() => setShowDemoModal(true)}
+                >
+                  📺 Watch Demo
+                </Button>
+              </div>
+
+              {/* Trust Indicators with Modern Cards */}
+              <div className="tw-grid tw-grid-cols-1 sm:tw-grid-cols-3 tw-gap-6 tw-max-w-4xl tw-mx-auto">
+                <div className="tw-bg-white/5 tw-backdrop-blur-sm tw-border tw-border-white/10 tw-rounded-xl tw-p-6 tw-transition-all tw-duration-300 hover:tw-bg-white/10">
+                  <div className="tw-text-3xl tw-mb-3">✈️</div>
+                  <div className="tw-text-sky-300 tw-font-bold tw-text-lg">200+</div>
+                  <div className="tw-text-gray-400 tw-text-sm">Charter Companies</div>
+                </div>
+                <div className="tw-bg-white/5 tw-backdrop-blur-sm tw-border tw-border-white/10 tw-rounded-xl tw-p-6 tw-transition-all tw-duration-300 hover:tw-bg-white/10">
+                  <div className="tw-text-3xl tw-mb-3">🛡️</div>
+                  <div className="tw-text-green-300 tw-font-bold tw-text-lg">Bank-Level</div>
+                  <div className="tw-text-gray-400 tw-text-sm">Security</div>
+                </div>
+                <div className="tw-bg-white/5 tw-backdrop-blur-sm tw-border tw-border-white/10 tw-rounded-xl tw-p-6 tw-transition-all tw-duration-300 hover:tw-bg-white/10">
+                  <div className="tw-text-3xl tw-mb-3">⚡</div>
+                  <div className="tw-text-blue-300 tw-font-bold tw-text-lg">99.9%</div>
+                  <div className="tw-text-gray-400 tw-text-sm">Uptime SLA</div>
+                </div>
+              </div>
             </div>
           </div>
         </Container>
+
+        {/* Bottom Accent Line */}
+        <div className="tw-absolute tw-bottom-0 tw-left-0 tw-right-0 tw-h-1 tw-bg-gradient-to-r tw-from-sky-500 tw-via-blue-500 tw-to-indigo-500"></div>
       </section>
 
       {/* Footer Section */}
@@ -727,7 +777,7 @@ const App = () => {
           <Row className="tw-items-center">
             <Col md={6}>
               <div className="tw-text-gray-400 tw-mb-4 md:tw-mb-0">
-                © 2024 Charter Ops. All rights reserved.
+                © {new Date().getFullYear()} Charter Ops. All rights reserved.
               </div>
             </Col>
             <Col md={6} className="tw-text-md-end">

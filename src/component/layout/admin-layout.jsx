@@ -8,7 +8,7 @@ function AdminLayout({ children }) {
         <SideBar />{" "}
       </div>
       <main className="content">
-        <AdminNavigation />
+        {/* <AdminNavigation /> */}
         <div className="p-3">{children}</div>
       </main>
     </div>

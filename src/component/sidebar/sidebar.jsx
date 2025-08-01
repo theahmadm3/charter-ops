@@ -153,7 +153,7 @@ function SideBar() {
     // </>
     <>
       <aside
-        className="sidebar shadow tw-backdrop-blur-sm tw-bg-white/5 tw-border-b tw-border-white/10 tw-shadow-sm"
+        className="sidebar shadow tw-border-b tw-border-white/10 tw-shadow-sm"
         style={{ left: showMenu ? "0" : "-390px", background: 'linear-gradient(to bottom, rgba(135, 206, 235, 0.3), rgba(70, 130, 180, 0.4))' }}
       >
         <div className="text-center py-1">

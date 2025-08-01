@@ -148,17 +148,13 @@ td {
 
 .real {
   display: flex;
-  background-image: url("./assets/images/plane-image-background.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
   .sidebar {
     flex: 1 1 0;
     margin: 0;
     // padding-top: 2rem;
     width: 280px;
     height: 100vh;
-    background-color: white;
+    
     box-shadow: 8px 0px 19px -4px rgba(36, 71, 97, 0.75);
 
     .sidebar-links {
