@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react';
 import { Container, Row, Col, Card, Button, Form, Modal, Nav, Navbar, Accordion, Badge } from 'react-bootstrap';
+import { Link } from 'react-router-dom'
 
 const App = () => {
   const [showTrialModal, setShowTrialModal] = useState(false);
@@ -272,8 +273,8 @@ const App = () => {
               <Nav className="tw-ms-auto">
                 <Nav.Link href="#features" className="tw-text-gray-700 hover:tw-text-sky-600">Features</Nav.Link>
                 <Nav.Link href="#pricing" className="tw-text-gray-700 hover:tw-text-sky-600">Pricing</Nav.Link>
-                <Nav.Link href="#demo" className="tw-text-gray-700 hover:tw-text-sky-600">Demo</Nav.Link>
                 <Nav.Link href="#contact" className="tw-text-gray-700 hover:tw-text-sky-600">Contact</Nav.Link>
+                <Link to="/login" className="tw-text-gray-700 hover:tw-text-sky-600">Login</Link>
               </Nav>
             </Navbar.Collapse>
           </Container>
