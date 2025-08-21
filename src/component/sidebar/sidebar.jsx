@@ -25,9 +25,11 @@ function SideBar() {
   const isAdmin = user?.role?.role_name === "admin";
   const role = user?.role?.role_name;
 
+  const dispatch = useDispatch();
+
   const handleLogout = async () => {
     dispatch(logoutAsync());
-
+    localStorage.clear();
     window.location.href = "/";
     sessionStorage.removeItem("loading");
   };
