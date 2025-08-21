@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form, Modal, Nav, Navbar, Accordion, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
@@ -7,6 +7,60 @@ const App = () => {
   const [showTrialModal, setShowTrialModal] = useState(false);
   const [showDemoModal, setShowDemoModal] = useState(false);
   const [billingCycle, setBillingCycle] = useState('monthly');
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  // Show/hide scroll button based on scroll position
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setShowScrollButton(true);
+      } else {
+        setShowScrollButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  // Back to Top Button Component
+  const ScrollToTopButton = () => {
+    if (!showScrollButton) {
+      return null;
+    }
+
+    return (
+      <button
+        onClick={scrollToTop}
+        className="tw-fixed tw-bottom-8 tw-right-8 tw-z-50 tw-w-12 tw-h-12 tw-rounded-full tw-bg-sky-600 hover:tw-bg-sky-700 tw-text-white tw-shadow-lg tw-transition-all tw-duration-300 tw-flex tw-items-center tw-justify-center"
+        aria-label="Back to top"
+      >
+        <svg
+          className="tw-w-6 tw-h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 10l7-7m0 0l7 7m-7-7v18"
+          />
+        </svg>
+      </button>
+    );
+  };
 
   // Trial Form Modal
   const TrialModal = () => (
@@ -537,40 +591,6 @@ const App = () => {
                   </Card.Body>
                 </Card>
               </div>
-              // <Col md={4} key={index} className="tw-mb-8 tw-flex tw-flex-col tw-justify-between">
-              //   <Card className={`tw-h-full tw-relative tw-transition-all tw-duration-300 ${plan.popular ? 'tw-border-sky-500 tw-shadow-xl tw-scale-105' : 'tw-border-gray-200 hover:tw-shadow-lg hover:tw-translate-y-1'}`}>
-              //     {plan.popular && (
-              //       <div className="tw-absolute -tw-top-3 tw-left-1/2 tw-transform -tw-translate-x-1/2">
-              //         <Badge bg="primary" className="tw-bg-sky-500 tw-px-4 tw-py-1">
-              //           Best Value ✅
-              //         </Badge>
-              //       </div>
-              //     )}
-              //     <Card.Body className="tw-text-center tw-flex tw-flex-col tw-justify-between">
-              //       <Card.Title className="tw-text-blue-900 tw-text-2xl tw-font-bold tw-mb-2">
-              //         {plan.name}
-              //       </Card.Title>
-              //       <div className="tw-text-4xl tw-font-bold tw-text-blue-900 tw-mb-2">
-              //         {plan.price}
-              //       </div>
-              //       <div className="tw-text-gray-600 tw-mb-4">{plan.period}</div>
-              //       <ul className="tw-list-none tw-space-y-3 tw-mb-8 tw-text-left">
-              //         {plan.features.map((feature, featureIndex) => (
-              //           <li key={featureIndex} className="tw-flex tw-items-center">
-              //             <span className="tw-text-green-500 tw-mr-3">✓</span>
-              //             <span className="tw-text-gray-700">{feature}</span>
-              //           </li>
-              //         ))}
-              //       </ul>
-              //       <Button
-              //         size="lg"
-              //         className={`tw-w-full tw-py-3 tw-font-semibold ${plan.popular ? 'tw-bg-sky-600 tw-border-sky-600 hover:tw-bg-sky-700' : 'tw-bg-blue-800 tw-border-blue-800 hover:tw-bg-blue-900'}`}
-              //       >
-              //         Start Free Trial
-              //       </Button>
-              //     </Card.Body>
-              //   </Card>
-              // </Col>
             ))}
           </div>
         </Container>
@@ -790,7 +810,7 @@ const App = () => {
                 </a>
                 <a href="#" className="tw-text-gray-400 hover:tw-text-sky-400">
                   <svg className="tw-w-6 tw-h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.370-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
                 </a>
               </div>
@@ -798,6 +818,9 @@ const App = () => {
           </Row>
         </Container>
       </footer>
+
+      {/* Back to Top Button */}
+      <ScrollToTopButton />
 
       {/* Modals */}
       <TrialModal />
