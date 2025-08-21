@@ -26,11 +26,11 @@ function SideBar() {
   const role = user?.role?.role_name;
 
   const handleLogout = async () => {
-      dispatch(logoutAsync());
-  
-      window.location.href = "/";
-      sessionStorage.removeItem("loading");
-    };
+    dispatch(logoutAsync());
+
+    window.location.href = "/";
+    sessionStorage.removeItem("loading");
+  };
 
   const rolePaths = {
     "Commercial": [
@@ -176,7 +176,7 @@ function SideBar() {
             <GiHamburgerMenu />
           </div>
         </div>
-        <div className="mt-5 tw-flex tw-flex-col tw-gap-y-5 tw-px-2">
+        <div className="mt-5 tw-flex tw-flex-col tw-gap-y-4 tw-px-2">
           {
             isAdmin ?
               renderMenuItems(menuItems) :

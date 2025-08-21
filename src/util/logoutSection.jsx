@@ -18,12 +18,12 @@ const LogoutSection = ({ user, handleLogout }) => {
 
     return (
         <>
-            <div className="tw-absolute tw-bottom-5 tw-left-5 tw-flex tw-items-center tw-gap-3 tw-text-white">
+            <div className="tw-px-4 tw-mt-4 tw-flex tw-items-center tw-gap-3 tw-text-white">
                 <span className="tw-font-bold">
                     {`${user?.first_name} ${user?.last_name}` || "Guest"}
                 </span>
                 <button
-                    className="tw-bg-red-600 tw-rounded-full tw-p-2 tw-text-white tw-hover:bg-red-700 tw-transition-colors"
+                    className="tw-bg-red-600 tw-rounded-full tw-p-2 tw-text-white tw-hover:bg-red-700 tw-transition-colors tw-text-xs"
                     onClick={handleLogoutClick}
                 >
                     <FaUser />

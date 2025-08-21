@@ -26,8 +26,8 @@ const BookingFilter = () => {
   };
 
   return (
-    <Card className="shadow p-4 border-0 rounded-4 bg-light">
-      <h5 className="mb-4">Filter Bookings</h5>
+    <Card className="tw-shadow-md tw-p-4 tw-border-0 tw-rounded-xl tw-bg-gray-100">
+      <h5 className="tw-mb-4">Filter Bookings</h5>
       <Formik
         initialValues={{
           service_name: "",
@@ -64,8 +64,8 @@ const BookingFilter = () => {
       >
         {({ handleSubmit, values, handleChange }) => (
           <Form onSubmit={handleSubmit}>
-            <Row className="g-4">
-              <Col md={3}>
+            <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-4 tw-gap-4">
+              <div className="md:tw-col-span-1 tw-overflow-hidden">
                 <FloatingLabel label="Aircraft Reg No">
                   <Form.Control
                     type="text"
@@ -73,16 +73,18 @@ const BookingFilter = () => {
                     value={values.aircraft_reg_no}
                     onChange={handleChange}
                     placeholder="Aircraft Reg No"
+                    className="tw-w-full"
                   />
                 </FloatingLabel>
-              </Col>
+              </div>
 
-              <Col md={3}>
+              <div className="md:tw-col-span-1">
                 <FloatingLabel label="Status">
                   <Form.Select
                     name="status"
                     value={values.status}
                     onChange={handleChange}
+                    className="tw-w-full"
                   >
                     <option value="">Select Status</option>
                     <option value="pending">Pending</option>
@@ -92,12 +94,12 @@ const BookingFilter = () => {
                     <option value="no_show">No Show</option>
                   </Form.Select>
                 </FloatingLabel>
-              </Col>
+              </div>
 
-              <Col md={3}>
-                <Form.Label className="fw-semibold">Flight Date Range</Form.Label>
+              <div className="md:tw-col-span-1">
+                <Form.Label className="tw-font-semibold">Flight Date Range</Form.Label>
                 <DatePicker
-                  className="form-control rounded-3"
+                  className="tw-form-control tw-rounded-lg tw-w-full"
                   selectsRange
                   startDate={startDate}
                   endDate={endDate}
@@ -105,14 +107,14 @@ const BookingFilter = () => {
                   isClearable
                   placeholderText="Start - End"
                 />
-              </Col>
+              </div>
 
-              <Col md={3}>
-                <Form.Label className="fw-semibold">
+              <div className="md:tw-col-span-1">
+                <Form.Label className="tw-font-semibold">
                   Booking Date Range
                 </Form.Label>
                 <DatePicker
-                  className="form-control rounded-3"
+                  className="tw-form-control tw-rounded-lg tw-w-full"
                   selectsRange
                   startDate={bookingsStartDate}
                   endDate={bookingsEndDate}
@@ -120,21 +122,23 @@ const BookingFilter = () => {
                   isClearable
                   placeholderText="Start - End"
                 />
-              </Col>
+              </div>
 
-              <Col xs={12} className="text-end">
-                <Button type="submit" variant="primary" className="me-3 px-4 py-2 rounded-pill">
-                  <FaSearch className="me-2" /> Search
-                </Button>
-                <Button
-                  variant="outline-secondary"
-                  onClick={handleFetch}
-                  className="px-4 py-2 rounded-pill"
+              <div className="tw-col-span-full tw-text-right">
+                <button
+                  type="submit"
+                  className="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-gap-x-2 tw-text-white tw-bg-blue-600 hover:tw-bg-blue-700 tw-mx-3"
                 >
-                  <MdCancel className="me-2" /> Reset
-                </Button>
-              </Col>
-            </Row>
+                  <FaSearch className="tw-me-2" /> Search
+                </button>
+                <button
+                  onClick={handleFetch}
+                  className="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-gap-x-2 tw-text-red-600 tw-bg-white tw-border tw-border-red-600 hover:tw-bg-red-600 hover:tw-text-white"
+                >
+                  <MdCancel /> Reset
+                </button>
+              </div>
+            </div>
           </Form>
         )}
       </Formik>

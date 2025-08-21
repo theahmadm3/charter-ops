@@ -58,26 +58,27 @@ const ReportingFilter = () => {
       >
         {({ errors, touched, handleSubmit, values, handleChange }) => (
           <Form onSubmit={handleSubmit}>
-            <Row>
-              <Col md={4}>
-                <Form.Group>
-                  <p className="m-0 p-0">Filter by date</p>
-                  <DatePicker
-                    className="mb-2 form-control w-100"
-                    selectsRange={true}
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={handleDateChange}
-                    isClearable={true}
-                  />
-                </Form.Group>
-              </Col>
+            <div className="tw-flex tw-flex-col md:tw-flex-row md:tw-items-center">
 
-              <Col>
+              <div className="tw-mb-2 tw-border tw-w-fit tw-px-2 tw-rounded-lg tw-mr-4">
+                <p className="tw-m-0 tw-p-0">Filter by date</p>
+                <DatePicker
+                  className="tw-mb-2 tw-form-control tw-w-full"
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={handleDateChange}
+                  isClearable={true}
+                  placeholderText="Start date - End date"
+                />
+              </div>
+
+
+              <div className="tw-flex tw-gap-3">
                 <Button
                   type="submit"
                   variant="success"
-                  className="my-2 me-3 py-3 border-0"
+                  className="tw-my-2 tw-me-3 tw-py-3 tw-border-0"
                 >
                   <span>
                     <FaSearch />{" "}
@@ -86,15 +87,15 @@ const ReportingFilter = () => {
 
                 <Button
                   variant="danger"
-                  className="my-2 me-3 py-3 border-0"
+                  className="tw-my-2 tw-me-3 tw-py-3 tw-border-0"
                   onClick={handleFetch}
                 >
                   <span>
                     <MdCancel />
                   </span>
                 </Button>
-              </Col>
-            </Row>
+              </div>
+            </div>
           </Form>
         )}
       </Formik>
